@@ -18,6 +18,14 @@ _global_script_class_icons={
 config/name="tribes_of_dust"
 run/main_scene="res://Scenes/Scene.tscn"
 
+[display]
+
+window/vsync/use_vsync=false
+
+[logging]
+
+file_logging/enable_file_logging=true
+
 [rendering]
 
-environment/default_environment="res://Environment/default_env.tres"
+environment/default_environment="res://environment/default_env.tres"
