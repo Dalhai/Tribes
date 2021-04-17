@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Left Arm.png-0ca896b28ddfde660d22b97b0bf238c0.stex"
+path="res://.import/Arm Upper.png-3250526c869ee50e271686027f3503d7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/character_puppet/Left Arm.png"
-dest_files=[ "res://.import/Left Arm.png-0ca896b28ddfde660d22b97b0bf238c0.stex" ]
+source_file="res://assets/textures/character_puppet/Arm Upper.png"
+dest_files=[ "res://.import/Arm Upper.png-3250526c869ee50e271686027f3503d7.stex" ]
 
 [params]
 
