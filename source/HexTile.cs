@@ -3,6 +3,14 @@ using System;
 
 public class HexTile : Sprite
 {
+	public record HexIndex(int Row, int Column);
+	
+	public HexIndex Index
+	{
+		get;
+		init;
+	}
+	
 	// Declare member variables here. Examples:
 	// private int a = 2;
 	// private string b = "text";
