@@ -3,6 +3,6 @@ using System;
 
 public class HexTile : Sprite
 {
-    public HexCoordinate.AxialCoordinate Coordinates { get; init; }
+    public AxialCoordinate<int> Coordinates { get; init; }
     
 }

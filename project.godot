@@ -25,6 +25,10 @@ window/vsync/use_vsync=false
 
 file_logging/enable_file_logging=true
 
+[mono]
+
+debugger_agent/wait_for_debugger=true
+
 [rendering]
 
 environment/default_environment="res://environment/default_env.tres"
