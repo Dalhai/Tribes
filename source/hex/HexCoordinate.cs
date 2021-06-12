@@ -3,6 +3,34 @@ using Godot;
 
 namespace TribesOfDust.Hex
 {
+    public static class CubeCoordinate
+    {
+        public static CubeCoordinate<int> FromQR(int q, int r) => new (q, -(q + r), r);
+        public static CubeCoordinate<float> FromQR(float q, float r) => new (q, -(q + r), r);
+
+        public static AxialCoordinate<int> ToAxialCoordinate(this CubeCoordinate<int> coordinate)
+        {
+            var (x, _, z) = coordinate;
+            return new(x, z);
+        }
+
+        public static AxialCoordinate<float> ToAxialCoordinate(this CubeCoordinate<float> coordinate)
+        {
+            var (x, _, z) = coordinate;
+            return new(x, z);
+        }
+
+        /// <summary> Round a cube coorindate to the nearest integer. </summary>
+        /// <remarks> Rounds each element individually. </remarks>
+        /// <param name="coordinate">The coordinate to round.</param>
+        public static CubeCoordinate<int> Round(this CubeCoordinate<float> coordinate)
+        {
+            var x = (int) Mathf.Round(coordinate.X);
+            var y = (int) Mathf.Round(coordinate.Y);
+            var z = (int) Mathf.Round(coordinate.Z);
+            return new(x, y, z);
+        }
+    }
 
     /// <summary>
     /// Cube coordinates based index.
@@ -21,6 +49,31 @@ namespace TribesOfDust.Hex
         }
     }
 
+    public static class AxialCoordinate
+    {
+        public static CubeCoordinate<int> ToCubeCoordinate(this AxialCoordinate<int> coordinate)
+        {
+            var (q, r) = coordinate;
+            return CubeCoordinate.FromQR(q, r);
+        }
+
+        public static CubeCoordinate<float> ToCubeCoordinate(this AxialCoordinate<float> coordinate)
+        {
+            var (q, r) = coordinate;
+            return CubeCoordinate.FromQR(q, r);
+        }
+
+        /// <summary> Round an axial coorindate to the nearest integer. </summary>
+        /// <remarks> Rounds each element individually. </remarks>
+        /// <param name="coordinate">The coordinate to round.</param>
+        public static AxialCoordinate<int> Round(this AxialCoordinate<float> coordinate)
+        {
+            var q = (int) Mathf.Round(coordinate.Q);
+            var r = (int) Mathf.Round(coordinate.R);
+            return new(q, r);
+        }
+    }
+
     /// <summary>
     /// Axial coordinates based index.
     /// </summary>
@@ -33,48 +86,6 @@ namespace TribesOfDust.Hex
             return (Q.GetHashCode(),
                     R.GetHashCode())
                 .GetHashCode();
-        }
-    }
-
-    public static class HexCoordinate
-    {
-        public static CubeCoordinate<int> ToCubeCoordinate(this AxialCoordinate<int> axialCoordinate)
-        {
-            var (q, r) = axialCoordinate;
-            return new(q, -(q + r), r);
-        }
-
-        public static CubeCoordinate<float> ToCubeCoordinate(this AxialCoordinate<float> axialCoordinate)
-        {
-            var (q, r) = axialCoordinate;
-            return new(q, -(q + r), r);
-        }
-
-        public static AxialCoordinate<int> ToAxialCoordinate(this CubeCoordinate<int> cubeCoordinate)
-        {
-            var (x, _, z) = cubeCoordinate;
-            return new(x, z);
-        }
-
-        public static AxialCoordinate<float> ToAxialCoordinate(this CubeCoordinate<float> cubeCoordinate)
-        {
-            var (x, _, z) = cubeCoordinate;
-            return new(x, z);
-        }
-
-        public static CubeCoordinate<int> Round(this CubeCoordinate<float> cubeCoordinate)
-        {
-            var rx = (int)Mathf.Round(cubeCoordinate.X);
-            var ry = (int)Mathf.Round(cubeCoordinate.Y);
-            var rz = (int)Mathf.Round(cubeCoordinate.Z);
-            return new(rx, ry, rz);
-        }
-
-        public static AxialCoordinate<int> Round(this AxialCoordinate<float> axialCoordinate)
-        {
-            var rq = (int)Mathf.Round(axialCoordinate.Q);
-            var rr = (int)Mathf.Round(axialCoordinate.R);
-            return new(rq, rr);
         }
     }
 }

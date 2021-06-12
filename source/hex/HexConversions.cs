@@ -9,18 +9,18 @@ namespace TribesOfDust.Hex
     {
         public static Vector2 HexToWorld(AxialCoordinate<int> coordinates, float size)
         {
-            var x = 3.0f / 2.0f * coordinates.Q;
-            var y = Mathf.Sqrt(1 - 0.25f) * coordinates.Q + coordinates.R * (2.0f * Mathf.Sqrt(1 - 0.25f));
-            return new Vector2(x * size, y * size);
+            var x = size * (coordinates.Q * 3.0f / 2.0f);
+            var y = size * (coordinates.Q * Mathf.Sqrt(3.0f) / 2.0f + coordinates.R * Mathf.Sqrt(3.0f));
+
+            return new Vector2(x, y);
         }
 
         public static AxialCoordinate<int> WorldToHex(Vector2 position, float size)
         {
-            var r = 2.0f / 3.0f * position.y / size;
-            var q = (Mathf.Sqrt(3.0f) / 3.0f * position.x - 1.0f / 3.0f * position.y ) / size;
+            var q = position.x * 2.0f / (3.0f * size);
+            var r = position.x * -1.0f/ (3.0f * size) + position.y * 1.0f / (Mathf.Sqrt(3.0f) * size);
 
-            var axialCoordinate = new AxialCoordinate<float>((int)q, (int)r);
-            return HexRound(axialCoordinate.ToCubeCoordinate());
+            return HexRound(new AxialCoordinate<float>(q, r).ToCubeCoordinate());
         }
 
         private static AxialCoordinate<int> HexRound(CubeCoordinate<float> cubeCoordinate)

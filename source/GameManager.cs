@@ -48,6 +48,7 @@ namespace TribesOfDust
                     var tile = new HexTile
                     {
                         Texture = TileTexture.Value,
+                        Centered = true,
                         Coordinates = axialCoordinates,
                         Position = position
                     };
@@ -60,11 +61,9 @@ namespace TribesOfDust
 
         public override void _Input(InputEvent inputEvent)
         {
-            if (inputEvent is InputEventMouseMotion mouseMotion)
+            if (inputEvent is InputEventMouseMotion)
             {
-                var world = mouseMotion.Position + GetNode<Camera2D>("CameraRoot").Position;
-                DebugSpriteMP.Value.Position = world;
-
+                var world = GetGlobalMousePosition();
                 var hex = HexConversions.WorldToHex(world, Size);
                 var debug = HexConversions.HexToWorld(hex, Size);
 
@@ -77,6 +76,7 @@ namespace TribesOfDust
                 DebugSpriteTR.Value.Position = TopRight;
                 DebugSpriteBL.Value.Position = BottomLeft;
                 DebugSpriteBR.Value.Position = BottomRight;
+                DebugSpriteMP.Value.Position = world;
 
                 if (ActiveTile?.Coordinates != hex && Tiles.TryGetValue(hex, out HexTile tile))
                 {
