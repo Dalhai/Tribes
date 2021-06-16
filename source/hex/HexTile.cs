@@ -6,8 +6,15 @@ namespace TribesOfDust.Hex
 {
     public class HexTile : Sprite
     {
-        public AxialCoordinate<int> Coordinates { get; init; }
-        public TileType Type { get; init; }
-        public List<TileEffect> Effects { get; init; }
+        public HexTile(AxialCoordinate<int> coordinates, TileType type, List<TileEffect> effects)
+        {
+            Coordinates = coordinates;
+            Type = type;
+            Effects = effects;
+        }
+
+        public AxialCoordinate<int> Coordinates { get; }
+        public TileType Type { get; }
+        public List<TileEffect> Effects { get; }
     }
 }

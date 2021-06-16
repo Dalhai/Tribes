@@ -45,11 +45,10 @@ namespace TribesOfDust
                     var axialCoordinates = new AxialCoordinate<int>(x, z);
                     var position = HexConversions.HexToWorld(axialCoordinates, _size);
 
-                    var tile = new HexTile
+                    var tile = new HexTile(axialCoordinates,TileType.Open,new())
                     {
                         Texture = TileTexture.Value,
                         Centered = true,
-                        Coordinates = axialCoordinates,
                         Position = position
                     };
 
