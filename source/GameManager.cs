@@ -23,10 +23,10 @@ namespace TribesOfDust
 
         private static readonly Lazy<Sprite> DebugSpriteMP = new(() => new Sprite() { Centered = true, Texture = DebugTexture.Value, ZIndex = 10 });
 
-        private readonly Dictionary<AxialCoordinate<int>, HexTile> Tiles = new ();
-        private HexTile? ActiveTile;
+        private readonly Dictionary<AxialCoordinate<int>, HexTile> _tiles = new ();
+        private HexTile? _activeTile;
 
-        private float Size;
+        private float _size;
 
         public override void _Ready()
         {
@@ -36,14 +36,14 @@ namespace TribesOfDust
             AddChild(DebugSpriteBR.Value);
             AddChild(DebugSpriteMP.Value);
 
-            Size = TileTexture.Value.GetWidth() / 2.0f;
+            _size = TileTexture.Value.GetWidth() / 2.0f;
 
             for (int x = 0; x < 10; ++x)
             {
                 for (int z = 0; z < 10; ++z)
                 {
                     var axialCoordinates = new AxialCoordinate<int>(x, z);
-                    var position = HexConversions.HexToWorld(axialCoordinates, Size);
+                    var position = HexConversions.HexToWorld(axialCoordinates, _size);
 
                     var tile = new HexTile
                     {
@@ -54,7 +54,7 @@ namespace TribesOfDust
                     };
 
                     AddChild(tile);
-                    Tiles.Add(tile.Coordinates, tile);
+                    _tiles.Add(tile.Coordinates, tile);
                 }
             }
         }
@@ -64,28 +64,28 @@ namespace TribesOfDust
             if (inputEvent is InputEventMouseMotion)
             {
                 var world = GetGlobalMousePosition();
-                var hex = HexConversions.WorldToHex(world, Size);
-                var debug = HexConversions.HexToWorld(hex, Size);
+                var hex = HexConversions.WorldToHex(world, _size);
+                var debug = HexConversions.HexToWorld(hex, _size);
 
-                Vector2 TopLeft = debug + Vector2.Left * Size + Vector2.Up * Size;
-                Vector2 TopRight = debug + Vector2.Right * Size + Vector2.Up * Size;
-                Vector2 BottomLeft = debug + Vector2.Left * Size + Vector2.Down * Size;
-                Vector2 BottomRight = debug + Vector2.Right * Size + Vector2.Down * Size;
+                Vector2 topLeft = debug + Vector2.Left * _size + Vector2.Up * _size;
+                Vector2 topRight = debug + Vector2.Right * _size + Vector2.Up * _size;
+                Vector2 bottomLeft = debug + Vector2.Left * _size + Vector2.Down * _size;
+                Vector2 bottomRight = debug + Vector2.Right * _size + Vector2.Down * _size;
 
-                DebugSpriteTL.Value.Position = TopLeft;
-                DebugSpriteTR.Value.Position = TopRight;
-                DebugSpriteBL.Value.Position = BottomLeft;
-                DebugSpriteBR.Value.Position = BottomRight;
+                DebugSpriteTL.Value.Position = topLeft;
+                DebugSpriteTR.Value.Position = topRight;
+                DebugSpriteBL.Value.Position = bottomLeft;
+                DebugSpriteBR.Value.Position = bottomRight;
                 DebugSpriteMP.Value.Position = world;
 
-                if (ActiveTile?.Coordinates != hex && Tiles.TryGetValue(hex, out HexTile tile))
+                if (_activeTile?.Coordinates != hex && _tiles.TryGetValue(hex, out HexTile tile))
                 {
-                    if (ActiveTile is not null)
+                    if (_activeTile is not null)
                     {
-                        ActiveTile.Modulate = Colors.White;
+                        _activeTile.Modulate = Colors.White;
                     }
 
-                    ActiveTile = tile;
+                    _activeTile = tile;
                     tile.Modulate = Colors.Aqua;
                 }
             }

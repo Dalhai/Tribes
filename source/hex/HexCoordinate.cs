@@ -20,7 +20,7 @@ namespace TribesOfDust.Hex
             return new(x, z);
         }
 
-        /// <summary> Round a cube coorindate to the nearest integer. </summary>
+        /// <summary> Round a cube coordinate to the nearest integer. </summary>
         /// <remarks> Rounds each element individually. </remarks>
         /// <param name="coordinate">The coordinate to round.</param>
         public static CubeCoordinate<int> Round(this CubeCoordinate<float> coordinate)
@@ -63,7 +63,7 @@ namespace TribesOfDust.Hex
             return CubeCoordinate.FromQR(q, r);
         }
 
-        /// <summary> Round an axial coorindate to the nearest integer. </summary>
+        /// <summary> Round an axial coordinate to the nearest integer. </summary>
         /// <remarks> Rounds each element individually. </remarks>
         /// <param name="coordinate">The coordinate to round.</param>
         public static AxialCoordinate<int> Round(this AxialCoordinate<float> coordinate)
