@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 namespace TribesOfDust.Hex
@@ -7,5 +8,6 @@ namespace TribesOfDust.Hex
     {
         public AxialCoordinate<int> Coordinates { get; init; }
         public TileType Type { get; init; }
+        public List<TileEffect> Effects { get; init; }
     }
 }
