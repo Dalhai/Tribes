@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using TribesOfDust.Hex;
+using TribesOfDust.Map;
 
 namespace System.Runtime.CompilerServices
 {
@@ -13,21 +14,24 @@ namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-        private readonly Dictionary<AxialCoordinate<int>, HexTile> _tiles = new();
+        private Dictionary<AxialCoordinate<int>, HexTile> _tiles = new();
         private HexTile? _activeTile;
 
         public override void _Ready()
         {
-            for (int x = 0; x < 10; ++x)
+            Dictionary<AxialCoordinate<int>, TileType> tiles = new();
+            tiles.Add(new AxialCoordinate<int>(0,0),TileType.Rocks);
+            tiles.Add(new AxialCoordinate<int>(1,-1),TileType.Open);
+            tiles.Add(new AxialCoordinate<int>(1,0),TileType.Open);
+            tiles.Add(new AxialCoordinate<int>(0,1),TileType.Canyon);
+            tiles.Add(new AxialCoordinate<int>(-1,1),TileType.Canyon);
+            tiles.Add(new AxialCoordinate<int>(-1,0),TileType.Dune);
+            tiles.Add(new AxialCoordinate<int>(0,-1),TileType.Tundra);
+            MapTemplate mapTemplate = new MapTemplate(tiles);
+            _tiles = mapTemplate.Generate();
+            foreach (var tile in _tiles)
             {
-                for (int z = 0; z < 10; ++z)
-                {
-                    var axialCoordinates = new AxialCoordinate<int>(x, z);
-                    var tile = new HexTile(axialCoordinates, TileType.Open);
-                    
-                    AddChild(tile);
-                    _tiles.Add(tile.Coordinates, tile);
-                }
+                AddChild(tile.Value);  
             }
         }
 
