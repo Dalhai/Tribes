@@ -49,6 +49,8 @@ namespace TribesOfDust
             {
                 AddChild(tile.Value);
             }
+            
+            mapTemplate.Save();
         }
 
         public override void _Input(InputEvent inputEvent)
