@@ -28,7 +28,7 @@ namespace TribesOfDust
             tiles.Add(new AxialCoordinate<int>(-1,0),TileType.Dune);
             tiles.Add(new AxialCoordinate<int>(0,-1),TileType.Tundra);
 
-            MapTemplate mapTemplate = new MapTemplate(tiles);
+            MapTemplate mapTemplate = new(tiles);
             _tiles = mapTemplate.Generate();
             foreach (var tile in _tiles)
             {
@@ -38,7 +38,10 @@ namespace TribesOfDust
             var assets = TileAsset.LoadAll();
             foreach (var asset in assets)
             {
-                GD.Print($"{asset.Type.ToString()}, {asset.Texture.ResourcePath}");
+                string type = asset.Type.ToString();
+                string texture = asset.Texture?.ResourcePath ?? "Not assigned";
+
+                GD.Print($"{type}, {texture}");
             }
         }
 
