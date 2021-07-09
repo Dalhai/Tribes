@@ -8,14 +8,10 @@
 
 config_version=4
 
-_global_script_classes=[  ]
-_global_script_class_icons={
-}
-
 [application]
 
 config/name="tribes_of_dust"
-run/main_scene="res://Scenes/Scene.tscn"
+run/main_scene="res://scenes/Scene.tscn"
 
 [display]
 
@@ -27,6 +23,7 @@ file_logging/enable_file_logging=true
 
 [mono]
 
+debugger_agent/port=23575
 debugger_agent/wait_for_debugger=true
 
 [rendering]

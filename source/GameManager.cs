@@ -27,11 +27,18 @@ namespace TribesOfDust
             tiles.Add(new AxialCoordinate<int>(-1,1),TileType.Canyon);
             tiles.Add(new AxialCoordinate<int>(-1,0),TileType.Dune);
             tiles.Add(new AxialCoordinate<int>(0,-1),TileType.Tundra);
+
             MapTemplate mapTemplate = new MapTemplate(tiles);
             _tiles = mapTemplate.Generate();
             foreach (var tile in _tiles)
             {
                 AddChild(tile.Value);  
+            }
+
+            var assets = TileAsset.LoadAll();
+            foreach (var asset in assets)
+            {
+                GD.Print($"{asset.Type.ToString()}, {asset.Texture.ResourcePath}");
             }
         }
 
