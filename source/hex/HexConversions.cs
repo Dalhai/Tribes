@@ -1,7 +1,4 @@
-﻿using System;
-using Godot;
-
-using static System.Diagnostics.Trace;
+﻿using Godot;
 
 namespace TribesOfDust.Hex
 {

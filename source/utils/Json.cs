@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+
 using TribesOfDust.Hex;
 
 namespace TribesOfDust.Utils

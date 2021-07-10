@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 using Godot;
@@ -6,7 +5,6 @@ using GodotJson = Godot.Collections.Dictionary;
 
 using TribesOfDust.Hex;
 using TribesOfDust.Map;
-using TribesOfDust.Utils;
 
 namespace System.Runtime.CompilerServices
 {
@@ -20,24 +18,42 @@ namespace TribesOfDust
     public class GameManager : Node2D
     {
         private Dictionary<AxialCoordinate<int>, HexTile> _tiles = new();
+        private Dictionary<TileType, TileAsset> _assets = new();
         private HexTile? _activeTile;
+        private MapTemplate? _mapTemplate;
 
         public override void _Ready()
         {
-            Dictionary<AxialCoordinate<int>, TileType> tiles = new();
-            Dictionary<TileType, TileAsset> assets = new();
+            // Try to load the tile assets and the default map template
 
-            LoadTileAssets(assets);
-            Load(out MapTemplate? mapTemplate);
+            LoadTileAssets(_assets);
+            Load(out _mapTemplate);
 
-            if (mapTemplate is not null)
+            // Try to generate a map from the map template
+
+            if (_mapTemplate is not null)
             {
-                _tiles = mapTemplate.Generate(assets);
+                _tiles = _mapTemplate.Generate(_assets);
                 foreach (var tile in _tiles)
                 {
                     AddChild(tile.Value);
                 }
             }
+
+            base._Ready();
+        }
+
+        public override void _ExitTree()
+        {
+            // If we have a map template, save the map template in the file system.
+            // We overwrite the existing map template with our new map.
+
+            if (_mapTemplate is not null)
+            {
+                Save(_mapTemplate);
+            }
+
+            base._ExitTree();
         }
 
         private static void LoadTileAssets(Dictionary<TileType, TileAsset> assets)
