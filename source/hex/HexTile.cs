@@ -104,7 +104,6 @@ namespace TribesOfDust.Hex
 
             if (texture == null)
             {
-                tile = null;
                 return false;
             }
 
@@ -112,13 +111,11 @@ namespace TribesOfDust.Hex
 
             if (json[keyCoordinates] is not GodotJson coordinatesJson || !Json.TryDeserialize(coordinatesJson, out AxialCoordinate<int> coordinates))
             {
-                tile = null;
                 return false;
             }
 
             if (json[keyScale] is not GodotJson scaleJson || !Json.TryDeserialize(scaleJson, out Vector2 scale))
             {
-                tile = null;
                 return false;
             }
 
@@ -126,7 +123,6 @@ namespace TribesOfDust.Hex
 
             if (json[keyType] is not string typeJson || !Enum.TryParse(typeJson, out TileType type))
             {
-                tile = null;
                 return false;
             }
 

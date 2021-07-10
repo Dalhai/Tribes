@@ -102,14 +102,12 @@ namespace TribesOfDust
             // Try to open the default map file to load our default map.
             Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Read);
 
-            // If opening the file worked, serialize the template map and store it in the file as JSON.
+            // If opening the file worked, deserialize the template map.
             if (fileOpenError == Error.Ok)
             {
                 var stringMap = targetFile.GetLine();
                 var jsonMap = JSON.Parse(stringMap);
                 targetFile.Close();
-
-                GD.Print(jsonMap.Result.GetType().Name);
 
                 if (jsonMap.Result is GodotJson json)
                 {
