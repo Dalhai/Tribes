@@ -1,3 +1,5 @@
+using System;
+
 using Godot;
 using Godot.Collections;
 
@@ -29,20 +31,28 @@ namespace TribesOfDust.Utils
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
         public static bool TryDeserialize(Dictionary json, out Vector2 output)
         {
+            output = Vector2.Zero;
+
             string keyX = nameof(Vector2.x).ToLower();
             string keyY = nameof(Vector2.y).ToLower();
 
             if (!json.Contains(keyX) || !json.Contains(keyY))
             {
-                output = Vector2.Zero;
                 return false;
             }
 
-            float x = System.Convert.ToSingle(json[keyX]);
-            float y = System.Convert.ToSingle(json[keyY]);
+            try
+            {
+                float x = Convert.ToSingle(json[keyX]);
+                float y = Convert.ToSingle(json[keyY]);
 
-            output = new(x, y);
-            return true;
+                output = new(x, y);
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -68,22 +78,30 @@ namespace TribesOfDust.Utils
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
         public static bool TryDeserialize(Dictionary json, out Vector3 output)
         {
+            output = Vector3.Zero;
+
             string keyX = nameof(Vector3.x).ToLower();
             string keyY = nameof(Vector3.y).ToLower();
             string keyZ = nameof(Vector3.z).ToLower();
 
             if (!json.Contains(keyX) || !json.Contains(keyY) || !json.Contains(keyZ))
             {
-                output = Vector3.Zero;
                 return false;
             }
 
-            float x = System.Convert.ToSingle(json[keyX]);
-            float y = System.Convert.ToSingle(json[keyY]);
-            float z = System.Convert.ToSingle(json[keyZ]);
+            try
+            {
+                float x = Convert.ToSingle(json[keyX]);
+                float y = Convert.ToSingle(json[keyY]);
+                float z = Convert.ToSingle(json[keyZ]);
 
-            output = new(x, y, z);
-            return true;
+                output = new(x, y, z);
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -108,20 +126,28 @@ namespace TribesOfDust.Utils
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
         public static bool TryDeserialize(Dictionary json, out AxialCoordinate<int> output)
         {
+            output = new(0, 0);
+
             string keyQ = nameof(AxialCoordinate<int>.Q).ToLower();
             string keyR = nameof(AxialCoordinate<int>.R).ToLower();
 
             if (!json.Contains(keyQ) || !json.Contains(keyR))
             {
-                output = new(0, 0);
                 return false;
             }
 
-            int q = System.Convert.ToInt32(json[keyQ]);
-            int r = System.Convert.ToInt32(json[keyR]);
+            try
+            {
+                int q = Convert.ToInt32(json[keyQ]);
+                int r = Convert.ToInt32(json[keyR]);
 
-            output = new(q, r);
-            return true;
+                output = new(q, r);
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -147,22 +173,30 @@ namespace TribesOfDust.Utils
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
         public static bool TryDeserialize(Dictionary json, out CubeCoordinate<int> output)
         {
+            output = new(0, 0, 0);
+
             string keyX = nameof(CubeCoordinate<int>.X).ToLower();
             string keyY = nameof(CubeCoordinate<int>.X).ToLower();
             string keyZ = nameof(CubeCoordinate<int>.X).ToLower();
 
             if (!json.Contains(keyX) || !json.Contains(keyY) || !json.Contains(keyZ))
             {
-                output = new(0, 0, 0);
                 return false;
             }
 
-            int x = System.Convert.ToInt32(json[keyX]);
-            int y = System.Convert.ToInt32(json[keyY]);
-            int z = System.Convert.ToInt32(json[keyZ]);
+            try
+            {
+                int x = Convert.ToInt32(json[keyX]);
+                int y = Convert.ToInt32(json[keyY]);
+                int z = Convert.ToInt32(json[keyZ]);
 
-            output = new(x, y, z);
-            return true;
+                output = new(x, y, z);
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
     }
 }
