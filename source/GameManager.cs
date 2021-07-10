@@ -1,7 +1,12 @@
-using Godot;
+using System;
 using System.Collections.Generic;
+
+using Godot;
+using GodotJson = Godot.Collections.Dictionary;
+
 using TribesOfDust.Hex;
 using TribesOfDust.Map;
+using TribesOfDust.Utils;
 
 namespace System.Runtime.CompilerServices
 {
@@ -22,8 +27,21 @@ namespace TribesOfDust
             Dictionary<AxialCoordinate<int>, TileType> tiles = new();
             Dictionary<TileType, TileAsset> assets = new();
 
-            MapTemplate mapTemplate = new(tiles);
+            LoadTileAssets(assets);
+            Load(out MapTemplate? mapTemplate);
 
+            if (mapTemplate is not null)
+            {
+                _tiles = mapTemplate.Generate(assets);
+                foreach (var tile in _tiles)
+                {
+                    AddChild(tile.Value);
+                }
+            }
+        }
+
+        private static void LoadTileAssets(Dictionary<TileType, TileAsset> assets)
+        {
             var loadedAssets = TileAsset.LoadAll();
             int current = 0;
             foreach (TileAsset asset in loadedAssets)
@@ -33,9 +51,6 @@ namespace TribesOfDust
 
                 GD.Print($"{type}, {texture}");
 
-                for (int tileIndex = 0; tileIndex < 3; ++tileIndex)
-                    tiles.Add(new AxialCoordinate<int>(current, tileIndex), asset.Type);
-
                 if (!assets.ContainsKey(asset.Type))
                 {
                     assets.Add(asset.Type, asset);
@@ -43,14 +58,48 @@ namespace TribesOfDust
 
                 current += 1;
             }
+        }
 
-            _tiles = mapTemplate.Generate(assets);
-            foreach (var tile in _tiles)
+        private static void Save(MapTemplate mapTemplate)
+        {
+            var targetFile = new File();
+
+            // Try to open the default map file to save our default map.
+            Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Write);
+
+            // If opening the file worked, serialize the template map and store it in the file as JSON.
+            if (fileOpenError == Error.Ok)
             {
-                AddChild(tile.Value);
-            }
+                var serializedMap = mapTemplate.Serialize();
+                var jsonMap = JSON.Print(serializedMap);
 
-            mapTemplate.Save();
+                targetFile.StoreLine(jsonMap);
+                targetFile.Close();
+            }
+        }
+
+        private static void Load(out MapTemplate? mapTemplate)
+        {
+            mapTemplate = null;
+            var targetFile = new File();
+
+            // Try to open the default map file to load our default map.
+            Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Read);
+
+            // If opening the file worked, serialize the template map and store it in the file as JSON.
+            if (fileOpenError == Error.Ok)
+            {
+                var stringMap = targetFile.GetLine();
+                var jsonMap = JSON.Parse(stringMap);
+                targetFile.Close();
+
+                GD.Print(jsonMap.Result.GetType().Name);
+
+                if (jsonMap.Result is GodotJson json)
+                {
+                    MapTemplate.TryDeserialize(json, out mapTemplate);
+                }
+            }
         }
 
         public override void _Input(InputEvent inputEvent)

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Godot;
-using GodotJson = Godot.Collections.Dictionary<string, object>;
+using GodotJson = Godot.Collections.Dictionary;
 
 using TribesOfDust.Utils;
 
@@ -84,53 +84,54 @@ namespace TribesOfDust.Hex
         /// <returns>True, if the tile could be deserialized, false otherwise.</returns>
         public static bool TryDeserialize(GodotJson json, out HexTile? tile)
         {
-                string keyCoordinates = nameof(Coordinates).ToLower();
-                string keyScale = nameof(Scale).ToLower();
-                string keyTexture = nameof(Texture).ToLower();
-                string keyType = nameof(Type).ToLower();
+            tile = null;
 
-                // Check if all necessary keys exist
+            string keyCoordinates = nameof(Coordinates).ToLower();
+            string keyScale = nameof(Scale).ToLower();
+            string keyTexture = nameof(Texture).ToLower();
+            string keyType = nameof(Type).ToLower();
 
-                if (!json.ContainsKey(keyCoordinates) || !json.ContainsKey(keyScale) || !json.ContainsKey(keyTexture) || !json.ContainsKey(keyType))
-                {
-                    tile = null;
-                    return false;
-                }
+            // Check if all necessary keys exist
 
-                // Check if the texture can be loaded
+            if (!json.Contains(keyCoordinates) || !json.Contains(keyScale) || !json.Contains(keyTexture) || !json.Contains(keyType))
+            {
+                return false;
+            }
 
-                Texture texture = GD.Load<Texture>((string) json[keyTexture]);
+            // Check if the texture can be loaded
 
-                if (texture == null)
-                {
-                    tile = null;
-                    return false;
-                }
+            Texture texture = GD.Load<Texture>((string) json[keyTexture]);
 
-                // Check if the scale and coordinates can be deserialized
+            if (texture == null)
+            {
+                tile = null;
+                return false;
+            }
 
-                if (json[keyCoordinates] is not GodotJson coordinatesJson || !Json.TryDeserialize(coordinatesJson, out AxialCoordinate<int> coordinates))
-                {
-                    tile = null;
-                    return false;
-                }
+            // Check if the scale and coordinates can be deserialized
 
-                if (json[keyScale] is not GodotJson scaleJson || !Json.TryDeserialize(scaleJson, out Vector2 scale))
-                {
-                    tile = null;
-                    return false;
-                }
+            if (json[keyCoordinates] is not GodotJson coordinatesJson || !Json.TryDeserialize(coordinatesJson, out AxialCoordinate<int> coordinates))
+            {
+                tile = null;
+                return false;
+            }
 
-                // Check if the tile type can be deserialized
+            if (json[keyScale] is not GodotJson scaleJson || !Json.TryDeserialize(scaleJson, out Vector2 scale))
+            {
+                tile = null;
+                return false;
+            }
 
-                if (json[keyType] is not string typeJson || !Enum.TryParse(typeJson, out TileType type))
-                {
-                    tile = null;
-                    return false;
-                }
+            // Check if the tile type can be deserialized
 
-                tile = new (coordinates, type, texture, scale);
-                return true;
+            if (json[keyType] is not string typeJson || !Enum.TryParse(typeJson, out TileType type))
+            {
+                tile = null;
+                return false;
+            }
+
+            tile = new (coordinates, type, texture, scale);
+            return true;
         }
 
         private readonly List<TileEffect> _effects = new();

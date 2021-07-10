@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
-using Godot;
-using GodotJson = Godot.Collections.Dictionary<string, object>;
-using GodotArray = Godot.Collections.Array<object>;
+using GodotJson = Godot.Collections.Dictionary;
+using GodotArray = Godot.Collections.Array;
 
 using TribesOfDust.Hex;
 using TribesOfDust.Utils;
@@ -102,6 +102,62 @@ namespace TribesOfDust.Map
             result.Add(nameof(FountainCoordinates).ToLower(), serializedFountains);
 
             return result;
+        }
+
+        public static bool TryDeserialize(GodotJson json, out MapTemplate? map)
+        {
+            map = null;
+
+            string keyTiles = nameof(Tiles).ToLower();
+            string keyPool = nameof(TilePool).ToLower();
+            string keyStarts = nameof(StartCoordinates).ToLower();
+            string keyFountains = nameof(FountainCoordinates).ToLower();
+
+            if (!json.Contains(keyTiles) || !json.Contains(keyPool) || !json.Contains(keyStarts) || !json.Contains(keyFountains))
+            {
+                return false;
+            }
+
+            // Try to deserialize the pre-placed tiles into this dictionary
+            Dictionary<AxialCoordinate<int>, TileType> tiles = new ();
+
+            // First need to check whether the are even tiles available
+            if (json[keyTiles] is GodotArray jsonTiles)
+            {
+                string keyCoordinates = "coordinates";
+                string keyType = "type";
+
+                foreach (var jsonTile in jsonTiles)
+                {
+                    if (jsonTile is not GodotJson tileObject)
+                        continue;
+
+                    if (!tileObject.Contains(keyCoordinates) || !tileObject.Contains(keyType))
+                    {
+                        return false;
+                    }
+
+                    // Try to get the coordinates
+
+                    if (tileObject[keyCoordinates] is not GodotJson jsonCoordinates || !Json.TryDeserialize(jsonCoordinates, out AxialCoordinate<int> coordinates))
+                    {
+                        return false;
+                    }
+
+                    // Try to get the tile type
+
+                    if (tileObject[keyType] is not string jsonType || !Enum.TryParse(jsonType, out TileType type))
+                    {
+                        return false;
+                    }
+
+                    // Append the tile information to the output
+                    tiles.Add(coordinates, type);
+                }
+            }
+
+            map = new(tiles);
+            return true;
         }
 
         private readonly Dictionary<AxialCoordinate<int>, TileType> _tiles;

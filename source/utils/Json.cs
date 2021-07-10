@@ -11,7 +11,7 @@ namespace TribesOfDust.Utils
         /// </summary>
         /// <param name="vector">The vector to serialize.</param>
         /// <returns>The serialized vector.</returns>
-        public static Dictionary<string, object> Serialize(this Vector2 vector)
+        public static Dictionary Serialize(this Vector2 vector)
         {
             return new()
             {
@@ -26,19 +26,19 @@ namespace TribesOfDust.Utils
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output vector.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(Dictionary<string, object> json, out Vector2 output)
+        public static bool TryDeserialize(Dictionary json, out Vector2 output)
         {
             string keyX = nameof(Vector2.x).ToLower();
             string keyY = nameof(Vector2.y).ToLower();
 
-            if (!json.ContainsKey(keyX) || !json.ContainsKey(keyY))
+            if (!json.Contains(keyX) || !json.Contains(keyY))
             {
                 output = Vector2.Zero;
                 return false;
             }
 
-            float x = (float) json[keyX];
-            float y = (float) json[keyY];
+            float x = System.Convert.ToSingle(json[keyX]);
+            float y = System.Convert.ToSingle(json[keyY]);
 
             output = new(x, y);
             return true;
@@ -49,7 +49,7 @@ namespace TribesOfDust.Utils
         /// </summary>
         /// <param name="vector">The vector to serialize.</param>
         /// <returns>The serialized vector.</returns>
-        public static Dictionary<string, object> Serialize(this Vector3 vector)
+        public static Dictionary Serialize(this Vector3 vector)
         {
             return new()
             {
@@ -65,21 +65,21 @@ namespace TribesOfDust.Utils
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output vector.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(Dictionary<string, object> json, out Vector3 output)
+        public static bool TryDeserialize(Dictionary json, out Vector3 output)
         {
             string keyX = nameof(Vector3.x).ToLower();
             string keyY = nameof(Vector3.y).ToLower();
             string keyZ = nameof(Vector3.z).ToLower();
 
-            if (!json.ContainsKey(keyX) || !json.ContainsKey(keyY) || !json.ContainsKey(keyZ))
+            if (!json.Contains(keyX) || !json.Contains(keyY) || !json.Contains(keyZ))
             {
                 output = Vector3.Zero;
                 return false;
             }
 
-            float x = (float) json[keyX];
-            float y = (float) json[keyY];
-            float z = (float) json[keyZ];
+            float x = System.Convert.ToSingle(json[keyX]);
+            float y = System.Convert.ToSingle(json[keyY]);
+            float z = System.Convert.ToSingle(json[keyZ]);
 
             output = new(x, y, z);
             return true;
@@ -90,7 +90,7 @@ namespace TribesOfDust.Utils
         /// </summary>
         /// <param name="coordinates">The coordinates to serialize.</param>
         /// <returns>The serialized coordinates.</returns>
-        public static Dictionary<string, object> Serialize(this AxialCoordinate<int> coordinates)
+        public static Dictionary Serialize(this AxialCoordinate<int> coordinates)
         {
             return new()
             {
@@ -105,19 +105,19 @@ namespace TribesOfDust.Utils
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output coordinate.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(Dictionary<string, object> json, out AxialCoordinate<int> output)
+        public static bool TryDeserialize(Dictionary json, out AxialCoordinate<int> output)
         {
-            string keyQ = nameof(AxialCoordinate<int>.R).ToLower();
-            string keyR = nameof(AxialCoordinate<int>.Q).ToLower();
+            string keyQ = nameof(AxialCoordinate<int>.Q).ToLower();
+            string keyR = nameof(AxialCoordinate<int>.R).ToLower();
 
-            if (!json.ContainsKey(keyQ) || !json.ContainsKey(keyR))
+            if (!json.Contains(keyQ) || !json.Contains(keyR))
             {
                 output = new(0, 0);
                 return false;
             }
 
-            int q = (int) json[keyQ];
-            int r = (int) json[keyR];
+            int q = System.Convert.ToInt32(json[keyQ]);
+            int r = System.Convert.ToInt32(json[keyR]);
 
             output = new(q, r);
             return true;
@@ -128,7 +128,7 @@ namespace TribesOfDust.Utils
         /// </summary>
         /// <param name="coordinates">The coordinates to serialize.</param>
         /// <returns>The serialized coordinates.</returns>
-        public static Dictionary<string, object> Serialize(this CubeCoordinate<int> coordinates)
+        public static Dictionary Serialize(this CubeCoordinate<int> coordinates)
         {
             return new()
             {
@@ -144,21 +144,21 @@ namespace TribesOfDust.Utils
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output coordinate.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(Dictionary<string, object> json, out CubeCoordinate<int> output)
+        public static bool TryDeserialize(Dictionary json, out CubeCoordinate<int> output)
         {
             string keyX = nameof(CubeCoordinate<int>.X).ToLower();
             string keyY = nameof(CubeCoordinate<int>.X).ToLower();
             string keyZ = nameof(CubeCoordinate<int>.X).ToLower();
 
-            if (!json.ContainsKey(keyX) || !json.ContainsKey(keyY) || !json.ContainsKey(keyZ))
+            if (!json.Contains(keyX) || !json.Contains(keyY) || !json.Contains(keyZ))
             {
                 output = new(0, 0, 0);
                 return false;
             }
 
-            int x = (int) json[keyX];
-            int y = (int) json[keyY];
-            int z = (int) json[keyZ];
+            int x = System.Convert.ToInt32(json[keyX]);
+            int y = System.Convert.ToInt32(json[keyY]);
+            int z = System.Convert.ToInt32(json[keyZ]);
 
             output = new(x, y, z);
             return true;
