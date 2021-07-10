@@ -26,10 +26,10 @@ namespace TribesOfDust.Map
         /// </summary>
         public IDictionary<TileType, int> TilePool => _tilePool;
 
-        public Dictionary<AxialCoordinate<int>, HexTile> Generate() =>
+        public Dictionary<AxialCoordinate<int>, HexTile> Generate(Dictionary<TileType, TileAsset> assets) =>
             _tiles.ToDictionary(
                 tile => tile.Key,
-                tile => new HexTile(tile.Key, tile.Value)
+                tile => new HexTile(tile.Key, assets[tile.Value])
             );
 
         private readonly Dictionary<AxialCoordinate<int>, TileType> _tiles;

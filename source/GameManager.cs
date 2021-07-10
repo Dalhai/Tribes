@@ -20,28 +20,34 @@ namespace TribesOfDust
         public override void _Ready()
         {
             Dictionary<AxialCoordinate<int>, TileType> tiles = new();
-            tiles.Add(new AxialCoordinate<int>(0,0),TileType.Rocks);
-            tiles.Add(new AxialCoordinate<int>(1,-1),TileType.Open);
-            tiles.Add(new AxialCoordinate<int>(1,0),TileType.Open);
-            tiles.Add(new AxialCoordinate<int>(0,1),TileType.Canyon);
-            tiles.Add(new AxialCoordinate<int>(-1,1),TileType.Canyon);
-            tiles.Add(new AxialCoordinate<int>(-1,0),TileType.Dune);
-            tiles.Add(new AxialCoordinate<int>(0,-1),TileType.Tundra);
+            Dictionary<TileType, TileAsset> assets = new();
 
             MapTemplate mapTemplate = new(tiles);
-            _tiles = mapTemplate.Generate();
-            foreach (var tile in _tiles)
-            {
-                AddChild(tile.Value);  
-            }
 
-            var assets = TileAsset.LoadAll();
-            foreach (var asset in assets)
+            var loadedAssets = TileAsset.LoadAll();
+            int current = 0;
+            foreach (var asset in loadedAssets)
             {
                 string type = asset.Type.ToString();
                 string texture = asset.Texture?.ResourcePath ?? "Not assigned";
 
                 GD.Print($"{type}, {texture}");
+
+                for (int tileIndex = 0; tileIndex < 3; ++tileIndex)
+                    tiles.Add(new AxialCoordinate<int>(current, tileIndex), asset.Type);
+
+                if (!assets.ContainsKey(asset.Type))
+                {
+                    assets.Add(asset.Type, asset);
+                }
+
+                current += 1;
+            }
+
+            _tiles = mapTemplate.Generate(assets);
+            foreach (var tile in _tiles)
+            {
+                AddChild(tile.Value);
             }
         }
 
@@ -50,7 +56,7 @@ namespace TribesOfDust
             if (inputEvent is InputEventMouseMotion)
             {
                 var world = GetGlobalMousePosition();
-                var hex = HexConversions.WorldToHex(world, HexTile.Size);
+                var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
 
                 if (_activeTile?.Coordinates != hex && _tiles.TryGetValue(hex, out HexTile tile))
                 {
