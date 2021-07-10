@@ -6,41 +6,33 @@ namespace TribesOfDust.Hex
 {
     public class HexTile : Sprite
     {
-        private static readonly Lazy<Texture> MountainTexture = new(() => GD.Load<Texture>("res://assets/textures/tile_mountain_1.png"));
-        private static readonly Lazy<Texture> DefaultTexture = new(() => GD.Load<Texture>("res://assets/textures/tile_mountain_1.png"));
-        
-        /// <summary>
-        /// The radius of one hex tile.
-        /// </summary>
-        /// <remarks>
-        /// Currently defaults to the dimension of the default texture.
-        /// Is due to change in the future.
-        /// </remarks>
-        public static float Size => DefaultTexture.Value.GetWidth() / 2.0f;
-        
-        public HexTile(AxialCoordinate<int> coordinates, TileType type)
+        public HexTile(AxialCoordinate<int> coordinates, TileAsset asset)
         {
             Coordinates = coordinates;
-            Type = type;
-            Centered = true;
-            Position = HexConversions.HexToWorld(coordinates, Size);
 
-            switch (Type)
-            {
-                case TileType.Rocks:
-                    Texture = MountainTexture.Value;
-                    break;
-                default:
-                    Texture = DefaultTexture.Value;
-                    Modulate = Colors.Fuchsia;
-                    break;
-            }
+            // Initialize tile with properties from tile asset
+
+            Type = asset.Type;
+            Texture = asset.Texture;
+
+            // Scale tile according to specified texture
+
+            Scale = new Vector2(asset.WidthScaleToExpected, asset.HeightScaleToExpected);
+
+            // Position tile according to specified coordinates
+
+            Centered = true;
+            Position = HexConversions.HexToWorld(coordinates, TileAsset.ExpectedSize);
         }
 
-        public AxialCoordinate<int> Coordinates { get; }
+        public float Size => Width / 2.0f;
+        public float Width => Texture.GetWidth();
+        public float Height => Texture.GetHeight();
+
         public TileType Type { get; }
+        public AxialCoordinate<int> Coordinates { get; }
         public IEnumerable<TileEffect> Effects => _effects;
-        private List<TileEffect> _effects = new();
+
+        private readonly List<TileEffect> _effects = new();
     }
-    
 }
