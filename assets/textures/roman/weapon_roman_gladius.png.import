@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/weapon_druid_staff.png-5f6fa96aa27f440ce17a3df79ae76427.stex"
+path="res://.import/weapon_roman_gladius.png-e1240dbd6ec2e1ba4ad1ba5eb16dd260.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/weapon_druid_staff.png"
-dest_files=[ "res://.import/weapon_druid_staff.png-5f6fa96aa27f440ce17a3df79ae76427.stex" ]
+source_file="res://assets/textures/roman/weapon_roman_gladius.png"
+dest_files=[ "res://.import/weapon_roman_gladius.png-e1240dbd6ec2e1ba4ad1ba5eb16dd260.stex" ]
 
 [params]
 

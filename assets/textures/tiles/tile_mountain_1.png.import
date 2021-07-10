@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/armor_roman_helmet.png-dc8bc49dc0740467055b6527ed42dd1d.stex"
+path="res://.import/tile_mountain_1.png-fa51640e443d8fe0d8492d3108d9dae3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/armor_roman_helmet.png"
-dest_files=[ "res://.import/armor_roman_helmet.png-dc8bc49dc0740467055b6527ed42dd1d.stex" ]
+source_file="res://assets/textures/tiles/tile_mountain_1.png"
+dest_files=[ "res://.import/tile_mountain_1.png-fa51640e443d8fe0d8492d3108d9dae3.stex" ]
 
 [params]
 

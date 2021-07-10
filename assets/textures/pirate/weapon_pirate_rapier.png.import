@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/weapon_roman_sling_2.png-98852c3f4cfd7def0a367bc4e2a80554.stex"
+path="res://.import/weapon_pirate_rapier.png-e0967b5debd85730cc00766768e9f50c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/weapon_roman_sling_2.png"
-dest_files=[ "res://.import/weapon_roman_sling_2.png-98852c3f4cfd7def0a367bc4e2a80554.stex" ]
+source_file="res://assets/textures/pirate/weapon_pirate_rapier.png"
+dest_files=[ "res://.import/weapon_pirate_rapier.png-e0967b5debd85730cc00766768e9f50c.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Leg Lower.png-5085e75f558df2bd4b161beccf5d56b5.stex"
+path="res://.import/weapon_inuit_harpoon.png-941004664db1d81006cd64b2784dca95.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/character_puppet/Leg Lower.png"
-dest_files=[ "res://.import/Leg Lower.png-5085e75f558df2bd4b161beccf5d56b5.stex" ]
+source_file="res://assets/textures/inuit/weapon_inuit_harpoon.png"
+dest_files=[ "res://.import/weapon_inuit_harpoon.png-941004664db1d81006cd64b2784dca95.stex" ]
 
 [params]
 

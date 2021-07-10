@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/weapon_inuit_uluknife_2.png-df0b877671e40ce9bf5d95f422af1e80.stex"
+path="res://.import/armor_roman_helmet.png-08000991a4990cec15481a3a5a09c8c5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/weapon_inuit_uluknife_2.png"
-dest_files=[ "res://.import/weapon_inuit_uluknife_2.png-df0b877671e40ce9bf5d95f422af1e80.stex" ]
+source_file="res://assets/textures/roman/armor_roman_helmet.png"
+dest_files=[ "res://.import/armor_roman_helmet.png-08000991a4990cec15481a3a5a09c8c5.stex" ]
 
 [params]
 

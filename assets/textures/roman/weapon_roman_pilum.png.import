@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Neck.png-e4a6f2d57d592300b880b0a8f23315d1.stex"
+path="res://.import/weapon_roman_pilum.png-904f6d5e91f69cd0f04cb24f1b8b966c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/character_puppet/Neck.png"
-dest_files=[ "res://.import/Neck.png-e4a6f2d57d592300b880b0a8f23315d1.stex" ]
+source_file="res://assets/textures/roman/weapon_roman_pilum.png"
+dest_files=[ "res://.import/weapon_roman_pilum.png-904f6d5e91f69cd0f04cb24f1b8b966c.stex" ]
 
 [params]
 

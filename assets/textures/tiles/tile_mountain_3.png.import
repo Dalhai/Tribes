@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Head.png-bc38dafbb8e6011ecb2685b3ab431cfd.stex"
+path="res://.import/tile_mountain_3.png-4976a5b82d8bfc5fa92192c09aea1e70.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/character_puppet/Head.png"
-dest_files=[ "res://.import/Head.png-bc38dafbb8e6011ecb2685b3ab431cfd.stex" ]
+source_file="res://assets/textures/tiles/tile_mountain_3.png"
+dest_files=[ "res://.import/tile_mountain_3.png-4976a5b82d8bfc5fa92192c09aea1e70.stex" ]
 
 [params]
 

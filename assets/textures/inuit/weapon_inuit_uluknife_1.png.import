@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/weapon_druid_longbow.png-ef2ef5e291a178648c980added62383e.stex"
+path="res://.import/weapon_inuit_uluknife_1.png-44117e091a8ef2be253fe76cbfee8ce6.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/weapon_druid_longbow.png"
-dest_files=[ "res://.import/weapon_druid_longbow.png-ef2ef5e291a178648c980added62383e.stex" ]
+source_file="res://assets/textures/inuit/weapon_inuit_uluknife_1.png"
+dest_files=[ "res://.import/weapon_inuit_uluknife_1.png-44117e091a8ef2be253fe76cbfee8ce6.stex" ]
 
 [params]
 

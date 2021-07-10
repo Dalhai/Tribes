@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tile_mountain_3.png-79e7f93e0eca7752c00e10a6faba7173.stex"
+path="res://.import/weapon_druid_longbow.png-5eb366cab29b94aa561ad8acf8c44c84.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/tile_mountain_3.png"
-dest_files=[ "res://.import/tile_mountain_3.png-79e7f93e0eca7752c00e10a6faba7173.stex" ]
+source_file="res://assets/textures/druid/weapon_druid_longbow.png"
+dest_files=[ "res://.import/weapon_druid_longbow.png-5eb366cab29b94aa561ad8acf8c44c84.stex" ]
 
 [params]
 

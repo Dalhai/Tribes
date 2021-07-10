@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Body Upper Female.png-f4cdb426c61463c32ce691d635be9701.stex"
+path="res://.import/weapon_pirate_sword.png-47d584514b2004b4fd0ea93128f2cfee.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/character_puppet/Body Upper Female.png"
-dest_files=[ "res://.import/Body Upper Female.png-f4cdb426c61463c32ce691d635be9701.stex" ]
+source_file="res://assets/textures/pirate/weapon_pirate_sword.png"
+dest_files=[ "res://.import/weapon_pirate_sword.png-47d584514b2004b4fd0ea93128f2cfee.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/weapon_inuit_harpoon.png-017709360942a24b677b85189225af98.stex"
+path="res://.import/weapon_inuit_uluknife_2.png-a22721f7447db49b292127864ad13425.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/weapon_inuit_harpoon.png"
-dest_files=[ "res://.import/weapon_inuit_harpoon.png-017709360942a24b677b85189225af98.stex" ]
+source_file="res://assets/textures/inuit/weapon_inuit_uluknife_2.png"
+dest_files=[ "res://.import/weapon_inuit_uluknife_2.png-a22721f7447db49b292127864ad13425.stex" ]
 
 [params]
 

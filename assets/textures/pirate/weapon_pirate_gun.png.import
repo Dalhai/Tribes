@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Arm Upper.png-3250526c869ee50e271686027f3503d7.stex"
+path="res://.import/weapon_pirate_gun.png-fcc4d94e1993fa5f334f9ef9ead5076c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/character_puppet/Arm Upper.png"
-dest_files=[ "res://.import/Arm Upper.png-3250526c869ee50e271686027f3503d7.stex" ]
+source_file="res://assets/textures/pirate/weapon_pirate_gun.png"
+dest_files=[ "res://.import/weapon_pirate_gun.png-fcc4d94e1993fa5f334f9ef9ead5076c.stex" ]
 
 [params]
 
