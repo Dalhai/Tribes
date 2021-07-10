@@ -29,7 +29,7 @@ namespace TribesOfDust.Hex
             Position = HexConversions.HexToWorld(coordinates, TileAsset.ExpectedSize);
         }
 
-        public HexTile(AxialCoordinate<int> coordinates, TileType type, Texture texture, Vector2 scale)
+        private HexTile(AxialCoordinate<int> coordinates, TileType type, Texture texture, Vector2 scale)
         {
             Coordinates = coordinates;
 
