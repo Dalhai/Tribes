@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Utils;
@@ -6,6 +7,11 @@ namespace TribesOfDust.Hex
 {
     public class TileAsset : Resource
     {
+        public static readonly float ExpectedSize = 100.0f;
+        public static readonly float ExpectedWidth = 2.0f * ExpectedSize;
+        public static readonly float ExpectedHeight = 2.0f * Mathf.Sqrt(3.0f / 4.0f * ExpectedSize * ExpectedSize);
+        public static readonly float ExpectedRatio = ExpectedWidth / ExpectedHeight;
+
         /// <summary>
         /// The default resource path used for tile assets.
         /// </summary>
@@ -46,7 +52,26 @@ namespace TribesOfDust.Hex
             var name = dir.GetNext();
             while (!string.IsNullOrEmpty(name))
             {
-                results.Add(GD.Load<TileAsset>($"{Path}/{name}"));
+                var asset = GD.Load<TileAsset>($"{Path}/{name}");
+                if (asset != null && asset.Texture != null)
+                {
+                    float width = asset.Texture.GetWidth();
+                    float height = asset.Texture.GetHeight();
+                    float ratio = width / height;
+
+                    if(!Mathf.IsEqualApprox(ratio, ExpectedRatio))
+                    {
+                        GD.PushWarning
+                        (
+                            $"Tile: {asset.ResourcePath} has invalid ratio:\n" +
+                            $"Expected Ratio: {ExpectedRatio}\n" +
+                            $"Actual Ratio: {ratio}"
+                        );
+                    }
+
+                    results.Add(asset);
+                }
+
                 name = dir.GetNext();
             }
 
@@ -64,5 +89,15 @@ namespace TribesOfDust.Hex
         /// </summary>
         [Export(PropertyHint.ResourceType, "Texture")]
         public Texture? Texture;
+
+        /// <summary>
+        /// Gets the scale in x-direction necessary to match the expected width.
+        /// </summary>
+        public float WidthScaleToExpected => Texture != null ? ExpectedWidth / Texture.GetWidth() : 1.0f;
+
+        /// <summary>
+        /// Gets the scale in y-direction necessary to match the expected height.
+        /// </summary>
+        public float HeightScaleToExpected => Texture != null ? ExpectedHeight / Texture.GetHeight() : 1.0f;
     }
 }
