@@ -26,7 +26,7 @@ namespace TribesOfDust.Utils
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output vector.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(this Dictionary<string, object> json, out Vector2 output)
+        public static bool TryDeserialize(Dictionary<string, object> json, out Vector2 output)
         {
             string keyX = nameof(Vector2.x).ToLower();
             string keyY = nameof(Vector2.y).ToLower();
@@ -65,7 +65,7 @@ namespace TribesOfDust.Utils
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output vector.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(this Dictionary<string, object> json, out Vector3 output)
+        public static bool TryDeserialize(Dictionary<string, object> json, out Vector3 output)
         {
             string keyX = nameof(Vector3.x).ToLower();
             string keyY = nameof(Vector3.y).ToLower();
@@ -105,7 +105,7 @@ namespace TribesOfDust.Utils
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output coordinate.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(this Dictionary<string, object> json, out AxialCoordinate<int> output)
+        public static bool TryDeserialize(Dictionary<string, object> json, out AxialCoordinate<int> output)
         {
             string keyQ = nameof(AxialCoordinate<int>.R).ToLower();
             string keyR = nameof(AxialCoordinate<int>.Q).ToLower();
@@ -144,7 +144,7 @@ namespace TribesOfDust.Utils
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output coordinate.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(this Dictionary<string, object> json, out CubeCoordinate<int> output)
+        public static bool TryDeserialize(Dictionary<string, object> json, out CubeCoordinate<int> output)
         {
             string keyX = nameof(CubeCoordinate<int>.X).ToLower();
             string keyY = nameof(CubeCoordinate<int>.X).ToLower();

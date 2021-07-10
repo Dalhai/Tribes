@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Godot;
+using GodotJson = Godot.Collections.Dictionary<string, object>;
+using GodotArray = Godot.Collections.Array<object>;
+
 using TribesOfDust.Hex;
-
-using JsonDict = Godot.Collections.Dictionary<string, object>;
-using JsonArray = Godot.Collections.Array<object>;
-
+using TribesOfDust.Utils;
 
 namespace TribesOfDust.Map
 {
@@ -18,6 +19,11 @@ namespace TribesOfDust.Map
             _startCoordinates.Add(new AxialCoordinate<int>(1,0));
             _fountainCoordinates.Add(new AxialCoordinate<int>(0,0));
         }
+
+        /// <summary>
+        /// Gets all preplaced tiles on the map.
+        /// </summary>
+        public IDictionary<AxialCoordinate<int>, TileType> Tiles => _tiles;
 
         /// <summary>
         /// Gets all available player start coordinates on the map.
@@ -40,61 +46,62 @@ namespace TribesOfDust.Map
                 tile => new HexTile(tile.Key, assets[tile.Value])
             );
 
-        public void Save()
+        public GodotJson Serialize()
         {
-            string json = ToJson();
-            var target = new File();
-            target.Open("user://map.template", File.ModeFlags.Write);
-            target.StoreLine(json);
-            target.Close();
-        }
+            GodotJson result = new();
 
-        private string ToJson()
-        {
-            JsonDict dictionary = new();
+            // Serialize the initial tile placements
 
-            JsonArray tilesArray = new();
+            GodotArray serializedTiles = new();
             foreach (var tile in _tiles)
             {
-                JsonDict tileDict = new();
-                tileDict.Add("q", tile.Key.Q);
-                tileDict.Add("r",tile.Key.R);
-                tileDict.Add("type",tile.Value.ToString());
-                tilesArray.Add(tileDict);
+                var serializedCoordinates = tile.Key.Serialize();
+                var serializedType = tile.Value.ToString();
+
+                GodotJson serializedTile = new()
+                {
+                    {"coordinates", serializedCoordinates},
+                    {"type", serializedType}
+                };
+
+                serializedTiles.Add(serializedTile);
             }
 
-            JsonDict tilePoolDict = new();
-            foreach (var tileCount in _tilePool)
+            // Serialize the tile pool
+
+            GodotJson serializedPool = new();
+            foreach (var tilePool in _tilePool)
             {
-                tilePoolDict.Add(tileCount.Key.ToString(),tileCount.Value);
+                var serializedType = tilePool.Key.ToString();
+                var serializedCount = tilePool.Value;
+
+                serializedPool.Add(serializedType, serializedCount);
             }
 
-            JsonArray startCoordinateArray = new();
+            // Serialize the player start coordinates
 
-            foreach (var coordinate in _startCoordinates)
+            GodotArray serializedStarts = new();
+            foreach (var startCoordinates in _startCoordinates)
             {
-                JsonDict tileDict = new();
-                tileDict.Add("q", coordinate.Q);
-                tileDict.Add("r",coordinate.R);
-                startCoordinateArray.Add(tileDict);
+                serializedStarts.Add(startCoordinates.Serialize());
             }
 
-            JsonArray fountainCoordinateArray = new();
-            foreach (var coordinate in _fountainCoordinates)
+            // Serialize the fountain coordinates
+
+            GodotArray serializedFountains = new();
+            foreach (var fountainCoordinates in _fountainCoordinates)
             {
-                JsonDict tileDict = new();
-                tileDict.Add("q", coordinate.Q);
-                tileDict.Add("r",coordinate.R);
-                fountainCoordinateArray.Add(tileDict);
+                serializedFountains.Add(fountainCoordinates.Serialize());
             }
 
+            // Add all serialized values to the final output
 
-            dictionary.Add("tiles",tilesArray);
-            dictionary.Add("tilePool",tilePoolDict);
-            dictionary.Add("startCoordinates",startCoordinateArray);
-            dictionary.Add("fountainCoordinates",fountainCoordinateArray);
+            result.Add(nameof(Tiles).ToLower(), serializedTiles);
+            result.Add(nameof(TilePool).ToLower(), serializedPool);
+            result.Add(nameof(StartCoordinates).ToLower(), serializedStarts);
+            result.Add(nameof(FountainCoordinates).ToLower(), serializedFountains);
 
-            return JSON.Print(dictionary);
+            return result;
         }
 
         private readonly Dictionary<AxialCoordinate<int>, TileType> _tiles;

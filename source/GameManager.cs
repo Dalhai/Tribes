@@ -49,7 +49,7 @@ namespace TribesOfDust
             {
                 AddChild(tile.Value);
             }
-            
+
             mapTemplate.Save();
         }
 
