@@ -9,7 +9,7 @@ namespace TribesOfDust.Utils
         /// <summary>
         /// Initializes a new <see cref="GodotException"> for the specified error.
         /// </summary>
-        /// <param name="error">The Godot error ti wrap.</param>
+        /// <param name="error">The Godot error to wrap.</param>
         public GodotException(Error error)
             : base($"Error: {error}")
         {
