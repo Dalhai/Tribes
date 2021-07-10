@@ -26,7 +26,7 @@ namespace TribesOfDust
 
             var loadedAssets = TileAsset.LoadAll();
             int current = 0;
-            foreach (var asset in loadedAssets)
+            foreach (TileAsset asset in loadedAssets)
             {
                 string type = asset.Type.ToString();
                 string texture = asset.Texture?.ResourcePath ?? "Not assigned";
