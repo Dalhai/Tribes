@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tile_mountain_2.png-a9377c56fc3f8550805e724eb9f34eb1.stex"
+path="res://.import/tundra_3.png-24f91c7abf38f194d16e8d01f0f4522e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/tiles/tile_mountain_2.png"
-dest_files=[ "res://.import/tile_mountain_2.png-a9377c56fc3f8550805e724eb9f34eb1.stex" ]
+source_file="res://assets/textures/tiles/tundra_3.png"
+dest_files=[ "res://.import/tundra_3.png-24f91c7abf38f194d16e8d01f0f4522e.stex" ]
 
 [params]
 
