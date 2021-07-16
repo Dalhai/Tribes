@@ -5,7 +5,7 @@ using Godot.Collections;
 
 using TribesOfDust.Hex;
 
-namespace TribesOfDust.Utils
+namespace TribesOfDust.Utils.IO
 {
     public static class Json
     {
