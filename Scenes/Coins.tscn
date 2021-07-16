@@ -1,0 +1,85 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://source/GameManager.cs" type="Script" id=1]
+[ext_resource path="res://source/Camera2D.cs" type="Script" id=2]
+[ext_resource path="res://assets/textures/ui/clans/clan_inuit.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/ui/coin_square.png" type="Texture" id=4]
+[ext_resource path="res://assets/textures/ui/coin_circle.png" type="Texture" id=5]
+[ext_resource path="res://assets/textures/ui/clans/clan_druid.png" type="Texture" id=6]
+[ext_resource path="res://assets/textures/ui/clans/clan_pirate.png" type="Texture" id=7]
+[ext_resource path="res://assets/textures/ui/coin_triangle.png" type="Texture" id=8]
+[ext_resource path="res://assets/textures/ui/clans/clan_roman.png" type="Texture" id=9]
+
+[node name="Scene" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="CameraRoot" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="CameraRoot"]
+current = true
+
+[node name="coin_circle" type="Sprite" parent="."]
+position = Vector2( 1065.36, 1297.58 )
+z_index = 9
+z_as_relative = false
+texture = ExtResource( 5 )
+
+[node name="clan_inuit" type="Sprite" parent="coin_circle"]
+position = Vector2( -0.841064, -17.9716 )
+scale = Vector2( 0.506582, 0.506582 )
+z_index = 10
+z_as_relative = false
+texture = ExtResource( 3 )
+
+[node name="coin_triangle" type="Sprite" parent="."]
+position = Vector2( 523.819, 1336.26 )
+z_index = 9
+z_as_relative = false
+texture = ExtResource( 8 )
+
+[node name="clan_pirate" type="Sprite" parent="coin_triangle"]
+position = Vector2( -2.54681, -68.1125 )
+scale = Vector2( 0.531039, 0.531039 )
+z_index = 10
+z_as_relative = false
+texture = ExtResource( 7 )
+
+[node name="coin_square" type="Sprite" parent="."]
+position = Vector2( 786.179, 1290.85 )
+z_index = 9
+z_as_relative = false
+texture = ExtResource( 4 )
+
+[node name="clan_druid" type="Sprite" parent="coin_square"]
+position = Vector2( 2.52283, -15.9647 )
+scale = Vector2( 0.587637, 0.587637 )
+z_index = 10
+z_as_relative = false
+texture = ExtResource( 6 )
+
+[node name="coin_circle2" type="Sprite" parent="."]
+position = Vector2( 1061.99, 1549.85 )
+z_index = 9
+z_as_relative = false
+texture = ExtResource( 5 )
+
+[node name="clan_inuit" type="Sprite" parent="coin_circle2"]
+position = Vector2( -0.841064, -17.9716 )
+scale = Vector2( 0.506582, 0.506582 )
+z_index = 10
+z_as_relative = false
+texture = ExtResource( 9 )
+
+[node name="coin_circle3" type="Sprite" parent="."]
+position = Vector2( 1060.31, 1023.45 )
+z_index = 9
+z_as_relative = false
+texture = ExtResource( 5 )
+
+[node name="clan_inuit" type="Sprite" parent="coin_circle3"]
+position = Vector2( -0.841064, -17.9716 )
+scale = Vector2( 0.506582, 0.506582 )
+z_index = 10
+z_as_relative = false
+texture = ExtResource( 6 )
