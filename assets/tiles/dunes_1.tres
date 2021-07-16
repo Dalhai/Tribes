@@ -5,5 +5,5 @@
 
 [resource]
 script = ExtResource( 1 )
-Type = 3
+Type = 5
 Texture = ExtResource( 2 )

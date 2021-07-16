@@ -49,10 +49,10 @@ namespace TribesOfDust.Map
         /// </summary>
         public IEnumerable<AxialCoordinate<int>> FountainCoordinates => _fountainCoordinates;
 
-        public Dictionary<AxialCoordinate<int>, HexTile> Generate(Dictionary<TileType, TileAsset> assets) =>
+        public Dictionary<AxialCoordinate<int>, HexTile> Generate(TileAssetRepository repository) =>
             _tiles.ToDictionary(
                 tile => tile.Key,
-                tile => new HexTile(tile.Key, assets[tile.Value])
+                tile => new HexTile(tile.Key, repository.GetRandomVariation(tile.Value))
             );
 
         public GodotJson Serialize()
