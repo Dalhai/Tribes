@@ -1,19 +1,19 @@
 using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 
-using TribesOfDust.Hex;
 
-namespace TribesOfDust.Map
+namespace TribesOfDust.Hex
 {
-    public class Map
+    public class HexMap : IEnumerable<HexTile>
     {
-        public Map()
+        public HexMap()
         {
             tiles = new();
         }
 
-        public Map(IEnumerable<HexTile> tiles)
+        public HexMap(IEnumerable<HexTile> tiles)
         {
 
             // Verify the tiles are valid
@@ -33,12 +33,17 @@ namespace TribesOfDust.Map
             this.tiles = tiles.ToDictionary(tile => tile.Coordinates);
         }
 
+        #region Tile Queries
+
         public bool HasTileAt(AxialCoordinate<int> coordinates) => tiles.ContainsKey(coordinates);
         public bool IsOpenAt(AxialCoordinate<int> coordinates) => GetTileTypeAt(coordinates) == TileType.Open;
         public bool IsBlockedAt(AxialCoordinate<int> coordinates) => GetTileTypeAt(coordinates) == TileType.Blocked;
 
         public HexTile? GetTileAt(AxialCoordinate<int> coordinates) => tiles.ContainsKey(coordinates) ? tiles[coordinates] : null;
         public TileType GetTileTypeAt(AxialCoordinate<int> coordinates) => GetTileAt(coordinates)?.Type ?? TileType.Unknown;
+
+        #endregion
+        #region Manipulation
 
         public void RemoveTileAt(AxialCoordinate<int> coordinates)
         {
@@ -48,6 +53,15 @@ namespace TribesOfDust.Map
 
             tiles.Remove(coordinates);
         }
+
+        #endregion
+
+        #region IEnumerable Implementation
+
+        public IEnumerator<HexTile> GetEnumerator() => tiles.Values.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => tiles.Values.GetEnumerator();
+
+        #endregion
 
         private readonly Dictionary<AxialCoordinate<int>, HexTile> tiles;
     }
