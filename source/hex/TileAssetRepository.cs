@@ -50,11 +50,6 @@ namespace TribesOfDust.Hex
         /// </summary>
         public IEnumerable<TileType> TileTypes => tileAssets.Select(tileAsset => tileAsset.Type);
 
-        /// <summary>
-        /// Gets all tile variations in the repository.
-        /// </summary>
-        public IReadOnlyDictionary<TileType, List<TileAsset>> TileVariations => tileVariations;
-
         #endregion
 
 
