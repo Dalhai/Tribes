@@ -14,17 +14,14 @@ namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-        private TileAssetRepository _repository = new (TileAsset.LoadAll());
-        private HexMapTemplate? _mapTemplate;
+        private readonly TileAssetRepository _repository = new (TileAsset.LoadAll());
+        private readonly HexMapTemplate? _mapTemplate = Load();
+
         private HexMap? _map;
         private HexTile? _activeTile;
 
         public override void _Ready()
         {
-            // Try to load the default map template
-
-            Load(out _mapTemplate);
-
             // Try to generate a map from the map template
 
             if (_mapTemplate is not null)
@@ -70,9 +67,9 @@ namespace TribesOfDust
             }
         }
 
-        private static void Load(out HexMapTemplate? mapTemplate)
+        private static HexMapTemplate? Load()
         {
-            mapTemplate = null;
+            HexMapTemplate? mapTemplate = null;
             var targetFile = new File();
 
             // Try to open the default map file to load our default map.
@@ -90,6 +87,8 @@ namespace TribesOfDust
                     HexMapTemplate.TryDeserialize(json, out mapTemplate);
                 }
             }
+
+            return mapTemplate;
         }
 
         public override void _Input(InputEvent inputEvent)
