@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://source/GameManager.cs" type="Script" id=1]
 [ext_resource path="res://source/Camera2D.cs" type="Script" id=2]
+[ext_resource path="res://assets/fonts/cinzel.tres" type="DynamicFont" id=3]
+[ext_resource path="res://assets/themes/default_theme.tres" type="Theme" id=4]
 
 [node name="Scene" type="Node2D"]
 script = ExtResource( 1 )
@@ -10,4 +12,29 @@ script = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="CameraRoot"]
+anchor_mode = 0
 current = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="CameraRoot"]
+
+[node name="PanelContainer" type="PanelContainer" parent="CameraRoot/CanvasLayer"]
+anchor_right = 0.2
+anchor_bottom = 0.1
+margin_right = 14.0
+margin_bottom = 14.0
+theme = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CameraRoot/CanvasLayer/PanelContainer"]
+margin_right = 218.8
+margin_bottom = 74.0
+custom_fonts/bold_font = ExtResource( 3 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_enabled = true
+bbcode_text = "[b]Test[/b]"
+text = "Test"
+__meta__ = {
+"_edit_use_anchors_": false
+}
