@@ -3,13 +3,6 @@ using GodotJson = Godot.Collections.Dictionary;
 
 using TribesOfDust.Hex;
 
-namespace System.Runtime.CompilerServices
-{
-    internal class IsExternalInit
-    {
-    };
-}
-
 namespace TribesOfDust
 {
     public class GameManager : Node2D
