@@ -6,11 +6,7 @@ using GodotJson = Godot.Collections.Dictionary;
 using GodotArray = Godot.Collections.Array;
 
 using TribesOfDust.Hex;
-using TribesOfDust.Utils;
-using System.Threading;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using Godot;
+using TribesOfDust.Utils.IO;
 
 namespace TribesOfDust.Map
 {
@@ -53,10 +49,10 @@ namespace TribesOfDust.Map
         /// </summary>
         public IEnumerable<AxialCoordinate<int>> FountainCoordinates => _fountainCoordinates;
 
-        public Dictionary<AxialCoordinate<int>, HexTile> Generate(Dictionary<TileType, TileAsset> assets) =>
+        public Dictionary<AxialCoordinate<int>, HexTile> Generate(TileAssetRepository repository) =>
             _tiles.ToDictionary(
                 tile => tile.Key,
-                tile => new HexTile(tile.Key, assets[tile.Value])
+                tile => new HexTile(tile.Key, repository.GetRandomVariation(tile.Value))
             );
 
         public GodotJson Serialize()

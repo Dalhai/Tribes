@@ -18,22 +18,21 @@ namespace TribesOfDust
     public class GameManager : Node2D
     {
         private Dictionary<AxialCoordinate<int>, HexTile> _tiles = new();
-        private Dictionary<TileType, TileAsset> _assets = new();
+        private TileAssetRepository _repository = new (TileAsset.LoadAll());
         private HexTile? _activeTile;
         private MapTemplate? _mapTemplate;
 
         public override void _Ready()
         {
-            // Try to load the tile assets and the default map template
+            // Try to load the default map template
 
-            LoadTileAssets(_assets);
             Load(out _mapTemplate);
 
             // Try to generate a map from the map template
 
             if (_mapTemplate is not null)
             {
-                _tiles = _mapTemplate.Generate(_assets);
+                _tiles = _mapTemplate.Generate(_repository);
                 foreach (var tile in _tiles)
                 {
                     AddChild(tile.Value);
@@ -54,26 +53,6 @@ namespace TribesOfDust
             }
 
             base._ExitTree();
-        }
-
-        private static void LoadTileAssets(Dictionary<TileType, TileAsset> assets)
-        {
-            var loadedAssets = TileAsset.LoadAll();
-            int current = 0;
-            foreach (TileAsset asset in loadedAssets)
-            {
-                string type = asset.Type.ToString();
-                string texture = asset.Texture?.ResourcePath ?? "Not assigned";
-
-                GD.Print($"{type}, {texture}");
-
-                if (!assets.ContainsKey(asset.Type))
-                {
-                    assets.Add(asset.Type, asset);
-                }
-
-                current += 1;
-            }
         }
 
         private static void Save(MapTemplate mapTemplate)

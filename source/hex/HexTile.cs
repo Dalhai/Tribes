@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Godot;
 using GodotJson = Godot.Collections.Dictionary;
 
-using TribesOfDust.Utils;
+using TribesOfDust.Utils.IO;
 
 namespace TribesOfDust.Hex
 {
