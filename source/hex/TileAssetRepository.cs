@@ -51,8 +51,6 @@ namespace TribesOfDust.Hex
         public IEnumerable<TileType> TileTypes => tileAssets.Select(tileAsset => tileAsset.Type);
 
         #endregion
-
-
         #region Add Assets
 
         /// <summary>
@@ -111,8 +109,6 @@ namespace TribesOfDust.Hex
         }
 
         #endregion
-
-
         #region Access Assets
 
         /// <summary>
@@ -172,8 +168,6 @@ namespace TribesOfDust.Hex
         }
 
         #endregion
-
-
         #region IEnumerable
         /*
          * IEnumerable Implementation
@@ -199,6 +193,7 @@ namespace TribesOfDust.Hex
         IEnumerator IEnumerable.GetEnumerator() => tileAssets.GetEnumerator();
 
         #endregion
+        #region Helpers
 
         private void EnsureTypeHasVariations(TileType type)
         {
@@ -229,6 +224,9 @@ namespace TribesOfDust.Hex
                 throw new TileVariationNotFoundException(type, variation);
             }
         }
+
+        #endregion
+
 
         private readonly Dictionary<TileType, List<TileAsset>> tileVariations = new();
         private readonly List<TileAsset> tileAssets = new();
