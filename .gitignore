@@ -2,9 +2,13 @@
 .idea/
 .vscode/
 
+# IDE-specified ignores
+*.csproj
+*.sln
+*.suo
+
 # Godot-specific ignores
 .import/
-*.import
 export.cfg
 export_presets.cfg
 
