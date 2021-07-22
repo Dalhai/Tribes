@@ -20,10 +20,7 @@ namespace TribesOfDust
             if (_mapTemplate is not null)
             {
                 _map = _mapTemplate.Generate(_repository);
-                foreach (var tile in _map)
-                {
-                    AddChild(tile);
-                }
+                AddChild(_map);
             }
 
             base._Ready();
