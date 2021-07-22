@@ -39,6 +39,13 @@ namespace TribesOfDust.Hex
 
         #region Tile Queries
 
+        /// <summary>
+        /// Gets a <see cref="HexTile"/> at a specific <see cref="AxialCoordinate"/>.
+        /// </summary>
+        ///
+        /// <returns>The tile at the specified coordinates.</returns>
+        public HexTile? this[AxialCoordinate<int> coordinate] => GetTileAt(coordinate);
+
         public bool HasTileAt(AxialCoordinate<int> coordinates) => tiles.ContainsKey(coordinates);
         public bool IsOpenAt(AxialCoordinate<int> coordinates) => GetTileTypeAt(coordinates) == TileType.Open;
         public bool IsBlockedAt(AxialCoordinate<int> coordinates) => GetTileTypeAt(coordinates) == TileType.Blocked;
@@ -48,6 +55,26 @@ namespace TribesOfDust.Hex
 
         #endregion
         #region Manipulation
+
+        /// <summary>
+        /// Adds a <see cref="HexTile"/> to the map.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// If a tile has already been added at the same location, replaces the existing tile
+        /// with this new one silently.
+        /// </remarks>
+        ///
+        /// <param name="tile">The tile to add.</param>
+        public void AddOrOverwriteTile(HexTile tile)
+        {
+            if (tiles.ContainsKey(tile.Coordinates))
+            {
+                RemoveTileAt(tile.Coordinates);
+            }
+
+            AddTile(tile);
+        }
 
         /// <summary>
         /// Adds a <see cref="HexTile"/> to the map.
