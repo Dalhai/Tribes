@@ -10,7 +10,7 @@ namespace TribesOfDust.Hex
 {
     public class HexTile : Sprite
     {
-        public HexTile(AxialCoordinate<int> coordinates, TileAsset asset)
+        public HexTile(AxialCoordinate coordinates, TileAsset asset)
         {
             Coordinates = coordinates;
 
@@ -29,7 +29,7 @@ namespace TribesOfDust.Hex
             Position = HexConversions.HexToWorld(coordinates, TileAsset.ExpectedSize);
         }
 
-        private HexTile(AxialCoordinate<int> coordinates, TileType type, Texture texture, Vector2 scale)
+        private HexTile(AxialCoordinate coordinates, TileType type, Texture texture, Vector2 scale)
         {
             Coordinates = coordinates;
 
@@ -53,7 +53,7 @@ namespace TribesOfDust.Hex
         public float Height => Texture.GetHeight();
 
         public TileType Type { get; }
-        public AxialCoordinate<int> Coordinates { get; }
+        public AxialCoordinate Coordinates { get; }
         public IEnumerable<TileEffect> Effects => _effects;
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace TribesOfDust.Hex
 
             // Check if the scale and coordinates can be deserialized
 
-            if (json[keyCoordinates] is not GodotJson coordinatesJson || !Json.TryDeserialize(coordinatesJson, out AxialCoordinate<int> coordinates))
+            if (json[keyCoordinates] is not GodotJson coordinatesJson || !Json.TryDeserialize(coordinatesJson, out AxialCoordinate coordinates))
             {
                 return false;
             }

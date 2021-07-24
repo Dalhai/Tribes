@@ -37,7 +37,7 @@ namespace TribesOfDust.Hex
         ///
         /// <param name="direction">The direction for which to get the offset.</param>
         /// <returns>The offset.</returns>
-        public static CubeCoordinate<int> GetCubeOffset(TileDirection direction) => GetAxialOffset(direction).ToCubeCoordinate();
+        public static CubeCoordinate GetCubeOffset(TileDirection direction) => GetAxialOffset(direction).ToCubeCoordinate();
 
         /// <summary>
         /// Gets a <see cref="AxialCoordinate"/> offset for a <see cref="TileDirection"/>.
@@ -49,7 +49,7 @@ namespace TribesOfDust.Hex
         /// </remarks>
         ///
         /// <example>
-        /// var coordinate = new AxialCoordinate<int>(0, 0);
+        /// var coordinate = new AxialCoordinate(0, 0);
         /// var offset = TileDirectionOffset.GetAxialOffset(TileDirection.N);
         ///
         /// /* Compute the coordinates of the tile just above our tile. */
@@ -58,7 +58,7 @@ namespace TribesOfDust.Hex
         ///
         /// <param name="direction">The direction for which to get the offset.</param>
         /// <returns>The offset.</returns>
-        public static AxialCoordinate<int> GetAxialOffset(TileDirection direction) => direction switch
+        public static AxialCoordinate GetAxialOffset(TileDirection direction) => direction switch
         {
             TileDirection.NW => new (-1,  0),
             TileDirection.N  => new ( 0, -1),

@@ -15,14 +15,14 @@ namespace TribesOfDust.Hex
         /// Initializes a new <see cref="MapTemplate"/>.
         /// </summary>
         ///
-        /// <remark>
+        /// <remarks>
         /// This constructor creates a new map template that does not contain any player
         /// start positions or fountain positions. Technically, this map template is invalid
         /// for play.
-        /// </remark>
+        /// </remarks>
         ///
         /// <param name="tiles">The tiles forming the initial map.</param>
-        public HexMapTemplate(Dictionary<AxialCoordinate<int>, TileType> tiles)
+        public HexMapTemplate(Dictionary<AxialCoordinate, TileType> tiles)
         {
             _tiles = tiles;
         }
@@ -36,10 +36,10 @@ namespace TribesOfDust.Hex
         /// <param name="startCoordinates">The possible start coordinates for players.</param>
         /// <param name="fountainCoordinates">The possible fountain coordinates.</param>
         private HexMapTemplate(
-            Dictionary<AxialCoordinate<int>, TileType> tiles,
+            Dictionary<AxialCoordinate, TileType> tiles,
             Dictionary<TileType, int> tilePool,
-            List<AxialCoordinate<int>> startCoordinates,
-            List<AxialCoordinate<int>> fountainCoordinates)
+            List<AxialCoordinate> startCoordinates,
+            List<AxialCoordinate> fountainCoordinates)
         {
             _tiles = tiles;
             _tilePool = tilePool;
@@ -52,7 +52,7 @@ namespace TribesOfDust.Hex
         /// <summary>
         /// Gets all preplaced tiles on the map.
         /// </summary>
-        public IDictionary<AxialCoordinate<int>, TileType> Tiles => _tiles;
+        public IDictionary<AxialCoordinate, TileType> Tiles => _tiles;
 
         /// <summary>
         /// Gets the available number of tiles per tile type.
@@ -62,12 +62,12 @@ namespace TribesOfDust.Hex
         /// <summary>
         /// Gets all available player start coordinates on the map.
         /// </summary>
-        public IEnumerable<AxialCoordinate<int>> StartCoordinates => _startCoordinates;
+        public IEnumerable<AxialCoordinate> StartCoordinates => _startCoordinates;
 
         /// <summary>
         /// Gets all available fountain coordinates on the map.
         /// </summary>
-        public IEnumerable<AxialCoordinate<int>> FountainCoordinates => _fountainCoordinates;
+        public IEnumerable<AxialCoordinate> FountainCoordinates => _fountainCoordinates;
 
         #endregion
         #region Generation
@@ -97,10 +97,10 @@ namespace TribesOfDust.Hex
         /// Serializes the map template into a JSON dictionary.
         /// </summary>
         ///
-        /// <remark>
+        /// <remarks>
         /// The JSON dictioanry is simply a base-type Godot Dictionary mapping objects to objects.
         /// The map template is encoded into this dictionary format, which can then be further processed.
-        /// </remark>
+        /// </remarks>
         ///
         /// <returns>A Godot dictionary representation of the map template.</returns>
         public GodotJson Serialize()
@@ -182,7 +182,7 @@ namespace TribesOfDust.Hex
             }
 
             // Try to deserialize the pre-placed tiles into this dictionary
-            Dictionary<AxialCoordinate<int>, TileType> tiles = new ();
+            Dictionary<AxialCoordinate, TileType> tiles = new ();
 
             // First need to check whether the are even tiles available
             if (json[keyTiles] is not GodotArray jsonTiles)
@@ -207,7 +207,7 @@ namespace TribesOfDust.Hex
 
                 // Try to get the coordinates
 
-                if (tileObject[keyCoordinates] is not GodotJson jsonCoordinates || !Json.TryDeserialize(jsonCoordinates, out AxialCoordinate<int> coordinates))
+                if (tileObject[keyCoordinates] is not GodotJson jsonCoordinates || !Json.TryDeserialize(jsonCoordinates, out AxialCoordinate coordinates))
                 {
                     return false;
                 }
@@ -255,7 +255,7 @@ namespace TribesOfDust.Hex
                 }
             }
 
-            static bool exctractAxialCoordinates(object json, List<AxialCoordinate<int>> result)
+            static bool exctractAxialCoordinates(object json, List<AxialCoordinate> result)
             {
                 // First need to check whether the coordinates are even available
                 if (json is not GodotArray jsonCoordinates)
@@ -267,7 +267,7 @@ namespace TribesOfDust.Hex
 
                 foreach (var coordinate in jsonCoordinates)
                 {
-                    if (coordinate is not GodotJson jsonCoordinate || !Json.TryDeserialize(jsonCoordinate, out AxialCoordinate<int> coordinates))
+                    if (coordinate is not GodotJson jsonCoordinate || !Json.TryDeserialize(jsonCoordinate, out AxialCoordinate coordinates))
                     {
                         return false;
                     }
@@ -278,8 +278,8 @@ namespace TribesOfDust.Hex
                 return true;
             };
 
-            List<AxialCoordinate<int>> startCoordinates = new();
-            List<AxialCoordinate<int>> fountainCoordinates = new();
+            List<AxialCoordinate> startCoordinates = new();
+            List<AxialCoordinate> fountainCoordinates = new();
 
             exctractAxialCoordinates(json[keyStarts], startCoordinates);
             exctractAxialCoordinates(json[keyFountains], fountainCoordinates);
@@ -290,9 +290,9 @@ namespace TribesOfDust.Hex
 
         #endregion
 
-        private readonly Dictionary<AxialCoordinate<int>, TileType> _tiles;
+        private readonly Dictionary<AxialCoordinate, TileType> _tiles;
         private readonly Dictionary<TileType, int> _tilePool = new();
-        private readonly List<AxialCoordinate<int>> _startCoordinates = new();
-        private readonly List<AxialCoordinate<int>> _fountainCoordinates = new();
+        private readonly List<AxialCoordinate> _startCoordinates = new();
+        private readonly List<AxialCoordinate> _fountainCoordinates = new();
     }
 }
