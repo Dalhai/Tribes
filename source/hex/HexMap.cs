@@ -44,14 +44,14 @@ namespace TribesOfDust.Hex
         /// </summary>
         ///
         /// <returns>The tile at the specified coordinates.</returns>
-        public HexTile? this[AxialCoordinate<int> coordinate] => GetTileAt(coordinate);
+        public HexTile? this[AxialCoordinate coordinate] => GetTileAt(coordinate);
 
-        public bool HasTileAt(AxialCoordinate<int> coordinates) => tiles.ContainsKey(coordinates);
-        public bool IsOpenAt(AxialCoordinate<int> coordinates) => GetTileTypeAt(coordinates) == TileType.Open;
-        public bool IsBlockedAt(AxialCoordinate<int> coordinates) => GetTileTypeAt(coordinates) == TileType.Blocked;
+        public bool HasTileAt(AxialCoordinate coordinates) => tiles.ContainsKey(coordinates);
+        public bool IsOpenAt(AxialCoordinate coordinates) => GetTileTypeAt(coordinates) == TileType.Open;
+        public bool IsBlockedAt(AxialCoordinate coordinates) => GetTileTypeAt(coordinates) == TileType.Blocked;
 
-        public HexTile? GetTileAt(AxialCoordinate<int> coordinates) => tiles.ContainsKey(coordinates) ? tiles[coordinates] : null;
-        public TileType GetTileTypeAt(AxialCoordinate<int> coordinates) => GetTileAt(coordinates)?.Type ?? TileType.Unknown;
+        public HexTile? GetTileAt(AxialCoordinate coordinates) => tiles.ContainsKey(coordinates) ? tiles[coordinates] : null;
+        public TileType GetTileTypeAt(AxialCoordinate coordinates) => GetTileAt(coordinates)?.Type ?? TileType.Unknown;
 
         #endregion
         #region Manipulation
@@ -131,7 +131,7 @@ namespace TribesOfDust.Hex
         /// </exception>
         ///
         /// <param name="coordinates">The coordinates of the tile to remove.</param>
-        public void RemoveTileAt(AxialCoordinate<int> coordinates)
+        public void RemoveTileAt(AxialCoordinate coordinates)
         {
             HexTile? removed = GetTileAt(coordinates);
 
@@ -157,6 +157,6 @@ namespace TribesOfDust.Hex
 
         #endregion
 
-        private readonly Dictionary<AxialCoordinate<int>, HexTile> tiles = new();
+        private readonly Dictionary<AxialCoordinate, HexTile> tiles = new();
     }
 }
