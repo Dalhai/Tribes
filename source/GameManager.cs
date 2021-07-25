@@ -1,42 +1,26 @@
-using System.Collections.Generic;
-
 using Godot;
 using GodotJson = Godot.Collections.Dictionary;
 
 using TribesOfDust.Hex;
-using TribesOfDust.Map;
-
-namespace System.Runtime.CompilerServices
-{
-    internal class IsExternalInit
-    {
-    };
-}
 
 namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-        private Dictionary<AxialCoordinate<int>, HexTile> _tiles = new();
-        private TileAssetRepository _repository = new (TileAsset.LoadAll());
+        private readonly TileAssetRepository _repository = new (TileAsset.LoadAll());
+        private readonly HexMapTemplate? _mapTemplate = Load();
+
+        private HexMap? _map;
         private HexTile? _activeTile;
-        private MapTemplate? _mapTemplate;
 
         public override void _Ready()
         {
-            // Try to load the default map template
-
-            Load(out _mapTemplate);
-
             // Try to generate a map from the map template
 
             if (_mapTemplate is not null)
             {
-                _tiles = _mapTemplate.Generate(_repository);
-                foreach (var tile in _tiles)
-                {
-                    AddChild(tile.Value);
-                }
+                _map = _mapTemplate.Generate(_repository);
+                AddChild(_map);
             }
 
             base._Ready();
@@ -55,7 +39,7 @@ namespace TribesOfDust
             base._ExitTree();
         }
 
-        private static void Save(MapTemplate mapTemplate)
+        private static void Save(HexMapTemplate mapTemplate)
         {
             var targetFile = new File();
 
@@ -73,9 +57,9 @@ namespace TribesOfDust
             }
         }
 
-        private static void Load(out MapTemplate? mapTemplate)
+        private static HexMapTemplate? Load()
         {
-            mapTemplate = null;
+            HexMapTemplate? mapTemplate = null;
             var targetFile = new File();
 
             // Try to open the default map file to load our default map.
@@ -90,27 +74,33 @@ namespace TribesOfDust
 
                 if (jsonMap.Result is GodotJson json)
                 {
-                    MapTemplate.TryDeserialize(json, out mapTemplate);
+                    HexMapTemplate.TryDeserialize(json, out mapTemplate);
                 }
             }
+
+            return mapTemplate;
         }
 
         public override void _Input(InputEvent inputEvent)
         {
-            if (inputEvent is InputEventMouseMotion)
+            if (inputEvent is InputEventMouseMotion && _map is not null)
             {
                 var world = GetGlobalMousePosition();
                 var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
 
-                if (_activeTile?.Coordinates != hex && _tiles.TryGetValue(hex, out HexTile tile))
+                if (_activeTile?.Coordinates != hex && _map.HasTileAt(hex))
                 {
                     if (_activeTile is not null)
                     {
                         _activeTile.Modulate = Colors.White;
                     }
 
-                    _activeTile = tile;
-                    tile.Modulate = Colors.Aqua;
+                    _activeTile = _map.GetTileAt(hex);
+
+                    if (_activeTile is not null)
+                    {
+                        _activeTile.Modulate = Colors.Aqua;
+                    }
                 }
             }
         }
