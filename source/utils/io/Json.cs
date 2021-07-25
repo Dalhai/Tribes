@@ -109,12 +109,12 @@ namespace TribesOfDust.Utils.IO
         /// </summary>
         /// <param name="coordinates">The coordinates to serialize.</param>
         /// <returns>The serialized coordinates.</returns>
-        public static Dictionary Serialize(this AxialCoordinate<int> coordinates)
+        public static Dictionary Serialize(this AxialCoordinate coordinates)
         {
             return new()
             {
-                {nameof(AxialCoordinate<int>.R).ToLower(), coordinates.R},
-                {nameof(AxialCoordinate<int>.Q).ToLower(), coordinates.Q},
+                {nameof(AxialCoordinate.R).ToLower(), coordinates.R},
+                {nameof(AxialCoordinate.Q).ToLower(), coordinates.Q},
             };
         }
 
@@ -124,12 +124,12 @@ namespace TribesOfDust.Utils.IO
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output coordinate.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(Dictionary json, out AxialCoordinate<int> output)
+        public static bool TryDeserialize(Dictionary json, out AxialCoordinate output)
         {
             output = new(0, 0);
 
-            string keyQ = nameof(AxialCoordinate<int>.Q).ToLower();
-            string keyR = nameof(AxialCoordinate<int>.R).ToLower();
+            string keyQ = nameof(AxialCoordinate.Q).ToLower();
+            string keyR = nameof(AxialCoordinate.R).ToLower();
 
             if (!json.Contains(keyQ) || !json.Contains(keyR))
             {
@@ -155,13 +155,13 @@ namespace TribesOfDust.Utils.IO
         /// </summary>
         /// <param name="coordinates">The coordinates to serialize.</param>
         /// <returns>The serialized coordinates.</returns>
-        public static Dictionary Serialize(this CubeCoordinate<int> coordinates)
+        public static Dictionary Serialize(this CubeCoordinate coordinates)
         {
             return new()
             {
-                {nameof(CubeCoordinate<int>.X).ToLower(), coordinates.X},
-                {nameof(CubeCoordinate<int>.Y).ToLower(), coordinates.Y},
-                {nameof(CubeCoordinate<int>.Z).ToLower(), coordinates.Z}
+                {nameof(CubeCoordinate.X).ToLower(), coordinates.X},
+                {nameof(CubeCoordinate.Y).ToLower(), coordinates.Y},
+                {nameof(CubeCoordinate.Z).ToLower(), coordinates.Z}
             };
         }
 
@@ -171,13 +171,13 @@ namespace TribesOfDust.Utils.IO
         /// <param name="json">The JSON dictionary.</param>
         /// <param name="output">The deserialized output coordinate.</param>
         /// <returns>True, if the deserialization succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(Dictionary json, out CubeCoordinate<int> output)
+        public static bool TryDeserialize(Dictionary json, out CubeCoordinate output)
         {
             output = new(0, 0, 0);
 
-            string keyX = nameof(CubeCoordinate<int>.X).ToLower();
-            string keyY = nameof(CubeCoordinate<int>.X).ToLower();
-            string keyZ = nameof(CubeCoordinate<int>.X).ToLower();
+            string keyX = nameof(CubeCoordinate.X).ToLower();
+            string keyY = nameof(CubeCoordinate.X).ToLower();
+            string keyZ = nameof(CubeCoordinate.X).ToLower();
 
             if (!json.Contains(keyX) || !json.Contains(keyY) || !json.Contains(keyZ))
             {

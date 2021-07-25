@@ -1,44 +1,55 @@
-﻿using Godot;
+﻿using System.Runtime.CompilerServices;
+using Godot;
 
 namespace TribesOfDust.Hex
 {
-    public static class CubeCoordinate
-    {
-        public static CubeCoordinate<int> FromQR(int q, int r) => new (q, -(q + r), r);
-        public static CubeCoordinate<float> FromQR(float q, float r) => new (q, -(q + r), r);
-
-        public static AxialCoordinate<int> ToAxialCoordinate(this CubeCoordinate<int> coordinate)
-        {
-            var (x, _, z) = coordinate;
-            return new(x, z);
-        }
-
-        public static AxialCoordinate<float> ToAxialCoordinate(this CubeCoordinate<float> coordinate)
-        {
-            var (x, _, z) = coordinate;
-            return new(x, z);
-        }
-
-        /// <summary> Round a cube coordinate to the nearest integer. </summary>
-        /// <remarks> Rounds each element individually. </remarks>
-        /// <param name="coordinate">The coordinate to round.</param>
-        public static CubeCoordinate<int> Round(this CubeCoordinate<float> coordinate)
-        {
-            var x = (int) Mathf.Round(coordinate.X);
-            var y = (int) Mathf.Round(coordinate.Y);
-            var z = (int) Mathf.Round(coordinate.Z);
-            return new(x, y, z);
-        }
-    }
 
     /// <summary>
     /// Cube coordinates based index.
     /// </summary>
+    ///
+    /// <remarks>
+    /// Cube coordinates operate in three dimensions, with the constraint that the three
+    /// dimensions <see cref="X"/>, <see cref="Y"/> and <see cref="Z"/> must yield a sum of zero.
+    ///
+    /// Note that working with a <see cref="CubeCoordinate"/> facilitates some computations,
+    /// but the third dimension is ambiguous. For storage, consider using a <see cref="AxialCoordinate"/> instead.
+    /// </remarks>
+    ///
     /// <param name="X">Left to right</param>
     /// <param name="Y">Bottom right to top left</param>
     /// <param name="Z">Top right to bottom left</param>
-    public record CubeCoordinate<T>(T X, T Y, T Z) where T: notnull
+    public record CubeCoordinate(int X, int Y, int Z)
     {
+        #region Factory
+
+        public static CubeCoordinate From(int q, int r) => new (q, -(q + r), r);
+        public static CubeCoordinate From(AxialCoordinate coordinate) => coordinate.ToCubeCoordinate();
+        public static CubeCoordinate From(Vector3 vector)
+        {
+            var rounded = vector.Round();
+            var x = (int) rounded.x;
+            var y = (int) rounded.y;
+            var z = (int) rounded.z;
+
+            return new (x, y, z);
+        }
+
+        #endregion
+        #region Conversions
+
+        /// <summary> Converts a <see cref="CubeCoordinate"/> to a <see cref="AxialCoordinate"/>. </summary>
+        /// <remarks> Conversion is marked as implicit to facilitate switching between coordinate types. </remarks>
+        /// <param name="coordinate">The coordiante to convert.</param>
+        public static implicit operator AxialCoordinate(CubeCoordinate coordinate) => coordinate.ToAxialCoordinate();
+
+        /// <summary>
+        /// Converts the <see cref="CubeCoordinate"/> to the matching <see cref="AxialCoordinate"/>.
+        /// </summary>
+        public AxialCoordinate ToAxialCoordinate() => new(X, Z);
+
+        #endregion
+
         public override int GetHashCode()
         {
             return (X.GetHashCode(),
@@ -46,45 +57,59 @@ namespace TribesOfDust.Hex
                     Z.GetHashCode())
                 .GetHashCode();
         }
-    }
 
-    public static class AxialCoordinate
-    {
-        public static CubeCoordinate<int> ToCubeCoordinate(this AxialCoordinate<int> coordinate)
-        {
-            var (q, r) = coordinate;
-            return CubeCoordinate.FromQR(q, r);
-        }
-
-        public static CubeCoordinate<float> ToCubeCoordinate(this AxialCoordinate<float> coordinate)
-        {
-            var (q, r) = coordinate;
-            return CubeCoordinate.FromQR(q, r);
-        }
-
-        /// <summary> Round an axial coordinate to the nearest integer. </summary>
-        /// <remarks> Rounds each element individually. </remarks>
-        /// <param name="coordinate">The coordinate to round.</param>
-        public static AxialCoordinate<int> Round(this AxialCoordinate<float> coordinate)
-        {
-            var q = (int) Mathf.Round(coordinate.Q);
-            var r = (int) Mathf.Round(coordinate.R);
-            return new(q, r);
-        }
+        public override string ToString() => $"({X}, {Y}, {Z})";
     }
 
     /// <summary>
     /// Axial coordinates based index.
     /// </summary>
+    ///
+    /// <remarks>
+    /// Axial coordiantes operate in two dimensions. The third dimension is implicit.
+    /// While the <see cref="Q"/> property describes the offset horizontally, the <see cref="R"/> property
+    /// describes the offset along the bottom-left to top-right. This gives you all the axis you need to properly
+    /// describe coordinates in a two dimensional system.
+    /// </remarks>
+    ///
     /// <param name="Q">Left to right</param>
     /// <param name="R">Top right to bottom left</param>
-    public record AxialCoordinate<T>(T Q, T R) where T: notnull
+    public record AxialCoordinate(int Q, int R)
     {
+        #region Factory
+
+        public static AxialCoordinate From(CubeCoordinate coordinate) => coordinate.ToAxialCoordinate();
+        public static AxialCoordinate From(Vector2 vector)
+        {
+            var rounded = vector.Round();
+            var q = (int) rounded.x;
+            var r = (int) rounded.y;
+
+            return new (q, r);
+        }
+
+        #endregion
+        #region Conversions
+
+        /// <summary> Converts a <see cref="AxialCoordinate"/> to a <see cref="CubeCoordinate"/>. </summary>
+        /// <remarks> Conversion is marked as implicit to facilitate switching between coordinate types. </remarks>
+        /// <param name="coordinate">The coordiante to convert.</param>
+        public static implicit operator CubeCoordinate(AxialCoordinate coordinate) => coordinate.ToCubeCoordinate();
+
+        /// <summary>
+        /// Converts the <see cref="AxialCoordinate"/> to the matching <see cref="CubeCoordinate"/>.
+        /// </summary>
+        public CubeCoordinate ToCubeCoordinate() => CubeCoordinate.From(Q, R);
+
+        #endregion
+
         public override int GetHashCode()
         {
             return (Q.GetHashCode(),
                     R.GetHashCode())
                 .GetHashCode();
         }
+
+        public override string ToString() => $"({Q}, {R})";
     }
 }
