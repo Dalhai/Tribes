@@ -100,6 +100,7 @@ namespace TribesOfDust
                     if (_activeTile is not null)
                     {
                         _activeTile.Modulate = Colors.White;
+                        
                     }
 
                     _activeTile = _tiles.Get(hex);
@@ -108,6 +109,43 @@ namespace TribesOfDust
                     {
                         _activeTile.Modulate = Colors.Aqua;
                     }
+                }
+            }
+
+            if (inputEvent is InputEventKey)
+            {
+                if (Input.IsActionPressed("ui_TileTundra")&& _activeTileType!=TileType.Tundra && richTextLabel is not null && _mapTemplate is not null)
+                {
+                    _activeTileType = TileType.Tundra;
+                    richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
+                }
+                else if (Input.IsActionPressed("ui_TileRocks")&&_activeTileType!=TileType.Rocks)
+                {
+                    _activeTileType = TileType.Rocks;
+                }
+                else if (Input.IsActionPressed("ui_TileDunes")&&_activeTileType!=TileType.Dune)
+                {
+                    _activeTileType = TileType.Dune;
+                }
+                else if (Input.IsActionPressed("ui_TileOpen")&&_activeTileType!=TileType.Open)
+                {
+                    _activeTileType = TileType.Open;
+                }
+            }
+            if (Input.IsActionPressed("add_tile"))
+            {
+                if (_mapTemplate != null && richTextLabel is not null)
+                {
+                    _mapTemplate.TilePool[_activeTileType]+=1;
+                    richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
+                }
+            }
+            if (Input.IsActionPressed("remove_tile"))
+            {
+                if (_mapTemplate != null && _mapTemplate.TilePool[_activeTileType] > 0 && richTextLabel is not null)
+                {
+                    _mapTemplate.TilePool[_activeTileType]-=1;
+                    richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
                 }
             }
         }
