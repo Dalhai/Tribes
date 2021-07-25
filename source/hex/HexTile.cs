@@ -5,6 +5,8 @@ using Godot;
 using GodotJson = Godot.Collections.Dictionary;
 
 using TribesOfDust.Utils.IO;
+using System.Security;
+using System.Diagnostics;
 
 namespace TribesOfDust.Hex
 {
@@ -48,13 +50,76 @@ namespace TribesOfDust.Hex
             Position = HexConversions.HexToWorld(coordinates, TileAsset.ExpectedSize);
         }
 
+        #region Queries
+
         public float Size => Width / 2.0f;
         public float Width => Texture.GetWidth();
         public float Height => Texture.GetHeight();
 
         public TileType Type { get; }
+        public bool IsBlocked => Type == TileType.Blocked;
+        public bool IsOpen => Type == TileType.Open;
+
         public AxialCoordinate Coordinates { get; }
-        public IEnumerable<TileEffect> Effects => _effects;
+
+        #endregion
+        #region Connectivity
+
+        /// <summary>
+        /// Checks if the tile is blocked in the specified direction.
+        /// </summary>
+        ///
+        /// <param name="direction">The direction to look at.</param>
+        /// <returns>True, if the tile is blocked in that direction, false otherwise.</returns>
+        public bool IsBlockedIn(TileDirection direction) => IsBlocked || _blockedDirections.Contains(direction);
+
+        /// <summary>
+        /// Block the tile in the specified <see cref="TileDirection">.
+        /// </summary>
+        ///
+        /// <exception cref="ArgumentException">
+        /// Thrown when trying to block a tile in a direction that is already blocked.
+        /// </exception>
+        ///
+        /// <param name="direction">The direction to block.</param>
+        public void Block(TileDirection direction)
+        {
+            if (IsBlockedIn(direction))
+            {
+                throw new ArgumentException($"Trying to block tile in direction {direction}, but it is already blocked.", "direction");
+            }
+
+            _blockedDirections.Add(direction);
+        }
+
+        /// <summary>
+        /// Unblock the tile in the specified <see cref="TileDirection"/>.
+        /// </summary>
+        ///
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when trying to unblock a tile with type <see cref="TileType.Blocked"/>.
+        /// Blocked tile types can never be unblocked in any direction and are implicitly blocked in all directions.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when trying to unlobkc a tile in a direction that is already unblocked.
+        /// </exception>
+        ///
+        /// <param name="direction"></param>
+        public void Unblock(TileDirection direction)
+        {
+            if (IsBlocked)
+            {
+                throw new InvalidOperationException("Trying to unblock a direction on a blocked tile.");
+            }
+
+            if (!IsBlockedIn(direction))
+            {
+                throw new ArgumentException($"Trying to unblock tile in direction {direction}, but is is already unblocked.", "direction");
+            }
+        }
+
+        #endregion
+        #region Serialization
 
         /// <summary>
         /// Serialize the tile into a godot JSON dictionary.
@@ -130,6 +195,9 @@ namespace TribesOfDust.Hex
             return true;
         }
 
+        #endregion
+
+        private readonly HashSet<TileDirection> _blockedDirections = new();
         private readonly List<TileEffect> _effects = new();
     }
 }
