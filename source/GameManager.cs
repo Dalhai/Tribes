@@ -112,40 +112,58 @@ namespace TribesOfDust
                 }
             }
 
-            if (inputEvent is InputEventKey)
+            if (inputEvent is InputEventKey && _richTextLabel is not null )
             {
-                if (Input.IsActionPressed("ui_TileTundra")&& _activeTileType!=TileType.Tundra && richTextLabel is not null && _mapTemplate is not null)
+                if (Input.IsActionPressed(InputActionTundra))
                 {
                     _activeTileType = TileType.Tundra;
-                    richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
                 }
-                else if (Input.IsActionPressed("ui_TileRocks")&&_activeTileType!=TileType.Rocks)
+                else if (Input.IsActionPressed(InputActionRock))
                 {
                     _activeTileType = TileType.Rocks;
                 }
-                else if (Input.IsActionPressed("ui_TileDunes")&&_activeTileType!=TileType.Dune)
+                else if (Input.IsActionPressed(InputActionDune))
                 {
                     _activeTileType = TileType.Dune;
                 }
-                else if (Input.IsActionPressed("ui_TileOpen")&&_activeTileType!=TileType.Open)
+                else if (Input.IsActionPressed(InputActionCanyon))
                 {
-                    _activeTileType = TileType.Open;
+                    _activeTileType = TileType.Canyon;
                 }
+                _richTextLabel.Text = $"{_activeTileType}";
             }
-            if (Input.IsActionPressed("add_tile"))
+            if (Input.IsActionPressed(InputActionIncreaseTileCount))
             {
-                if (_mapTemplate != null && richTextLabel is not null)
+                if (_mapTemplate != null && _richTextLabel is not null)
                 {
                     _mapTemplate.TilePool[_activeTileType]+=1;
-                    richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
+                    _richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
                 }
             }
-            if (Input.IsActionPressed("remove_tile"))
+            if (Input.IsActionPressed(InputActionDecreaseTileCount))
             {
-                if (_mapTemplate != null && _mapTemplate.TilePool[_activeTileType] > 0 && richTextLabel is not null)
+                if (_mapTemplate != null && _mapTemplate.TilePool[_activeTileType] > 0 && _richTextLabel is not null)
                 {
                     _mapTemplate.TilePool[_activeTileType]-=1;
-                    richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
+                    _richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
+                }
+            }
+
+            if (inputEvent is InputEventMouseButton mouseButton && _mapTemplate is not null && _map is not null)
+            {
+                if (mouseButton.Pressed && mouseButton.ButtonIndex == 1)
+                {
+                    var world = GetGlobalMousePosition();
+                    var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
+                    HexTile hexTile = new HexTile(hex, _repository.GetRandomVariation(_activeTileType));
+                    _map.AddOrOverwriteTile(hexTile);
+                }
+                else if (mouseButton.Pressed && mouseButton.ButtonIndex == 2)
+                {
+                    var world = GetGlobalMousePosition();
+                    var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
+                    HexTile hexTile = new HexTile(hex, _repository.GetRandomVariation(TileType.Open));
+                    _map.AddOrOverwriteTile(hexTile);
                 }
             }
         }
