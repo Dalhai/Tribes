@@ -135,9 +135,8 @@ namespace TribesOfDust.Hex
         {
             HexTile? removed = GetTileAt(coordinates);
 
-            // Note that the dictionary won't throw an exception if the coordinates are
-            // not registered. Since this is exactly what we want, no additional checks
-            // are necessary.
+            // Throw an excpetion when someone is trying to remove a tile that does not exist in the map.
+            // Should not happen, but could happen in a networked scenario.
 
             if (removed is null)
             {
