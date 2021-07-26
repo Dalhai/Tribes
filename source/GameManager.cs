@@ -31,6 +31,10 @@ namespace TribesOfDust
             {
                 AddChild(tile.Value);
             }
+            
+            // Initialize user interface.
+            
+            UpdateActiveTileType();
 
             base._Ready();
         }
@@ -97,75 +101,103 @@ namespace TribesOfDust
 
                 if (_activeTile?.Coordinates != hex && _tiles.Contains(hex))
                 {
-                    if (_activeTile is not null)
-                    {
-                        _activeTile.Modulate = Colors.White;
-                        
-                    }
+                    if (_activeTile is not null) _activeTile.Modulate = Colors.White;
 
                     _activeTile = _tiles.Get(hex);
 
-                    if (_activeTile is not null)
-                    {
-                        _activeTile.Modulate = Colors.Aqua;
-                    }
+                    if (_activeTile is not null) _activeTile.Modulate = Colors.Aqua;
                 }
             }
 
-            if (inputEvent is InputEventKey && _richTextLabel is not null )
+            if (inputEvent is InputEventKey && _richTextLabel is not null)
             {
-                if (Input.IsActionPressed(InputActionTundra))
-                {
-                    _activeTileType = TileType.Tundra;
-                }
-                else if (Input.IsActionPressed(InputActionRock))
-                {
-                    _activeTileType = TileType.Rocks;
-                }
-                else if (Input.IsActionPressed(InputActionDune))
-                {
-                    _activeTileType = TileType.Dune;
-                }
-                else if (Input.IsActionPressed(InputActionCanyon))
-                {
-                    _activeTileType = TileType.Canyon;
-                }
-                _richTextLabel.Text = $"{_activeTileType}";
+                UpdateActiveTileType();
             }
+
             if (Input.IsActionPressed(InputActionIncreaseTileCount))
-            {
                 if (_mapTemplate != null && _richTextLabel is not null)
                 {
-                    _mapTemplate.TilePool[_activeTileType]+=1;
+                    _mapTemplate.TilePool[_activeTileType] += 1;
                     _richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
                 }
-            }
+
             if (Input.IsActionPressed(InputActionDecreaseTileCount))
-            {
                 if (_mapTemplate != null && _mapTemplate.TilePool[_activeTileType] > 0 && _richTextLabel is not null)
                 {
-                    _mapTemplate.TilePool[_activeTileType]-=1;
+                    _mapTemplate.TilePool[_activeTileType] -= 1;
                     _richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
                 }
-            }
 
             if (inputEvent is InputEventMouseButton mouseButton && _mapTemplate is not null && _map is not null)
             {
+                // Check left mouse button pressed and add selected tile type.
                 if (mouseButton.Pressed && mouseButton.ButtonIndex == 1)
                 {
                     var world = GetGlobalMousePosition();
                     var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
-                    HexTile hexTile = new HexTile(hex, _repository.GetRandomVariation(_activeTileType));
-                    _map.AddOrOverwriteTile(hexTile);
+                    try
+                    {
+                        var hexTile = new HexTile(hex, _repository.GetRandomVariation(_activeTileType));
+                        _map.AddOrOverwriteTile(hexTile);
+                    }
+                    catch(ArgumentException exception)
+                    {
+                        GD.PrintErr(exception.Message);
+                    }
+                  
                 }
+                // Check right mouse button pressed and add open tile, if the current tile is not of open type.
+                // Check right mouse button pressed and remove tile, if the current tile is of open type.
                 else if (mouseButton.Pressed && mouseButton.ButtonIndex == 2)
                 {
                     var world = GetGlobalMousePosition();
                     var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
-                    HexTile hexTile = new HexTile(hex, _repository.GetRandomVariation(TileType.Open));
-                    _map.AddOrOverwriteTile(hexTile);
+                    if (_map.GetTileTypeAt(hex) == TileType.Open)
+                    {
+                        _map.RemoveTileAt(hex);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            var hexTile = new HexTile(hex, _repository.GetRandomVariation(TileType.Open));
+                            _map.AddOrOverwriteTile(hexTile);
+                        }
+                        catch(ArgumentException exception)
+                        {
+                            GD.PrintErr(exception.Message);
+                        }
+                    }
                 }
             }
         }
+
+        private void UpdateActiveTileType()
+        {
+            if (Input.IsActionPressed(InputActionTundra))
+                _activeTileType = TileType.Tundra;
+            else if (Input.IsActionPressed(InputActionRock))
+                _activeTileType = TileType.Rocks;
+            else if (Input.IsActionPressed(InputActionDune))
+                _activeTileType = TileType.Dune;
+            else if (Input.IsActionPressed(InputActionCanyon)) 
+                _activeTileType = TileType.Canyon;
+            
+            if (_richTextLabel is not null)
+            {
+                _richTextLabel.Text = $"{_activeTileType}";
+            }
+        }
+
+        #region Input Actions
+
+        private const string InputActionDune = "editor_tile_dunes";
+        private const string InputActionRock = "editor_tile_rocks";
+        private const string InputActionTundra = "editor_tile_tundra";
+        private const string InputActionCanyon = "editor_tile_canyon";
+        private const string InputActionIncreaseTileCount = "editor_increase_tile_count";
+        private const string InputActionDecreaseTileCount = "editor_decrease_tile_count";
+
+        #endregion
     }
 }
