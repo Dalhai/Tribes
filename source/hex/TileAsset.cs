@@ -91,6 +91,13 @@ namespace TribesOfDust.Hex
         [Export(PropertyHint.ResourceType, "Texture")]
         public Texture? Texture;
 
+        [Export] public bool BlockedNW = false;
+        [Export] public bool BlockedN  = false;
+        [Export] public bool BlockedNE = false;
+        [Export] public bool BlockedSE = false;
+        [Export] public bool BlockedS  = false;
+        [Export] public bool BlockedSW = false;
+
         /// <summary>
         /// Gets the scale in x-direction necessary to match the expected width.
         /// </summary>

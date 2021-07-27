@@ -71,7 +71,7 @@ namespace TribesOfDust.Hex
         ///
         /// <param name="direction">The direction to look at.</param>
         /// <returns>True, if the tile is blocked in that direction, false otherwise.</returns>
-        public bool IsBlockedIn(TileDirection direction) => IsBlocked || _blockedDirections.Contains(direction);
+        public bool IsBlockedIn(TileDirection direction) => IsBlocked || _blocked.HasFlag(direction);
 
         /// <summary>
         /// Block the tile in the specified <see cref="TileDirection">.
@@ -89,7 +89,7 @@ namespace TribesOfDust.Hex
                 throw new ArgumentException($"Trying to block tile in direction {direction}, but it is already blocked.", "direction");
             }
 
-            _blockedDirections.Add(direction);
+            _blocked |= direction;
         }
 
         /// <summary>
@@ -116,6 +116,8 @@ namespace TribesOfDust.Hex
             {
                 throw new ArgumentException($"Trying to unblock tile in direction {direction}, but is is already unblocked.", "direction");
             }
+
+            _blocked ^= direction;
         }
 
         #endregion
@@ -197,7 +199,6 @@ namespace TribesOfDust.Hex
 
         #endregion
 
-        private readonly HashSet<TileDirection> _blockedDirections = new();
-        private readonly List<TileEffect> _effects = new();
+        private TileDirection _blocked = TileDirection.None;
     }
 }

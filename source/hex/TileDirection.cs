@@ -6,14 +6,25 @@ namespace TribesOfDust.Hex
     /// A <see cref="TileDirection"/> describes the six possible directions along
     /// the edges of a <see cref="HexTile"/>.
     /// </summary>
+    [Flags]
     public enum TileDirection
     {
-        NW,
-        N,
-        NE,
-        SE,
-        S,
-        SW
+        NW = 0x01,
+        N  = 0x02,
+        NE = 0x04,
+        SE = 0x08,
+        S  = 0x10,
+        SW = 0x20,
+
+        /// <summary>
+        /// A special direction used to signal all directions.
+        /// </summary>
+        All  = NW & N & NE & SE & S & SW,
+
+        /// <summary>
+        /// A special direction used to signal no direction.
+        /// </summary>
+        None = 0,
     }
 
     public static class TileDirectionOffset
