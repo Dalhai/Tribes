@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Diagnostics;
 
-namespace TribesOfDust.Utils
+namespace TribesOfDust.Utils.Godot
 {
     public class GodotException : Exception
     {
