@@ -17,14 +17,17 @@ namespace TribesOfDust.Hex
         SW = 0x20,
 
         /// <summary>
-        /// A special direction used to signal all directions.
+        /// A special tile direction for when no direction is needed.
         /// </summary>
-        All  = NW & N & NE & SE & S & SW,
+        None = 0
+    }
 
-        /// <summary>
-        /// A special direction used to signal no direction.
-        /// </summary>
-        None = 0,
+    public static class TileDirections
+    {
+        public const TileDirection Northern = TileDirection.NW | TileDirection.N | TileDirection.NE;
+        public const TileDirection Southern = TileDirection.SW | TileDirection.S | TileDirection.SE;
+        public const TileDirection All = Northern | Southern;
+        public const TileDirection None = 0;
     }
 
     public static class TileDirectionOffset

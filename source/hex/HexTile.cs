@@ -21,6 +21,9 @@ namespace TribesOfDust.Hex
             Type = asset.Type;
             Texture = asset.Texture;
 
+            _connections = (TileDirection) asset.Connections;
+            _direction = asset.Direction;
+
             // Scale tile according to specified texture
 
             Scale = new Vector2(asset.WidthScaleToExpected, asset.HeightScaleToExpected);
@@ -39,6 +42,9 @@ namespace TribesOfDust.Hex
 
             Type =  type;
             Texture = texture;
+
+            _connections = TileDirection.None;
+            _direction = TileDirection.None;
 
             // Initialize the tile scale explicitly
 
@@ -66,58 +72,49 @@ namespace TribesOfDust.Hex
         #region Connectivity
 
         /// <summary>
-        /// Checks if the tile is blocked in the specified direction.
+        /// Checks if the tile is connected in the specified direction.
         /// </summary>
         ///
         /// <param name="direction">The direction to look at.</param>
-        /// <returns>True, if the tile is blocked in that direction, false otherwise.</returns>
-        public bool IsBlockedIn(TileDirection direction) => IsBlocked || _blocked.HasFlag(direction);
+        /// <returns>True, if there is a connection, false otherwise.</returns>
+        public bool IsConnected(TileDirection direction) => _connections.HasFlag(direction);
 
         /// <summary>
-        /// Block the tile in the specified <see cref="TileDirection">.
+        /// Connect the tile in the specified <see cref="TileDirection">.
         /// </summary>
         ///
         /// <exception cref="ArgumentException">
-        /// Thrown when trying to block a tile in a direction that is already blocked.
+        /// Thrown when trying to connect a tile in a direction that is already connected..
         /// </exception>
         ///
-        /// <param name="direction">The direction to block.</param>
-        public void Block(TileDirection direction)
+        /// <param name="direction">The direction to connect.</param>
+        public void Connect(TileDirection direction)
         {
-            if (IsBlockedIn(direction))
+            if (IsConnected(direction))
             {
-                throw new ArgumentException($"Trying to block tile in direction {direction}, but it is already blocked.", "direction");
+                throw new ArgumentException($"Trying to connect tile in direction {direction}, but it is already connected.", "direction");
             }
 
-            _blocked |= direction;
+            _connections |= direction;
         }
 
         /// <summary>
-        /// Unblock the tile in the specified <see cref="TileDirection"/>.
+        /// Disconnect the tile in the specified <see cref="TileDirection"/>.
         /// </summary>
         ///
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when trying to unblock a tile with type <see cref="TileType.Blocked"/>.
-        /// Blocked tile types can never be unblocked in any direction and are implicitly blocked in all directions.
-        /// </exception>
         /// <exception cref="ArgumentException">
-        /// Thrown when trying to unlobkc a tile in a direction that is already unblocked.
+        /// Thrown when trying to disconnect a tile in a direction that is already disconnected.
         /// </exception>
         ///
-        /// <param name="direction"></param>
-        public void Unblock(TileDirection direction)
+        /// <param name="direction">The direction to disconnected.</param>
+        public void Disconnect(TileDirection direction)
         {
-            if (IsBlocked)
+            if (IsConnected(direction))
             {
-                throw new InvalidOperationException("Trying to unblock a direction on a blocked tile.");
+                throw new ArgumentException($"Trying to disconnect tile in direction {direction}, but is is already disconnected.", "direction");
             }
 
-            if (!IsBlockedIn(direction))
-            {
-                throw new ArgumentException($"Trying to unblock tile in direction {direction}, but is is already unblocked.", "direction");
-            }
-
-            _blocked ^= direction;
+            _connections ^= direction;
         }
 
         #endregion
@@ -199,6 +196,7 @@ namespace TribesOfDust.Hex
 
         #endregion
 
-        private TileDirection _blocked = TileDirection.None;
+        private TileDirection _connections = TileDirection.None;
+        private TileDirection _direction = TileDirection.None;
     }
 }

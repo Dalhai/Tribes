@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Godot;
 
-using TribesOfDust.Utils;
+using TribesOfDust.Utils.Godot;
 
 namespace TribesOfDust.Hex
 {
@@ -19,7 +19,7 @@ namespace TribesOfDust.Hex
         public static readonly string Path = "res://assets/tiles";
 
         /// <summary>
-        /// Loads all tile assets in the path specified by <see cref="TileAsset.Path"/>.
+        /// Loads all tile assets in the path specified by <see cref="Path"/>.
         /// </summary>
         /// <exception cref="GodotException">Thrown when the default directory can't be opened.</exception>
         /// <exception cref="GodotException">Thrown when the default directory can't be iterated.</exception>
@@ -60,7 +60,7 @@ namespace TribesOfDust.Hex
                     float height = asset.Texture.GetHeight();
                     float ratio = width / height;
 
-                    if(!Mathf.IsEqualApprox(ratio, ExpectedRatio))
+                    if (!Mathf.IsEqualApprox(ratio, ExpectedRatio))
                     {
                         GD.PushWarning
                         (
@@ -79,6 +79,8 @@ namespace TribesOfDust.Hex
             return results;
         }
 
+        #region Exports
+
         /// <summary>
         /// The overarching type the tile belongs to.
         /// </summary>
@@ -91,12 +93,28 @@ namespace TribesOfDust.Hex
         [Export(PropertyHint.ResourceType, "Texture")]
         public Texture? Texture;
 
-        [Export] public bool BlockedNW = false;
-        [Export] public bool BlockedN  = false;
-        [Export] public bool BlockedNE = false;
-        [Export] public bool BlockedSE = false;
-        [Export] public bool BlockedS  = false;
-        [Export] public bool BlockedSW = false;
+        /// <summary>
+        /// The direction of the tile.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// Most tiles will not be directed, which is allowed as well.
+        /// </remarks>
+        [Export(PropertyHint.Enum)]
+        public TileDirection Direction = TileDirection.None;
+
+        /// <summary>
+        /// The connections to other tiles this tile has.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// Most tiles will have connections to all surrounding tiles.
+        /// </remarks>
+        [ExportFlags(typeof(TileDirection))]
+        public int Connections = (int)TileDirections.All;
+
+        #endregion
+        #region Size
 
         /// <summary>
         /// Gets the scale in x-direction necessary to match the expected width.
@@ -107,5 +125,7 @@ namespace TribesOfDust.Hex
         /// Gets the scale in y-direction necessary to match the expected height.
         /// </summary>
         public float HeightScaleToExpected => Texture != null ? ExpectedHeight / Texture.GetHeight() : 1.0f;
+
+        #endregion
     }
 }
