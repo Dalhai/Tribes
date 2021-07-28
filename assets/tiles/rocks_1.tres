@@ -7,3 +7,5 @@
 script = ExtResource( 2 )
 Type = 4
 Texture = ExtResource( 1 )
+Direction = 0
+Connections = 63
