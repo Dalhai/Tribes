@@ -10,9 +10,9 @@ using System.Diagnostics;
 
 namespace TribesOfDust.Hex
 {
-    public class HexTile : Sprite
+    public class Tile : Sprite
     {
-        public HexTile(AxialCoordinate coordinates, TileAsset asset)
+        public Tile(AxialCoordinate coordinates, TileAsset asset)
         {
             Coordinates = coordinates;
 
@@ -34,7 +34,7 @@ namespace TribesOfDust.Hex
             Position = HexConversions.HexToWorld(coordinates, TileAsset.ExpectedSize);
         }
 
-        private HexTile(AxialCoordinate coordinates, TileType type, Texture texture, Vector2 scale)
+        private Tile(AxialCoordinate coordinates, TileType type, Texture texture, Vector2 scale)
         {
             Coordinates = coordinates;
 
@@ -123,12 +123,12 @@ namespace TribesOfDust.Hex
         }
 
         /// <summary>
-        /// Try to deserialize a <see cref="HexTile"/> from a godot JSON dictionary.
+        /// Try to deserialize a <see cref="Tile"/> from a godot JSON dictionary.
         /// </summary>
         /// <param name="json">The input JSON dictionary.</param>
         /// <param name="tile">The output tile, or null, if unparseable.</param>
         /// <returns>True, if the tile could be deserialized, false otherwise.</returns>
-        public static bool TryDeserialize(GodotJson json, out HexTile? tile)
+        public static bool TryDeserialize(GodotJson json, out Tile? tile)
         {
             tile = null;
 

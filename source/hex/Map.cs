@@ -8,17 +8,17 @@ using Godot;
 
 namespace TribesOfDust.Hex
 {
-    public class HexMap : Node2D, IEnumerable<HexTile>
+    public class Map : Node2D, IEnumerable<Tile>
     {
         /// <summary>
-        /// Initializes an empty <see cref="HexMap"/>.
+        /// Initializes an empty <see cref="Map"/>.
         /// </summary>
-        public HexMap()
+        public Map()
         {
         }
 
         /// <summary>
-        /// Initializes a new <see cref="HexMap"/>.
+        /// Initializes a new <see cref="Map"/>.
         /// </summary>
         ///
         /// <exception cref="ArgumentException">
@@ -26,7 +26,7 @@ namespace TribesOfDust.Hex
         /// </exception>
         ///
         /// <param name="tiles">The initial tiles of the map.</param>
-        public HexMap(IEnumerable<HexTile> tiles)
+        public Map(IEnumerable<Tile> tiles)
         {
             // Build an index of tile coordinates to tiles.
             // Automatically performs validity checks for successively added tiles.
@@ -40,24 +40,24 @@ namespace TribesOfDust.Hex
         #region Tile Queries
 
         /// <summary>
-        /// Gets a <see cref="HexTile"/> at a specific <see cref="AxialCoordinate"/>.
+        /// Gets a <see cref="Tile"/> at a specific <see cref="AxialCoordinate"/>.
         /// </summary>
         ///
         /// <returns>The tile at the specified coordinates.</returns>
-        public HexTile? this[AxialCoordinate coordinate] => GetTileAt(coordinate);
+        public Tile? this[AxialCoordinate coordinate] => GetTileAt(coordinate);
 
         public bool HasTileAt(AxialCoordinate coordinates) => tiles.ContainsKey(coordinates);
         public bool IsOpenAt(AxialCoordinate coordinates) => GetTileTypeAt(coordinates) == TileType.Open;
         public bool IsBlockedAt(AxialCoordinate coordinates) => GetTileTypeAt(coordinates) == TileType.Blocked;
 
-        public HexTile? GetTileAt(AxialCoordinate coordinates) => tiles.ContainsKey(coordinates) ? tiles[coordinates] : null;
+        public Tile? GetTileAt(AxialCoordinate coordinates) => tiles.ContainsKey(coordinates) ? tiles[coordinates] : null;
         public TileType GetTileTypeAt(AxialCoordinate coordinates) => GetTileAt(coordinates)?.Type ?? TileType.Unknown;
 
         #endregion
         #region Manipulation
 
         /// <summary>
-        /// Adds a <see cref="HexTile"/> to the map.
+        /// Adds a <see cref="Tile"/> to the map.
         /// </summary>
         ///
         /// <remarks>
@@ -66,7 +66,7 @@ namespace TribesOfDust.Hex
         /// </remarks>
         ///
         /// <param name="tile">The tile to add.</param>
-        public void AddOrOverwriteTile(HexTile tile)
+        public void AddOrOverwriteTile(Tile tile)
         {
             if (tiles.ContainsKey(tile.Coordinates))
             {
@@ -77,7 +77,7 @@ namespace TribesOfDust.Hex
         }
 
         /// <summary>
-        /// Adds a <see cref="HexTile"/> to the map.
+        /// Adds a <see cref="Tile"/> to the map.
         /// </summary>
         ///
         /// <exception cref="ArgumentException">
@@ -85,7 +85,7 @@ namespace TribesOfDust.Hex
         /// </exception>
         ///
         /// <param name="tile">The tile to add.</param>
-        public void AddTile(HexTile tile)
+        public void AddTile(Tile tile)
         {
             if (tiles.ContainsKey(tile.Coordinates))
             {
@@ -97,7 +97,7 @@ namespace TribesOfDust.Hex
         }
 
         /// <summary>
-        /// Removes a <see cref="HexTile"/> from the map.
+        /// Removes a <see cref="Tile"/> from the map.
         /// </summary>
         ///
         /// <exception cref="ArgumentException">
@@ -105,9 +105,9 @@ namespace TribesOfDust.Hex
         /// </exception>
         ///
         /// <param name="tile">The tile to remove.</param>
-        public void RemoveTile(HexTile tile)
+        public void RemoveTile(Tile tile)
         {
-            HexTile? target = GetTileAt(tile.Coordinates);
+            Tile? target = GetTileAt(tile.Coordinates);
 
             // Note that even though we might receive a valid tile, the tile stored at
             // the coordinates of the provided tile might not be the same, in which
@@ -123,7 +123,7 @@ namespace TribesOfDust.Hex
         }
 
         /// <summary>
-        /// Removes a <see cref="HexTile"/> from the map.
+        /// Removes a <see cref="Tile"/> from the map.
         /// </summary>
         ///
         /// <exception cref="ArgumentException">
@@ -133,7 +133,7 @@ namespace TribesOfDust.Hex
         /// <param name="coordinates">The coordinates of the tile to remove.</param>
         public void RemoveTileAt(AxialCoordinate coordinates)
         {
-            HexTile? removed = GetTileAt(coordinates);
+            Tile? removed = GetTileAt(coordinates);
 
             // Throw an excpetion when someone is trying to remove a tile that does not exist in the map.
             // Should not happen, but could happen in a networked scenario.
@@ -151,11 +151,11 @@ namespace TribesOfDust.Hex
 
         #region IEnumerable Implementation
 
-        public IEnumerator<HexTile> GetEnumerator() => tiles.Values.GetEnumerator();
+        public IEnumerator<Tile> GetEnumerator() => tiles.Values.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => tiles.Values.GetEnumerator();
 
         #endregion
 
-        private readonly Dictionary<AxialCoordinate, HexTile> tiles = new();
+        private readonly Dictionary<AxialCoordinate, Tile> tiles = new();
     }
 }
