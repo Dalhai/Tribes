@@ -20,6 +20,18 @@ namespace TribesOfDust.Hex
     /// <param name="Z">Top right to bottom left</param>
     public record CubeCoordinate(int X, int Y, int Z)
     {
+        #region Constants
+
+        public static readonly CubeCoordinate Zero = From(0, 0);
+
+        public static readonly CubeCoordinate NW = TileDirectionOffset.GetCubeOffset(TileDirection.NW);
+        public static readonly CubeCoordinate N  = TileDirectionOffset.GetCubeOffset(TileDirection.N);
+        public static readonly CubeCoordinate NE = TileDirectionOffset.GetCubeOffset(TileDirection.NE);
+        public static readonly CubeCoordinate SE = TileDirectionOffset.GetCubeOffset(TileDirection.SE);
+        public static readonly CubeCoordinate S  = TileDirectionOffset.GetCubeOffset(TileDirection.S);
+        public static readonly CubeCoordinate SW = TileDirectionOffset.GetCubeOffset(TileDirection.SW);
+
+        #endregion
         #region Factory
 
         public static CubeCoordinate From(int q, int r) => new (q, -(q + r), r);
@@ -81,6 +93,18 @@ namespace TribesOfDust.Hex
     /// <param name="R">Top right to bottom left</param>
     public record AxialCoordinate(int Q, int R)
     {
+        #region Constants
+
+        public static readonly AxialCoordinate Zero = new (0, 0);
+
+        public static readonly AxialCoordinate NW = TileDirectionOffset.GetAxialOffset(TileDirection.NW);
+        public static readonly AxialCoordinate N  = TileDirectionOffset.GetAxialOffset(TileDirection.N);
+        public static readonly AxialCoordinate NE = TileDirectionOffset.GetAxialOffset(TileDirection.NE);
+        public static readonly AxialCoordinate SE = TileDirectionOffset.GetAxialOffset(TileDirection.SE);
+        public static readonly AxialCoordinate S  = TileDirectionOffset.GetAxialOffset(TileDirection.S);
+        public static readonly AxialCoordinate SW = TileDirectionOffset.GetAxialOffset(TileDirection.SW);
+
+        #endregion
         #region Factory
 
         public static AxialCoordinate From(CubeCoordinate coordinate) => coordinate.ToAxialCoordinate();

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/clan_druid.png-5d1e1f9d943bd194da1d9a135de7ffd8.stex"
+path="res://.import/icon_priate.png-8f5382c8e7cb2daab80aef0086675ccc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/ui/clans/clan_druid.png"
-dest_files=[ "res://.import/clan_druid.png-5d1e1f9d943bd194da1d9a135de7ffd8.stex" ]
+source_file="res://assets/textures/ui/tribes/icon_priate.png"
+dest_files=[ "res://.import/icon_priate.png-8f5382c8e7cb2daab80aef0086675ccc.stex" ]
 
 [params]
 

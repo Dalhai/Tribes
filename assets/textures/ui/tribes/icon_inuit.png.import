@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/clan_roman.png-28aa9e34bb18d3ecbc7cc7aa12e7aebb.stex"
+path="res://.import/icon_inuit.png-462c0b736f8dbdc0ad80334237862ce1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/ui/clans/clan_roman.png"
-dest_files=[ "res://.import/clan_roman.png-28aa9e34bb18d3ecbc7cc7aa12e7aebb.stex" ]
+source_file="res://assets/textures/ui/tribes/icon_inuit.png"
+dest_files=[ "res://.import/icon_inuit.png-462c0b736f8dbdc0ad80334237862ce1.stex" ]
 
 [params]
 
