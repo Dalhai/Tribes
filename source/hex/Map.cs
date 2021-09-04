@@ -51,7 +51,7 @@ namespace TribesOfDust.Hex
         public bool IsBlockedAt(AxialCoordinate coordinates) => GetTileTypeAt(coordinates) == TileType.Blocked;
 
         public Tile? GetTileAt(AxialCoordinate coordinates) => tiles.ContainsKey(coordinates) ? tiles[coordinates] : null;
-        public TileType GetTileTypeAt(AxialCoordinate coordinates) => GetTileAt(coordinates)?.Type ?? TileType.Unknown;
+        public TileType GetTileTypeAt(AxialCoordinate coordinates) => GetTileAt(coordinates)?.Key ?? TileType.Unknown;
 
         #endregion
         #region Manipulation

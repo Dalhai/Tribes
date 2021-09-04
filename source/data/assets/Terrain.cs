@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Godot;
 
 using TribesOfDust.Utils.Godot;
+using TribesOfDust.Data;
+using TribesOfDust.Hex;
 
-namespace TribesOfDust.Hex
+namespace TribesOfDust.Data.Assets
 {
-    public class TileAsset : Resource
+    public class Terrain : Resource, IAsset<TileType>
     {
         public static readonly float ExpectedSize = 100.0f;
         public static readonly float ExpectedWidth = 2.0f * ExpectedSize;
@@ -24,7 +26,7 @@ namespace TribesOfDust.Hex
         /// <exception cref="GodotException">Thrown when the default directory can't be opened.</exception>
         /// <exception cref="GodotException">Thrown when the default directory can't be iterated.</exception>
         /// <returns>The loaded tile assets, if available, or an empty list otherwise.</returns>
-        public static List<TileAsset> LoadAll()
+        public static List<Terrain> LoadAll()
         {
             var dir = new Directory();
 
@@ -49,11 +51,11 @@ namespace TribesOfDust.Hex
             // Iterate through the directory entries and try to load the
             // corresponding tile assets.
 
-            var results = new List<TileAsset>();
+            var results = new List<Terrain>();
             var name = dir.GetNext();
             while (!string.IsNullOrEmpty(name))
             {
-                var asset = GD.Load<TileAsset>($"{Path}/{name}");
+                var asset = GD.Load<Terrain>($"{Path}/{name}");
                 if (asset != null && asset.Texture != null)
                 {
                     float width = asset.Texture.GetWidth();
@@ -85,7 +87,7 @@ namespace TribesOfDust.Hex
         /// The overarching type the tile belongs to.
         /// </summary>
         [Export(PropertyHint.Enum)]
-        public TileType Type;
+        public TileType Key { get; set; }
 
         /// <summary>
         /// The texture associated with the tile.

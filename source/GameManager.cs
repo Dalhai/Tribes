@@ -2,16 +2,18 @@ using Godot;
 using GodotJson = Godot.Collections.Dictionary;
 
 using TribesOfDust.Hex;
+using TribesOfDust.Data.Repositories;
+using TribesOfDust.Data.Assets;
 
 namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-        private readonly TileAssetRepository _repository = new (TileAsset.LoadAll());
-        private readonly HexMapTemplate? _mapTemplate = Load();
+        private readonly TerrainRepository _repository = new ();
+        private readonly MapTemplate? _mapTemplate = Load();
 
-        private HexMap? _map;
-        private HexTile? _activeTile;
+        private Map? _map;
+        private Tile? _activeTile;
 
         public override void _Ready()
         {
@@ -19,7 +21,9 @@ namespace TribesOfDust
 
             if (_mapTemplate is not null)
             {
+                _repository.LoadAll();
                 _map = _mapTemplate.Generate(_repository);
+
                 AddChild(_map);
             }
 
@@ -39,7 +43,7 @@ namespace TribesOfDust
             base._ExitTree();
         }
 
-        private static void Save(HexMapTemplate mapTemplate)
+        private static void Save(MapTemplate mapTemplate)
         {
             var targetFile = new File();
 
@@ -57,9 +61,9 @@ namespace TribesOfDust
             }
         }
 
-        private static HexMapTemplate? Load()
+        private static MapTemplate? Load()
         {
-            HexMapTemplate? mapTemplate = null;
+            MapTemplate? mapTemplate = null;
             var targetFile = new File();
 
             // Try to open the default map file to load our default map.
@@ -74,7 +78,7 @@ namespace TribesOfDust
 
                 if (jsonMap.Result is GodotJson json)
                 {
-                    HexMapTemplate.TryDeserialize(json, out mapTemplate);
+                    MapTemplate.TryDeserialize(json, out mapTemplate);
                 }
             }
 
@@ -86,7 +90,7 @@ namespace TribesOfDust
             if (inputEvent is InputEventMouseMotion && _map is not null)
             {
                 var world = GetGlobalMousePosition();
-                var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
+                var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
 
                 if (_activeTile?.Coordinates != hex && _map.HasTileAt(hex))
                 {

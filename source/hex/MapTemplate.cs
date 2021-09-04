@@ -6,6 +6,7 @@ using GodotJson = Godot.Collections.Dictionary;
 using GodotArray = Godot.Collections.Array;
 
 using TribesOfDust.Utils.IO;
+using TribesOfDust.Data.Repositories;
 
 namespace TribesOfDust.Hex
 {
@@ -78,12 +79,12 @@ namespace TribesOfDust.Hex
         ///
         /// <param name="repository">The tile asset repository providing assets for the template.</param>
         /// <returns>A new runtime map based on the map template.</returns>
-        public Map Generate(TileAssetRepository repository)
+        public Map Generate(TerrainRepository repository)
         {
             // Select a random variation for each registered tile type.
             // Should eventually be replaced with a more sophisticated selection heuristic.
 
-            var tiles = _tiles.Select(tile => new Tile(tile.Key, repository.GetRandomVariation(tile.Value)));
+            var tiles = _tiles.Select(tile => new Tile(tile.Key, repository.GetAsset(tile.Value)));
 
             // Pass the tiles to he map and let it handle things from thereon.
 

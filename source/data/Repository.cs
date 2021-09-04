@@ -1,14 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
-namespace TribesOfDust.Assets
+using Godot;
+
+using TribesOfDust.Utils.Godot;
+
+namespace TribesOfDust.Data
 {
-    public abstract class Repository<TVariation, TAsset> : IEnumerable<TAsset>
-        where TAsset : IAsset<TVariation>
-        where TVariation : IEquatable<TVariation>
+    public abstract class Repository<TVariation, TAsset> : IEnumerable<TAsset> where TAsset : IAsset<TVariation>
     {
         #region Loading
 
@@ -23,27 +25,57 @@ namespace TribesOfDust.Assets
         /// </remarks>
         ///
         /// <returns>A list of loaded assets.</returns>
-        public abstract List<TAsset> Load();
+        public abstract List<TAsset> LoadAll();
 
         /// <summary>
         /// Recrusively load all assets at the specified resource path.
         /// </summary>
         ///
+        /// <exception cref="GodotException">
+        /// Thrown when the directory can not be opened.
+        /// </exception>
+        ///
         /// <param name="resourcePath">The path from which to load assets.</param>
         ///
         /// <returns>A list of all assets that have been loaded, if there are any.</returns>
         /// <returns>An empty list if there were no assets at the specified path.</returns>
-        protected abstract List<TAsset> LoadAll(string resourcePath);
+        protected List<TAsset> LoadAll(string resourcePath)
+        {
+            var dir = new Godot.Directory();
+            var err = dir.Open(resourcePath);
+            if (err != Error.Ok)
+            {
+                throw new GodotException(err);
+            }
+
+            var results = new List<TAsset>();
+
+            // Iterate through all files in the directory.
+
+            err = dir.ListDirBegin(skipNavigational: true);
+            if (err != Error.Ok)
+            {
+                throw new GodotException(err);
+            }
+
+            var name = dir.GetNext();
+            while (!string.IsNullOrEmpty(name))
+            {
+                results.Add(Load($"{resourcePath}/{name}"));
+                name = dir.GetNext();
+            }
+
+            return results;
+        }
 
         /// <summary>
-        /// Loads all assets of the specified variation.
+        /// Load a signle asset from the specified resource path.
         /// </summary>
         ///
-        /// <param name="variation">The variation to load assets for.</param>
+        /// <param name="resourcePath">The path to the resource.</param>
         ///
-        /// <returns>A list of all assets that have been loaded, if there are any.</returns>
-        /// <returns>An empty list if there were no assets at the specified path.</returns>
-        protected abstract List<TAsset> LoadAll(TVariation variation);
+        /// <returns></returns>
+        protected abstract TAsset Load(string resourcePath);
 
         #endregion
         #region Dictionary Access

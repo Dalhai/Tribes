@@ -1,8 +1,8 @@
 using System;
 
-namespace TribesOfDust.Assets
+namespace TribesOfDust.Data
 {
-    public interface IAsset<TKey> where TKey : IEquatable<TKey>
+    public interface IAsset<TKey>
     {
         /// <summary>
         /// The path to the resource in the virtual file system.
