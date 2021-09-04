@@ -3,9 +3,6 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
-using Godot;
-
-using TribesOfDust.Hex;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Hex
