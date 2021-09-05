@@ -131,6 +131,10 @@ namespace TribesOfDust.Data
         /// Remove an asset at the index of the specified variation.
         /// </summary>
         ///
+        /// <exception cref="ArgumentException">
+        /// Thrown when the requested asset could not be found at the specified index of the variation.
+        /// </exception>
+        ///
         /// <param name="variation">The variation to remove from.</param>
         /// <param name="index">The index in the variation to remove.</param>
         public void RemoveVariation(TVariation variation, int index)
@@ -139,11 +143,19 @@ namespace TribesOfDust.Data
             {
                 _assets[variation].RemoveAt(index);
             }
+            else
+            {
+                throw new ArgumentException($"Could not remove asset of variation {variation} at index {index}.", "index");
+            }
         }
 
         /// <summary>
         /// Removes an asset reference from the specified variation.
         /// </summary>
+        ///
+        /// <exception cref="ArgumentException">
+        /// Thrown when the requested asset could not be found for the specified variation.
+        /// </exception>
         ///
         /// <param name="variation">The variation to remove the asset from.</param>
         /// <param name="asset">The asset to remove.</param>
@@ -152,6 +164,10 @@ namespace TribesOfDust.Data
             if (Contains(variation, asset))
             {
                 _assets[variation].Remove(asset);
+            }
+            else
+            {
+                throw new ArgumentException($"Could not remove asset {asset} of variation {variation}.", "asset");
             }
         }
 
@@ -184,7 +200,7 @@ namespace TribesOfDust.Data
                 return _assets[variation][index];
             }
 
-            throw new ArgumentException($"Could not find asset of variation {variation} at index {index}.", "variation");
+            throw new ArgumentException($"Could not find asset of variation {variation} at index {index}.", "index");
         }
 
         /// <summary>
