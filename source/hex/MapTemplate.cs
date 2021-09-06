@@ -9,7 +9,7 @@ using TribesOfDust.Utils.IO;
 
 namespace TribesOfDust.Hex
 {
-    public class HexMapTemplate
+    public class MapTemplate
     {
         /// <summary>
         /// Initializes a new <see cref="MapTemplate"/>.
@@ -22,7 +22,7 @@ namespace TribesOfDust.Hex
         /// </remarks>
         ///
         /// <param name="tiles">The tiles forming the initial map.</param>
-        public HexMapTemplate(Dictionary<AxialCoordinate, TileType> tiles)
+        public MapTemplate(Dictionary<AxialCoordinate, TileType> tiles)
         {
             _tiles = tiles;
         }
@@ -35,7 +35,7 @@ namespace TribesOfDust.Hex
         /// <param name="tilePool">The number of tiles available to players of each type.</param>
         /// <param name="startCoordinates">The possible start coordinates for players.</param>
         /// <param name="fountainCoordinates">The possible fountain coordinates.</param>
-        private HexMapTemplate(
+        private MapTemplate(
             Dictionary<AxialCoordinate, TileType> tiles,
             Dictionary<TileType, int> tilePool,
             List<AxialCoordinate> startCoordinates,
@@ -78,16 +78,16 @@ namespace TribesOfDust.Hex
         ///
         /// <param name="repository">The tile asset repository providing assets for the template.</param>
         /// <returns>A new runtime map based on the map template.</returns>
-        public HexMap Generate(TileAssetRepository repository)
+        public Map Generate(TileAssetRepository repository)
         {
             // Select a random variation for each registered tile type.
             // Should eventually be replaced with a more sophisticated selection heuristic.
 
-            var tiles = _tiles.Select(tile => new HexTile(tile.Key, repository.GetRandomVariation(tile.Value)));
+            var tiles = _tiles.Select(tile => new Tile(tile.Key, repository.GetRandomVariation(tile.Value)));
 
             // Pass the tiles to he map and let it handle things from thereon.
 
-            return new HexMap(tiles);
+            return new Map(tiles);
         }
 
         #endregion
@@ -167,7 +167,7 @@ namespace TribesOfDust.Hex
         /// <param name="json">The godot JSON dictionary representing the map.</param>
         /// <param name="map">The output map template that is filled with information on success.</param>
         /// <returns>True, if deserializing succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(GodotJson json, out HexMapTemplate? map)
+        public static bool TryDeserialize(GodotJson json, out MapTemplate? map)
         {
             map = null;
 
