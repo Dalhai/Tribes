@@ -27,7 +27,6 @@ namespace TribesOfDust.Hex
         public const TileDirection Northern = TileDirection.NW | TileDirection.N | TileDirection.NE;
         public const TileDirection Southern = TileDirection.SW | TileDirection.S | TileDirection.SE;
         public const TileDirection All = Northern | Southern;
-        public const TileDirection None = 0;
     }
 
     public static class TileDirectionOffset

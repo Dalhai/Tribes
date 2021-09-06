@@ -83,18 +83,9 @@ namespace TribesOfDust.Hex
         /// Connect the tile in the specified <see cref="TileDirection">.
         /// </summary>
         ///
-        /// <exception cref="ArgumentException">
-        /// Thrown when trying to connect a tile in a direction that is already connected..
-        /// </exception>
-        ///
         /// <param name="direction">The direction to connect.</param>
         public void Connect(TileDirection direction)
         {
-            if (IsConnected(direction))
-            {
-                throw new ArgumentException($"Trying to connect tile in direction {direction}, but it is already connected.", "direction");
-            }
-
             _connections |= direction;
         }
 
@@ -102,19 +93,10 @@ namespace TribesOfDust.Hex
         /// Disconnect the tile in the specified <see cref="TileDirection"/>.
         /// </summary>
         ///
-        /// <exception cref="ArgumentException">
-        /// Thrown when trying to disconnect a tile in a direction that is already disconnected.
-        /// </exception>
-        ///
         /// <param name="direction">The direction to disconnected.</param>
         public void Disconnect(TileDirection direction)
         {
-            if (IsConnected(direction))
-            {
-                throw new ArgumentException($"Trying to disconnect tile in direction {direction}, but is is already disconnected.", "direction");
-            }
-
-            _connections ^= direction;
+            _connections &= ~direction;
         }
 
         #endregion
