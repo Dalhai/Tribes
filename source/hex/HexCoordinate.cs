@@ -49,6 +49,12 @@ namespace TribesOfDust.Hex
         public AxialCoordinate ToAxialCoordinate() => new(X, Z);
 
         #endregion
+        #region Operators
+
+        public static CubeCoordinate operator+(CubeCoordinate lhs, CubeCoordinate rhs) => new (lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z);
+        public static CubeCoordinate operator-(CubeCoordinate lhs, CubeCoordinate rhs) => new (lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
+
+        #endregion
 
         public override int GetHashCode()
         {
@@ -100,6 +106,12 @@ namespace TribesOfDust.Hex
         /// Converts the <see cref="AxialCoordinate"/> to the matching <see cref="CubeCoordinate"/>.
         /// </summary>
         public CubeCoordinate ToCubeCoordinate() => CubeCoordinate.From(Q, R);
+
+        #endregion
+        #region Operators
+
+        public static AxialCoordinate operator+(AxialCoordinate lhs, AxialCoordinate rhs) => new (lhs.Q + rhs.Q, lhs.R + rhs.R);
+        public static AxialCoordinate operator-(AxialCoordinate lhs, AxialCoordinate rhs) => new (lhs.Q - rhs.Q, lhs.R - rhs.R);
 
         #endregion
 

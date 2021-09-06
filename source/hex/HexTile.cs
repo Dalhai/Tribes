@@ -5,6 +5,8 @@ using Godot;
 using GodotJson = Godot.Collections.Dictionary;
 
 using TribesOfDust.Utils.IO;
+using System.Security;
+using System.Diagnostics;
 
 namespace TribesOfDust.Hex
 {
@@ -18,6 +20,9 @@ namespace TribesOfDust.Hex
 
             Type = asset.Type;
             Texture = asset.Texture;
+
+            _connections = (TileDirection) asset.Connections;
+            _direction = asset.Direction;
 
             // Scale tile according to specified texture
 
@@ -38,6 +43,9 @@ namespace TribesOfDust.Hex
             Type =  type;
             Texture = texture;
 
+            _connections = TileDirection.None;
+            _direction = TileDirection.None;
+
             // Initialize the tile scale explicitly
 
             Scale = scale;
@@ -48,13 +56,51 @@ namespace TribesOfDust.Hex
             Position = HexConversions.HexToWorld(coordinates, TileAsset.ExpectedSize);
         }
 
+        #region Queries
+
         public float Size => Width / 2.0f;
         public float Width => Texture.GetWidth();
         public float Height => Texture.GetHeight();
 
         public TileType Type { get; }
+        public bool IsBlocked => Type == TileType.Blocked;
+        public bool IsOpen => Type == TileType.Open;
+
         public AxialCoordinate Coordinates { get; }
-        public IEnumerable<TileEffect> Effects => _effects;
+
+        #endregion
+        #region Connectivity
+
+        /// <summary>
+        /// Checks if the tile is connected in the specified direction.
+        /// </summary>
+        ///
+        /// <param name="direction">The direction to look at.</param>
+        /// <returns>True, if there is a connection, false otherwise.</returns>
+        public bool IsConnected(TileDirection direction) => _connections.HasFlag(direction);
+
+        /// <summary>
+        /// Connect the tile in the specified <see cref="TileDirection">.
+        /// </summary>
+        ///
+        /// <param name="direction">The direction to connect.</param>
+        public void Connect(TileDirection direction)
+        {
+            _connections |= direction;
+        }
+
+        /// <summary>
+        /// Disconnect the tile in the specified <see cref="TileDirection"/>.
+        /// </summary>
+        ///
+        /// <param name="direction">The direction to disconnected.</param>
+        public void Disconnect(TileDirection direction)
+        {
+            _connections &= ~direction;
+        }
+
+        #endregion
+        #region Serialization
 
         /// <summary>
         /// Serialize the tile into a godot JSON dictionary.
@@ -130,6 +176,9 @@ namespace TribesOfDust.Hex
             return true;
         }
 
-        private readonly List<TileEffect> _effects = new();
+        #endregion
+
+        private TileDirection _connections = TileDirection.None;
+        private TileDirection _direction = TileDirection.None;
     }
 }
