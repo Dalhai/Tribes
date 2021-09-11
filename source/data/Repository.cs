@@ -10,7 +10,9 @@ using TribesOfDust.Utils.Godot;
 
 namespace TribesOfDust.Data
 {
-    public abstract class Repository<TVariation, TAsset> : IEnumerable<TAsset> where TAsset : IAsset<TVariation>
+    public abstract class Repository<TVariation, TAsset> : IEnumerable<TAsset>
+        where TAsset : IAsset<TVariation>
+        where TVariation : notnull
     {
         #region Loading
 

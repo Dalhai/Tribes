@@ -51,7 +51,7 @@ namespace TribesOfDust.Hex.Storage
 
         public override bool TryAdd(AxialCoordinate coordinates, T item) => _constraint.Contains(coordinates) && base.TryAdd(coordinates, item);
 
-        private void OnConstraintItemRemoving(object sender, AxialCoordinate coordinates)
+        private void OnConstraintItemRemoving(object? sender, AxialCoordinate coordinates)
         {
             if (Contains(coordinates))
                 Remove(coordinates);
