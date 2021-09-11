@@ -58,7 +58,15 @@ namespace TribesOfDust.Hex.Storage
         /// <param name="coordinates">The coordinates of the item to get.</param>
         ///
         /// <returns>The item at the specified coordinates.</returns>
-        T Get(AxialCoordinate coordinates);
+        T Get(AxialCoordinate coordinates)
+        {
+            if (TryGet(coordinates, out T? item) && item is not null)
+            {
+                return item;
+            }
+
+            throw new ArgumentException($"Could not get item at coordinates {coordinates} from storage {this}.");
+        }
 
         /// <summary>
         /// Tries to get the item at the specified coordinates.
@@ -86,16 +94,13 @@ namespace TribesOfDust.Hex.Storage
         bool Contains(T item);
 
         /// <summary>
-        /// Gets the coordinate of the item.
+        /// Gets the coordinates of the item.
         /// </summary>
         ///
-        /// <exception cref="ArgumentException">
-        /// Thrown when the item could not be found in the storage.
-        /// </exception>
-        ///
+        /// <remarks>Potentially very slow as possibly every entry has to be inspected.</remarks>
         /// <param name="item">The item to get the coordinates of.</param>
         ///
-        /// <returns>The coordinates of the item.</returns>
-        AxialCoordinate GetCoordinates(T item);
+        /// <returns>A list of coordinates this item is stored at.</returns>
+        List<AxialCoordinate> GetCoordinates(T item);
     }
 }
