@@ -11,7 +11,10 @@ namespace TribesOfDust.Data
         where TAsset : IAsset<TVariation>
         where TVariation : notnull
     {
+
         #region Loading
+
+        public void Load() => LoadAll().ForEach(AddVariation);
 
         /// <summary>
         /// Loads the default tiles of the repository.
@@ -24,7 +27,7 @@ namespace TribesOfDust.Data
         /// </remarks>
         ///
         /// <returns>A list of loaded assets.</returns>
-        public abstract List<TAsset> LoadAll();
+        protected abstract List<TAsset> LoadAll();
 
         /// <summary>
         /// Recrusively load all assets at the specified resource path.

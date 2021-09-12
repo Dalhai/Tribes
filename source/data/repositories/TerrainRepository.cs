@@ -12,8 +12,8 @@ namespace TribesOfDust.Data.Repositories
         /// <summary>
         /// The default resource path used for tile assets.
         /// </summary>
-        public static readonly string DefaultPath = "res://assets/tiles";
-        public override List<Terrain> LoadAll() => LoadAll(DefaultPath);
+        private static readonly string DefaultPath = "res://assets/terrains";
+        protected override List<Terrain> LoadAll() => LoadAll(DefaultPath);
 
         protected override bool TryLoad(string resourcePath, out Terrain? asset)
         {

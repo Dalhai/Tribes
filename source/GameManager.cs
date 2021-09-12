@@ -19,7 +19,7 @@ namespace TribesOfDust
         public GameManager()
         {
             _repository = new TerrainRepository();
-            _repository.LoadAll();
+            _repository.Load();
 
             _map = Load();
             _tiles = _map.Generate(_repository);
