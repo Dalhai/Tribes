@@ -2,7 +2,7 @@ using static System.Diagnostics.Debug;
 
 using Godot;
 
-namespace TribesOfDust.Utils.Godot
+namespace TribesOfDust.Utils.Misc
 {
     public static class GodotAssertions
     {

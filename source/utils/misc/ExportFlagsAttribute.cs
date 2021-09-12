@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Godot;
 
-namespace TribesOfDust.Utils.Godot
+namespace TribesOfDust.Utils.Misc
 {
     /// <summary>
     /// Helper attributes extending godots <see cref="ExportAttribute"/> to facilitate setting
