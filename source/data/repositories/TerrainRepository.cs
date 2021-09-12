@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 
-using TribesOfDust.Hex;
-using TribesOfDust.Data.Assets;
-using TribesOfDust.Utils.Godot;
-
 using Godot;
-using System.IO;
+
+using TribesOfDust.Data.Assets;
+using TribesOfDust.Hex;
 
 namespace TribesOfDust.Data.Repositories
 {
@@ -18,19 +15,10 @@ namespace TribesOfDust.Data.Repositories
         public static readonly string DefaultPath = "res://assets/tiles";
         public override List<Terrain> LoadAll() => LoadAll(DefaultPath);
 
-        /// <summary>
-        /// Loads the terrain type at the specified resource path.
-        /// </summary>
-        ///
-        /// <exception cref="FileNotFoundException">
-        /// Thrown when the file at the resource path could not be found.
-        /// </exception>
-        ///
-        /// <param name="resourcePath">The path to the tile asset.</param>
-        /// <returns></returns>
-        protected override Terrain Load(string resourcePath)
+        protected override bool TryLoad(string resourcePath, out Terrain? asset)
         {
-            var asset = GD.Load<Terrain>(resourcePath);
+            asset = GD.Load<Terrain>(resourcePath);
+
             if (asset != null && asset.Texture != null)
             {
                 float width = asset.Texture.GetWidth();
@@ -47,10 +35,10 @@ namespace TribesOfDust.Data.Repositories
                     );
                 }
 
-                return asset;
+                return true;
             }
 
-            throw new FileNotFoundException("Could not load terrain asset.", resourcePath);
+            return false;
         }
     }
 }

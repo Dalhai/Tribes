@@ -1,30 +1,35 @@
+using System;
 using Godot;
-using GodotJson = Godot.Collections.Dictionary;
-
-using TribesOfDust.Hex;
-using TribesOfDust.Data.Repositories;
 using TribesOfDust.Data.Assets;
+using TribesOfDust.Data.Repositories;
+using TribesOfDust.Hex;
+using TribesOfDust.Hex.Storage;
+using GodotJson = Godot.Collections.Dictionary;
 
 namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-        private readonly TerrainRepository _repository = new ();
-        private readonly MapTemplate? _mapTemplate = Load();
+        private readonly TerrainRepository _repository;
+        private readonly Map _map;
+        private readonly TileStorage<Tile> _tiles;
 
-        private Map? _map;
-        private Tile? _activeTile;
+        private Tile? _activeTile = null;
+
+        public GameManager()
+        {
+            _repository = new TerrainRepository();
+            _repository.LoadAll();
+
+            _map = Load();
+            _tiles = _map.Generate(_repository);
+        }
 
         public override void _Ready()
         {
-            // Try to generate a map from the map template
-
-            if (_mapTemplate is not null)
+            foreach (var tile in _tiles)
             {
-                _repository.LoadAll();
-                _map = _mapTemplate.Generate(_repository);
-
-                AddChild(_map);
+                AddChild(tile.Value);
             }
 
             base._Ready();
@@ -32,28 +37,21 @@ namespace TribesOfDust
 
         public override void _ExitTree()
         {
-            // If we have a map template, save the map template in the file system.
-            // We overwrite the existing map template with our new map.
-
-            if (_mapTemplate is not null)
-            {
-                Save(_mapTemplate);
-            }
-
+            Save(_map);
             base._ExitTree();
         }
 
-        private static void Save(MapTemplate mapTemplate)
+        private static void Save(Map map)
         {
             var targetFile = new File();
 
             // Try to open the default map file to save our default map.
-            Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Write);
+            Godot.Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Write);
 
             // If opening the file worked, serialize the template map and store it in the file as JSON.
-            if (fileOpenError == Error.Ok)
+            if (fileOpenError == Godot.Error.Ok)
             {
-                var serializedMap = mapTemplate.Serialize();
+                var serializedMap = map.Serialize();
                 var jsonMap = JSON.Print(serializedMap);
 
                 targetFile.StoreLine(jsonMap);
@@ -61,16 +59,16 @@ namespace TribesOfDust
             }
         }
 
-        private static MapTemplate? Load()
+        private static Map Load()
         {
-            MapTemplate? mapTemplate = null;
+            Map? map = null;
             var targetFile = new File();
 
             // Try to open the default map file to load our default map.
-            Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Read);
+            Godot.Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Read);
 
             // If opening the file worked, deserialize the template map.
-            if (fileOpenError == Error.Ok)
+            if (fileOpenError == Godot.Error.Ok)
             {
                 var stringMap = targetFile.GetLine();
                 var jsonMap = JSON.Parse(stringMap);
@@ -78,11 +76,16 @@ namespace TribesOfDust
 
                 if (jsonMap.Result is GodotJson json)
                 {
-                    MapTemplate.TryDeserialize(json, out mapTemplate);
+                    Map.TryDeserialize(json, out map);
                 }
             }
 
-            return mapTemplate;
+            if (map is null)
+            {
+                throw new InvalidOperationException("Map could not be loaded properly.");
+            }
+
+            return map;
         }
 
         public override void _Input(InputEvent inputEvent)
@@ -92,14 +95,14 @@ namespace TribesOfDust
                 var world = GetGlobalMousePosition();
                 var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
 
-                if (_activeTile?.Coordinates != hex && _map.HasTileAt(hex))
+                if (_activeTile?.Coordinates != hex && _tiles.Contains(hex))
                 {
                     if (_activeTile is not null)
                     {
                         _activeTile.Modulate = Colors.White;
                     }
 
-                    _activeTile = _map.GetTileAt(hex);
+                    _activeTile = _tiles.Get(hex);
 
                     if (_activeTile is not null)
                     {

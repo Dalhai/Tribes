@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
-using Godot;
-
-using TribesOfDust.Utils.Godot;
+using TribesOfDust.Utils.Misc;
 
 namespace TribesOfDust.Data
 {
@@ -45,9 +42,9 @@ namespace TribesOfDust.Data
         {
             var dir = new Godot.Directory();
             var err = dir.Open(resourcePath);
-            if (err != Error.Ok)
+            if (err != Godot.Error.Ok)
             {
-                throw new GodotException(err);
+                throw Error.Wrap(err);
             }
 
             var results = new List<TAsset>();
@@ -55,15 +52,20 @@ namespace TribesOfDust.Data
             // Iterate through all files in the directory.
 
             err = dir.ListDirBegin(skipNavigational: true);
-            if (err != Error.Ok)
+            if (err != Godot.Error.Ok)
             {
-                throw new GodotException(err);
+                throw Error.Wrap(err);
             }
 
             var name = dir.GetNext();
             while (!string.IsNullOrEmpty(name))
             {
-                results.Add(Load($"{resourcePath}/{name}"));
+                string path = $"{resourcePath}/{name}";
+                if (TryLoad(path, out TAsset? asset) && asset is not null)
+                {
+                    results.Add(asset);
+                }
+
                 name = dir.GetNext();
             }
 
@@ -71,13 +73,14 @@ namespace TribesOfDust.Data
         }
 
         /// <summary>
-        /// Load a signle asset from the specified resource path.
+        /// Try to load a single asset from the specified resource path.
         /// </summary>
         ///
         /// <param name="resourcePath">The path to the resource.</param>
+        /// <param name="asset">The asset to be initialized, if found.</param>
         ///
-        /// <returns></returns>
-        protected abstract TAsset Load(string resourcePath);
+        /// <returns>True, if the asset could be loaded, false otherwise.</returns>
+        protected abstract bool TryLoad(string resourcePath, out TAsset? asset);
 
         #endregion
         #region Dictionary Access
@@ -112,7 +115,7 @@ namespace TribesOfDust.Data
                 // That's a problem. The asset shouldn't be in there yet when
                 // adding a variation. Throw an exception correspondingly.
 
-                throw new ArgumentException($"Trying to add asset {asset} to repostiroy, but asset is alread in repostiory.", "asset");
+                throw Error.CantAddDuplicate(nameof(asset), this);
             }
         }
 
@@ -147,7 +150,7 @@ namespace TribesOfDust.Data
             }
             else
             {
-                throw new ArgumentException($"Could not remove asset of variation {variation} at index {index}.", "index");
+                throw Error.CantRemove(nameof(index), this);
             }
         }
 
@@ -169,7 +172,7 @@ namespace TribesOfDust.Data
             }
             else
             {
-                throw new ArgumentException($"Could not remove asset {asset} of variation {variation}.", "asset");
+                throw Error.CantRemove(nameof(asset), this);
             }
         }
 
@@ -202,7 +205,7 @@ namespace TribesOfDust.Data
                 return _assets[variation][index];
             }
 
-            throw new ArgumentException($"Could not find asset of variation {variation} at index {index}.", "index");
+            throw Error.CantFind(nameof(index), this);
         }
 
         /// <summary>
@@ -226,7 +229,7 @@ namespace TribesOfDust.Data
                 return asset;
             }
 
-            throw new ArgumentException($"Could not find asset of variation {variation}.", "variation");
+            throw Error.CantFind(nameof(variation), this);
         }
 
         /// <summary>
@@ -252,7 +255,7 @@ namespace TribesOfDust.Data
                 return assets[index];
             }
 
-            throw new InvalidOperationException("Random asset requested from empty repository.");
+            throw Error.InvalidEmpty(this);
         }
 
         #endregion
