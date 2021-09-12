@@ -1,53 +1,52 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
-using GodotJson = Godot.Collections.Dictionary;
-using GodotArray = Godot.Collections.Array;
-
-using TribesOfDust.Utils.IO;
 using TribesOfDust.Data.Repositories;
+using TribesOfDust.Hex;
+using TribesOfDust.Hex.Storage;
+using TribesOfDust.Utils.IO;
 
-namespace TribesOfDust.Hex
+using GodotArray = Godot.Collections.Array;
+using GodotJson = Godot.Collections.Dictionary;
+
+namespace TribesOfDust.Data.Assets
 {
-    public class MapTemplate
+    public class Map : IAsset<string>
     {
         /// <summary>
-        /// Initializes a new <see cref="MapTemplate"/>.
+        /// Initializes a new <see cref="Map"/>.
         /// </summary>
         ///
-        /// <remarks>
-        /// This constructor creates a new map template that does not contain any player
-        /// start positions or fountain positions. Technically, this map template is invalid
-        /// for play.
-        /// </remarks>
-        ///
-        /// <param name="tiles">The tiles forming the initial map.</param>
-        public MapTemplate(Dictionary<AxialCoordinate, TileType> tiles)
-        {
-            _tiles = tiles;
-        }
-
-        /// <summary>
-        /// Initializes a new <see cref="MapTemplate"/>.
-        /// </summary>
-        ///
+        /// <param name="name">The name of the map.</param>
+        /// <param name="path">The path to the map file.</param>
         /// <param name="tiles">The tiles forming the initial map.</param>
         /// <param name="tilePool">The number of tiles available to players of each type.</param>
         /// <param name="startCoordinates">The possible start coordinates for players.</param>
         /// <param name="fountainCoordinates">The possible fountain coordinates.</param>
-        private MapTemplate(
+        private Map(
+            string name,
+            string path,
             Dictionary<AxialCoordinate, TileType> tiles,
             Dictionary<TileType, int> tilePool,
             List<AxialCoordinate> startCoordinates,
             List<AxialCoordinate> fountainCoordinates)
         {
+            Key = name;
+            ResourcePath = path;
+
             _tiles = tiles;
             _tilePool = tilePool;
             _startCoordinates = startCoordinates;
             _fountainCoordinates = fountainCoordinates;
         }
 
+        #region Asset
+
+        public string Key { get; init; }
+        public string ResourcePath { get; init; }
+
+        #endregion
         #region Access
 
         /// <summary>
@@ -74,21 +73,22 @@ namespace TribesOfDust.Hex
         #region Generation
 
         /// <summary>
-        /// Generates a new <see cref="Map"/> from the map template.
+        /// Generates a new <see cref="TileStorage"/> from the map template.
         /// </summary>
         ///
         /// <param name="repository">The tile asset repository providing assets for the template.</param>
         /// <returns>A new runtime map based on the map template.</returns>
-        public Map Generate(TerrainRepository repository)
+        public TileStorage<Tile> Generate(TerrainRepository repository)
         {
-            // Select a random variation for each registered tile type.
-            // Should eventually be replaced with a more sophisticated selection heuristic.
-
             var tiles = _tiles.Select(tile => new Tile(tile.Key, repository.GetAsset(tile.Value)));
+            var storage = new TileStorage<Tile>();
 
-            // Pass the tiles to he map and let it handle things from thereon.
+            foreach (var tile in tiles)
+            {
+                storage.Add(tile.Coordinates, tile);
+            }
 
-            return new Map(tiles);
+            return storage;
         }
 
         #endregion
@@ -118,8 +118,8 @@ namespace TribesOfDust.Hex
 
                 GodotJson serializedTile = new()
                 {
-                    {"coordinates", serializedCoordinates},
-                    {"type", serializedType}
+                    { "coordinates", serializedCoordinates },
+                    { "type", serializedType }
                 };
 
                 serializedTiles.Add(serializedTile);
@@ -168,7 +168,7 @@ namespace TribesOfDust.Hex
         /// <param name="json">The godot JSON dictionary representing the map.</param>
         /// <param name="map">The output map template that is filled with information on success.</param>
         /// <returns>True, if deserializing succeeded, false otherwise.</returns>
-        public static bool TryDeserialize(GodotJson json, out MapTemplate? map)
+        public static bool TryDeserialize(GodotJson json, out Map? map)
         {
             map = null;
 
@@ -183,7 +183,7 @@ namespace TribesOfDust.Hex
             }
 
             // Try to deserialize the pre-placed tiles into this dictionary
-            Dictionary<AxialCoordinate, TileType> tiles = new ();
+            Dictionary<AxialCoordinate, TileType> tiles = new();
 
             // First need to check whether the are even tiles available
             if (json[keyTiles] is not GodotArray jsonTiles)
@@ -250,7 +250,7 @@ namespace TribesOfDust.Hex
                 {
                     tilePool.Add(type, Convert.ToInt32(jsonPool[poolKey]));
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     return false;
                 }
@@ -285,7 +285,7 @@ namespace TribesOfDust.Hex
             exctractAxialCoordinates(json[keyStarts], startCoordinates);
             exctractAxialCoordinates(json[keyFountains], fountainCoordinates);
 
-            map = new(tiles, tilePool, startCoordinates, fountainCoordinates);
+            map = new(String.Empty, String.Empty, tiles, tilePool, startCoordinates, fountainCoordinates);
             return true;
         }
 

@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Runtime;
 
 namespace TribesOfDust.Hex.Storage
 {
@@ -65,68 +63,32 @@ namespace TribesOfDust.Hex.Storage
         #endregion
         #region Add / Remove
 
-        public virtual void Add(AxialCoordinate coordinates, T item)
-        {
-            if (Contains(coordinates))
-            {
-                throw new ArgumentException(
-                    $"Could not add {item} at coordinates {coordinates}. " +
-                     "An item is already in the storage at the specified coordinates.",
-                    "coordinates"
-                );
-            }
-
-            AddUnchecked(coordinates, item);
-        }
-
-        public virtual bool TryAdd(AxialCoordinate coordinates, T item)
+        public virtual bool Add(AxialCoordinate coordinates, T item)
         {
             if (Contains(coordinates))
                 return false;
 
-            AddUnchecked(coordinates, item);
-            return true;
-        }
-
-        protected void AddUnchecked(AxialCoordinate coordinates, T item)
-        {
             var eventArgs = new TileStorageEventArgs<T>(coordinates, item);
 
             OnAdding(eventArgs);
             _items.Add(coordinates, item);
             OnAdded(eventArgs);
+
+            return true;
         }
 
-        public virtual void Remove(AxialCoordinate coordinates)
-        {
-            if (!Contains(coordinates))
-            {
-                throw new ArgumentException(
-                    $"Could not remove item at coordinates {coordinates}. " +
-                     "No item is in the storage at the specified coordinates.",
-                    "coordinates"
-                );
-            }
-
-            RemoveUnchecked(coordinates);
-        }
-
-        public virtual bool TryRemove(AxialCoordinate coordinates)
+        public virtual bool Remove(AxialCoordinate coordinates)
         {
             if (!Contains(coordinates))
                 return false;
 
-            RemoveUnchecked(coordinates);
-            return true;
-        }
-
-        protected void RemoveUnchecked(AxialCoordinate coordinates)
-        {
             var eventArgs = new TileStorageEventArgs<T>(coordinates, _items[coordinates]);
 
             OnRemoving(eventArgs);
             _items.Remove(coordinates);
             OnRemoved(eventArgs);
+
+            return true;
         }
 
         #endregion
@@ -147,45 +109,16 @@ namespace TribesOfDust.Hex.Storage
         #endregion
         #region Get
 
-        public AxialCoordinate GetCoordinates(T item)
-        {
-            try
-            {
-                return _items.First(stored => _comparer.Equals(stored.Value, item)).Key;
-            }
-            catch (InvalidOperationException e)
-            {
-                throw new ArgumentException($"Could not get coordinates for item {item}.", "item", e);
-            }
-        }
+        public IEnumerable<AxialCoordinate> GetCoordinates(T item) => _items
+            .Where(stored => _comparer.Equals(stored.Value, item))
+            .Select(stored => stored.Key);
 
-        public T Get(AxialCoordinate coordinates)
-        {
-            if (Contains(coordinates))
-            {
-                return _items[coordinates];
-            }
-
-            throw new ArgumentException($"Could not get item at coordinates {coordinates}.", "coordinates");
-        }
-
-        public bool TryGet(AxialCoordinate coordinates, out T? item)
-        {
-            if (Contains(coordinates))
-            {
-                item = _items[coordinates];
-                return true;
-            }
-
-            item = default;
-            return false;
-        }
+        public T? Get(AxialCoordinate coordinates) => _items.ContainsKey(coordinates) ? _items[coordinates] : default;
 
         #endregion
         #region IEnumerable
 
-        IEnumerator IEnumerable.GetEnumerator() => (this as IEnumerable<T>).GetEnumerator();
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() => _items.Values.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
         IEnumerator<KeyValuePair<AxialCoordinate, T>> IEnumerable<KeyValuePair<AxialCoordinate, T>>.GetEnumerator() => _items.GetEnumerator();
 
         #endregion

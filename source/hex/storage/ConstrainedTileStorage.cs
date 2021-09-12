@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 
 namespace TribesOfDust.Hex.Storage
@@ -16,45 +15,34 @@ namespace TribesOfDust.Hex.Storage
         }
 
         /// <summary>
-        /// Adds an item at the specified coordinates.
+        /// Tries to add the item at the specified coordinates.
+        ///
+        /// <br/>
+        /// To add an item to a constrained storage, it must be part of the constraint.
+        /// The constraint is the storage from which this constrained storage has been
+        /// built.
         /// </summary>
         ///
-        /// <exception cref="ArgumentException">
-        /// Thrown when there is already an item in the storage at the specified coordinates.
-        /// </exception>
+        /// <example>
+        /// var constraint = new TileStorage<int>();
+        /// var storage = constraint.Constrain<float>();
+        /// constraint.Add(0, 0, 1);
         ///
-        /// <exception cref="ConstraintViolationException{T}">
-        /// Thrown when there is not item at the coordinates in the constraint tile storage.
-        /// You can only add items to a constrained tile storage in places where the base
-        /// constraint already has an item.
-        /// </exception>
+        /// Debug.Assert(storage.Add(0, 0, 0.5));
+        /// Debug.Assert(!storage.Add(0, 1, 1.5));
+        /// </example>
         ///
         /// <param name="coordinates">The coordinates to add the item at.</param>
         /// <param name="item">The item to add.</param>
-        public override void Add(AxialCoordinate coordinates, T item)
-        {
-            if (!_constraint.Contains(coordinates))
-            {
-                throw new ConstraintViolationException<T>(
-                    coordinates,
-                    _constraint,
-                    this,
-
-                    $"Could not add item at coordinates {coordinates} due to violation of constraint." +
-                     "Ensure that the base tile storage of this constrained storage already has an item " +
-                     "at the specified coordinates."
-                );
-            }
-
-            base.Add(coordinates, item);
-        }
-
-        public override bool TryAdd(AxialCoordinate coordinates, T item) => _constraint.Contains(coordinates) && base.TryAdd(coordinates, item);
+        /// <returns>True, if the item was added, false otherwise.</returns>
+        public override bool Add(AxialCoordinate coordinates, T item) => _constraint.Contains(coordinates) && base.Add(coordinates, item);
 
         private void OnConstraintItemRemoving(object? sender, AxialCoordinate coordinates)
         {
             if (Contains(coordinates))
+            {
                 Remove(coordinates);
+            }
         }
 
         private readonly ITileStorageView _constraint;
