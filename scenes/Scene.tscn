@@ -17,24 +17,88 @@ current = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="CameraRoot"]
 
-[node name="PanelContainer" type="PanelContainer" parent="CameraRoot/CanvasLayer"]
-anchor_right = 0.2
-anchor_bottom = 0.1
-margin_right = 14.0
-margin_bottom = 14.0
+[node name="EditorMenu" type="VBoxContainer" parent="CameraRoot/CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 theme = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CameraRoot/CanvasLayer/PanelContainer"]
-margin_right = 218.8
-margin_bottom = 74.0
+[node name="ActiveTileType" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
+margin_right = 1024.0
+margin_bottom = 23.0
 custom_fonts/bold_font = ExtResource( 3 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
-bbcode_text = "[b]Current Tile[/b]"
-text = "Current Tile"
+bbcode_text = "[b] Tundra[/b]"
+text = " Tundra"
+fit_content_height = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AvailableTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
+margin_top = 27.0
+margin_right = 1024.0
+margin_bottom = 42.0
+custom_fonts/bold_font = ExtResource( 3 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_text = "Available"
+text = "Available"
+fit_content_height = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TundraTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
+margin_top = 46.0
+margin_right = 1024.0
+margin_bottom = 61.0
+custom_fonts/bold_font = ExtResource( 3 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_text = "Tundra"
+text = "Tundra"
+fit_content_height = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DuneTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
+margin_top = 65.0
+margin_right = 1024.0
+margin_bottom = 80.0
+custom_fonts/bold_font = ExtResource( 3 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_text = "Dune"
+text = "Dune"
+fit_content_height = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RockTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
+margin_top = 84.0
+margin_right = 1024.0
+margin_bottom = 99.0
+custom_fonts/bold_font = ExtResource( 3 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_text = "Rock"
+text = "Rock"
+fit_content_height = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CanyonTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
+margin_top = 103.0
+margin_right = 1024.0
+margin_bottom = 118.0
+custom_fonts/bold_font = ExtResource( 3 )
+custom_colors/default_color = Color( 0, 0, 0, 1 )
+bbcode_text = "Canyon"
+text = "Canyon"
+fit_content_height = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

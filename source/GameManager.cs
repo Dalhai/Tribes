@@ -13,7 +13,10 @@ namespace TribesOfDust
         private readonly TerrainRepository _repository;
         private readonly Map _map;
         private readonly TileStorage<Tile> _tiles;
-
+        
+        private RichTextLabel? _richTextLabel;
+        
+        private TileType _activeTileType = TileType.Tundra;
         private Tile? _activeTile = null;
 
         public GameManager()
@@ -33,7 +36,8 @@ namespace TribesOfDust
             }
             
             // Initialize user interface.
-            
+
+            _richTextLabel = GetNode<RichTextLabel>("CameraRoot/CanvasLayer/EditorMenu/ActiveTileType");
             UpdateActiveTileType();
 
             base._Ready();
@@ -94,7 +98,7 @@ namespace TribesOfDust
 
         public override void _Input(InputEvent inputEvent)
         {
-            if (inputEvent is InputEventMouseMotion && _map is not null)
+            if (inputEvent is InputEventMouseMotion)
             {
                 var world = GetGlobalMousePosition();
                 var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
@@ -114,31 +118,33 @@ namespace TribesOfDust
                 UpdateActiveTileType();
             }
 
+
             if (Input.IsActionPressed(InputActionIncreaseTileCount))
-                if (_mapTemplate != null && _richTextLabel is not null)
+                if (_richTextLabel is not null)
                 {
-                    _mapTemplate.TilePool[_activeTileType] += 1;
-                    _richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
+                    _map.TilePool[_activeTileType] += 1;
+                    _richTextLabel.Text = $"{_activeTileType} : {_map.TilePool[_activeTileType]}";
                 }
 
             if (Input.IsActionPressed(InputActionDecreaseTileCount))
-                if (_mapTemplate != null && _mapTemplate.TilePool[_activeTileType] > 0 && _richTextLabel is not null)
+                if (_map.TilePool[_activeTileType] > 0 && _richTextLabel is not null)
                 {
-                    _mapTemplate.TilePool[_activeTileType] -= 1;
-                    _richTextLabel.Text = $"{_activeTileType} : {_mapTemplate.TilePool[_activeTileType]}";
+                    _map.TilePool[_activeTileType] -= 1;
+                    _richTextLabel.Text = $"{_activeTileType} : {_map.TilePool[_activeTileType]}";
                 }
 
-            if (inputEvent is InputEventMouseButton mouseButton && _mapTemplate is not null && _map is not null)
+            if (inputEvent is InputEventMouseButton mouseButton)
             {
                 // Check left mouse button pressed and add selected tile type.
                 if (mouseButton.Pressed && mouseButton.ButtonIndex == 1)
                 {
                     var world = GetGlobalMousePosition();
-                    var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
+                    var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
                     try
                     {
-                        var hexTile = new HexTile(hex, _repository.GetRandomVariation(_activeTileType));
-                        _map.AddOrOverwriteTile(hexTile);
+                        var hexTile = new Tile(hex, _repository.GetAsset(_activeTileType));
+                        _tiles.Add(hexTile.Coordinates,hexTile);
+                        AddChild(hexTile);
                     }
                     catch(ArgumentException exception)
                     {
@@ -151,17 +157,19 @@ namespace TribesOfDust
                 else if (mouseButton.Pressed && mouseButton.ButtonIndex == 2)
                 {
                     var world = GetGlobalMousePosition();
-                    var hex = HexConversions.WorldToHex(world, TileAsset.ExpectedSize);
-                    if (_map.GetTileTypeAt(hex) == TileType.Open)
-                    {
-                        _map.RemoveTileAt(hex);
-                    }
-                    else
+                    var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
+                    var tile = _tiles.Get(hex);
+                    
+                    _tiles.Remove(hex);
+                    RemoveChild(tile);
+                    
+                    if (tile is null || tile.Key != TileType.Open)
                     {
                         try
                         {
-                            var hexTile = new HexTile(hex, _repository.GetRandomVariation(TileType.Open));
-                            _map.AddOrOverwriteTile(hexTile);
+                            var hexTile = new Tile(hex, _repository.GetAsset(TileType.Open));
+                            _tiles.Add(hexTile.Coordinates,hexTile);
+                            AddChild(hexTile);
                         }
                         catch(ArgumentException exception)
                         {
