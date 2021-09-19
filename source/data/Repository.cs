@@ -187,7 +187,7 @@ namespace TribesOfDust.Data
         public int CountVariations(TVariation variation) => _assets.ContainsKey(variation) ? _assets[variation].Count : 0;
 
         public bool HasVariations(TVariation variation) => CountVariations(variation) > 0;
-        public bool HasVariation(TVariation variation, int index) => CountVariations(variation) >= index;
+        public bool HasVariation(TVariation variation, int index) => CountVariations(variation) > index;
 
         /// <summary>
         /// Gets the asset at the specified index of a variation.

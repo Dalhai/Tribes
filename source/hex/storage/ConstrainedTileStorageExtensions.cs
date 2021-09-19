@@ -9,7 +9,7 @@ namespace TribesOfDust.Hex.Storage
             return new ConstraintedTileStorage<T>(storageView);
         }
 
-        public static ITileStorage<T> Constraint<T>(this ITileStorageView storageView, IEqualityComparer<T> comparer)
+        public static ITileStorage<T> Constrain<T>(this ITileStorageView storageView, IEqualityComparer<T> comparer)
         {
             return new ConstraintedTileStorage<T>(storageView, comparer);
         }

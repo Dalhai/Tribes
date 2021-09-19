@@ -4,6 +4,7 @@
 
 # IDE-specified ignores
 *.suo
+*.one
 
 # Godot-specific ignores
 .import/
@@ -12,7 +13,9 @@ export_presets.cfg
 
 # Mono-specific ignores
 .mono/
+notes/
 data_*/
 
 # Ignore old project files
 *.old
+*.**~
