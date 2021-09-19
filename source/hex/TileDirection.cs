@@ -82,7 +82,7 @@ namespace TribesOfDust.Hex
 
             // Catch-all case for unsupported tile directions.
             // Should ideally be caught by the compiler.
-            _ => throw new NotImplementedException($"Offset calculation not implemented for {direction}.")
+            TileDirection other=> throw Error.NotImplementedFor<TileDirection>(other)
         };
     }
 }

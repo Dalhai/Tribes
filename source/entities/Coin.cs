@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 using Godot;
 
-using TribesOfDust.Utils.Godot;
+using TribesOfDust.Utils.Misc;
 
 namespace TribesOfDust.Entities
 {

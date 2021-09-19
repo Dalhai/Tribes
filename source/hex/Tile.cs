@@ -1,24 +1,22 @@
 using System;
-using System.Collections.Generic;
 
 using Godot;
 using GodotJson = Godot.Collections.Dictionary;
 
 using TribesOfDust.Utils.IO;
-using System.Security;
-using System.Diagnostics;
+using TribesOfDust.Data.Assets;
 
 namespace TribesOfDust.Hex
 {
     public class Tile : Sprite
     {
-        public Tile(AxialCoordinate coordinates, TileAsset asset)
+        public Tile(AxialCoordinate coordinates, Terrain asset)
         {
             Coordinates = coordinates;
 
             // Initialize tile with properties from tile asset
 
-            Type = asset.Type;
+            Key = asset.Key;
             Texture = asset.Texture;
 
             _connections = (TileDirection) asset.Connections;
@@ -31,7 +29,7 @@ namespace TribesOfDust.Hex
             // Position tile according to specified coordinates
 
             Centered = true;
-            Position = HexConversions.HexToWorld(coordinates, TileAsset.ExpectedSize);
+            Position = HexConversions.HexToWorld(coordinates, Terrain.ExpectedSize);
         }
 
         private Tile(AxialCoordinate coordinates, TileType type, Texture texture, Vector2 scale)
@@ -40,7 +38,7 @@ namespace TribesOfDust.Hex
 
             // Initialize tile with properties that would normally be provided by a tile asset
 
-            Type =  type;
+            Key =  type;
             Texture = texture;
 
             _connections = TileDirection.None;
@@ -53,7 +51,7 @@ namespace TribesOfDust.Hex
             // Popsition tile according to specified coordinates
 
             Centered = true;
-            Position = HexConversions.HexToWorld(coordinates, TileAsset.ExpectedSize);
+            Position = HexConversions.HexToWorld(coordinates, Terrain.ExpectedSize);
         }
 
         #region Queries
@@ -62,9 +60,9 @@ namespace TribesOfDust.Hex
         public float Width => Texture.GetWidth();
         public float Height => Texture.GetHeight();
 
-        public TileType Type { get; }
-        public bool IsBlocked => Type == TileType.Blocked;
-        public bool IsOpen => Type == TileType.Open;
+        public TileType Key { get; }
+        public bool IsBlocked => Key == TileType.Blocked;
+        public bool IsOpen => Key == TileType.Open;
 
         public AxialCoordinate Coordinates { get; }
 
@@ -111,7 +109,7 @@ namespace TribesOfDust.Hex
             var serializedCoordinates = Json.Serialize(Coordinates);
             var serializedScale = Json.Serialize(Scale);
             var serializedTexture = Texture.ResourcePath;
-            var serializedType = Type.ToString();
+            var serializedType = Key.ToString();
 
             return new()
             {
@@ -125,8 +123,10 @@ namespace TribesOfDust.Hex
         /// <summary>
         /// Try to deserialize a <see cref="Tile"/> from a godot JSON dictionary.
         /// </summary>
+        ///
         /// <param name="json">The input JSON dictionary.</param>
         /// <param name="tile">The output tile, or null, if unparseable.</param>
+        //
         /// <returns>True, if the tile could be deserialized, false otherwise.</returns>
         public static bool TryDeserialize(GodotJson json, out Tile? tile)
         {
