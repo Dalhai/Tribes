@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Godot;
 using TribesOfDust.Data.Assets;
 using TribesOfDust.Data.Repositories;
@@ -10,15 +11,20 @@ namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-        private readonly TerrainRepository _repository;
         private readonly Map _map;
+        private readonly TerrainRepository _repository;
         private readonly TileStorage<Tile> _tiles;
         
-        private RichTextLabel? _richTextLabel;
-        
-        private TileType _activeTileType = TileType.Tundra;
         private Tile? _activeTile = null;
+        private TileType _activeTileType = TileType.Tundra;
 
+        private RichTextLabel? _activeTileLabel;
+        private RichTextLabel? _availableTileCountLabel;
+        private RichTextLabel? _tundraTileCountLabel;
+        private RichTextLabel? _duneTileCountLabel;
+        private RichTextLabel? _rockTileCountLabel;
+        private RichTextLabel? _canyonTileCountLabel;
+        
         public GameManager()
         {
             _repository = new TerrainRepository();
@@ -34,10 +40,17 @@ namespace TribesOfDust
             {
                 AddChild(tile.Value);
             }
-            
+
             // Initialize user interface.
 
-            _richTextLabel = GetNode<RichTextLabel>("CameraRoot/CanvasLayer/EditorMenu/ActiveTileType");
+            _activeTileLabel = GetNode<RichTextLabel>(NodePathActiveTileLabel);
+            _availableTileCountLabel = GetNode<RichTextLabel>(NodePathAvailableTileCountLabel);
+            _tundraTileCountLabel = GetNode<RichTextLabel>(NodePathTundraTileCountLabel);
+            _duneTileCountLabel = GetNode<RichTextLabel>(NodePathDuneTileCountLabel);
+            _rockTileCountLabel = GetNode<RichTextLabel>(NodePathRockTileCountLabel);
+            _canyonTileCountLabel = GetNode<RichTextLabel>(NodePathCanyonTileCountLabel);
+            
+            UpdateTileCounts();
             UpdateActiveTileType();
 
             base._Ready();
@@ -113,24 +126,24 @@ namespace TribesOfDust
                 }
             }
 
-            if (inputEvent is InputEventKey && _richTextLabel is not null)
+            if (inputEvent is InputEventKey && _activeTileLabel is not null)
             {
                 UpdateActiveTileType();
             }
 
 
             if (Input.IsActionPressed(InputActionIncreaseTileCount))
-                if (_richTextLabel is not null)
+                if (_activeTileLabel is not null)
                 {
                     _map.TilePool[_activeTileType] += 1;
-                    _richTextLabel.Text = $"{_activeTileType} : {_map.TilePool[_activeTileType]}";
+                    _activeTileLabel.Text = $"{_activeTileType} : {_map.TilePool[_activeTileType]}";
                 }
 
             if (Input.IsActionPressed(InputActionDecreaseTileCount))
-                if (_map.TilePool[_activeTileType] > 0 && _richTextLabel is not null)
+                if (_map.TilePool[_activeTileType] > 0 && _activeTileLabel is not null)
                 {
                     _map.TilePool[_activeTileType] -= 1;
-                    _richTextLabel.Text = $"{_activeTileType} : {_map.TilePool[_activeTileType]}";
+                    _activeTileLabel.Text = $"{_activeTileType} : {_map.TilePool[_activeTileType]}";
                 }
 
             if (inputEvent is InputEventMouseButton mouseButton)
@@ -143,14 +156,18 @@ namespace TribesOfDust
                     try
                     {
                         var hexTile = new Tile(hex, _repository.GetAsset(_activeTileType));
-                        _tiles.Add(hexTile.Coordinates,hexTile);
+                        var tile = _tiles.Get(hex);
+
+                        _tiles.Remove(hex);
+                        RemoveChild(tile);
+                        
+                        _tiles.Add(hexTile.Coordinates, hexTile);
                         AddChild(hexTile);
                     }
-                    catch(ArgumentException exception)
+                    catch (ArgumentException exception)
                     {
                         GD.PrintErr(exception.Message);
                     }
-                  
                 }
                 // Check right mouse button pressed and add open tile, if the current tile is not of open type.
                 // Check right mouse button pressed and remove tile, if the current tile is of open type.
@@ -159,27 +176,35 @@ namespace TribesOfDust
                     var world = GetGlobalMousePosition();
                     var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
                     var tile = _tiles.Get(hex);
-                    
+
                     _tiles.Remove(hex);
                     RemoveChild(tile);
-                    
+
                     if (tile is null || tile.Key != TileType.Open)
                     {
                         try
                         {
                             var hexTile = new Tile(hex, _repository.GetAsset(TileType.Open));
-                            _tiles.Add(hexTile.Coordinates,hexTile);
+                            _tiles.Add(hexTile.Coordinates, hexTile);
                             AddChild(hexTile);
                         }
-                        catch(ArgumentException exception)
+                        catch (ArgumentException exception)
                         {
                             GD.PrintErr(exception.Message);
                         }
                     }
                 }
+                UpdateTileCounts();
             }
         }
 
+        private void UpdateTileCounts()
+        {
+            if (_availableTileCountLabel is not null)
+            {
+                _availableTileCountLabel.Text = $"Available: {_tiles.Count(tile => tile.Value.Key == TileType.Open)}";
+            }
+        }
         private void UpdateActiveTileType()
         {
             if (Input.IsActionPressed(InputActionTundra))
@@ -188,24 +213,33 @@ namespace TribesOfDust
                 _activeTileType = TileType.Rocks;
             else if (Input.IsActionPressed(InputActionDune))
                 _activeTileType = TileType.Dune;
-            else if (Input.IsActionPressed(InputActionCanyon)) 
+            else if (Input.IsActionPressed(InputActionCanyon))
                 _activeTileType = TileType.Canyon;
-            
-            if (_richTextLabel is not null)
+
+            if (_activeTileLabel is not null)
             {
-                _richTextLabel.Text = $"{_activeTileType}";
+                _activeTileLabel.BbcodeText = $"[b]{_activeTileType}[/b]";
             }
         }
 
-        #region Input Actions
+        #region Constants
 
+        private const string InputActionTundra = "editor_tile_tundra";
         private const string InputActionDune = "editor_tile_dunes";
         private const string InputActionRock = "editor_tile_rocks";
-        private const string InputActionTundra = "editor_tile_tundra";
         private const string InputActionCanyon = "editor_tile_canyon";
         private const string InputActionIncreaseTileCount = "editor_increase_tile_count";
         private const string InputActionDecreaseTileCount = "editor_decrease_tile_count";
 
+        private const string NodePathActiveTileLabel = "CameraRoot/CanvasLayer/EditorMenu/ActiveTileType";
+        private const string NodePathAvailableTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/AvailableTileCount";
+        private const string NodePathTundraTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/TundraTileCount";
+        private const string NodePathDuneTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/DuneTileCount";
+        private const string NodePathRockTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/RockTileCount";
+        private const string NodePathCanyonTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/CanyonTileCount";
+
+
+        
         #endregion
     }
 }
