@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://source/GameManager.cs" type="Script" id=1]
 [ext_resource path="res://source/Camera2D.cs" type="Script" id=2]
 [ext_resource path="res://assets/fonts/cinzel.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/themes/default_theme.tres" type="Theme" id=4]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 1, 1, 1, 0.627451 )
 
 [node name="Scene" type="Node2D"]
 script = ExtResource( 1 )
@@ -16,6 +19,14 @@ anchor_mode = 0
 current = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="CameraRoot"]
+
+[node name="Panel" type="Panel" parent="CameraRoot/CanvasLayer"]
+margin_right = 200.0
+margin_bottom = 125.0
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="EditorMenu" type="VBoxContainer" parent="CameraRoot/CanvasLayer"]
 anchor_right = 1.0

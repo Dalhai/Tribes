@@ -31,6 +31,11 @@ namespace TribesOfDust
             _repository.Load();
 
             _map = Load();
+            _map.TilePool[TileType.Tundra] = 0;
+            _map.TilePool[TileType.Dune] = 0;
+            _map.TilePool[TileType.Rocks] = 0;
+            _map.TilePool[TileType.Canyon] = 0;
+            
             _tiles = _map.Generate(_repository);
         }
 
@@ -62,7 +67,7 @@ namespace TribesOfDust
             base._ExitTree();
         }
 
-        private static void Save(Map map)
+        private void Save(Map map)
         {
             var targetFile = new File();
 
@@ -72,6 +77,10 @@ namespace TribesOfDust
             // If opening the file worked, serialize the template map and store it in the file as JSON.
             if (fileOpenError == Godot.Error.Ok)
             {
+                foreach (var tile in _tiles)
+                {
+                    _map.Tiles[tile.Key] = tile.Value.Key;
+                }
                 var serializedMap = map.Serialize();
                 var jsonMap = JSON.Print(serializedMap);
 
@@ -103,7 +112,7 @@ namespace TribesOfDust
 
             if (map is null)
             {
-                throw new InvalidOperationException("Map could not be loaded properly.");
+                map = new("temp","temp",new(),new(),new(),new());
             }
 
             return map;
@@ -132,19 +141,15 @@ namespace TribesOfDust
             }
 
 
-            if (Input.IsActionPressed(InputActionIncreaseTileCount))
-                if (_activeTileLabel is not null)
-                {
-                    _map.TilePool[_activeTileType] += 1;
-                    _activeTileLabel.Text = $"{_activeTileType} : {_map.TilePool[_activeTileType]}";
-                }
+            if (Input.IsActionPressed(InputActionIncreaseTileCount) && _activeTileLabel is not null)
+            {
+                _map.TilePool[_activeTileType] += 1;
+            }
 
-            if (Input.IsActionPressed(InputActionDecreaseTileCount))
-                if (_map.TilePool[_activeTileType] > 0 && _activeTileLabel is not null)
-                {
-                    _map.TilePool[_activeTileType] -= 1;
-                    _activeTileLabel.Text = $"{_activeTileType} : {_map.TilePool[_activeTileType]}";
-                }
+            if (Input.IsActionPressed(InputActionDecreaseTileCount) && _map.TilePool[_activeTileType] > 0)
+            {
+                _map.TilePool[_activeTileType] -= 1;
+            }
 
             if (inputEvent is InputEventMouseButton mouseButton)
             {
@@ -194,8 +199,8 @@ namespace TribesOfDust
                         }
                     }
                 }
-                UpdateTileCounts();
             }
+            UpdateTileCounts();
         }
 
         private void UpdateTileCounts()
@@ -203,6 +208,22 @@ namespace TribesOfDust
             if (_availableTileCountLabel is not null)
             {
                 _availableTileCountLabel.Text = $"Available: {_tiles.Count(tile => tile.Value.Key == TileType.Open)}";
+            }
+            if (_tundraTileCountLabel is not null)
+            {
+                _tundraTileCountLabel.Text = $"Tundra: {_map.TilePool[TileType.Tundra]}";
+            }
+            if (_duneTileCountLabel is not null)
+            {
+                _duneTileCountLabel.Text = $"Dune: {_map.TilePool[TileType.Dune]}";
+            }
+            if (_rockTileCountLabel is not null)
+            {
+                _rockTileCountLabel.Text = $"Rock: {_map.TilePool[TileType.Rocks]}";
+            }
+            if (_canyonTileCountLabel is not null)
+            {
+                _canyonTileCountLabel.Text = $"Canyon: {_map.TilePool[TileType.Canyon]}";
             }
         }
         private void UpdateActiveTileType()

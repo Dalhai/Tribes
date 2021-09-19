@@ -24,7 +24,7 @@ namespace TribesOfDust.Data.Assets
         /// <param name="tilePool">The number of tiles available to players of each type.</param>
         /// <param name="startCoordinates">The possible start coordinates for players.</param>
         /// <param name="fountainCoordinates">The possible fountain coordinates.</param>
-        private Map(
+        public Map(
             string name,
             string path,
             Dictionary<AxialCoordinate, TileType> tiles,
