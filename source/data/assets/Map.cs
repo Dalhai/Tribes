@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Godot;
 using TribesOfDust.Data.Repositories;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
@@ -14,27 +14,21 @@ namespace TribesOfDust.Data.Assets
 {
     public class Map : IAsset<string>
     {
-        /// <summary>
-        /// Initializes a new <see cref="Map"/>.
-        /// </summary>
-        ///
-        /// <param name="name">The name of the map.</param>
-        /// <param name="path">The path to the map file.</param>
-        /// <param name="tiles">The tiles forming the initial map.</param>
-        /// <param name="tilePool">The number of tiles available to players of each type.</param>
-        /// <param name="startCoordinates">The possible start coordinates for players.</param>
-        /// <param name="fountainCoordinates">The possible fountain coordinates.</param>
-        private Map(
+        public Map(string name, string path)
+        {
+            Name = name;
+            ResourcePath = path;
+        }
+
+        public Map(
             string name,
             string path,
             Dictionary<AxialCoordinate, TileType> tiles,
             Dictionary<TileType, int> tilePool,
             List<AxialCoordinate> startCoordinates,
             List<AxialCoordinate> fountainCoordinates)
+        : this(name, path)
         {
-            Key = name;
-            ResourcePath = path;
-
             _tiles = tiles;
             _tilePool = tilePool;
             _startCoordinates = startCoordinates;
@@ -43,7 +37,8 @@ namespace TribesOfDust.Data.Assets
 
         #region Asset
 
-        public string Key { get; init; }
+        public string Key => Name;
+        public string Name { get; init; }
         public string ResourcePath { get; init; }
 
         #endregion
@@ -285,13 +280,13 @@ namespace TribesOfDust.Data.Assets
             exctractAxialCoordinates(json[keyStarts], startCoordinates);
             exctractAxialCoordinates(json[keyFountains], fountainCoordinates);
 
-            map = new(String.Empty, String.Empty, tiles, tilePool, startCoordinates, fountainCoordinates);
+            map = new(string.Empty, string.Empty, tiles, tilePool, startCoordinates, fountainCoordinates);
             return true;
         }
 
         #endregion
 
-        private readonly Dictionary<AxialCoordinate, TileType> _tiles;
+        private readonly Dictionary<AxialCoordinate, TileType> _tiles = new();
         private readonly Dictionary<TileType, int> _tilePool = new();
         private readonly List<AxialCoordinate> _startCoordinates = new();
         private readonly List<AxialCoordinate> _fountainCoordinates = new();
