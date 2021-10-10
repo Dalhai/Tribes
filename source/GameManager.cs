@@ -73,6 +73,7 @@ namespace TribesOfDust
             // If opening the file worked, serialize the template map and store it in the file as JSON.
             if (fileOpenError == Godot.Error.Ok)
             {
+                map.Tiles.Clear();
                 foreach (var tile in _tiles)
                 {
                     _map.Tiles[tile.Key] = tile.Value.Key;
