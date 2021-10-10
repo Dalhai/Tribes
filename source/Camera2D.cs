@@ -30,9 +30,13 @@ namespace TribesOfDust
             if(Input.IsActionJustReleased("zoom_in"))
             {
                 Vector2 oldZoom = Zoom;
-                Vector2 newZoom = oldZoom * 0.9f;;
+                Vector2 newZoom = oldZoom * 0.9f;
+                Vector2 offset = GetGlobalMousePosition() - GetCameraScreenCenter();
+                Vector2 offsetNormalized = offset.Normalized();
+                float offsetWeight = (float) Math.Min(offset.Length()*0.15f,50f*Math.Pow(newZoom.x,2f));
                 Viewport viewport = GetViewport();
-                Position = Position + 0.5f*viewport.Size*(oldZoom-newZoom);
+                Position = Position + 0.5f*viewport.Size*(oldZoom-newZoom) +  offsetNormalized*offsetWeight;
+
                 Zoom = newZoom;
             }
 
