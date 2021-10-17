@@ -23,6 +23,8 @@ namespace TribesOfDust.Data.Assets
             }
         }
 
+        public override string ToString() => $"Map: {Name}, {ResourcePath}";
+
         #region Asset
 
         public string Key => Name;

@@ -12,6 +12,8 @@ namespace TribesOfDust.Data.Assets
         public static readonly float ExpectedHeight = 2.0f * Mathf.Sqrt(3.0f / 4.0f * ExpectedSize * ExpectedSize);
         public static readonly float ExpectedRatio = ExpectedWidth / ExpectedHeight;
 
+        public override string ToString() => $"Terrain: {Key}";
+
         #region Exports
 
         /// <summary>
