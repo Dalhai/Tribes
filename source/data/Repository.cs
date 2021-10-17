@@ -12,6 +12,8 @@ namespace TribesOfDust.Data
         where TVariation : notnull
     {
 
+        public override string ToString() => $"Repository: {typeof(TVariation).Name} => {typeof(TAsset).Name}";
+
         #region Loading
 
         public void Load() => LoadAll().ForEach(AddVariation);

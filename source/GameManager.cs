@@ -1,12 +1,16 @@
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Xml;
+
 using Godot;
+
 using TribesOfDust.Data.Assets;
 using TribesOfDust.Data.Repositories;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Utils.Collections;
-using GodotJson = Godot.Collections.Dictionary;
 
 namespace TribesOfDust
 {
@@ -78,10 +82,21 @@ namespace TribesOfDust
                 {
                     _map.Tiles[tile.Key] = tile.Value.Key;
                 }
-                var serializedMap = map.Serialize();
-                var jsonMap = JSON.Print(serializedMap);
 
-                targetFile.StoreLine(jsonMap);
+                var settings = new XmlWriterSettings
+                {
+                    Indent = true,
+                    NewLineHandling = NewLineHandling.Entitize
+                };
+
+                var str = new StringBuilder();
+                using var xml = XmlWriter.Create(str, settings);
+
+                var serializer = new DataContractSerializer(typeof(Map));
+                serializer.WriteObject(xml, map);
+                xml.Flush();
+
+                targetFile.StoreLine(str.ToString());
                 targetFile.Close();
             }
         }
@@ -97,19 +112,16 @@ namespace TribesOfDust
             // If opening the file worked, deserialize the template map.
             if (fileOpenError == Godot.Error.Ok)
             {
-                var stringMap = targetFile.GetLine();
-                var jsonMap = JSON.Parse(stringMap);
-                targetFile.Close();
+                using var reader = new System.IO.StringReader(targetFile.GetAsText());
+                using var xml = System.Xml.XmlReader.Create(reader);
 
-                if (jsonMap.Result is GodotJson json)
-                {
-                    Map.TryDeserialize(json, out map);
-                }
+                var deserializer = new DataContractSerializer(typeof(Map));
+                map = deserializer.ReadObject(xml) as Map;
             }
 
             if (map is null)
             {
-                map = new("temp", "temp", new(), new(), new(), new());
+                map = new("World", "res://assets/maps/map.template");
             }
 
             return map;
