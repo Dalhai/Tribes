@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Runtime.Serialization;
+using Godot;
 
 namespace TribesOfDust.Hex
 {
@@ -18,7 +19,11 @@ namespace TribesOfDust.Hex
     /// <param name="X">Left to right</param>
     /// <param name="Y">Bottom right to top left</param>
     /// <param name="Z">Top right to bottom left</param>
-    public record CubeCoordinate(int X, int Y, int Z)
+    [DataContract]
+    public record CubeCoordinate(
+        [property: DataMember] int X,
+        [property: DataMember] int Y,
+        [property: DataMember] int Z)
     {
         #region Constants
 
@@ -91,7 +96,10 @@ namespace TribesOfDust.Hex
     ///
     /// <param name="Q">Left to right</param>
     /// <param name="R">Top right to bottom left</param>
-    public record AxialCoordinate(int Q, int R)
+    [DataContract]
+    public record AxialCoordinate(
+        [property: DataMember] int Q,
+        [property: DataMember] int R)
     {
         #region Constants
 
