@@ -1,6 +1,5 @@
 .vs/
 .idea/
-.vscode/
 
 # IDE-specified ignores
 *.suo
