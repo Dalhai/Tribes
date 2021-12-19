@@ -1,451 +1,451 @@
 <?xml version="1.0" encoding="utf-16"?>
 <Map xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/TribesOfDust.Data.Assets">
-    <Name>World</Name>
-    <_fountainCoordinates xmlns:d2p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex" />
-    <_startCoordinates xmlns:d2p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex" />
-    <_tilePool xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-        <d2p1:KeyValueOfTileTypeintWuA5iMY3>
-            <d2p1:Key>Unknown</d2p1:Key>
-            <d2p1:Value>0</d2p1:Value>
-        </d2p1:KeyValueOfTileTypeintWuA5iMY3>
-        <d2p1:KeyValueOfTileTypeintWuA5iMY3>
-            <d2p1:Key>Open</d2p1:Key>
-            <d2p1:Value>0</d2p1:Value>
-        </d2p1:KeyValueOfTileTypeintWuA5iMY3>
-        <d2p1:KeyValueOfTileTypeintWuA5iMY3>
-            <d2p1:Key>Blocked</d2p1:Key>
-            <d2p1:Value>0</d2p1:Value>
-        </d2p1:KeyValueOfTileTypeintWuA5iMY3>
-        <d2p1:KeyValueOfTileTypeintWuA5iMY3>
-            <d2p1:Key>Tundra</d2p1:Key>
-            <d2p1:Value>6</d2p1:Value>
-        </d2p1:KeyValueOfTileTypeintWuA5iMY3>
-        <d2p1:KeyValueOfTileTypeintWuA5iMY3>
-            <d2p1:Key>Rocks</d2p1:Key>
-            <d2p1:Value>4</d2p1:Value>
-        </d2p1:KeyValueOfTileTypeintWuA5iMY3>
-        <d2p1:KeyValueOfTileTypeintWuA5iMY3>
-            <d2p1:Key>Dune</d2p1:Key>
-            <d2p1:Value>5</d2p1:Value>
-        </d2p1:KeyValueOfTileTypeintWuA5iMY3>
-        <d2p1:KeyValueOfTileTypeintWuA5iMY3>
-            <d2p1:Key>Canyon</d2p1:Key>
-            <d2p1:Value>5</d2p1:Value>
-        </d2p1:KeyValueOfTileTypeintWuA5iMY3>
-    </_tilePool>
-    <_tiles xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>8</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>8</d4p1:Q>
-                <d4p1:R>3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>10</d4p1:Q>
-                <d4p1:R>3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>11</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>11</d4p1:Q>
-                <d4p1:R>-1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>14</d4p1:Q>
-                <d4p1:R>-3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>15</d4p1:Q>
-                <d4p1:R>-3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>13</d4p1:Q>
-                <d4p1:R>-1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>11</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>9</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>10</d4p1:Q>
-                <d4p1:R>2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>11</d4p1:Q>
-                <d4p1:R>2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>10</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>9</d4p1:Q>
-                <d4p1:R>3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>9</d4p1:Q>
-                <d4p1:R>2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>8</d4p1:Q>
-                <d4p1:R>2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>10</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>12</d4p1:Q>
-                <d4p1:R>2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>11</d4p1:Q>
-                <d4p1:R>3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>12</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>12</d4p1:Q>
-                <d4p1:R>-1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>12</d4p1:Q>
-                <d4p1:R>-2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>12</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>13</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>14</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>14</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>15</d4p1:Q>
-                <d4p1:R>-2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>13</d4p1:Q>
-                <d4p1:R>-2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>14</d4p1:Q>
-                <d4p1:R>-2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>14</d4p1:Q>
-                <d4p1:R>-1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>15</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>13</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Open</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>13</d4p1:Q>
-                <d4p1:R>2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Tundra</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>9</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>10</d4p1:Q>
-                <d4p1:R>-1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>11</d4p1:Q>
-                <d4p1:R>-2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>12</d4p1:Q>
-                <d4p1:R>-3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>13</d4p1:Q>
-                <d4p1:R>-3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>14</d4p1:Q>
-                <d4p1:R>-4</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>15</d4p1:Q>
-                <d4p1:R>-4</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>16</d4p1:Q>
-                <d4p1:R>-4</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>16</d4p1:Q>
-                <d4p1:R>-3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>16</d4p1:Q>
-                <d4p1:R>-2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>15</d4p1:Q>
-                <d4p1:R>-1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>16</d4p1:Q>
-                <d4p1:R>-1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>16</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>15</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>14</d4p1:Q>
-                <d4p1:R>2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>13</d4p1:Q>
-                <d4p1:R>3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>12</d4p1:Q>
-                <d4p1:R>3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>11</d4p1:Q>
-                <d4p1:R>4</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>10</d4p1:Q>
-                <d4p1:R>4</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>9</d4p1:Q>
-                <d4p1:R>4</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>8</d4p1:Q>
-                <d4p1:R>4</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>7</d4p1:Q>
-                <d4p1:R>4</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>7</d4p1:Q>
-                <d4p1:R>3</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>7</d4p1:Q>
-                <d4p1:R>2</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>7</d4p1:Q>
-                <d4p1:R>1</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-        <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-            <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
-                <d4p1:Q>8</d4p1:Q>
-                <d4p1:R>0</d4p1:R>
-            </d2p1:Key>
-            <d2p1:Value>Rocks</d2p1:Value>
-        </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    </_tiles>
+  <Name>World</Name>
+  <_fountainCoordinates xmlns:d2p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex" />
+  <_startCoordinates xmlns:d2p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex" />
+  <_tilePool xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+    <d2p1:KeyValueOfTileTypeintWuA5iMY3>
+      <d2p1:Key>Unknown</d2p1:Key>
+      <d2p1:Value>0</d2p1:Value>
+    </d2p1:KeyValueOfTileTypeintWuA5iMY3>
+    <d2p1:KeyValueOfTileTypeintWuA5iMY3>
+      <d2p1:Key>Open</d2p1:Key>
+      <d2p1:Value>0</d2p1:Value>
+    </d2p1:KeyValueOfTileTypeintWuA5iMY3>
+    <d2p1:KeyValueOfTileTypeintWuA5iMY3>
+      <d2p1:Key>Blocked</d2p1:Key>
+      <d2p1:Value>0</d2p1:Value>
+    </d2p1:KeyValueOfTileTypeintWuA5iMY3>
+    <d2p1:KeyValueOfTileTypeintWuA5iMY3>
+      <d2p1:Key>Tundra</d2p1:Key>
+      <d2p1:Value>7</d2p1:Value>
+    </d2p1:KeyValueOfTileTypeintWuA5iMY3>
+    <d2p1:KeyValueOfTileTypeintWuA5iMY3>
+      <d2p1:Key>Rocks</d2p1:Key>
+      <d2p1:Value>9</d2p1:Value>
+    </d2p1:KeyValueOfTileTypeintWuA5iMY3>
+    <d2p1:KeyValueOfTileTypeintWuA5iMY3>
+      <d2p1:Key>Dune</d2p1:Key>
+      <d2p1:Value>7</d2p1:Value>
+    </d2p1:KeyValueOfTileTypeintWuA5iMY3>
+    <d2p1:KeyValueOfTileTypeintWuA5iMY3>
+      <d2p1:Key>Canyon</d2p1:Key>
+      <d2p1:Value>10</d2p1:Value>
+    </d2p1:KeyValueOfTileTypeintWuA5iMY3>
+  </_tilePool>
+  <_tiles xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>8</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>8</d4p1:Q>
+        <d4p1:R>3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>10</d4p1:Q>
+        <d4p1:R>3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>11</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>11</d4p1:Q>
+        <d4p1:R>-1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>14</d4p1:Q>
+        <d4p1:R>-3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>15</d4p1:Q>
+        <d4p1:R>-3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>13</d4p1:Q>
+        <d4p1:R>-1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>11</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>9</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>10</d4p1:Q>
+        <d4p1:R>2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Dune</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>11</d4p1:Q>
+        <d4p1:R>2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>10</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Dune</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>9</d4p1:Q>
+        <d4p1:R>3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>9</d4p1:Q>
+        <d4p1:R>2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>8</d4p1:Q>
+        <d4p1:R>2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>10</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>12</d4p1:Q>
+        <d4p1:R>2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>11</d4p1:Q>
+        <d4p1:R>3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>12</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>12</d4p1:Q>
+        <d4p1:R>-1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>12</d4p1:Q>
+        <d4p1:R>-2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>12</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>13</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>14</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>14</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>15</d4p1:Q>
+        <d4p1:R>-2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>13</d4p1:Q>
+        <d4p1:R>-2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>14</d4p1:Q>
+        <d4p1:R>-2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>14</d4p1:Q>
+        <d4p1:R>-1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>15</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>13</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Open</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>13</d4p1:Q>
+        <d4p1:R>2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>9</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>10</d4p1:Q>
+        <d4p1:R>-1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>11</d4p1:Q>
+        <d4p1:R>-2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>12</d4p1:Q>
+        <d4p1:R>-3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>13</d4p1:Q>
+        <d4p1:R>-3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>14</d4p1:Q>
+        <d4p1:R>-4</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>15</d4p1:Q>
+        <d4p1:R>-4</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>16</d4p1:Q>
+        <d4p1:R>-4</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>16</d4p1:Q>
+        <d4p1:R>-3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>16</d4p1:Q>
+        <d4p1:R>-2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>15</d4p1:Q>
+        <d4p1:R>-1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>16</d4p1:Q>
+        <d4p1:R>-1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>16</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>15</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>14</d4p1:Q>
+        <d4p1:R>2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>13</d4p1:Q>
+        <d4p1:R>3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>12</d4p1:Q>
+        <d4p1:R>3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>11</d4p1:Q>
+        <d4p1:R>4</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>10</d4p1:Q>
+        <d4p1:R>4</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>9</d4p1:Q>
+        <d4p1:R>4</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>8</d4p1:Q>
+        <d4p1:R>4</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>7</d4p1:Q>
+        <d4p1:R>4</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>7</d4p1:Q>
+        <d4p1:R>3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>7</d4p1:Q>
+        <d4p1:R>2</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>7</d4p1:Q>
+        <d4p1:R>1</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>8</d4p1:Q>
+        <d4p1:R>0</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Rocks</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+  </_tiles>
 </Map>
