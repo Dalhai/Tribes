@@ -20,14 +20,23 @@ namespace TribesOfDust
         private readonly TerrainRepository _repository;
         private readonly TileStorage<Tile> _tiles;
 
-        private Tile? _activeTile = null;
+        private Tile? _activeTile;
         private TileType _activeTileType = TileType.Tundra;
+        private PanelContainer? _activeContainer;
 
         private Label? _availableTileCountLabel;
+
         private Label? _tundraTileCountLabel;
-        private Label? _duneTileCountLabel;
-        private Label? _rockTileCountLabel;
+        private PanelContainer? _tundraContainer;
+
+        private Label? _rocksTileCountLabel;
+        private PanelContainer? _rocksContainer;
+
+        private Label? _dunesTileCountLabel;
+        private PanelContainer? _dunesContainer;
+
         private Label? _canyonTileCountLabel;
+        private PanelContainer? _canyonContainer;
 
         public GameManager()
         {
@@ -49,9 +58,16 @@ namespace TribesOfDust
 
             _availableTileCountLabel = GetNode<Label>(NodePathAvailableTileCountLabel);
             _tundraTileCountLabel = GetNode<Label>(NodePathTundraTileCountLabel);
-            _duneTileCountLabel = GetNode<Label>(NodePathDuneTileCountLabel);
-            _rockTileCountLabel = GetNode<Label>(NodePathRockTileCountLabel);
+            _dunesTileCountLabel = GetNode<Label>(NodePathDunesTileCountLabel);
+            _rocksTileCountLabel = GetNode<Label>(NodePathRockTileCountLabel);
             _canyonTileCountLabel = GetNode<Label>(NodePathCanyonTileCountLabel);
+
+            _tundraContainer = GetNode<PanelContainer>(NodePathTundraContainer);
+            _dunesContainer = GetNode<PanelContainer>(NodePathDunesContainer);
+            _rocksContainer = GetNode<PanelContainer>(NodePathRocksContainer);
+            _canyonContainer = GetNode<PanelContainer>(NodePathCanyonContainer);
+
+            _activeContainer = _tundraContainer;
 
             UpdateTileCounts();
             UpdateActiveTileType();
@@ -216,13 +232,13 @@ namespace TribesOfDust
             {
                 _tundraTileCountLabel.Text = _map.TilePool[TileType.Tundra].ToString();
             }
-            if (_duneTileCountLabel is not null)
+            if (_dunesTileCountLabel is not null)
             {
-                _duneTileCountLabel.Text = _map.TilePool[TileType.Dune].ToString();
+                _dunesTileCountLabel.Text = _map.TilePool[TileType.Dunes].ToString();
             }
-            if (_rockTileCountLabel is not null)
+            if (_rocksTileCountLabel is not null)
             {
-                _rockTileCountLabel.Text = _map.TilePool[TileType.Rocks].ToString();
+                _rocksTileCountLabel.Text = _map.TilePool[TileType.Rocks].ToString();
             }
             if (_canyonTileCountLabel is not null)
             {
@@ -231,30 +247,77 @@ namespace TribesOfDust
         }
         private void UpdateActiveTileType()
         {
+            if (_activeContainer is not null)
+                _activeContainer.SelfModulate = new Color(_activeContainer.SelfModulate, 0.0f);
+
             if (Input.IsActionPressed(InputActionTundra))
                 _activeTileType = TileType.Tundra;
             else if (Input.IsActionPressed(InputActionRock))
                 _activeTileType = TileType.Rocks;
-            else if (Input.IsActionPressed(InputActionDune))
-                _activeTileType = TileType.Dune;
+            else if (Input.IsActionPressed(InputActionDunes))
+                _activeTileType = TileType.Dunes;
             else if (Input.IsActionPressed(InputActionCanyon))
                 _activeTileType = TileType.Canyon;
+
+            switch(_activeTileType)
+            {
+                case TileType.Tundra:
+                    if (_tundraContainer is not null)
+                    {
+                        _tundraContainer.SelfModulate = new Color(_tundraContainer.SelfModulate, 0.3f);
+                        _activeContainer = _tundraContainer;
+                    }
+                    break;
+
+                case TileType.Rocks:
+                    if (_rocksContainer is not null)
+                    {
+                        _rocksContainer.SelfModulate = new Color(_rocksContainer.SelfModulate, 0.3f);
+                        _activeContainer = _rocksContainer;
+                    }
+                    break;
+
+                case TileType.Dunes:
+                    if (_dunesContainer is not null)
+                    {
+                        _dunesContainer.SelfModulate = new Color(_dunesContainer.SelfModulate, 0.3f);
+                        _activeContainer = _dunesContainer;
+                    }
+                    break;
+
+                case TileType.Canyon:
+                    if (_canyonContainer is not null)
+                    {
+                        _canyonContainer.SelfModulate = new Color(_canyonContainer.SelfModulate, 0.3f);
+                        _activeContainer = _canyonContainer;
+                    }
+                    break;
+
+            }
         }
 
         #region Constants
 
         private const string InputActionTundra = "editor_tile_tundra";
-        private const string InputActionDune = "editor_tile_dunes";
         private const string InputActionRock = "editor_tile_rocks";
+        private const string InputActionDunes = "editor_tile_dunes";
         private const string InputActionCanyon = "editor_tile_canyon";
         private const string InputActionIncreaseTileCount = "editor_increase_tile_count";
         private const string InputActionDecreaseTileCount = "editor_decrease_tile_count";
 
         private const string NodePathAvailableTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/AvailableTileCount/Count";
-        private const string NodePathTundraTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/TundraTileCount/Count";
-        private const string NodePathDuneTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/DunesTileCount/Count";
-        private const string NodePathRockTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/RockTileCount/Count";
-        private const string NodePathCanyonTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/CanyonTileCount/Count";
+
+        private const string NodePathTundraContainer = "CameraRoot/CanvasLayer/EditorMenu/List/TundraContainer";
+        private const string NodePathTundraTileCountLabel = NodePathTundraContainer + "/TundraTileCount/Count";
+
+        private const string NodePathRocksContainer = "CameraRoot/CanvasLayer/EditorMenu/List/RocksContainer";
+        private const string NodePathRockTileCountLabel = NodePathRocksContainer + "/RocksTileCount/Count";
+
+        private const string NodePathDunesContainer = "CameraRoot/CanvasLayer/EditorMenu/List/DunesContainer";
+        private const string NodePathDunesTileCountLabel = NodePathDunesContainer + "/DunesTileCount/Count";
+
+        private const string NodePathCanyonContainer = "CameraRoot/CanvasLayer/EditorMenu/List/CanyonContainer";
+        private const string NodePathCanyonTileCountLabel = NodePathCanyonContainer + "/CanyonTileCount/Count";
         #endregion
     }
 }

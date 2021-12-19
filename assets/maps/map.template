@@ -25,7 +25,7 @@
       <d2p1:Value>9</d2p1:Value>
     </d2p1:KeyValueOfTileTypeintWuA5iMY3>
     <d2p1:KeyValueOfTileTypeintWuA5iMY3>
-      <d2p1:Key>Dune</d2p1:Key>
+      <d2p1:Key>Dunes</d2p1:Key>
       <d2p1:Value>7</d2p1:Value>
     </d2p1:KeyValueOfTileTypeintWuA5iMY3>
     <d2p1:KeyValueOfTileTypeintWuA5iMY3>
@@ -109,7 +109,7 @@
         <d4p1:Q>10</d4p1:Q>
         <d4p1:R>2</d4p1:R>
       </d2p1:Key>
-      <d2p1:Value>Dune</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
@@ -123,7 +123,7 @@
         <d4p1:Q>10</d4p1:Q>
         <d4p1:R>1</d4p1:R>
       </d2p1:Key>
-      <d2p1:Value>Dune</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
@@ -500,6 +500,20 @@
       <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
         <d4p1:Q>3</d4p1:Q>
         <d4p1:R>5</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>3</d4p1:Q>
+        <d4p1:R>3</d4p1:R>
+      </d2p1:Key>
+      <d2p1:Value>Tundra</d2p1:Value>
+    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
+      <d2p1:Key xmlns:d4p1="http://schemas.datacontract.org/2004/07/TribesOfDust.Hex">
+        <d4p1:Q>4</d4p1:Q>
+        <d4p1:R>6</d4p1:R>
       </d2p1:Key>
       <d2p1:Value>Tundra</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
