@@ -7,6 +7,7 @@
 
 [node name="Scene" type="Node2D"]
 script = ExtResource( 1 )
+EditorMenuPath = NodePath("CameraRoot/CanvasLayer/EditorMenu")
 
 [node name="CameraRoot" type="Node2D" parent="."]
 
@@ -27,6 +28,3 @@ __meta__ = {
 }
 
 [node name="EditorMenu" parent="CameraRoot/CanvasLayer" instance=ExtResource( 3 )]
-
-[connection signal="focus_entered" from="CameraRoot/CanvasLayer/EditorMenu" to="CameraRoot/Camera2D" method="_on_EditorMenu_focus_entered"]
-[connection signal="mouse_entered" from="CameraRoot/CanvasLayer/EditorMenu" to="CameraRoot/Camera2D" method="_on_EditorMenu_mouse_entered"]

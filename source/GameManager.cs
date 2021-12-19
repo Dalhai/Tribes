@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
@@ -10,67 +9,36 @@ using TribesOfDust.Data.Assets;
 using TribesOfDust.Data.Repositories;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
+using TribesOfDust.UI;
 using TribesOfDust.Utils.Collections;
 
 namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-        private readonly Map _map;
-        private readonly TerrainRepository _repository;
-        private readonly TileStorage<Tile> _tiles;
 
-        private Tile? _activeTile;
-        private TileType _activeTileType = TileType.Tundra;
-        private PanelContainer? _activeContainer;
+        [Export]
+        public NodePath? EditorMenuPath;
 
-        private Label? _availableTileCountLabel;
-
-        private Label? _tundraTileCountLabel;
-        private PanelContainer? _tundraContainer;
-
-        private Label? _rocksTileCountLabel;
-        private PanelContainer? _rocksContainer;
-
-        private Label? _dunesTileCountLabel;
-        private PanelContainer? _dunesContainer;
-
-        private Label? _canyonTileCountLabel;
-        private PanelContainer? _canyonContainer;
-
-        public GameManager()
+        public override void _Ready()
         {
             _repository = new TerrainRepository();
             _repository.Load();
 
             _map = Load();
             _tiles = _map.Generate(_repository);
-        }
 
-        public override void _Ready()
-        {
             foreach (var tile in _tiles)
             {
                 AddChild(tile.Value);
             }
 
+            UpdateActiveTileType();
+
             // Initialize user interface.
 
-            _availableTileCountLabel = GetNode<Label>(NodePathAvailableTileCountLabel);
-            _tundraTileCountLabel = GetNode<Label>(NodePathTundraTileCountLabel);
-            _dunesTileCountLabel = GetNode<Label>(NodePathDunesTileCountLabel);
-            _rocksTileCountLabel = GetNode<Label>(NodePathRockTileCountLabel);
-            _canyonTileCountLabel = GetNode<Label>(NodePathCanyonTileCountLabel);
-
-            _tundraContainer = GetNode<PanelContainer>(NodePathTundraContainer);
-            _dunesContainer = GetNode<PanelContainer>(NodePathDunesContainer);
-            _rocksContainer = GetNode<PanelContainer>(NodePathRocksContainer);
-            _canyonContainer = GetNode<PanelContainer>(NodePathCanyonContainer);
-
-            _activeContainer = _tundraContainer;
-
-            UpdateTileCounts();
-            UpdateActiveTileType();
+            _editorMenu = GetNode<EditorMenu>(EditorMenuPath);
+            _editorMenu.UpdateCounts(_tiles, _map.TilePool);
 
             base._Ready();
         }
@@ -218,38 +186,11 @@ namespace TribesOfDust
                 }
             }
 
-            UpdateTileCounts();
             UpdateActiveTileType();
         }
 
-        private void UpdateTileCounts()
-        {
-            if (_availableTileCountLabel is not null)
-            {
-                _availableTileCountLabel.Text = _tiles.Count(tile => tile.Value.Key == TileType.Open).ToString();
-            }
-            if (_tundraTileCountLabel is not null)
-            {
-                _tundraTileCountLabel.Text = _map.TilePool[TileType.Tundra].ToString();
-            }
-            if (_dunesTileCountLabel is not null)
-            {
-                _dunesTileCountLabel.Text = _map.TilePool[TileType.Dunes].ToString();
-            }
-            if (_rocksTileCountLabel is not null)
-            {
-                _rocksTileCountLabel.Text = _map.TilePool[TileType.Rocks].ToString();
-            }
-            if (_canyonTileCountLabel is not null)
-            {
-                _canyonTileCountLabel.Text = _map.TilePool[TileType.Canyon].ToString();
-            }
-        }
         private void UpdateActiveTileType()
         {
-            if (_activeContainer is not null)
-                _activeContainer.SelfModulate = new Color(_activeContainer.SelfModulate, 0.0f);
-
             if (Input.IsActionPressed(InputActionTundra))
                 _activeTileType = TileType.Tundra;
             else if (Input.IsActionPressed(InputActionRock))
@@ -258,43 +199,16 @@ namespace TribesOfDust
                 _activeTileType = TileType.Dunes;
             else if (Input.IsActionPressed(InputActionCanyon))
                 _activeTileType = TileType.Canyon;
-
-            switch(_activeTileType)
-            {
-                case TileType.Tundra:
-                    if (_tundraContainer is not null)
-                    {
-                        _tundraContainer.SelfModulate = new Color(_tundraContainer.SelfModulate, 0.3f);
-                        _activeContainer = _tundraContainer;
-                    }
-                    break;
-
-                case TileType.Rocks:
-                    if (_rocksContainer is not null)
-                    {
-                        _rocksContainer.SelfModulate = new Color(_rocksContainer.SelfModulate, 0.3f);
-                        _activeContainer = _rocksContainer;
-                    }
-                    break;
-
-                case TileType.Dunes:
-                    if (_dunesContainer is not null)
-                    {
-                        _dunesContainer.SelfModulate = new Color(_dunesContainer.SelfModulate, 0.3f);
-                        _activeContainer = _dunesContainer;
-                    }
-                    break;
-
-                case TileType.Canyon:
-                    if (_canyonContainer is not null)
-                    {
-                        _canyonContainer.SelfModulate = new Color(_canyonContainer.SelfModulate, 0.3f);
-                        _activeContainer = _canyonContainer;
-                    }
-                    break;
-
-            }
         }
+
+        private Map _map = null!;
+        private TerrainRepository _repository = null!;
+        private TileStorage<Tile> _tiles = null!;
+
+        private Tile? _activeTile;
+        private TileType _activeTileType = TileType.Tundra;
+
+        private EditorMenu? _editorMenu;
 
         #region Constants
 
@@ -305,19 +219,6 @@ namespace TribesOfDust
         private const string InputActionIncreaseTileCount = "editor_increase_tile_count";
         private const string InputActionDecreaseTileCount = "editor_decrease_tile_count";
 
-        private const string NodePathAvailableTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/AvailableTileCount/Count";
-
-        private const string NodePathTundraContainer = "CameraRoot/CanvasLayer/EditorMenu/List/TundraContainer";
-        private const string NodePathTundraTileCountLabel = NodePathTundraContainer + "/TundraTileCount/Count";
-
-        private const string NodePathRocksContainer = "CameraRoot/CanvasLayer/EditorMenu/List/RocksContainer";
-        private const string NodePathRockTileCountLabel = NodePathRocksContainer + "/RocksTileCount/Count";
-
-        private const string NodePathDunesContainer = "CameraRoot/CanvasLayer/EditorMenu/List/DunesContainer";
-        private const string NodePathDunesTileCountLabel = NodePathDunesContainer + "/DunesTileCount/Count";
-
-        private const string NodePathCanyonContainer = "CameraRoot/CanvasLayer/EditorMenu/List/CanyonContainer";
-        private const string NodePathCanyonTileCountLabel = NodePathCanyonContainer + "/CanyonTileCount/Count";
         #endregion
     }
 }
