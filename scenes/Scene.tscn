@@ -1,12 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://source/GameManager.cs" type="Script" id=1]
 [ext_resource path="res://source/Camera2D.cs" type="Script" id=2]
-[ext_resource path="res://assets/fonts/cinzel.tres" type="DynamicFont" id=3]
-[ext_resource path="res://assets/themes/default_theme.tres" type="Theme" id=4]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 1, 1, 0.627451 )
+[ext_resource path="res://scenes/ui/EditorMenu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/themes/menu.tres" type="Theme" id=4]
 
 [node name="Scene" type="Node2D"]
 script = ExtResource( 1 )
@@ -21,97 +18,12 @@ script = ExtResource( 2 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="CameraRoot"]
 
-[node name="Panel" type="Panel" parent="CameraRoot/CanvasLayer"]
-margin_right = 200.0
-margin_bottom = 125.0
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="EditorMenu" type="VBoxContainer" parent="CameraRoot/CanvasLayer"]
-anchor_left = 0.000976563
-anchor_right = 1.00098
+[node name="Background" type="Panel" parent="CameraRoot/CanvasLayer"]
 anchor_bottom = 1.0
+margin_right = 250.0
 theme = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ActiveTileType" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
-margin_right = 1024.0
-margin_bottom = 23.0
-custom_fonts/bold_font = ExtResource( 3 )
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-bbcode_enabled = true
-bbcode_text = "[b] Tundra[/b]"
-text = " Tundra"
-fit_content_height = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AvailableTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
-margin_top = 27.0
-margin_right = 1024.0
-margin_bottom = 42.0
-custom_fonts/bold_font = ExtResource( 3 )
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-bbcode_text = "Available"
-text = "Available"
-fit_content_height = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TundraTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
-margin_top = 46.0
-margin_right = 1024.0
-margin_bottom = 61.0
-custom_fonts/bold_font = ExtResource( 3 )
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-bbcode_text = "Tundra"
-text = "Tundra"
-fit_content_height = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="DuneTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
-margin_top = 65.0
-margin_right = 1024.0
-margin_bottom = 80.0
-custom_fonts/bold_font = ExtResource( 3 )
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-bbcode_text = "Dune"
-text = "Dune"
-fit_content_height = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="RockTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
-margin_top = 84.0
-margin_right = 1024.0
-margin_bottom = 99.0
-custom_fonts/bold_font = ExtResource( 3 )
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-bbcode_text = "Rock"
-text = "Rock"
-fit_content_height = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CanyonTileCount" type="RichTextLabel" parent="CameraRoot/CanvasLayer/EditorMenu"]
-margin_top = 103.0
-margin_right = 1024.0
-margin_bottom = 118.0
-custom_fonts/bold_font = ExtResource( 3 )
-custom_colors/default_color = Color( 0, 0, 0, 1 )
-bbcode_text = "Canyon"
-text = "Canyon"
-fit_content_height = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="EditorMenu" parent="CameraRoot/CanvasLayer" instance=ExtResource( 3 )]
