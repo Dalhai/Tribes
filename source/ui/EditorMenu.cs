@@ -9,7 +9,7 @@ using TribesOfDust.Hex.Storage;
 
 namespace TribesOfDust.UI
 {
-    public class EditorMenu : Control 
+    public class EditorMenu : Control
     {
         public override void _EnterTree()
         {
@@ -28,7 +28,7 @@ namespace TribesOfDust.UI
             base._Ready();
         }
 
-        public void UpdateCounts(ITileStorageView<Tile> tiles,  IDictionary<TileType, int> tilePool)
+        public void UpdateCounts(ITileStorageView<Tile> tiles, IDictionary<TileType, int> tilePool)
         {
             int tundraCount = tilePool.TryGetValue(TileType.Tundra, out tundraCount) ? tundraCount : 0;
             int rocksCount = tilePool.TryGetValue(TileType.Rocks, out rocksCount) ? rocksCount : 0;
@@ -46,6 +46,22 @@ namespace TribesOfDust.UI
             _dunesCount.Value = dunesCount.ToString();
             _canyonCount.Value = canyonCount.ToString();
             _availableCount.Value = availableCount.ToString();
+        }
+
+        public void UpdateActiveTileType(TileType newTileType)
+        {
+            _tundraCount.IsActive = false;
+            _rocksCount.IsActive = false;
+            _dunesCount.IsActive = false;
+            _canyonCount.IsActive = false;
+
+            switch (newTileType)
+            {
+                case TileType.Tundra: _tundraCount.IsActive = true; break;
+                case TileType.Rocks: _rocksCount.IsActive = true; break;
+                case TileType.Dunes: _dunesCount.IsActive = true; break;
+                case TileType.Canyon: _canyonCount.IsActive = true; break;
+            }
         }
 
         private LabelValueItem _tundraCount = null!;

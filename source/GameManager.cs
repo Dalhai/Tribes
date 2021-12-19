@@ -33,12 +33,10 @@ namespace TribesOfDust
                 AddChild(tile.Value);
             }
 
-            UpdateActiveTileType();
-
             // Initialize user interface.
 
             _editorMenu = GetNode<EditorMenu>(EditorMenuPath);
-            _editorMenu.UpdateCounts(_tiles, _map.TilePool);
+            UpdateEditorMenu();
 
             base._Ready();
         }
@@ -126,16 +124,6 @@ namespace TribesOfDust
                 }
             }
 
-            if (Input.IsActionPressed(InputActionIncreaseTileCount))
-            {
-                _map.TilePool.UpdateOrAdd(_activeTileType, count => count + 1, 1);
-            }
-
-            if (Input.IsActionPressed(InputActionDecreaseTileCount))
-            {
-                _map.TilePool.Update(_activeTileType, count => Math.Max(0, count - 1));
-            }
-
             if (inputEvent is InputEventMouseButton mouseButton)
             {
                 // Check left mouse button pressed and add selected tile type.
@@ -186,11 +174,17 @@ namespace TribesOfDust
                 }
             }
 
-            UpdateActiveTileType();
+            UpdateEditorMenu();
         }
 
-        private void UpdateActiveTileType()
+        private void UpdateEditorMenu()
         {
+            if (Input.IsActionPressed(InputActionIncreaseTileCount))
+                _map.TilePool.UpdateOrAdd(_activeTileType, count => count + 1, 1);
+
+            if (Input.IsActionPressed(InputActionDecreaseTileCount))
+                _map.TilePool.Update(_activeTileType, count => Math.Max(0, count - 1));
+
             if (Input.IsActionPressed(InputActionTundra))
                 _activeTileType = TileType.Tundra;
             else if (Input.IsActionPressed(InputActionRock))
@@ -199,6 +193,9 @@ namespace TribesOfDust
                 _activeTileType = TileType.Dunes;
             else if (Input.IsActionPressed(InputActionCanyon))
                 _activeTileType = TileType.Canyon;
+
+            _editorMenu?.UpdateActiveTileType(_activeTileType);
+            _editorMenu?.UpdateCounts(_tiles, _map.TilePool);
         }
 
         private Map _map = null!;
