@@ -250,11 +250,11 @@ namespace TribesOfDust
         private const string InputActionIncreaseTileCount = "editor_increase_tile_count";
         private const string InputActionDecreaseTileCount = "editor_decrease_tile_count";
 
-        private const string NodePathAvailableTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/AvailableTileCount/Count";
-        private const string NodePathTundraTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/TundraTileCount/Count";
-        private const string NodePathDuneTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/DunesTileCount/Count";
-        private const string NodePathRockTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/RockTileCount/Count";
-        private const string NodePathCanyonTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/CanyonTileCount/Count";
+        private const string NodePathAvailableTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/AvailableTileCount/Count";
+        private const string NodePathTundraTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/TundraTileCount/Count";
+        private const string NodePathDuneTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/DunesTileCount/Count";
+        private const string NodePathRockTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/RockTileCount/Count";
+        private const string NodePathCanyonTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/List/CanyonTileCount/Count";
         #endregion
     }
 }
