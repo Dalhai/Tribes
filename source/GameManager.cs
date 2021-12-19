@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
@@ -10,37 +9,25 @@ using TribesOfDust.Data.Assets;
 using TribesOfDust.Data.Repositories;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
+using TribesOfDust.UI;
 using TribesOfDust.Utils.Collections;
 
 namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-        private readonly Map _map;
-        private readonly TerrainRepository _repository;
-        private readonly TileStorage<Tile> _tiles;
 
-        private Tile? _activeTile = null;
-        private TileType _activeTileType = TileType.Tundra;
+        [Export]
+        public NodePath? EditorMenuPath;
 
-        private RichTextLabel? _activeTileLabel;
-        private RichTextLabel? _availableTileCountLabel;
-        private RichTextLabel? _tundraTileCountLabel;
-        private RichTextLabel? _duneTileCountLabel;
-        private RichTextLabel? _rockTileCountLabel;
-        private RichTextLabel? _canyonTileCountLabel;
-
-        public GameManager()
+        public override void _Ready()
         {
             _repository = new TerrainRepository();
             _repository.Load();
 
             _map = Load();
             _tiles = _map.Generate(_repository);
-        }
 
-        public override void _Ready()
-        {
             foreach (var tile in _tiles)
             {
                 AddChild(tile.Value);
@@ -48,15 +35,8 @@ namespace TribesOfDust
 
             // Initialize user interface.
 
-            _activeTileLabel = GetNode<RichTextLabel>(NodePathActiveTileLabel);
-            _availableTileCountLabel = GetNode<RichTextLabel>(NodePathAvailableTileCountLabel);
-            _tundraTileCountLabel = GetNode<RichTextLabel>(NodePathTundraTileCountLabel);
-            _duneTileCountLabel = GetNode<RichTextLabel>(NodePathDuneTileCountLabel);
-            _rockTileCountLabel = GetNode<RichTextLabel>(NodePathRockTileCountLabel);
-            _canyonTileCountLabel = GetNode<RichTextLabel>(NodePathCanyonTileCountLabel);
-
-            UpdateTileCounts();
-            UpdateActiveTileType();
+            _editorMenu = GetNode<EditorMenu>(EditorMenuPath);
+            UpdateEditorMenu();
 
             base._Ready();
         }
@@ -144,16 +124,6 @@ namespace TribesOfDust
                 }
             }
 
-            if (Input.IsActionPressed(InputActionIncreaseTileCount))
-            {
-                _map.TilePool.UpdateOrAdd(_activeTileType, count => count + 1, 1);
-            }
-
-            if (Input.IsActionPressed(InputActionDecreaseTileCount))
-            {
-                _map.TilePool.Update(_activeTileType, count => Math.Max(0, count - 1));
-            }
-
             if (inputEvent is InputEventMouseButton mouseButton)
             {
                 // Check left mouse button pressed and add selected tile type.
@@ -204,65 +174,47 @@ namespace TribesOfDust
                 }
             }
 
-            UpdateTileCounts();
-            UpdateActiveTileType();
+            UpdateEditorMenu();
         }
 
-        private void UpdateTileCounts()
+        private void UpdateEditorMenu()
         {
-            if (_availableTileCountLabel is not null)
-            {
-                _availableTileCountLabel.Text = $"Available: {_tiles.Count(tile => tile.Value.Key == TileType.Open)}";
-            }
-            if (_tundraTileCountLabel is not null)
-            {
-                _tundraTileCountLabel.Text = $"Tundra: {_map.TilePool[TileType.Tundra]}";
-            }
-            if (_duneTileCountLabel is not null)
-            {
-                _duneTileCountLabel.Text = $"Dune: {_map.TilePool[TileType.Dune]}";
-            }
-            if (_rockTileCountLabel is not null)
-            {
-                _rockTileCountLabel.Text = $"Rock: {_map.TilePool[TileType.Rocks]}";
-            }
-            if (_canyonTileCountLabel is not null)
-            {
-                _canyonTileCountLabel.Text = $"Canyon: {_map.TilePool[TileType.Canyon]}";
-            }
-        }
-        private void UpdateActiveTileType()
-        {
+            if (Input.IsActionPressed(InputActionIncreaseTileCount))
+                _map.TilePool.UpdateOrAdd(_activeTileType, count => count + 1, 1);
+
+            if (Input.IsActionPressed(InputActionDecreaseTileCount))
+                _map.TilePool.Update(_activeTileType, count => Math.Max(0, count - 1));
+
             if (Input.IsActionPressed(InputActionTundra))
                 _activeTileType = TileType.Tundra;
             else if (Input.IsActionPressed(InputActionRock))
                 _activeTileType = TileType.Rocks;
-            else if (Input.IsActionPressed(InputActionDune))
-                _activeTileType = TileType.Dune;
+            else if (Input.IsActionPressed(InputActionDunes))
+                _activeTileType = TileType.Dunes;
             else if (Input.IsActionPressed(InputActionCanyon))
                 _activeTileType = TileType.Canyon;
 
-            if (_activeTileLabel is not null)
-            {
-                _activeTileLabel.BbcodeText = $"[b]{_activeTileType}[/b]";
-            }
+            _editorMenu?.UpdateActiveTileType(_activeTileType);
+            _editorMenu?.UpdateCounts(_tiles, _map.TilePool);
         }
+
+        private Map _map = null!;
+        private TerrainRepository _repository = null!;
+        private TileStorage<Tile> _tiles = null!;
+
+        private Tile? _activeTile;
+        private TileType _activeTileType = TileType.Tundra;
+
+        private EditorMenu? _editorMenu;
 
         #region Constants
 
         private const string InputActionTundra = "editor_tile_tundra";
-        private const string InputActionDune = "editor_tile_dunes";
         private const string InputActionRock = "editor_tile_rocks";
+        private const string InputActionDunes = "editor_tile_dunes";
         private const string InputActionCanyon = "editor_tile_canyon";
         private const string InputActionIncreaseTileCount = "editor_increase_tile_count";
         private const string InputActionDecreaseTileCount = "editor_decrease_tile_count";
-
-        private const string NodePathActiveTileLabel = "CameraRoot/CanvasLayer/EditorMenu/ActiveTileType";
-        private const string NodePathAvailableTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/AvailableTileCount";
-        private const string NodePathTundraTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/TundraTileCount";
-        private const string NodePathDuneTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/DuneTileCount";
-        private const string NodePathRockTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/RockTileCount";
-        private const string NodePathCanyonTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/CanyonTileCount";
 
         #endregion
     }

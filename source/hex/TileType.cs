@@ -30,7 +30,7 @@
 
         Tundra,
         Rocks,
-        Dune,
+        Dunes,
         Canyon
     }
 }
