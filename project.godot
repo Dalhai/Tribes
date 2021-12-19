@@ -15,16 +15,18 @@ _global_script_class_icons={
 [application]
 
 config/name="tribes_of_dust"
-run/main_scene="res://scenes/Scene.tscn"
+run/main_scene="res://scenes/main.tscn"
 
 [display]
 
+window/size/fullscreen=true
 window/vsync/use_vsync=false
 
 [global]
 
 mono=false
 debugger=false
+scene=false
 
 [input]
 

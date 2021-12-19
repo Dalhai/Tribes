@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://assets/shaders/ui/ui_shader.tres" type="Shader" id=1]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/uv_scale = Vector2( 0.002, 0.5 )
+shader_param/screen_scale = null
+shader_param/screen_size = Vector2( 1852, 633 )
+shader_param/opacity = null
