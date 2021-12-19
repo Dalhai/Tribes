@@ -23,12 +23,11 @@ namespace TribesOfDust
         private Tile? _activeTile = null;
         private TileType _activeTileType = TileType.Tundra;
 
-        private RichTextLabel? _activeTileLabel;
-        private RichTextLabel? _availableTileCountLabel;
-        private RichTextLabel? _tundraTileCountLabel;
-        private RichTextLabel? _duneTileCountLabel;
-        private RichTextLabel? _rockTileCountLabel;
-        private RichTextLabel? _canyonTileCountLabel;
+        private Label? _availableTileCountLabel;
+        private Label? _tundraTileCountLabel;
+        private Label? _duneTileCountLabel;
+        private Label? _rockTileCountLabel;
+        private Label? _canyonTileCountLabel;
 
         public GameManager()
         {
@@ -48,12 +47,11 @@ namespace TribesOfDust
 
             // Initialize user interface.
 
-            _activeTileLabel = GetNode<RichTextLabel>(NodePathActiveTileLabel);
-            _availableTileCountLabel = GetNode<RichTextLabel>(NodePathAvailableTileCountLabel);
-            _tundraTileCountLabel = GetNode<RichTextLabel>(NodePathTundraTileCountLabel);
-            _duneTileCountLabel = GetNode<RichTextLabel>(NodePathDuneTileCountLabel);
-            _rockTileCountLabel = GetNode<RichTextLabel>(NodePathRockTileCountLabel);
-            _canyonTileCountLabel = GetNode<RichTextLabel>(NodePathCanyonTileCountLabel);
+            _availableTileCountLabel = GetNode<Label>(NodePathAvailableTileCountLabel);
+            _tundraTileCountLabel = GetNode<Label>(NodePathTundraTileCountLabel);
+            _duneTileCountLabel = GetNode<Label>(NodePathDuneTileCountLabel);
+            _rockTileCountLabel = GetNode<Label>(NodePathRockTileCountLabel);
+            _canyonTileCountLabel = GetNode<Label>(NodePathCanyonTileCountLabel);
 
             UpdateTileCounts();
             UpdateActiveTileType();
@@ -212,23 +210,23 @@ namespace TribesOfDust
         {
             if (_availableTileCountLabel is not null)
             {
-                _availableTileCountLabel.Text = $"Available: {_tiles.Count(tile => tile.Value.Key == TileType.Open)}";
+                _availableTileCountLabel.Text = _tiles.Count(tile => tile.Value.Key == TileType.Open).ToString();
             }
             if (_tundraTileCountLabel is not null)
             {
-                _tundraTileCountLabel.Text = $"Tundra: {_map.TilePool[TileType.Tundra]}";
+                _tundraTileCountLabel.Text = _map.TilePool[TileType.Tundra].ToString();
             }
             if (_duneTileCountLabel is not null)
             {
-                _duneTileCountLabel.Text = $"Dune: {_map.TilePool[TileType.Dune]}";
+                _duneTileCountLabel.Text = _map.TilePool[TileType.Dune].ToString();
             }
             if (_rockTileCountLabel is not null)
             {
-                _rockTileCountLabel.Text = $"Rock: {_map.TilePool[TileType.Rocks]}";
+                _rockTileCountLabel.Text = _map.TilePool[TileType.Rocks].ToString();
             }
             if (_canyonTileCountLabel is not null)
             {
-                _canyonTileCountLabel.Text = $"Canyon: {_map.TilePool[TileType.Canyon]}";
+                _canyonTileCountLabel.Text = _map.TilePool[TileType.Canyon].ToString();
             }
         }
         private void UpdateActiveTileType()
@@ -241,11 +239,6 @@ namespace TribesOfDust
                 _activeTileType = TileType.Dune;
             else if (Input.IsActionPressed(InputActionCanyon))
                 _activeTileType = TileType.Canyon;
-
-            if (_activeTileLabel is not null)
-            {
-                _activeTileLabel.BbcodeText = $"[b]{_activeTileType}[/b]";
-            }
         }
 
         #region Constants
@@ -257,13 +250,11 @@ namespace TribesOfDust
         private const string InputActionIncreaseTileCount = "editor_increase_tile_count";
         private const string InputActionDecreaseTileCount = "editor_decrease_tile_count";
 
-        private const string NodePathActiveTileLabel = "CameraRoot/CanvasLayer/EditorMenu/ActiveTileType";
-        private const string NodePathAvailableTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/AvailableTileCount";
-        private const string NodePathTundraTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/TundraTileCount";
-        private const string NodePathDuneTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/DuneTileCount";
-        private const string NodePathRockTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/RockTileCount";
-        private const string NodePathCanyonTileCountLabel = "CameraRoot/CanvasLayer/EditorMenu/CanyonTileCount";
-
+        private const string NodePathAvailableTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/AvailableTileCount/Count";
+        private const string NodePathTundraTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/TundraTileCount/Count";
+        private const string NodePathDuneTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/DunesTileCount/Count";
+        private const string NodePathRockTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/RockTileCount/Count";
+        private const string NodePathCanyonTileCountLabel = "CameraRoot/CanvasLayer/Margins/EditorMenu/CanyonTileCount/Count";
         #endregion
     }
 }

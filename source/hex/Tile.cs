@@ -3,13 +3,29 @@ using System;
 using Godot;
 using GodotJson = Godot.Collections.Dictionary;
 
-using TribesOfDust.Utils.IO;
 using TribesOfDust.Data.Assets;
 
 namespace TribesOfDust.Hex
 {
     public class Tile : Sprite
     {
+        public Tile()
+        {
+            // Default Zero Coordinates
+
+            Coordinates = AxialCoordinate.Zero;
+
+            // Setup empty defaults for asset values
+
+            Key = TileType.Unknown;
+            Scale = Vector2.Zero;
+
+            // Position tile according to specified coordinates
+
+            Centered = true;
+            Position = HexConversions.HexToWorld(Coordinates, Terrain.ExpectedSize);
+        }
+
         public Tile(AxialCoordinate coordinates, Terrain asset)
         {
             Coordinates = coordinates;
@@ -95,85 +111,6 @@ namespace TribesOfDust.Hex
         public void Disconnect(TileDirection direction)
         {
             _connections &= ~direction;
-        }
-
-        #endregion
-        #region Serialization
-
-        /// <summary>
-        /// Serialize the tile into a godot JSON dictionary.
-        /// </summary>
-        /// <returns>The tile as a dictionary.</returns>
-        public GodotJson Serialize()
-        {
-            var serializedCoordinates = Json.Serialize(Coordinates);
-            var serializedScale = Json.Serialize(Scale);
-            var serializedTexture = Texture.ResourcePath;
-            var serializedType = Key.ToString();
-
-            return new()
-            {
-                {nameof(Coordinates).ToLower(), serializedCoordinates},
-                {nameof(Scale).ToLower(), serializedScale},
-                {nameof(Texture).ToLower(), serializedTexture},
-                {nameof(Type).ToLower(), serializedType}
-            };
-        }
-
-        /// <summary>
-        /// Try to deserialize a <see cref="Tile"/> from a godot JSON dictionary.
-        /// </summary>
-        ///
-        /// <param name="json">The input JSON dictionary.</param>
-        /// <param name="tile">The output tile, or null, if unparseable.</param>
-        //
-        /// <returns>True, if the tile could be deserialized, false otherwise.</returns>
-        public static bool TryDeserialize(GodotJson json, out Tile? tile)
-        {
-            tile = null;
-
-            string keyCoordinates = nameof(Coordinates).ToLower();
-            string keyScale = nameof(Scale).ToLower();
-            string keyTexture = nameof(Texture).ToLower();
-            string keyType = nameof(Type).ToLower();
-
-            // Check if all necessary keys exist
-
-            if (!json.Contains(keyCoordinates) || !json.Contains(keyScale) || !json.Contains(keyTexture) || !json.Contains(keyType))
-            {
-                return false;
-            }
-
-            // Check if the texture can be loaded
-
-            Texture texture = GD.Load<Texture>((string) json[keyTexture]);
-
-            if (texture == null)
-            {
-                return false;
-            }
-
-            // Check if the scale and coordinates can be deserialized
-
-            if (json[keyCoordinates] is not GodotJson coordinatesJson || !Json.TryDeserialize(coordinatesJson, out AxialCoordinate coordinates))
-            {
-                return false;
-            }
-
-            if (json[keyScale] is not GodotJson scaleJson || !Json.TryDeserialize(scaleJson, out Vector2 scale))
-            {
-                return false;
-            }
-
-            // Check if the tile type can be deserialized
-
-            if (json[keyType] is not string typeJson || !Enum.TryParse(typeJson, out TileType type))
-            {
-                return false;
-            }
-
-            tile = new (coordinates, type, texture, scale);
-            return true;
         }
 
         #endregion
