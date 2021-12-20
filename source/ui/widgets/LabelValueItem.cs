@@ -1,7 +1,7 @@
 using Godot;
 using static System.Diagnostics.Debug;
 
-namespace TribesOfDust.UI
+namespace TribesOfDust.UI.Widgets
 {
     public class LabelValueItem : Control
     {

@@ -6,8 +6,9 @@ using System.Linq;
 
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
+using TribesOfDust.UI.Widgets;
 
-namespace TribesOfDust.UI
+namespace TribesOfDust.UI.Menus
 {
     public class EditorMenu : Control
     {
