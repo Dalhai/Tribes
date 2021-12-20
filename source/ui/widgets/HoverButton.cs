@@ -1,0 +1,68 @@
+using Godot;
+
+namespace TribesOfDust.UI
+{
+    public class HoverButton : Label
+    {
+        /// <summary>
+        ///  The item to be modulated, if any.
+        ///  If left unassinged, no item will be modulated.
+        /// </summary>
+        [Export] 
+        public NodePath? ModulationColored;
+
+        /// <summary>
+        ///  The item to have its' font colored, if any.
+        ///  If left unassigned, no item will have its' font color adjusted.
+        ///  If assigend to anything but a label, no item will have its' font color adjusted.
+        /// </summary>
+        [Export]
+        public NodePath? FontColored;
+
+        [Export]
+        public Color HoverColor
+        {
+            get => _hoverColor;
+            set => _hoverColor = value;
+        }
+
+        public override void _EnterTree()
+        {   
+            base._EnterTree();
+
+            _modulationColorTarget = GetNodeOrNull<Control>(ModulationColored);
+            _fontColorTarget = GetNodeOrNull<Label>(FontColored);
+
+            if (_modulationColorTarget is not null)
+                _modulationColor = _modulationColorTarget.Modulate;
+
+            if (_fontColorTarget is not null)
+                _fontColor = _fontColorTarget.GetColor("font_color");
+        }
+
+        virtual public void OnMouseEntered() 
+        {
+            if (_modulationColorTarget is not null)
+                _modulationColorTarget.Modulate = HoverColor;
+
+            if (_fontColorTarget is not null)
+                _fontColorTarget.AddColorOverride("font_color", HoverColor);
+        }
+
+        virtual public void OnMouseExited()
+        {
+            if (_modulationColorTarget is not null)
+                _modulationColorTarget.Modulate = _modulationColor;
+
+            if (_fontColorTarget is not null)
+                _fontColorTarget.AddColorOverride("font_color", _fontColor);
+        }
+
+        private Color _hoverColor = Colors.Orange;
+        private Color _modulationColor = Colors.White;
+        private Color _fontColor = Colors.White;
+
+        private Label? _fontColorTarget;
+        private Control? _modulationColorTarget;
+    }
+}

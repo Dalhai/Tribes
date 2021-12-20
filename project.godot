@@ -15,11 +15,14 @@ _global_script_class_icons={
 [application]
 
 config/name="tribes_of_dust"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/root.tscn"
+
+[audio]
+
+default_bus_layout="res://assets/music/bus_layout.tres"
 
 [display]
 
-window/size/fullscreen=true
 window/vsync/use_vsync=false
 
 [global]

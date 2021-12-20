@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/textures/ui/widgets/button_3.png" type="Texture" id=1]
+[ext_resource path="res://assets/fonts/great_vibes.tres" type="DynamicFont" id=2]
+[ext_resource path="res://source/ui/widgets/HoverButton.cs" type="Script" id=3]
+
+[node name="Label" type="Label"]
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Label"
+align = 1
+valign = 1
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+ModulationColored = NodePath("")
+FontColored = NodePath(".")
+
+[node name="Border" type="NinePatchRect" parent="."]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -5.0
+margin_top = -10.0
+margin_right = 5.0
+margin_bottom = 10.0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+texture = ExtResource( 1 )
+region_rect = Rect2( 23, 20, 343, 136 )
+patch_margin_left = 16
+patch_margin_top = 14
+patch_margin_right = 17
+patch_margin_bottom = 17
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="mouse_entered" from="Border" to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="Border" to="." method="OnMouseExited"]
