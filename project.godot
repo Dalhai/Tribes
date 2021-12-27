@@ -15,7 +15,11 @@ _global_script_class_icons={
 [application]
 
 config/name="tribes_of_dust"
-run/main_scene="res://scenes/Scene.tscn"
+run/main_scene="res://scenes/root.tscn"
+
+[audio]
+
+default_bus_layout="res://assets/music/bus_layout.tres"
 
 [display]
 
@@ -25,6 +29,7 @@ window/vsync/use_vsync=false
 
 mono=false
 debugger=false
+scene=false
 
 [input]
 

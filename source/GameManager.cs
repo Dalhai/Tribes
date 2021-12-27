@@ -9,7 +9,7 @@ using TribesOfDust.Data.Assets;
 using TribesOfDust.Data.Repositories;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
-using TribesOfDust.UI;
+using TribesOfDust.UI.Menus;
 using TribesOfDust.Utils.Collections;
 
 namespace TribesOfDust
