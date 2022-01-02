@@ -13,3 +13,4 @@ namespace TribesOfDust.UI.Pages
         public void OnQuitPressed() => GetTree().Quit();
     }
 }
+

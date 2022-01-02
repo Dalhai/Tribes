@@ -72,7 +72,6 @@ namespace TribesOfDust.UI.Navigation
                 selectedTarget.Name = "Scene";
 
                 Root.AddChild(selectedTarget, true);
-                Root.GetTree().CurrentScene = selectedTarget;
 
                 return true;
             }

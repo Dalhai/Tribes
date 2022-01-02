@@ -1,7 +1,12 @@
 using Godot;
+using System;
+using System.Linq;
+
+using TribesOfDust.Utils;
 
 namespace TribesOfDust.UI
 {
+    [Tool]
     public class Root : Node 
     {
         /// <summary>
@@ -30,14 +35,5 @@ namespace TribesOfDust.UI
         /// Gets the current scene node if there is any.
         /// </summary>
         public Node2D? Scene => GetNodeOrNull<Node2D>("Scene");
-
-        public override void _EnterTree()
-        {
-            if (Scene is not null)
-                GetTree().CurrentScene = Scene;
-
-            base._EnterTree();
-        }
-
     }
 }
