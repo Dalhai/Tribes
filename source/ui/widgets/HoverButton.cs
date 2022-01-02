@@ -29,6 +29,8 @@ namespace TribesOfDust.UI.Widgets
             set => _hoverColor = value;
         }
 
+        public bool IsHovered => _isHovered;
+
         public override void _EnterTree()
         {   
             base._EnterTree();
