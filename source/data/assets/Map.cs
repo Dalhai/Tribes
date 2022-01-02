@@ -67,7 +67,7 @@ namespace TribesOfDust.Data.Assets
         /// <returns>A new runtime map based on the map template.</returns>
         public TileStorage<Tile> Generate(TerrainRepository repository)
         {
-            var tiles = _tiles.Select(tile => new Tile(tile.Key, repository.GetAsset(tile.Value)));
+            var tiles = _tiles.Select(tile => Tile.Create(tile.Key, repository.GetAsset(tile.Value, 0)));
             var storage = new TileStorage<Tile>();
 
             foreach (var tile in tiles)

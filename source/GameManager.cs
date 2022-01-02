@@ -16,7 +16,6 @@ namespace TribesOfDust
 {
     public class GameManager : Node2D
     {
-
         [Export]
         public NodePath? EditorMenuPath;
 
@@ -133,11 +132,13 @@ namespace TribesOfDust
                     var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
                     try
                     {
-                        var hexTile = new Tile(hex, _repository.GetAsset(_activeTileType));
+                        var hexTile = Tile.Create(hex, _repository.GetAsset(_activeTileType));
                         var tile = _tiles.Get(hex);
 
                         _tiles.Remove(hex);
-                        RemoveChild(tile);
+
+                        if (tile is not null)
+                            RemoveChild(tile);
 
                         _tiles.Add(hexTile.Coordinates, hexTile);
                         AddChild(hexTile);
@@ -156,13 +157,15 @@ namespace TribesOfDust
                     var tile = _tiles.Get(hex);
 
                     _tiles.Remove(hex);
-                    RemoveChild(tile);
+
+                    if (tile is not null)
+                        RemoveChild(tile);
 
                     if (tile is null || tile.Key != TileType.Open)
                     {
                         try
                         {
-                            var hexTile = new Tile(hex, _repository.GetAsset(TileType.Open));
+                            var hexTile = Tile.Create(hex, _repository.GetAsset(TileType.Open));
                             _tiles.Add(hexTile.Coordinates, hexTile);
                             AddChild(hexTile);
                         }
