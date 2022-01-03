@@ -35,6 +35,6 @@ namespace TribesOfDust.Data.Config
         /// <summary>
         /// The material to be used by tiles using this tile configuration.
         /// </summary>
-        public CanvasItemMaterial? Material;
+        public ShaderMaterial? Material;
     }
 }
