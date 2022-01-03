@@ -1,0 +1,59 @@
+using Godot;
+
+using TribesOfDust.UI.Navigation;
+
+namespace TribesOfDust.Core 
+{
+    public class Context 
+    {   
+        /// <summary>
+        /// Try to get the current context based on the godot viewport.
+        /// </summary>
+        /// <param name="start">The child node in the tree to start from.</param>
+        /// <returns>The root node context, if found, null otherwise.</returns>
+        public static Context? Get(Node start) => Root.Get(start)?.Context;
+
+        public Context(Root root) 
+        {
+            Root = root;
+
+            // Initialize Subcontexts
+
+            Game = new(this);
+            Navigator = new(this);
+        }
+
+        /// <summary>
+        /// Route Args for the last Route taken.
+        /// 
+        /// The information contained here comes from the latest call to the root
+        /// navigator to change the scene. You can use these route arguments, if
+        /// available, to access information that has beeen passed from the previous
+        /// location.
+        /// </summary>
+        public RouteArgs? Route { get; set; }
+
+        /// <summary>
+        /// Root Navigator
+        /// 
+        /// Use this to change between different scenes. For example, to get to the
+        /// main menu from anywhere, or to get to the editor or the game menu from 
+        /// anywhere as well. Note that some pages expect certain states to be set
+        /// on the route args, read up on the individual page route args in the 
+        /// different pages.
+        /// </summary>
+        public Navigator Navigator { get; init; }
+
+        /// <summary>
+        /// Game Context
+        /// 
+        /// Contains information about the current game, including entities, state,
+        /// game mode (editor or played) and others. If you need to know about what's
+        /// going on on the map, this is the entity to check. It's a facade for everything
+        /// that's going on and provides most of the information you need.
+        /// </summary>
+        public Game Game { get; init; }
+
+        public readonly Root Root;
+    }
+}
