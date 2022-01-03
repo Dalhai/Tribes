@@ -1,5 +1,8 @@
 using Godot;
 
+using System.Linq;
+using System.Collections.Generic;
+
 using TribesOfDust.Data.Assets;
 using TribesOfDust.Data.Config;
 
@@ -49,7 +52,7 @@ namespace TribesOfDust.Hex
             Key = terrain.Key;
             Texture = terrain.Texture;
 
-            _connections = (TileDirection) terrain.Connections;
+            _connections = (TileDirection)terrain.Connections;
             _direction = terrain.Direction;
 
             // Scale tile according to specified texture
@@ -107,8 +110,45 @@ namespace TribesOfDust.Hex
         }
 
         #endregion
+        #region Display
+
+        public void AddOverlayColor(Color color) 
+        {
+            _overlayColors.Add(color);
+            UpdateOverlayColor();
+        }
+
+        public void RemoveOverlayColor(Color color)
+        {
+            _overlayColors.Remove(color);
+            UpdateOverlayColor();
+        }
+
+        public void ClearOverlayColor()
+        {
+            _overlayColors.Clear();
+            UpdateOverlayColor();
+        }
+
+        private void UpdateOverlayColor() 
+        {
+            if (_overlayColors.Count == 0)
+            {
+                Modulate = Colors.White;
+            }
+            else
+            {
+                // Figure out the color mix and assign it to the modulation color
+                Modulate = _overlayColors.Aggregate((Next, Current) => Next + Current);
+                Modulate /= _overlayColors.Count;
+            }
+        }
+
+        #endregion
 
         private TileDirection _connections = TileDirection.None;
         private TileDirection _direction = TileDirection.None;
+
+        private readonly List<Color> _overlayColors = new();
     }
 }
