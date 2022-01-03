@@ -23,6 +23,7 @@ namespace TribesOfDust.Hex.Storage
         /// <param name="coordinates">The coordinates of the item to remove.</param>
         /// <returns>True, if the item was removed, false otherwise.</returns>
         bool Remove(AxialCoordinate coordinates);
+        void Clear();
 
         #endregion
     }

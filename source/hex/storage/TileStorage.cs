@@ -91,6 +91,19 @@ namespace TribesOfDust.Hex.Storage
             return true;
         }
 
+        public virtual void Clear()
+        {
+            // Clone the list so we don't end up removing while iterating.
+            // Unfortunately very inefficient if we clone often. Will be tackled later on.
+
+            var coordinates = new List<AxialCoordinate>(Coordinates);
+
+            // Iterate through all coordinates and remove them individually to trigger events.
+
+            foreach (var coordinate in coordinates)
+                Remove(coordinate);
+        }
+
         #endregion
         #region Properties
 
