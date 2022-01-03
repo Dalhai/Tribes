@@ -1,14 +1,15 @@
 using System;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 
 using Godot;
 
+using TribesOfDust.Core;
 using TribesOfDust.Data.Assets;
-using TribesOfDust.Data.Repositories;
-using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
+using TribesOfDust.Hex;
 using TribesOfDust.UI.Menus;
 using TribesOfDust.Utils.Collections;
 
@@ -21,32 +22,49 @@ namespace TribesOfDust
 
         public override void _Ready()
         {
-            _repository = new TerrainRepository();
-            _repository.Load();
-
-            _map = Load();
-            _tiles = _map.Generate(_repository);
-
-            foreach (var tile in _tiles)
+            _context = Context.Get(this);
+            if (_context is not null)
             {
-                AddChild(tile.Value);
+                // Load map and register level with context
+
+                _context.Game.Level = new(_context.Game);
+                _context.Game.Level.Map = Load();
+
+                foreach (var tile in _context.Game.Level.Tiles)
+                {
+                    AddChild(tile.Value);
+                }
+
+                // Register overlays with context   
+                
+                _context.Game.Display = new(_context.Game);
+                _context.Game.Display?.AddOverlay(_activeTileOverlay);
+                _context.Game.Display?.AddOverlay(_activeTypeOverlay);
+
+                _context.Game.Level.Tiles.Added += (_, _) => UpdateTypeOverlay();
             }
 
             // Initialize user interface.
 
             _editorMenu = GetNode<EditorMenu>(EditorMenuPath);
-            UpdateEditorMenu();
+
+            // Initialize render state
+
+            UpdateActiveType();
+            UpdateTypeOverlay();
 
             base._Ready();
         }
 
         public override void _ExitTree()
         {
-            Save(_map);
+            if (_context?.Game.Level is not null)
+                Save(_context.Game.Level);
+
             base._ExitTree();
         }
 
-        private void Save(Map map)
+        private void Save(Level level)
         {
             var targetFile = new File();
 
@@ -56,10 +74,11 @@ namespace TribesOfDust
             // If opening the file worked, serialize the template map and store it in the file as JSON.
             if (fileOpenError == Godot.Error.Ok)
             {
-                map.Tiles.Clear();
-                foreach (var tile in _tiles)
+                level.Map ??= new("Default", targetFile.GetPath());
+                level.Map.Tiles.Clear();
+                foreach (var tile in level.Tiles)
                 {
-                    _map.Tiles[tile.Key] = tile.Value.Key;
+                    level.Map.Tiles[tile.Key] = tile.Value.Key;
                 }
 
                 var settings = new XmlWriterSettings
@@ -72,7 +91,7 @@ namespace TribesOfDust
                 using var xml = XmlWriter.Create(str, settings);
 
                 var serializer = new DataContractSerializer(typeof(Map));
-                serializer.WriteObject(xml, map);
+                serializer.WriteObject(xml, level.Map);
                 xml.Flush();
 
                 targetFile.StoreLine(str.ToString());
@@ -108,39 +127,54 @@ namespace TribesOfDust
 
         public override void _Input(InputEvent inputEvent)
         {
+            var tiles = _context?.Game.Level?.Tiles;
+            var repo = _context?.Game.Repositories?.Terrain;
+
+            // Early exit if there are no tiles currently.
+
+            if (tiles is null || repo is null) 
+                return;
+
+            // Update the active tile and color it accordingly.
+            // The active tile is the tile the mouse cursor is currently hovering over.
+            // The active tile is colored for highlighting purposes only, this will be removed later on.
+
             if (inputEvent is InputEventMouseMotion)
             {
                 var world = GetGlobalMousePosition();
                 var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
 
-                if (_activeTile?.Coordinates != hex && _tiles.Contains(hex))
+                if (_activeTileCoordinates != hex)
                 {
-                    if (_activeTile is not null) _activeTile.Modulate = Colors.White;
-
-                    _activeTile = _tiles.Get(hex);
-
-                    if (_activeTile is not null) _activeTile.Modulate = Colors.Aqua;
+                    _activeTileCoordinates = hex;
+                    _activeTileOverlay.Clear();
+                    _activeTileOverlay.Add(hex, Colors.Aqua);
                 }
             }
 
+            // Add and remove tiles on mouse clicks.
+
             if (inputEvent is InputEventMouseButton mouseButton)
             {
-                // Check left mouse button pressed and add selected tile type.
+                // Add new tiles or replace existing ones on left mouse click.
+                // Existing tiles of a type are replaced with new types.
+                // Existing tiles of a type are replaced with a new variation of the same type.
+
                 if (mouseButton.Pressed && mouseButton.ButtonIndex == 1)
                 {
                     var world = GetGlobalMousePosition();
                     var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
                     try
                     {
-                        var hexTile = Tile.Create(hex, _repository.GetAsset(_activeTileType));
-                        var tile = _tiles.Get(hex);
+                        var hexTile = Tile.Create(hex, repo.GetAsset(_activeTileType));
+                        var tile = tiles.Get(hex);
 
-                        _tiles.Remove(hex);
+                        tiles.Remove(hex);
 
                         if (tile is not null)
                             RemoveChild(tile);
 
-                        _tiles.Add(hexTile.Coordinates, hexTile);
+                        tiles.Add(hexTile.Coordinates, hexTile);
                         AddChild(hexTile);
                     }
                     catch (ArgumentException exception)
@@ -148,15 +182,17 @@ namespace TribesOfDust
                         GD.PrintErr(exception.Message);
                     }
                 }
-                // Check right mouse button pressed and add open tile, if the current tile is not of open type.
-                // Check right mouse button pressed and remove tile, if the current tile is of open type.
+
+                // Remove open tiles on right mouse click.
+                // Remove other tiles on right mouse click and replace them with an open tile.
+
                 else if (mouseButton.Pressed && mouseButton.ButtonIndex == 2)
                 {
                     var world = GetGlobalMousePosition();
                     var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
-                    var tile = _tiles.Get(hex);
+                    var tile = tiles.Get(hex);
 
-                    _tiles.Remove(hex);
+                    tiles.Remove(hex);
 
                     if (tile is not null)
                         RemoveChild(tile);
@@ -165,8 +201,8 @@ namespace TribesOfDust
                     {
                         try
                         {
-                            var hexTile = Tile.Create(hex, _repository.GetAsset(TileType.Open));
-                            _tiles.Add(hexTile.Coordinates, hexTile);
+                            var hexTile = Tile.Create(hex, repo.GetAsset(TileType.Open));
+                            tiles.Add(hexTile.Coordinates, hexTile);
                             AddChild(hexTile);
                         }
                         catch (ArgumentException exception)
@@ -177,16 +213,12 @@ namespace TribesOfDust
                 }
             }
 
-            UpdateEditorMenu();
+            UpdateActiveType();
         }
 
-        private void UpdateEditorMenu()
+        private void UpdateActiveType()
         {
-            if (Input.IsActionPressed(InputActionIncreaseTileCount))
-                _map.TilePool.UpdateOrAdd(_activeTileType, count => count + 1, 1);
-
-            if (Input.IsActionPressed(InputActionDecreaseTileCount))
-                _map.TilePool.Update(_activeTileType, count => Math.Max(0, count - 1));
+            TileType previousTileType = _activeTileType;
 
             if (Input.IsActionPressed(InputActionTundra))
                 _activeTileType = TileType.Tundra;
@@ -197,18 +229,54 @@ namespace TribesOfDust
             else if (Input.IsActionPressed(InputActionCanyon))
                 _activeTileType = TileType.Canyon;
 
-            _editorMenu?.UpdateActiveTileType(_activeTileType);
-            _editorMenu?.UpdateCounts(_tiles, _map.TilePool);
+            if (_activeTileType != previousTileType)
+                UpdateTypeOverlay();
+
+            UpdateEditorMenu();
         }
 
-        private Map _map = null!;
-        private TerrainRepository _repository = null!;
-        private TileStorage<Tile> _tiles = null!;
+        private void UpdateTypeOverlay()
+        {
+            _activeTypeOverlay.Clear();
 
-        private Tile? _activeTile;
+            var tiles = _context?.Game.Level?.Tiles;
+            var overlay = tiles?.Where(tile => tile.Value.Key == _activeTileType);
+
+            if (overlay is not null)
+            {
+                foreach(var tile in overlay)
+                    _activeTypeOverlay.Add(tile.Key, Colors.LightBlue);
+            }
+        }
+
+        private void UpdateEditorMenu()
+        {
+            var tiles = _context?.Game.Level?.Tiles;
+            var map = _context?.Game.Level?.Map;
+
+            // Early exit if the map doesn't currently exist.
+
+            if (tiles is null || map is null)
+                return;
+
+            if (Input.IsActionPressed(InputActionIncreaseTileCount))
+                map.TilePool.UpdateOrAdd(_activeTileType, count => count + 1, 1);
+
+            if (Input.IsActionPressed(InputActionDecreaseTileCount))
+                map.TilePool.Update(_activeTileType, count => Math.Max(0, count - 1));
+
+            _editorMenu?.UpdateActiveTileType(_activeTileType);
+            _editorMenu?.UpdateCounts(tiles, map.TilePool);
+        }
+
+        private AxialCoordinate? _activeTileCoordinates;
         private TileType _activeTileType = TileType.Tundra;
 
         private EditorMenu? _editorMenu;
+
+        private Context? _context;
+        private readonly ITileStorage<Color> _activeTileOverlay = new TileStorage<Color>();
+        private readonly ITileStorage<Color> _activeTypeOverlay = new TileStorage<Color>();
 
         #region Constants
 
