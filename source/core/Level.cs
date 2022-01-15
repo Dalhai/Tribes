@@ -1,14 +1,26 @@
-using TribesOfDust.Data.Assets;
+
+using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
+using TribesOfDust.Data.Assets;
 
 namespace TribesOfDust.Core
 {
     public class Level
     {
-        public Level(ITileStorage<Terrain> terrain)
+        public Level(Game game)
         {
-            Terrain = terrain;
+            Game = game;
+
+            // Initialize persistent storages.
+
+            Tiles = new TileStorage<Tile>();
         }
+
+        /// <summary>
+        /// The game this level belongs to.
+        /// The game can be used to walk the context tree up.
+        /// </summary>
+        public readonly Game Game;
 
         /// <summary>
         /// The base terrain of the level.
@@ -18,6 +30,34 @@ namespace TribesOfDust.Core
         /// at coordinates that are not assigned a terrain, you won't get a rendered tile if the
         /// corresponding terrain is not assigned etc.
         /// </summary>
-        public ITileStorage<Terrain> Terrain { get; init; }
+        public ITileStorage<Tile> Tiles { get; init; }
+
+        /// <summary>
+        /// The currently loaded map asset
+        /// 
+        /// This represents information about the current level in its' base state. The level itself
+        /// might have already changed way past what has initially been loaded through this map.
+        /// Consider this entity the entry point of the current level, not the current state.
+        /// </summary>
+        public Map? Map 
+        {
+            get => _map;
+            set 
+            {
+                // Unload the previous map.
+
+                Tiles.Clear();
+
+                // Load the map and generate tiles.
+                // Load the map using the default terrain repository.
+
+                _map = value;
+                if (_map is not null)
+                {
+                    _map.Generate(Game.Repositories.Terrain, Tiles);
+                }
+            }
+        }
+        private Map? _map;
     }
 }

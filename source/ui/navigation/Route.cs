@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Navigation
 {

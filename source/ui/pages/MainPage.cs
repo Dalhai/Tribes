@@ -1,4 +1,5 @@
 using Godot;
+using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Pages
 {
@@ -13,3 +14,4 @@ namespace TribesOfDust.UI.Pages
         public void OnQuitPressed() => GetTree().Quit();
     }
 }
+

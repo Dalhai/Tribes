@@ -1,15 +1,26 @@
-using System;
-
 using Godot;
-using GodotJson = Godot.Collections.Dictionary;
+
+using System.Linq;
+using System.Collections.Generic;
 
 using TribesOfDust.Data.Assets;
+using TribesOfDust.Data.Config;
 
 namespace TribesOfDust.Hex
 {
     public class Tile : Sprite
     {
-        public Tile()
+        #region Factory
+
+        public static Tile Create(AxialCoordinate coordinates, Terrain terrain)
+        {
+            return new(TileConfig.Default, coordinates, terrain);
+        }
+
+        #endregion
+        #region Constructors
+
+        private Tile()
         {
             // Default Zero Coordinates
 
@@ -26,21 +37,27 @@ namespace TribesOfDust.Hex
             Position = HexConversions.HexToWorld(Coordinates, Terrain.ExpectedSize);
         }
 
-        public Tile(AxialCoordinate coordinates, Terrain asset)
+        private Tile(TileConfig config, AxialCoordinate coordinates, Terrain terrain)
         {
+            // Initialize tile with tile config shared properties
+
+            Material = config.Material;
+
+            // Initialize tile with proper coordinates
+
             Coordinates = coordinates;
 
             // Initialize tile with properties from tile asset
 
-            Key = asset.Key;
-            Texture = asset.Texture;
+            Key = terrain.Key;
+            Texture = terrain.Texture;
 
-            _connections = (TileDirection) asset.Connections;
-            _direction = asset.Direction;
+            _connections = (TileDirection)terrain.Connections;
+            _direction = terrain.Direction;
 
             // Scale tile according to specified texture
 
-            Scale = new Vector2(asset.WidthScaleToExpected, asset.HeightScaleToExpected);
+            Scale = new Vector2(terrain.WidthScaleToExpected, terrain.HeightScaleToExpected);
 
             // Position tile according to specified coordinates
 
@@ -48,39 +65,18 @@ namespace TribesOfDust.Hex
             Position = HexConversions.HexToWorld(coordinates, Terrain.ExpectedSize);
         }
 
-        private Tile(AxialCoordinate coordinates, TileType type, Texture texture, Vector2 scale)
-        {
-            Coordinates = coordinates;
-
-            // Initialize tile with properties that would normally be provided by a tile asset
-
-            Key =  type;
-            Texture = texture;
-
-            _connections = TileDirection.None;
-            _direction = TileDirection.None;
-
-            // Initialize the tile scale explicitly
-
-            Scale = scale;
-
-            // Popsition tile according to specified coordinates
-
-            Centered = true;
-            Position = HexConversions.HexToWorld(coordinates, Terrain.ExpectedSize);
-        }
-
+        #endregion
         #region Queries
 
         public float Size => Width / 2.0f;
         public float Width => Texture.GetWidth();
         public float Height => Texture.GetHeight();
 
-        public TileType Key { get; }
+        public TileType Key { get; private set; }
         public bool IsBlocked => Key == TileType.Blocked;
         public bool IsOpen => Key == TileType.Open;
 
-        public AxialCoordinate Coordinates { get; }
+        public AxialCoordinate Coordinates { get; private set; }
 
         #endregion
         #region Connectivity
@@ -114,8 +110,45 @@ namespace TribesOfDust.Hex
         }
 
         #endregion
+        #region Display
+
+        public void AddOverlayColor(Color color) 
+        {
+            _overlayColors.Add(color);
+            UpdateOverlayColor();
+        }
+
+        public void RemoveOverlayColor(Color color)
+        {
+            _overlayColors.Remove(color);
+            UpdateOverlayColor();
+        }
+
+        public void ClearOverlayColor()
+        {
+            _overlayColors.Clear();
+            UpdateOverlayColor();
+        }
+
+        private void UpdateOverlayColor() 
+        {
+            if (_overlayColors.Count == 0)
+            {
+                Modulate = Colors.White;
+            }
+            else
+            {
+                // Figure out the color mix and assign it to the modulation color
+                Modulate = _overlayColors.Aggregate((Next, Current) => Next + Current);
+                Modulate /= _overlayColors.Count;
+            }
+        }
+
+        #endregion
 
         private TileDirection _connections = TileDirection.None;
         private TileDirection _direction = TileDirection.None;
+
+        private readonly List<Color> _overlayColors = new();
     }
 }

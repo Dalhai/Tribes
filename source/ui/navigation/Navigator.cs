@@ -1,21 +1,36 @@
 using Godot;
+
 using System;
-using System.Linq;
 using System.Collections.Generic;
+
+using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Navigation
 {
     public class Navigator : Godot.Object
     {
-        public Navigator(Root root) => Root = root;
+        public Navigator(Context context) => Context = context;
 
         /// <summary>
-        /// The root node to which nodes created through routes will be attached.
-        /// The root node is also used as the parent for all manually created node trees.
+        /// The context this navigator belongs to.
+        /// The context can be used to navigate the context tree.
         /// </summary>
-        public readonly Root Root;
+        public readonly Context Context;
+
+        /// <summary>
+        /// The routes stored in this navigator.
+        /// 
+        /// This dictionary of routes tells the navigator which routes are accessible and
+        /// how their corresponding root nodes are supposed to be constructed.
+        /// </summary>
         public readonly Dictionary<string, Route> Routes = new();
 
+        /// <summary>
+        /// Adds a new route to the navigator.
+        /// </summary>
+        /// 
+        /// <param name="route">The name under which the route can be found.</param>
+        /// <param name="createTarget">The factory function used to create the root node.</param>
         public void Route(string route, Func<Context, Node2D> createTarget)
         {
             if (Routes.ContainsKey(route))
@@ -24,14 +39,18 @@ namespace TribesOfDust.UI.Navigation
             Routes.Add(route, new(route, createTarget));
         }
 
+        /// <summary>
+        /// Goes to the specified route and updates the context route args.
+        /// </summary>
+        /// 
+        /// <param name="route">The route to take.</param>
+        /// <param name="args">The arguments to pass along.</param>
+        /// 
+        /// <returns>True, if the route was successfuly taken, false otherwise.</returns>
         public bool GoTo(string route, object? args = null)
         {
-            if (!Routes.ContainsKey(route) || Root is null)
+            if (!Routes.ContainsKey(route))
                 return false;
-
-            var sceneNode = Root.GetNodeOrNull<Node2D>("Scene");
-            if (sceneNode is not null)
-                Root.RemoveChild(sceneNode);
 
             var selectedRoute = Routes[route];
             var selectedRouteArgs = new RouteArgs() 
@@ -44,15 +63,16 @@ namespace TribesOfDust.UI.Navigation
             return GoToCommon(selectedRoute.CreateTarget, selectedRouteArgs);
         }
 
+        /// <summary>
+        /// Goes to a new scene without an associated route and updates the context route args.
+        /// </summary>
+        /// 
+        /// <param name="createTarget">The factory function for the new scene.</param>
+        /// <param name="args">The arguments to pass along.</param>
+        /// 
+        /// <returns>True, if the scene change was successful, false otherwise.</returns>
         public bool GoTo(Func<Context, Node2D> createTarget, object? args = null)
         {
-            if (Root is null)
-                return false;
-
-            var sceneNode = Root.GetNodeOrNull<Node2D>("Scene");
-            if (sceneNode is not null)
-                Root.RemoveChild(sceneNode);
-
             var selectedRouteArgs = new RouteArgs() 
             {
                 Name = string.Empty,
@@ -64,20 +84,14 @@ namespace TribesOfDust.UI.Navigation
 
         private bool GoToCommon(Func<Context, Node2D> createTarget, RouteArgs args)
         {
-            if (Root is not null)
-            {
-                Root.Context.Route = args;
+            Context.Route = args;
+            Context.Root.Scene = createTarget.Invoke(Context);
 
-                var selectedTarget = createTarget.Invoke(Root.Context);
-                selectedTarget.Name = "Scene";
+            // We signal success if a new scene was properly created and attached to the root node.
+            // If the scene wasn't attached, something must have gone wrong as we should never be
+            // in a situation where there is not scene node.
 
-                Root.AddChild(selectedTarget, true);
-                Root.GetTree().CurrentScene = selectedTarget;
-
-                return true;
-            }
-
-            return false;
+            return Context.Root.Scene != null;
         }
     }
 }

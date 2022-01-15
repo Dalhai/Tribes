@@ -60,6 +60,22 @@ namespace TribesOfDust.Data.Assets
         #region Generation
 
         /// <summary>
+        /// Fills a <see cref="TileStorage"/> with tiles from the map template.
+        /// </summary>
+        ///
+        /// <param name="repository">The tile asset repository providing assets for the template.</param>
+        /// <param name="storage">The tile storage to fill with new tiles.</param>
+        public void Generate(TerrainRepository repository, ITileStorage<Tile> storage)
+        {
+            var tiles = _tiles.Select(tile => Tile.Create(tile.Key, repository.GetAsset(tile.Value, 0)));
+
+            foreach (var tile in tiles)
+            {
+                storage.Add(tile.Coordinates, tile);
+            }
+        }
+
+        /// <summary>
         /// Generates a new <see cref="TileStorage"/> from the map template.
         /// </summary>
         ///
@@ -67,13 +83,9 @@ namespace TribesOfDust.Data.Assets
         /// <returns>A new runtime map based on the map template.</returns>
         public TileStorage<Tile> Generate(TerrainRepository repository)
         {
-            var tiles = _tiles.Select(tile => new Tile(tile.Key, repository.GetAsset(tile.Value)));
             var storage = new TileStorage<Tile>();
 
-            foreach (var tile in tiles)
-            {
-                storage.Add(tile.Coordinates, tile);
-            }
+            Generate(repository, storage);
 
             return storage;
         }

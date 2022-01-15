@@ -3,8 +3,8 @@
 [ext_resource path="res://assets/themes/menu.tres" type="Theme" id=1]
 [ext_resource path="res://assets/textures/ui/title.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/ui/paper.png" type="Texture" id=3]
-[ext_resource path="res://assets/shaders/ui/ui_material.tres" type="Material" id=4]
-[ext_resource path="res://source/ui/shader.gd" type="Script" id=5]
+[ext_resource path="res://assets/shaders/ui/mat_paper.tres" type="Material" id=4]
+[ext_resource path="res://source/ui/widgets/PaperPanel.cs" type="Script" id=5]
 [ext_resource path="res://scenes/ui/menus/main_menu.tscn" type="PackedScene" id=7]
 [ext_resource path="res://source/ui/pages/MainPage.cs" type="Script" id=8]
 
@@ -25,10 +25,6 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-u_scale = 0.1
-v_scale = 0.1
-screen_scale = 0.02
-opacity = 0.25
 
 [node name="Title" type="NinePatchRect" parent="CanvasLayer"]
 anchor_left = 0.2

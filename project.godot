@@ -30,6 +30,7 @@ window/vsync/use_vsync=false
 mono=false
 debugger=false
 scene=false
+debug=false
 
 [input]
 
@@ -129,10 +130,6 @@ zoom_out={
 [logging]
 
 file_logging/enable_file_logging=true
-
-[mono]
-
-debugger_agent/wait_for_debugger=true
 
 [rendering]
 

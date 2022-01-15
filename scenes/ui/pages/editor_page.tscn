@@ -4,8 +4,8 @@
 [ext_resource path="res://source/Camera2D.cs" type="Script" id=2]
 [ext_resource path="res://scenes/ui/menus/editor_menu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/themes/menu.tres" type="Theme" id=4]
-[ext_resource path="res://source/ui/shader.gd" type="Script" id=5]
-[ext_resource path="res://assets/shaders/ui/ui_material.tres" type="Material" id=6]
+[ext_resource path="res://source/ui/widgets/PaperPanel.cs" type="Script" id=5]
+[ext_resource path="res://assets/shaders/ui/mat_paper.tres" type="Material" id=6]
 [ext_resource path="res://assets/textures/ui/paper.png" type="Texture" id=7]
 
 [node name="Scene" type="Node2D"]
@@ -32,9 +32,5 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-u_scale = 0.1
-v_scale = 0.1
-screen_scale = 0.02
-opacity = 0.25
 
 [node name="EditorMenu" parent="CameraRoot/CanvasLayer" instance=ExtResource( 3 )]
