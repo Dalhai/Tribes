@@ -7,9 +7,14 @@ namespace TribesOfDust.Hex.Neighborhood
 {
     public class Neighborhood : INeighborhood
     {
-        public Neighborhood(ITileStorageView storage) => Storage = storage;
+        public Neighborhood(ITileStorageView storage, uint distance) 
+        {
+            Storage = storage;
+            Distance = distance;
+        }
 
-        public ITileStorageView Storage { get; set; }
+        public ITileStorageView Storage { get; init; }
+        public uint Distance { get; init; }
 
         /// <summary>
         /// Get all coordinates of the specified tile in this neighborhood.
@@ -20,13 +25,31 @@ namespace TribesOfDust.Hex.Neighborhood
         public List<AxialCoordinate> GetNeighbors(AxialCoordinate axialCoordinate)
         {
             List<AxialCoordinate> neighbors = new();
+            List<AxialCoordinate> current = new();
+            List<AxialCoordinate> previous = new();
 
-            neighbors.Add(axialCoordinate + AxialCoordinate.N);
-            neighbors.Add(axialCoordinate + AxialCoordinate.NE);
-            neighbors.Add(axialCoordinate + AxialCoordinate.NW);
-            neighbors.Add(axialCoordinate + AxialCoordinate.S);
-            neighbors.Add(axialCoordinate + AxialCoordinate.SE);
-            neighbors.Add(axialCoordinate + AxialCoordinate.SW);
+            previous.Add(axialCoordinate);
+            neighbors.Add(axialCoordinate);
+
+            for(int distance = 0; distance < Distance; distance++)
+            {
+                foreach(var coordinate in previous)
+                {
+                    current.Add(coordinate + AxialCoordinate.N);
+                    current.Add(coordinate + AxialCoordinate.NE);
+                    current.Add(coordinate + AxialCoordinate.NW);
+                    current.Add(coordinate + AxialCoordinate.S);
+                    current.Add(coordinate + AxialCoordinate.SE);
+                    current.Add(coordinate + AxialCoordinate.SW);
+                }
+
+                previous = current.Where(coordinate => !neighbors.Contains(coordinate)).ToList();
+                current = new ();
+
+                neighbors.AddRange(previous);
+            }
+
+            neighbors.Remove(axialCoordinate);
 
             return neighbors.Where(Storage.Contains).ToList();
         }
