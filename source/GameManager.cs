@@ -9,6 +9,7 @@ using Godot;
 using TribesOfDust.Core;
 using TribesOfDust.Data.Assets;
 using TribesOfDust.Hex.Storage;
+using TribesOfDust.Hex.Neighborhood;
 using TribesOfDust.Hex;
 using TribesOfDust.UI.Menus;
 using TribesOfDust.Utils.Collections;
@@ -40,8 +41,11 @@ namespace TribesOfDust
                 _context.Game.Display = new(_context.Game);
                 _context.Game.Display?.AddOverlay(_activeTileOverlay);
                 _context.Game.Display?.AddOverlay(_activeTypeOverlay);
+                _context.Game.Display?.AddOverlay(_neighborhoodOverlay);
 
                 _context.Game.Level.Tiles.Added += (_, _) => UpdateTypeOverlay();
+
+                _neighborhood = new Neighborhood(_context.Game.Level.Tiles);
             }
 
             // Initialize user interface.
@@ -211,6 +215,25 @@ namespace TribesOfDust
                         }
                     }
                 }
+
+                // Display neighborhood overlay on the tile that has been clicked.
+
+                else if (mouseButton.Pressed && mouseButton.ButtonIndex == 3 && _neighborhood is not null)
+                {
+                    _neighborhoodOverlay.Clear();
+
+                    var world = GetGlobalMousePosition();
+                    var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
+                    var tile = tiles.Get(hex);
+
+                    if (tile is not null)
+                    {
+                        foreach(var neighbor in _neighborhood.GetNeighbors(tile.Coordinates))
+                        {
+                            _neighborhoodOverlay.Add(neighbor,Colors.SaddleBrown);
+                        }
+                    }
+                }
             }
 
             UpdateActiveType();
@@ -275,8 +298,11 @@ namespace TribesOfDust
         private EditorMenu? _editorMenu;
 
         private Context? _context;
+        private INeighborhood? _neighborhood;
+
         private readonly ITileStorage<Color> _activeTileOverlay = new TileStorage<Color>();
         private readonly ITileStorage<Color> _activeTypeOverlay = new TileStorage<Color>();
+        private readonly ITileStorage<Color> _neighborhoodOverlay = new TileStorage<Color>();
 
         #region Constants
 
