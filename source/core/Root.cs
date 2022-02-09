@@ -1,4 +1,6 @@
 using Godot;
+using TribesOfDust.UI.Pages;
+using TribesOfDust.Core.State;
 
 namespace TribesOfDust.Core
 {
@@ -54,5 +56,7 @@ namespace TribesOfDust.Core
 				}
 			}
 		}
+
+		private readonly IStateMachine<Page, Page> _pageMachine;
 	}
 }
