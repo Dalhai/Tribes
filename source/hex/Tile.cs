@@ -34,7 +34,7 @@ namespace TribesOfDust.Hex
             // Position tile according to specified coordinates
 
             Centered = true;
-            Position = HexConversions.HexToWorld(Coordinates, Terrain.ExpectedSize);
+            Position = HexConversions.HexToUnit(Coordinates) * HexConstants.DefaultSize;
         }
 
         private Tile(TileConfig config, AxialCoordinate coordinates, Terrain terrain)
@@ -62,7 +62,7 @@ namespace TribesOfDust.Hex
             // Position tile according to specified coordinates
 
             Centered = true;
-            Position = HexConversions.HexToWorld(coordinates, Terrain.ExpectedSize);
+            Position = HexConversions.HexToUnit(coordinates) * HexConstants.DefaultSize;
         }
 
         #endregion

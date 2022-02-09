@@ -20,13 +20,13 @@ namespace TribesOfDust.Hex
 
         public static readonly float UnitWidth = 2.0f * CornerDistance;
         public static readonly float UnitHeight = 2.0f * SideDistance;
-
-        public static Vector2 HexToWorld(AxialCoordinate coordinates, float size)
+        
+        public static Vector2 HexToUnit(AxialCoordinate coordinates)
         {
             // Q: Top Left to Bottom Right
             // R: Top to Bottom
-            var x = size * (coordinates.Q * 1.5f * SideLength);
-            var y = size * (coordinates.Q * SideDistance + coordinates.R * UnitHeight);
+            var x = coordinates.Q * 1.5f * SideLength;
+            var y = coordinates.Q * SideDistance + coordinates.R * UnitHeight;
 
             // Note that this conversion defines the conversion matrix used in the fractional
             // back conversion further down.
@@ -34,17 +34,14 @@ namespace TribesOfDust.Hex
             return new Vector2(x, y);
         }
 
-        public static AxialCoordinate WorldToHex(Vector2 position, float size)
+        public static AxialCoordinate UnitToHex(Vector2 position)
         {
-            float unitX = position.x / size;
-            float unitY = position.y / size;
-            
             float centerToCenterDistance = 1.5f * CornerDistance;
 
             // Q: Top Left to Bottom Right
             // R: Top to Bottom
-            var q =  unitX / centerToCenterDistance;
-            var r = -unitX / 3.0f + unitY / UnitHeight;
+            var q =  position.x / centerToCenterDistance;
+            var r = -position.x / 3.0f + position.y / UnitHeight;
 
             // There is no direct relation of the third here to any of our other values.
             // This is a direct result of inverting the above conversion matrix. We divide

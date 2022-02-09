@@ -7,11 +7,6 @@ namespace TribesOfDust.Data.Assets
 {
     public class Terrain : Resource, IAsset<TileType>
     {
-        public static readonly float ExpectedSize = 100.0f;
-        public static readonly float ExpectedWidth = 2.0f * ExpectedSize;
-        public static readonly float ExpectedHeight = 2.0f * Mathf.Sqrt(3.0f / 4.0f * ExpectedSize * ExpectedSize);
-        public static readonly float ExpectedRatio = ExpectedWidth / ExpectedHeight;
-
         public override string ToString() => $"Terrain: {Key}";
 
         #region Exports
@@ -54,12 +49,12 @@ namespace TribesOfDust.Data.Assets
         /// <summary>
         /// Gets the scale in x-direction necessary to match the expected width.
         /// </summary>
-        public float WidthScaleToExpected => Texture != null ? ExpectedWidth / Texture.GetWidth() : 1.0f;
+        public float WidthScaleToExpected => Texture != null ? HexConstants.DefaultWidth / Texture.GetWidth() : 1.0f;
 
         /// <summary>
         /// Gets the scale in y-direction necessary to match the expected height.
         /// </summary>
-        public float HeightScaleToExpected => Texture != null ? ExpectedHeight / Texture.GetHeight() : 1.0f;
+        public float HeightScaleToExpected => Texture != null ? HexConstants.DefaultHeight / Texture.GetHeight() : 1.0f;
 
         #endregion
     }
