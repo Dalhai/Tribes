@@ -1,13 +1,16 @@
 using System;
+using TribesOfDust.Core.Input;
+
+using GDIn = Godot.Input;
 using Godot;
 
-namespace TribesOfDust
+namespace TribesOfDust.Core
 {
     public class Camera2D : Godot.Camera2D
     {
         public const string InputActionZoomIn = "zoom_in";
         public const string InputActionZoomOut = "zoom_out";
-        public const float ZoomChange = 30f;
+        public const float ZoomChange = 50f;
         public const float ZoomMax = 1.0f;
         public const float OffsetLengthWeight = 0.15f;
         public const float OffsetSpeed = 3000.0f;
@@ -16,27 +19,27 @@ namespace TribesOfDust
 
         public override void _Process(float delta)
         {
-            if (Input.IsKeyPressed((int)KeyList.Up))
+            if (GDIn.IsActionPressed(Actions.CameraUp))
             {
                 Position = Position.MoveToward(Position + Vector2.Up, delta * MovementSpeed);
             }
 
-            if (Input.IsKeyPressed((int)KeyList.Down))
+            if (GDIn.IsActionPressed(Actions.CameraDown))
             {
                 Position = Position.MoveToward(Position + Vector2.Down, delta * MovementSpeed);
             }
 
-            if (Input.IsKeyPressed((int)KeyList.Left))
+            if (GDIn.IsActionPressed(Actions.CameraLeft))
             {
                 Position = Position.MoveToward(Position + Vector2.Left, delta * MovementSpeed);
             }
 
-            if (Input.IsKeyPressed((int)KeyList.Right))
+            if (GDIn.IsActionPressed(Actions.CameraRight))
             {
                 Position = Position.MoveToward(Position + Vector2.Right, delta * MovementSpeed);
             }
 
-            if (Input.IsActionJustReleased(InputActionZoomIn))
+            if (GDIn.IsActionJustPressed(Actions.ZoomIn))
             {
                 if (Zoom.x > ZoomMax && Zoom.y > ZoomMax)
                 {
@@ -57,7 +60,7 @@ namespace TribesOfDust
             }
 
 
-            if (Input.IsActionJustReleased(InputActionZoomOut))
+            if (GDIn.IsActionJustPressed(Actions.ZoomOut))
             {
                 Vector2 oldZoom = Zoom;
                 Vector2 newZoom = oldZoom * (1.0f + ZoomChange * delta);

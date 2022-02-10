@@ -56,7 +56,5 @@ namespace TribesOfDust.Core
 				}
 			}
 		}
-
-		private readonly IStateMachine<Page, Page> _pageMachine;
 	}
 }
