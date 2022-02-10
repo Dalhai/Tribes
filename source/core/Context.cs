@@ -4,7 +4,15 @@ using TribesOfDust.UI.Navigation;
 
 namespace TribesOfDust.Core 
 {
-    public class Context 
+    public interface IContext<T> where T: Node
+    {
+        /// <summary>
+        /// The root node of the context.
+        /// </summary>
+        T Root { get; }
+    }
+
+    public class Context : IContext<Root>
     {   
         /// <summary>
         /// Try to get the current context based on the godot viewport.
@@ -20,18 +28,8 @@ namespace TribesOfDust.Core
             // Initialize Subcontexts
 
             Game = new(this);
-            Navigator = new(this);
+            Navigator = new(this, root);
         }
-
-        /// <summary>
-        /// Route Args for the last Route taken.
-        /// 
-        /// The information contained here comes from the latest call to the root
-        /// navigator to change the scene. You can use these route arguments, if
-        /// available, to access information that has beeen passed from the previous
-        /// location.
-        /// </summary>
-        public RouteArgs? Route { get; set; }
 
         /// <summary>
         /// Root Navigator
@@ -42,7 +40,7 @@ namespace TribesOfDust.Core
         /// on the route args, read up on the individual page route args in the 
         /// different pages.
         /// </summary>
-        public Navigator Navigator { get; init; }
+        public Navigator<Node2D> Navigator { get; init; }
 
         /// <summary>
         /// Game Context
@@ -54,6 +52,9 @@ namespace TribesOfDust.Core
         /// </summary>
         public Game Game { get; init; }
 
-        public readonly Root Root;
+        /// <summary>
+        /// The root node of the context.
+        /// </summary>
+        public Root Root { get; init; }
     }
 }

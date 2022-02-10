@@ -7,15 +7,13 @@ using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Navigation
 {
-    public class Navigator : Godot.Object
+    public class Navigator<TTarget>
     {
-        public Navigator(Context context) => Context = context;
-
-        /// <summary>
-        /// The context this navigator belongs to.
-        /// The context can be used to navigate the context tree.
-        /// </summary>
-        public readonly Context Context;
+        public Navigator(Context context, INavigatable<TTarget> navigated)
+        { 
+            _navigated = navigated;
+            _context = context;
+        }
 
         /// <summary>
         /// The routes stored in this navigator.
@@ -23,7 +21,12 @@ namespace TribesOfDust.UI.Navigation
         /// This dictionary of routes tells the navigator which routes are accessible and
         /// how their corresponding root nodes are supposed to be constructed.
         /// </summary>
-        public readonly Dictionary<string, Route> Routes = new();
+        public readonly Dictionary<string, Route<TTarget>> Routes = new();
+        
+        /// <summary>
+        /// The routes taken so far using this navigator.
+        /// </summary>
+        public readonly Stack<RouteArgs> History = new();
 
         /// <summary>
         /// Adds a new route to the navigator.
@@ -31,7 +34,7 @@ namespace TribesOfDust.UI.Navigation
         /// 
         /// <param name="route">The name under which the route can be found.</param>
         /// <param name="createTarget">The factory function used to create the root node.</param>
-        public void Route(string route, Func<Context, Node2D> createTarget)
+        public void Route(string route, Func<Context, TTarget> createTarget)
         {
             if (Routes.ContainsKey(route))
                 throw Error.CantAdd($"{nameof(route)}: {route}", this);
@@ -40,7 +43,27 @@ namespace TribesOfDust.UI.Navigation
         }
 
         /// <summary>
-        /// Goes to the specified route and updates the context route args.
+        /// Goes to the last navigated route.
+        /// </summary>
+        /// 
+        /// <param name="args">The arguments to pass along.</param>
+        /// 
+        /// <returns>True, if the last route was loaded successfully, false otherwise.</returns>
+        public bool Pop(object? args = null)
+        {
+            if (History.Count == 0)
+                return false;
+
+            var latest = History.Pop();
+            var name = latest.Name;
+
+            return name is not null 
+                ? GoTo(name, args ?? latest.Arguments)
+                : false;
+        }
+
+        /// <summary>
+        /// Goes to the specified route.
         /// </summary>
         /// 
         /// <param name="route">The route to take.</param>
@@ -71,7 +94,7 @@ namespace TribesOfDust.UI.Navigation
         /// <param name="args">The arguments to pass along.</param>
         /// 
         /// <returns>True, if the scene change was successful, false otherwise.</returns>
-        public bool GoTo(Func<Context, Node2D> createTarget, object? args = null)
+        public bool GoTo(Func<Context, TTarget> createTarget, object? args = null)
         {
             var selectedRouteArgs = new RouteArgs() 
             {
@@ -82,16 +105,21 @@ namespace TribesOfDust.UI.Navigation
             return GoToCommon(createTarget, selectedRouteArgs);
         }
 
-        private bool GoToCommon(Func<Context, Node2D> createTarget, RouteArgs args)
+        private bool GoToCommon(Func<Context, TTarget> createTarget, RouteArgs args)
         {
-            Context.Route = args;
-            Context.Root.Scene = createTarget.Invoke(Context);
+            var target = createTarget.Invoke(_context);
 
-            // We signal success if a new scene was properly created and attached to the root node.
-            // If the scene wasn't attached, something must have gone wrong as we should never be
-            // in a situation where there is not scene node.
+            // Push the route args to the history to enable pushing and popping
+            // various routes without knowing the parent.
+            History.Push(args);
 
-            return Context.Root.Scene != null;
+            // Pass the created target as well as the selected route arguments
+            // to the navigated element and let it handle success and failure
+            // reporting.
+            return _navigated.NavigateTo(target, args);
         }
+
+        private readonly INavigatable<TTarget> _navigated;
+        private readonly Context _context;
     }
 }

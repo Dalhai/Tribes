@@ -6,7 +6,7 @@ using Godot;
 
 namespace TribesOfDust.Core
 {
-    public class Camera2D : Godot.Camera2D
+    public class Camera : Godot.Camera2D
     {
         public const string InputActionZoomIn = "zoom_in";
         public const string InputActionZoomOut = "zoom_out";
