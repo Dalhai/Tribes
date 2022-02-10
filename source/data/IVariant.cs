@@ -2,7 +2,7 @@ using System;
 
 namespace TribesOfDust.Data
 {
-    public interface IAsset<TKey> where TKey : notnull
+    public interface IVariant<TKey> where TKey : notnull
     {
         /// <summary>
         /// The path to the resource in the virtual file system.

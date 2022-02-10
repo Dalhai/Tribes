@@ -5,7 +5,7 @@ using TribesOfDust.Utils.Misc;
 
 namespace TribesOfDust.Data.Assets
 {
-    public class Terrain : Resource, IAsset<TileType>
+    public class Terrain : Resource, IVariant<TileType>
     {
         public override string ToString() => $"Terrain: {Key}";
 

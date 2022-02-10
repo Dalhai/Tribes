@@ -8,7 +8,7 @@ using TribesOfDust.Utils.Misc;
 namespace TribesOfDust.Data
 {
     public abstract class Repository<TVariation, TAsset> : IEnumerable<TAsset>
-        where TAsset : IAsset<TVariation>
+        where TAsset : IVariant<TVariation>
         where TVariation : notnull
     {
 
