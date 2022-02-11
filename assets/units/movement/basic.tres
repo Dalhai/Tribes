@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource( 1 )
-TundraCost = 0
-DunesCost = 0
-MountainsCost = 0
-CanyonsCost = 0
+TundraCost = 1
+DunesCost = 1
+MountainsCost = 1
+CanyonsCost = 1
