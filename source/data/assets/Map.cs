@@ -12,10 +12,9 @@ namespace TribesOfDust.Data.Assets
     [DataContract]
     public class Map : IVariant<string>
     {
-        public Map(string name, string path)
+        public Map(string name)
         {
             Name = name;
-            ResourcePath = path;
 
             foreach (var type in Enum.GetValues(typeof(TileType)))
             {
@@ -23,15 +22,13 @@ namespace TribesOfDust.Data.Assets
             }
         }
 
-        public override string ToString() => $"Map: {Name}, {ResourcePath}";
+        public override string ToString() => $"Map: {Name}";
 
         #region Asset
 
-        public string Key => Name;
-
         [DataMember]
         public string Name { get; init; }
-        public string ResourcePath { get; init; }
+        string IVariant<string>.Key => Name;
 
         #endregion
         #region Access

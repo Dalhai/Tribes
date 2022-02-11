@@ -3,9 +3,12 @@ using Godot;
 using System;
 using System.Runtime.Serialization;
 
+using TribesOfDust.Data;
+
 namespace TribesOfDust.Core
 {
-    public class Player
+    [DataContract]
+    public class Player : IVariant<string>
     {
         public Player(string name, long id, Color? color = null)
         {
@@ -22,12 +25,14 @@ namespace TribesOfDust.Core
         /// identity for the player. Instead, refer to <see cref="Player.Id"/>
         /// for an identity that is unique across network instances as well.
         /// </summary>
+        [DataMember] 
         public string Name { get; init; }
+        string IVariant<string>.Key => Name;
 
         /// <summary>
         /// Guaranteed unique player number within the same game instance.
         /// </summary>
-        public long Id { get; init; }
+        public long Id { get; init; } = 0;
 
         /// <summary>
         /// The color of the player.
@@ -36,6 +41,7 @@ namespace TribesOfDust.Core
         /// entities, but overlays can make use of this color to highlight things by
         /// player color.
         /// </summary>
+        [DataMember] 
         public Color Color { get; init; }
     }
 }

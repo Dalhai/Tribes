@@ -76,7 +76,7 @@ namespace TribesOfDust.UI.Pages
 			// If opening the file worked, serialize the template map and store it in the file as JSON.
 			if (fileOpenError == Godot.Error.Ok)
 			{
-				level.Map ??= new("Default", targetFile.GetPath());
+				level.Map ??= new("Default");
 				level.Map.Tiles.Clear();
 				foreach (var tile in level.Tiles)
 				{
@@ -121,7 +121,7 @@ namespace TribesOfDust.UI.Pages
 
 			if (map is null)
 			{
-				map = new("World", "res://assets/maps/map.template");
+				map = new("World");
 			}
 
 			return map;
