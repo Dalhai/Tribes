@@ -3,9 +3,6 @@ using Godot;
 using System.Linq;
 using System.Collections.Generic;
 
-using TribesOfDust.Data.Assets;
-using TribesOfDust.Data.Config;
-
 namespace TribesOfDust.Hex
 {
     public class Tile : Sprite

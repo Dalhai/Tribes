@@ -54,7 +54,7 @@ namespace TribesOfDust.Core
                 _map = value;
                 if (_map is not null)
                 {
-                    _map.Generate(Game.Repositories.Terrain, Tiles);
+                    _map.Generate(Game.Repositories.Terrains, Tiles);
                 }
             }
         }

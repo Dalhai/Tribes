@@ -1,6 +1,6 @@
 using Godot;
 
-namespace TribesOfDust.Data.Config
+namespace TribesOfDust.Hex
 {
     [Tool]
     public class TileConfig : Resource

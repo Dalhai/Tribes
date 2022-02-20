@@ -5,7 +5,7 @@ using System.Linq;
 
 using TribesOfDust.Utils.Misc;
 
-namespace TribesOfDust.Data
+namespace TribesOfDust.Utils
 {
     public abstract class Repository<TVariation, TAsset> : IEnumerable<TAsset>
         where TAsset : IVariant<TVariation>

@@ -1,5 +1,4 @@
-using TribesOfDust.Data.Assets;
-using TribesOfDust.Data.Repositories;
+using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core
 {
@@ -11,7 +10,7 @@ namespace TribesOfDust.Core
 
             // Load all assets in all repositories immediately.
 
-            Terrain.Load();
+            Terrains.Load();
         }
 
         /// <summary>
@@ -26,6 +25,14 @@ namespace TribesOfDust.Core
         /// Contains all Terrain assets in the default Terrain resource location.
         /// Can be used to grab Terrain information necessary to construct hex tiles.
         /// </summary>
-        public readonly TerrainRepository Terrain = new();
+        public readonly TerrainRepository Terrains = new();
+
+        /// <summary>
+        /// The maps repository for the current game.
+        /// 
+        /// Contains all map assets in the default map resource location.
+        /// Can be used to grab map information necessary to load different levels.
+        /// </summary>
+        public readonly MapRepository Maps = new();
     }
 }

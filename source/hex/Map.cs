@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
-using TribesOfDust.Data.Repositories;
-using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
+using TribesOfDust.Utils;
 
-namespace TribesOfDust.Data.Assets
+namespace TribesOfDust.Hex
 {
     [DataContract]
     public class Map : IVariant<string>

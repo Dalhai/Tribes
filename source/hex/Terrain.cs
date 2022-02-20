@@ -1,9 +1,9 @@
 using Godot;
 
-using TribesOfDust.Hex;
+using TribesOfDust.Utils;
 using TribesOfDust.Utils.Misc;
 
-namespace TribesOfDust.Data.Assets
+namespace TribesOfDust.Hex
 {
     public class Terrain : Resource, IVariant<TileType>
     {

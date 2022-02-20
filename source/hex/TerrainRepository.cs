@@ -2,10 +2,9 @@ using System.Collections.Generic;
 
 using Godot;
 
-using TribesOfDust.Data.Assets;
-using TribesOfDust.Hex;
+using TribesOfDust.Utils;
 
-namespace TribesOfDust.Data.Repositories
+namespace TribesOfDust.Hex
 {
     public class TerrainRepository : Repository<TileType, Terrain>
     {
