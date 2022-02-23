@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://source/data/assets/Movement.cs" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+TundraCost = 1
+DunesCost = 1
+MountainsCost = 1
+CanyonsCost = 1

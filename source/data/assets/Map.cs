@@ -10,7 +10,7 @@ using TribesOfDust.Hex.Storage;
 namespace TribesOfDust.Data.Assets
 {
     [DataContract]
-    public class Map : IAsset<string>
+    public class Map : IVariant<string>
     {
         public Map(string name, string path)
         {
