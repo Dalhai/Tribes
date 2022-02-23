@@ -14,6 +14,7 @@ namespace TribesOfDust.Core
             // Load all assets in all repositories immediately.
 
             Terrains.Load();
+            Maps.Load();
         }
 
         #region Overrides
