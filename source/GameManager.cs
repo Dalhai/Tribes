@@ -42,6 +42,7 @@ namespace TribesOfDust
                 _context.Game.Display?.AddOverlay(_activeTileOverlay);
                 _context.Game.Display?.AddOverlay(_activeTypeOverlay);
                 _context.Game.Display?.AddOverlay(_neighborhoodOverlay);
+				_context.Game.Display?.AddOverlay(_lineOverlay);
 
                 _context.Game.Level.Tiles.Added += (_, _) => UpdateTypeOverlay();
 
@@ -146,7 +147,7 @@ namespace TribesOfDust
             if (inputEvent is InputEventMouseMotion)
             {
                 var world = GetGlobalMousePosition();
-                var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
+                var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
 
                 if (_activeTileCoordinates != hex)
                 {
@@ -154,6 +155,12 @@ namespace TribesOfDust
                     _activeTileOverlay.Clear();
                     _activeTileOverlay.Add(hex, Colors.Aqua);
                 }
+
+				_lineOverlay.Clear();
+				foreach (var coordinate in Intersections.Line(Vector2.Zero, world / HexConstants.DefaultSize)) 
+				{
+					_lineOverlay.Add(coordinate, Colors.YellowGreen);
+				}
             }
 
             // Add and remove tiles on mouse clicks.
@@ -167,7 +174,7 @@ namespace TribesOfDust
                 if (mouseButton.Pressed && mouseButton.ButtonIndex == 1)
                 {
                     var world = GetGlobalMousePosition();
-                    var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
+                    var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
                     try
                     {
                         var hexTile = Tile.Create(hex, repo.GetAsset(_activeTileType));
@@ -193,7 +200,7 @@ namespace TribesOfDust
                 else if (mouseButton.Pressed && mouseButton.ButtonIndex == 2)
                 {
                     var world = GetGlobalMousePosition();
-                    var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
+                    var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
                     var tile = tiles.Get(hex);
 
                     tiles.Remove(hex);
@@ -223,7 +230,7 @@ namespace TribesOfDust
                     _neighborhoodOverlay.Clear();
 
                     var world = GetGlobalMousePosition();
-                    var hex = HexConversions.WorldToHex(world, Terrain.ExpectedSize);
+                    var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
                     var tile = tiles.Get(hex);
 
                     if (tile is not null)
@@ -303,6 +310,7 @@ namespace TribesOfDust
         private readonly ITileStorage<Color> _activeTileOverlay = new TileStorage<Color>();
         private readonly ITileStorage<Color> _activeTypeOverlay = new TileStorage<Color>();
         private readonly ITileStorage<Color> _neighborhoodOverlay = new TileStorage<Color>();
+		private readonly ITileStorage<Color> _lineOverlay = new TileStorage<Color>();
 
         #region Constants
 

@@ -25,12 +25,12 @@ namespace TribesOfDust.Data.Repositories
                 float height = asset.Texture.GetHeight();
                 float ratio = width / height;
 
-                if (!Mathf.IsEqualApprox(ratio, Terrain.ExpectedRatio))
+                if (!Mathf.IsEqualApprox(ratio, HexConstants.DefaultRatio))
                 {
                     GD.PushWarning
                     (
                         $"Tile: {asset.ResourcePath} has invalid ratio:\n" +
-                        $"Expected Ratio: {Terrain.ExpectedRatio}\n" +
+                        $"Expected Ratio: {HexConstants.DefaultRatio}\n" +
                         $"Actual Ratio: {ratio}"
                     );
                 }

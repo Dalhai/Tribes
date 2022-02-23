@@ -16,9 +16,9 @@ namespace TribesOfDust.Hex
     /// but the third dimension is ambiguous. For storage, consider using a <see cref="AxialCoordinate"/> instead.
     /// </remarks>
     ///
-    /// <param name="X">Left to right</param>
-    /// <param name="Y">Bottom right to top left</param>
-    /// <param name="Z">Top right to bottom left</param>
+    /// <param name="X">Top Left to Bottom Right</param>
+    /// <param name="Y">Top Right to Bottom Left</param>
+    /// <param name="Z">Top to Bottom</param>
     [DataContract]
     public record CubeCoordinate(
         [property: DataMember] int X,
@@ -94,8 +94,8 @@ namespace TribesOfDust.Hex
     /// describe coordinates in a two dimensional system.
     /// </remarks>
     ///
-    /// <param name="Q">Left to right</param>
-    /// <param name="R">Top right to bottom left</param>
+    /// <param name="Q">Top Left to Bottom Right</param>
+    /// <param name="R">Top to Bottom</param>
     [DataContract]
     public record AxialCoordinate(
         [property: DataMember] int Q,
