@@ -17,6 +17,12 @@ namespace TribesOfDust.Core
             Color = color ?? Colors.White;
         }
 
+        #region Overrides
+
+        public override string ToString() => $"Name: {Name}";
+
+        #endregion
+
         /// <summary>
         /// The name of the player.
         /// 

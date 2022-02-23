@@ -1,4 +1,7 @@
+using System.Text;
+
 using TribesOfDust.Hex;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
@@ -12,6 +15,15 @@ namespace TribesOfDust.Core
 
             Terrains.Load();
         }
+
+        #region Overrides
+
+        public override string ToString() => new StringBuilder()
+            .AppendIndented(nameof(Terrains), Terrains)
+            .AppendIndented(nameof(Maps), Maps)
+            .ToString();
+
+        #endregion
 
         /// <summary>
         /// The game these repositories belong to.

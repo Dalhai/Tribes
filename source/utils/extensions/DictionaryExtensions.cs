@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TribesOfDust.Utils.Collections
+namespace TribesOfDust.Utils.Extensions
 {
     public static class DictionaryExtensions
     {

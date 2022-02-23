@@ -1,12 +1,12 @@
 using Godot;
 
 using System;
+using System.Text;
 using System.Collections.Generic;
 
-using TribesOfDust.Data.Assets;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
-
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
@@ -21,6 +21,14 @@ namespace TribesOfDust.Core
             _onOverlayTileAdded = (sender, args) => AddOverlayColor(args.Coordinates, args.Item); 
             _onOverlayTileRemoved = (sender, args) => RemoveOverlayColor(args.Coordinates, args.Item); 
         }
+
+        #region Overrides
+
+        public override string ToString() => new StringBuilder()
+            .AppendEnumerable(nameof(_overlays).Remove('_').Capitalize(), _overlays)
+            .ToString();
+
+        #endregion
 
         /// <summary>
         /// The game this display belongs to.

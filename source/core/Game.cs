@@ -1,5 +1,7 @@
 using System;
-using Godot;
+using System.Text;
+
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
@@ -13,6 +15,16 @@ namespace TribesOfDust.Core
 
             Repositories = new(this);
         }
+
+        #region Overrides
+
+        public override string ToString() => new StringBuilder()
+            .AppendIndented(nameof(Repositories), Repositories)
+            .AppendIndented(nameof(Level), Level)
+            .AppendIndented(nameof(Display), Display)
+            .ToString();
+
+        #endregion
 
         public event Action<Level?>? LevelChanged;
         public event Action<Display?>? DisplayChanged;

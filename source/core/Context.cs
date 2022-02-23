@@ -1,6 +1,7 @@
 using Godot;
-
+using System.Text;
 using TribesOfDust.UI.Navigation;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core 
 {
@@ -31,6 +32,15 @@ namespace TribesOfDust.Core
             Navigator = new(this, root);
         }
 
+        #region Overrides
+
+        public override string ToString() => new StringBuilder()
+            .AppendIndented(nameof(Navigator), Navigator)
+            .AppendIndented(nameof(Game), Game)
+            .ToString();
+
+        #endregion
+
         /// <summary>
         /// Root Navigator
         /// 
@@ -56,5 +66,6 @@ namespace TribesOfDust.Core
         /// The root node of the context.
         /// </summary>
         public Root Root { get; init; }
+
     }
 }

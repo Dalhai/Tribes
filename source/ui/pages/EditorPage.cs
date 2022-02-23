@@ -1,8 +1,5 @@
 using System;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Xml;
 
 using Godot;
 
@@ -11,7 +8,7 @@ using TribesOfDust.Hex.Storage;
 using TribesOfDust.Hex.Neighborhood;
 using TribesOfDust.Hex;
 using TribesOfDust.UI.Menus;
-using TribesOfDust.Utils.Collections;
+using TribesOfDust.Utils.Extensions;
 using TribesOfDust.Core.Input;
 
 namespace TribesOfDust.UI.Pages
