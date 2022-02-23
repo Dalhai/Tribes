@@ -1,6 +1,4 @@
-using System;
-
-namespace TribesOfDust.Data.Currencies
+namespace TribesOfDust.Core.Currencies
 {
     public enum Currency
     {

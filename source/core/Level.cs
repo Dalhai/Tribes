@@ -1,7 +1,8 @@
+using System.Text;
 
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
-using TribesOfDust.Data.Assets;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
@@ -15,6 +16,15 @@ namespace TribesOfDust.Core
 
             Tiles = new TileStorage<Tile>();
         }
+
+        #region Overrides
+
+        public override string ToString() => new StringBuilder()
+            .AppendIndented(nameof(Map), Map)
+            .AppendIndented(nameof(Tiles), Tiles)
+            .ToString();
+
+        #endregion
 
         /// <summary>
         /// The game this level belongs to.
@@ -54,7 +64,7 @@ namespace TribesOfDust.Core
                 _map = value;
                 if (_map is not null)
                 {
-                    _map.Generate(Game.Repositories.Terrain, Tiles);
+                    _map.Generate(Game.Repositories.Terrains, Tiles);
                 }
             }
         }

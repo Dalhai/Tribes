@@ -1,18 +1,14 @@
 using System;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Xml;
 
 using Godot;
 
 using TribesOfDust.Core;
-using TribesOfDust.Data.Assets;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Hex.Neighborhood;
 using TribesOfDust.Hex;
 using TribesOfDust.UI.Menus;
-using TribesOfDust.Utils.Collections;
+using TribesOfDust.Utils.Extensions;
 using TribesOfDust.Core.Input;
 
 namespace TribesOfDust.UI.Pages
@@ -27,7 +23,7 @@ namespace TribesOfDust.UI.Pages
 				// Load map and register level with context
 
 				_context.Game.Level = new(_context.Game);
-				_context.Game.Level.Map = Load();
+				_context.Game.Level.Map = Load(_context);
 
 				foreach (var tile in _context.Game.Level.Tiles)
 				{
@@ -60,77 +56,35 @@ namespace TribesOfDust.UI.Pages
 
 		public override void _ExitTree()
 		{
-			if (_context?.Game.Level is not null)
-				Save(_context.Game.Level);
+			if (_context is not null)
+				Save(_context);
 
 			base._ExitTree();
 		}
 
-		private void Save(Level level)
+		private void Save(Context context)
 		{
-			var targetFile = new File();
-
-			// Try to open the default map file to save our default map.
-			Godot.Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Write);
-
-			// If opening the file worked, serialize the template map and store it in the file as JSON.
-			if (fileOpenError == Godot.Error.Ok)
+			if (context.Game.Level is not null)
 			{
-				level.Map ??= new("Default");
+				var level = context.Game.Level;
+				level.Map ??= new("World");
 				level.Map.Tiles.Clear();
+
 				foreach (var tile in level.Tiles)
 				{
 					level.Map.Tiles[tile.Key] = tile.Value.Key;
 				}
 
-				var settings = new XmlWriterSettings
-				{
-					Indent = true,
-					NewLineHandling = NewLineHandling.Entitize
-				};
-
-				var str = new StringBuilder();
-				using var xml = XmlWriter.Create(str, settings);
-
-				var serializer = new DataContractSerializer(typeof(Map));
-				serializer.WriteObject(xml, level.Map);
-				xml.Flush();
-
-				targetFile.StoreLine(str.ToString());
-				targetFile.Close();
+				context.Game.Repositories.Maps.TrySave(level.Map);
 			}
 		}
 
-		private static Map Load()
-		{
-			Map? map = null;
-			var targetFile = new File();
-
-			// Try to open the default map file to load our default map.
-			Godot.Error fileOpenError = targetFile.Open("res://assets/maps/map.template", File.ModeFlags.Read);
-
-			// If opening the file worked, deserialize the template map.
-			if (fileOpenError == Godot.Error.Ok)
-			{
-				using var reader = new System.IO.StringReader(targetFile.GetAsText());
-				using var xml = System.Xml.XmlReader.Create(reader);
-
-				var deserializer = new DataContractSerializer(typeof(Map));
-				map = deserializer.ReadObject(xml) as Map;
-			}
-
-			if (map is null)
-			{
-				map = new("World");
-			}
-
-			return map;
-		}
+		private static Map Load(Context context) => context.Game.Repositories.Maps.First();
 
 		public override void _Input(InputEvent inputEvent)
 		{
 			var tiles = _context?.Game.Level?.Tiles;
-			var repo = _context?.Game.Repositories?.Terrain;
+			var repo = _context?.Game.Repositories?.Terrains;
 
 			// Early exit if there are no tiles currently.
 

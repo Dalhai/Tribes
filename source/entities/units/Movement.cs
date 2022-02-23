@@ -1,7 +1,7 @@
 using Godot;
-using TribesOfDust.Data.Currencies;
+using TribesOfDust.Core.Currencies;
 
-namespace TribesOfDust.Data.Assets
+namespace TribesOfDust.Core.Entities
 {
 	public class Movement : Resource
 	{

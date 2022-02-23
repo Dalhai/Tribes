@@ -1,6 +1,4 @@
-using System;
-
-namespace TribesOfDust.Data
+namespace TribesOfDust.Utils
 {
     public interface IVariant<TKey> where TKey : notnull
     {

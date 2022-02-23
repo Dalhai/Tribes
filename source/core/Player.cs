@@ -1,9 +1,8 @@
 using Godot;
 
-using System;
 using System.Runtime.Serialization;
 
-using TribesOfDust.Data;
+using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core
 {
@@ -17,6 +16,12 @@ namespace TribesOfDust.Core
 
             Color = color ?? Colors.White;
         }
+
+        #region Overrides
+
+        public override string ToString() => $"Name: {Name}";
+
+        #endregion
 
         /// <summary>
         /// The name of the player.

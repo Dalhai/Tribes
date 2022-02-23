@@ -38,6 +38,12 @@ namespace TribesOfDust.Core
 			{
 				Node2D? scene = Scene;
 
+				// Check that the new scene is not equal to the existing scene.
+				// Otherwise, we might accidentally free the new scene.
+
+				if (scene == value)
+					return;
+
 				// Properly free the old scene node.
 
 				if (scene is not null)

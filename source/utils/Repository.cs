@@ -5,15 +5,17 @@ using System.Linq;
 
 using TribesOfDust.Utils.Misc;
 
-namespace TribesOfDust.Data
+namespace TribesOfDust.Utils
 {
     public abstract class Repository<TVariation, TAsset> : IEnumerable<TAsset>
         where TAsset : IVariant<TVariation>
         where TVariation : notnull
     {
+        #region Overrides
 
         public override string ToString() => $"Repository: {typeof(TVariation).Name} => {typeof(TAsset).Name}";
 
+        #endregion
         #region Loading
 
         public void Load() => LoadAll().ForEach(AddVariation);
