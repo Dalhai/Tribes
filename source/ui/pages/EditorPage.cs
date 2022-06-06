@@ -40,7 +40,7 @@ namespace TribesOfDust.UI.Pages
 
 				_context.Game.Level.Tiles.Added += (_, _) => UpdateTypeOverlay();
 
-				_neighborhood = new Neighborhood(_context.Game.Level.Tiles, 3);
+				_neighborhood = new ConnectedNeighborhood(3, _context.Game.Level.Tiles);
 			}
 
 			// Initialize user interface.
