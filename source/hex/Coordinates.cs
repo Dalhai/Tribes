@@ -29,12 +29,19 @@ namespace TribesOfDust.Hex
 
         public static readonly CubeCoordinate Zero = From(0, 0);
 
-        public static readonly CubeCoordinate NW = TileDirectionOffset.GetCubeOffset(TileDirection.NW);
-        public static readonly CubeCoordinate N  = TileDirectionOffset.GetCubeOffset(TileDirection.N);
-        public static readonly CubeCoordinate NE = TileDirectionOffset.GetCubeOffset(TileDirection.NE);
-        public static readonly CubeCoordinate SE = TileDirectionOffset.GetCubeOffset(TileDirection.SE);
-        public static readonly CubeCoordinate S  = TileDirectionOffset.GetCubeOffset(TileDirection.S);
-        public static readonly CubeCoordinate SW = TileDirectionOffset.GetCubeOffset(TileDirection.SW);
+        public static readonly CubeCoordinate DirNW = TileDirectionOffset.GetCubeOffset(TileDirection.NW);
+        public static readonly CubeCoordinate DirN = TileDirectionOffset.GetCubeOffset(TileDirection.N);
+        public static readonly CubeCoordinate DirNE = TileDirectionOffset.GetCubeOffset(TileDirection.NE);
+        public static readonly CubeCoordinate DirSE = TileDirectionOffset.GetCubeOffset(TileDirection.SE);
+        public static readonly CubeCoordinate DirS  = TileDirectionOffset.GetCubeOffset(TileDirection.S);
+        public static readonly CubeCoordinate DirSW = TileDirectionOffset.GetCubeOffset(TileDirection.SW);
+
+        public CubeCoordinate NW => this + DirNW;
+        public CubeCoordinate N  => this + DirN;
+        public CubeCoordinate NE => this + DirNE;
+        public CubeCoordinate SE => this + DirSE;
+        public CubeCoordinate S  => this + DirS;
+        public CubeCoordinate SW => this + DirSW;
 
         #endregion
         #region Factory
@@ -105,12 +112,19 @@ namespace TribesOfDust.Hex
 
         public static readonly AxialCoordinate Zero = new (0, 0);
 
-        public static readonly AxialCoordinate NW = TileDirectionOffset.GetAxialOffset(TileDirection.NW);
-        public static readonly AxialCoordinate N  = TileDirectionOffset.GetAxialOffset(TileDirection.N);
-        public static readonly AxialCoordinate NE = TileDirectionOffset.GetAxialOffset(TileDirection.NE);
-        public static readonly AxialCoordinate SE = TileDirectionOffset.GetAxialOffset(TileDirection.SE);
-        public static readonly AxialCoordinate S  = TileDirectionOffset.GetAxialOffset(TileDirection.S);
-        public static readonly AxialCoordinate SW = TileDirectionOffset.GetAxialOffset(TileDirection.SW);
+        public static readonly AxialCoordinate DirNW = TileDirectionOffset.GetAxialOffset(TileDirection.NW);
+        public static readonly AxialCoordinate DirN = TileDirectionOffset.GetAxialOffset(TileDirection.N);
+        public static readonly AxialCoordinate DirNE = TileDirectionOffset.GetAxialOffset(TileDirection.NE);
+        public static readonly AxialCoordinate DirSE = TileDirectionOffset.GetAxialOffset(TileDirection.SE);
+        public static readonly AxialCoordinate DirS  = TileDirectionOffset.GetAxialOffset(TileDirection.S);
+        public static readonly AxialCoordinate DirSW = TileDirectionOffset.GetAxialOffset(TileDirection.SW);
+
+        public AxialCoordinate NW => this + DirNW;
+        public AxialCoordinate N  => this + DirN;
+        public AxialCoordinate NE => this + DirNE;
+        public AxialCoordinate SE => this + DirSE;
+        public AxialCoordinate S  => this + DirS;
+        public AxialCoordinate SW => this + DirSW;
 
         #endregion
         #region Factory

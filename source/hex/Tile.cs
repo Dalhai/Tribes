@@ -78,6 +78,14 @@ namespace TribesOfDust.Hex
         #endregion
         #region Connectivity
 
+        public static bool AreConnected(Tile first, Tile second) 
+        {
+            var firstToSecond = TileDirections.FromOffset(second.Coordinates - first.Coordinates);
+            var secondToFirst = TileDirections.FromOffset(first.Coordinates - second.Coordinates);
+
+            return first.IsConnected(firstToSecond) && second.IsConnected(secondToFirst);
+        }
+
         /// <summary>
         /// Checks if the tile is connected in the specified direction.
         /// </summary>
