@@ -5,53 +5,118 @@ using TribesOfDust.Hex.Storage;
 
 namespace TribesOfDust.Hex.Neighborhood
 {
-    public class Neighborhood : INeighborhood
+    public abstract class Neighborhood : INeighborhood
     {
-        public Neighborhood(ITileStorageView storage, uint distance) 
-        {
-            Storage = storage;
-            Distance = distance;
-        }
-
-        public ITileStorageView Storage { get; init; }
-        public uint Distance { get; init; }
-
         /// <summary>
         /// Get all coordinates of the specified tile in this neighborhood.
         /// </summary>
         /// 
         /// <param name="axialCoordinate">The target tile.</param>
         /// <returns>A list of all neighbors in this neighborhood around the tile.</returns>
-        public List<AxialCoordinate> GetNeighbors(AxialCoordinate axialCoordinate)
+        public virtual List<AxialCoordinate> GetNeighbors(AxialCoordinate axialCoordinate)
         {
             List<AxialCoordinate> neighbors = new();
             List<AxialCoordinate> current = new();
-            List<AxialCoordinate> previous = new();
+            List<AxialCoordinate> open = new();
 
-            previous.Add(axialCoordinate);
-            neighbors.Add(axialCoordinate);
+            current.Add(axialCoordinate);
 
-            for(int distance = 0; distance < Distance; distance++)
+            while (current.Count > 0)
             {
-                foreach(var coordinate in previous)
+                foreach (var coordinate in current)
                 {
-                    current.Add(coordinate + AxialCoordinate.N);
-                    current.Add(coordinate + AxialCoordinate.NE);
-                    current.Add(coordinate + AxialCoordinate.NW);
-                    current.Add(coordinate + AxialCoordinate.S);
-                    current.Add(coordinate + AxialCoordinate.SE);
-                    current.Add(coordinate + AxialCoordinate.SW);
+                    neighbors.Add(coordinate);
+                    open.AddRange(GetNext(coordinate));
                 }
 
-                previous = current.Where(coordinate => !neighbors.Contains(coordinate)).ToList();
-                current = new ();
+                // Move new open coordinates to working set
+                current = open
+                    .Where(coordinate => !neighbors.Contains(coordinate))
+                    .Distinct()
+                    .ToList();
 
-                neighbors.AddRange(previous);
+                open.Clear();
             }
 
-            neighbors.Remove(axialCoordinate);
+            return neighbors;
+        }
 
-            return neighbors.Where(Storage.Contains).ToList();
+        protected abstract IEnumerable<AxialCoordinate> GetNext(AxialCoordinate coordinate);
+    }
+
+    public class ConnectedNeighborhood : Neighborhood
+    {
+
+        public ConnectedNeighborhood(int distance, ITileStorage<Tile> tiles)
+        {
+            Tiles = tiles;
+            Distance = distance;
+            Distances = new TileStorage<int>();
+        }
+
+        public ITileStorage<Tile> Tiles { get; init; }
+        public int Distance { get; init; }
+        public ITileStorage<int> Distances { get; init; }
+
+        public override List<AxialCoordinate> GetNeighbors(AxialCoordinate axialCoordinate)
+        {
+            Distances.Clear();
+            return base.GetNeighbors(axialCoordinate);
+        }
+
+        protected override IEnumerable<AxialCoordinate> GetNext(AxialCoordinate coordinate)
+        {
+            List<AxialCoordinate> next = new();
+            
+            // Get distance of tile or zero distance, if it does not exist.
+            var tile = Tiles.Get(coordinate);
+            int distance = Distances.Get(coordinate);
+
+            if (!(tile is null) && distance < Distance)
+            {
+                var tileNW = Tiles.Get(tile.Coordinates.NW);
+                if (tileNW is not null && Tile.AreConnected(tile, tileNW))
+                {
+                    next.Add(coordinate.NW);
+                    Distances.Add(coordinate.NW, distance + 1);
+                }
+
+                var tileN = Tiles.Get(tile.Coordinates.N);
+                if (tileN is not null && Tile.AreConnected(tile, tileN)) 
+                {
+                    next.Add(coordinate.N);
+                    Distances.Add(coordinate.N, distance + 1);
+                }
+                var tileNE = Tiles.Get(tile.Coordinates.NE);
+                if (tileNE is not null && Tile.AreConnected(tile, tileNE))
+                {
+                    next.Add(coordinate.NE);
+                    Distances.Add(coordinate.NE, distance + 1);
+                }
+
+                var tileSE = Tiles.Get(tile.Coordinates.SE);
+                if (tileSE is not null && Tile.AreConnected(tile, tileSE))
+                {
+                    next.Add(coordinate.SE);
+                    Distances.Add(coordinate.SE, distance + 1);
+                }
+
+                var tileS = Tiles.Get(tile.Coordinates.S);
+                if (tileS is not null && Tile.AreConnected(tile, tileS))
+                {
+                    next.Add(coordinate.S);
+                    Distances.Add(coordinate.S, distance + 1);
+                }
+
+                var tileSW = Tiles.Get(tile.Coordinates.SW);
+                if (tileSW is not null && Tile.AreConnected(tile, tileSW))
+                {
+                    next.Add(coordinate.SW);
+                    Distances.Add(coordinate.SW, distance + 1);
+                }
+            }
+
+            return next;
         }
     }
 }
