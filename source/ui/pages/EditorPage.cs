@@ -122,7 +122,7 @@ namespace TribesOfDust.UI.Pages
 				// Existing tiles of a type are replaced with new types.
 				// Existing tiles of a type are replaced with a new variation of the same type.
 
-				if (mouseButton.Pressed && mouseButton.ButtonIndex == MouseButton.Left)
+				if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Left })
 				{
 					var world = GetGlobalMousePosition();
 					var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
@@ -148,7 +148,7 @@ namespace TribesOfDust.UI.Pages
 				// Remove open tiles on right mouse click.
 				// Remove other tiles on right mouse click and replace them with an open tile.
 
-				else if (mouseButton.Pressed && mouseButton.ButtonIndex == MouseButton.Right)
+				else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Right })
 				{
 					var world = GetGlobalMousePosition();
 					var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
@@ -176,7 +176,7 @@ namespace TribesOfDust.UI.Pages
 
 				// Display neighborhood overlay on the tile that has been clicked.
 
-				else if (mouseButton.Pressed && mouseButton.ButtonIndex == MouseButton.Middle && _neighborhood is not null)
+				else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Middle } && _neighborhood is not null)
 				{
 					_neighborhoodOverlay.Clear();
 

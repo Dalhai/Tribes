@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dgcyx78g01q7v"]
+[gd_scene load_steps=4 format=3 uid="uid://dgcyx78g01q7v"]
 
-[ext_resource type="PackedScene" path="res://scenes/ui/pages/main_page.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://cfoe6l2n6a7cw" path="res://scenes/ui/pages/main_page.tscn" id="1"]
+[ext_resource type="Script" path="res://source/core/Root.cs" id="1_2cua2"]
 [ext_resource type="AudioStream" uid="uid://vqyd4qi475f6" path="res://assets/music/title_seas-of-sands.wav" id="3"]
 
 [node name="Root" type="Node2D"]
+script = ExtResource("1_2cua2")
 
 [node name="Scene" parent="." instance=ExtResource("1")]
 position = Vector2(-185.838, 2.51984)

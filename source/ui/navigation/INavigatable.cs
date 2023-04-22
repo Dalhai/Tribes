@@ -7,7 +7,7 @@ namespace TribesOfDust.UI.Navigation
         /// </summary>
         /// 
         /// <param name="target">The target to navigate to.</param>
-        /// <param name="args">Information about the route taken.</param>
+        /// <param name="route">Information about the route taken.</param>
         /// <returns>True, if the target was loaded, false otherwise.</returns>
         bool NavigateTo(T target, RouteArgs route);
     }

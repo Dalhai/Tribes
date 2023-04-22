@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dp2eldfcmbvfm"]
+[gd_scene load_steps=8 format=3 uid="uid://dp2eldfcmbvfm"]
 
 [ext_resource type="Script" path="res://source/ui/pages/EditorPage.cs" id="1"]
+[ext_resource type="Script" path="res://source/core/Camera.cs" id="2_iukab"]
 [ext_resource type="PackedScene" path="res://scenes/ui/menus/editor_menu.tscn" id="3"]
 [ext_resource type="Theme" uid="uid://cc1p7417x760j" path="res://assets/themes/menu.tres" id="4"]
 [ext_resource type="Script" path="res://source/ui/widgets/PaperPanel.cs" id="5"]
-[ext_resource type="Material" path="res://assets/shaders/ui/mat_paper.tres" id="6"]
+[ext_resource type="Material" uid="uid://coxeg6vs40b1l" path="res://assets/shaders/ui/mat_paper.tres" id="6"]
 [ext_resource type="Texture2D" uid="uid://7gem50mhgjiv" path="res://assets/textures/ui/paper.png" id="7"]
 
 [node name="Scene" type="Node2D"]
@@ -15,6 +16,7 @@ script = ExtResource("1")
 [node name="Camera2D" type="Camera2D" parent="CameraRoot"]
 anchor_mode = 0
 zoom = Vector2(3, 3)
+script = ExtResource("2_iukab")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="CameraRoot"]
 

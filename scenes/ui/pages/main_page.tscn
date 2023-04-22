@@ -1,46 +1,79 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://cfoe6l2n6a7cw"]
 
-[ext_resource path="res://assets/themes/menu.tres" type="Theme" id=1]
-[ext_resource path="res://assets/textures/ui/title.png" type="Texture2D" id=2]
-[ext_resource path="res://assets/textures/ui/paper.png" type="Texture2D" id=3]
-[ext_resource path="res://assets/shaders/ui/mat_paper.tres" type="Material" id=4]
-[ext_resource path="res://source/ui/widgets/PaperPanel.cs" type="Script" id=5]
-[ext_resource path="res://scenes/ui/menus/main_menu.tscn" type="PackedScene" id=7]
-[ext_resource path="res://source/ui/pages/MainPage.cs" type="Script" id=8]
+[ext_resource type="Theme" uid="uid://cc1p7417x760j" path="res://assets/themes/menu.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://7gem50mhgjiv" path="res://assets/textures/ui/paper.png" id="3"]
+[ext_resource type="Material" uid="uid://coxeg6vs40b1l" path="res://assets/shaders/ui/mat_paper.tres" id="4"]
+[ext_resource type="Script" path="res://source/ui/widgets/PaperPanel.cs" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/ui/widgets/hover_button.tscn" id="6_eunmr"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menus/main_menu.tscn" id="7"]
+[ext_resource type="Script" path="res://source/ui/pages/MainPage.cs" id="8"]
 
 [node name="Scene" type="Node2D"]
-script = ExtResource( 8 )
+script = ExtResource("8")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Paper" type="NinePatchRect" parent="CanvasLayer"]
-material = ExtResource( 4 )
+material = ExtResource("4")
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 1 )
-texture = ExtResource( 3 )
+theme = ExtResource("1")
+texture = ExtResource("3")
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("5")
 
-[node name="Title" type="NinePatchRect" parent="CanvasLayer"]
-anchor_left = 0.2
-anchor_top = 0.1
-anchor_right = 0.8
-anchor_bottom = 0.4
-texture = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Title" parent="CanvasLayer" instance=ExtResource("6_eunmr")]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 97.0
+grow_vertical = 1
+theme_override_font_sizes/font_size = 75
+text = "Paper Warriors"
+horizontal_alignment = 1
+vertical_alignment = 1
+ModulationColored = null
+FontColored = null
+HoverColor = null
 
-[node name="MainMenu" parent="CanvasLayer" instance=ExtResource( 7 )]
+[node name="MainMenu" parent="CanvasLayer" instance=ExtResource("7")]
+anchors_preset = -1
 
-[connection signal="Pressed" from="CanvasLayer/MainMenu/Play" to="." method="OnPlayPressed"]
-[connection signal="Pressed" from="CanvasLayer/MainMenu/Editor" to="." method="OnEditorPressed"]
-[connection signal="Pressed" from="CanvasLayer/MainMenu/Settings" to="." method="OnSettingsPressed"]
-[connection signal="Pressed" from="CanvasLayer/MainMenu/Quit" to="." method="OnQuitPressed"]
+[node name="Play" parent="CanvasLayer/MainMenu" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
+ModulationColored = null
+FontColored = null
+HoverColor = null
+
+[node name="Editor" parent="CanvasLayer/MainMenu" index="1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
+ModulationColored = null
+FontColored = null
+HoverColor = null
+
+[node name="Settings" parent="CanvasLayer/MainMenu" index="2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
+ModulationColored = null
+FontColored = null
+HoverColor = null
+
+[node name="Quit" parent="CanvasLayer/MainMenu" index="3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
+ModulationColored = null
+FontColored = null
+HoverColor = null
 
 [editable path="CanvasLayer/MainMenu"]

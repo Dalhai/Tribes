@@ -6,7 +6,7 @@ using Godot;
 
 namespace TribesOfDust.Core
 {
-    public partial class Camera3D : Camera2D
+    public partial class Camera: Camera2D
     {
         public const string InputActionZoomIn = "zoom_in";
         public const string InputActionZoomOut = "zoom_out";
@@ -40,20 +40,21 @@ namespace TribesOfDust.Core
 
             if (GDIn.IsActionJustPressed(Actions.ZoomIn))
             {
-                if (Zoom.X > ZoomMax && Zoom.Y > ZoomMax)
+                if (Zoom is { X: > ZoomMax, Y: > ZoomMax })
                 {
                     Vector2 oldZoom = Zoom;
                     Vector2 newZoom = oldZoom * (1.0f - ZoomChange * (float)delta);
+                    
+                    var viewportRect = GetViewport().GetVisibleRect();
 
-                    Vector2 offset = GetGlobalMousePosition() - GetScreenCenterPosition();
+                    Vector2 offset = viewportRect.Size - GetLocalMousePosition();
                     Vector2 offsetNormalized = offset.Normalized();
 
                     float maxOffsetWeight = offset.Length() * OffsetLengthWeight;
                     float currentOffsetWeight = OffsetSpeed * (float)delta * (float)Math.Pow(newZoom.X, 2f);
-                    float offsetWeight = (float)Math.Min(maxOffsetWeight, currentOffsetWeight);
+                    float offsetWeight = Math.Min(maxOffsetWeight, currentOffsetWeight);
 
-                    Viewport viewport = GetViewport();
-                    Position = Position + 0.5f * viewport.GetVisibleRect().Size * (oldZoom - newZoom) + offsetNormalized * offsetWeight;
+                    Position = Position + 0.5f * viewportRect.Size * (oldZoom - newZoom) + offsetNormalized * offsetWeight;
                     Zoom = newZoom;
                 }
             }

@@ -7,7 +7,7 @@ using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Navigation
 {
-    public partial class Navigator<TTarget>
+    public class Navigator<TTarget>
     {
         public Navigator(Context context, INavigatable<TTarget> navigated)
         { 
@@ -57,9 +57,7 @@ namespace TribesOfDust.UI.Navigation
             var latest = History.Pop();
             var name = latest.Name;
 
-            return name is not null 
-                ? GoTo(name, args ?? latest.Arguments)
-                : false;
+            return name is not null && GoTo(name, args ?? latest.Arguments);
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace TribesOfDust.UI.Widgets
 
         /// <summary>
         ///  The item to be modulated, if any.
-        ///  If left unassinged, no item will be modulated.
+        ///  If left unassigned, no item will be modulated.
         /// </summary>
         [Export] 
         public NodePath? ModulationColored;
@@ -46,13 +46,13 @@ namespace TribesOfDust.UI.Widgets
         {
             if (@event is InputEventMouseButton mouse && mouse.IsPressed()) 
             {
-                EmitSignal(nameof(PressedEventHandler));
+                EmitSignal(SignalName.Pressed);
             }
 
             base._GuiInput(@event);
         }
 
-        virtual public void OnMouseEntered() 
+        public void OnMouseEntered() 
         {
             if (_modulationColorTarget is not null)
                 _modulationColorTarget.Modulate = HoverColor;
@@ -63,7 +63,7 @@ namespace TribesOfDust.UI.Widgets
             _isHovered = true;
         }
 
-        virtual public void OnMouseExited()
+        public void OnMouseExited()
         {
             if (_modulationColorTarget is not null)
                 _modulationColorTarget.Modulate = _modulationColor;

@@ -16,9 +16,11 @@ namespace TribesOfDust.Hex
 
         protected override bool TryLoad(string resourcePath, out Terrain? asset)
         {
-            asset = GD.Load<Terrain>(resourcePath);
+            GD.Print($"Loading Terrain: {resourcePath}");
+            var resource = GD.Load(resourcePath);
+            asset = resource as Terrain;
 
-            if (asset != null && asset.Texture2D != null)
+            if (asset is { Texture2D: not null })
             {
                 float width = asset.Texture2D.GetWidth();
                 float height = asset.Texture2D.GetHeight();
