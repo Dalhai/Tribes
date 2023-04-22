@@ -5,7 +5,7 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public class Game
+    public partial class Game
     {
         public Game(Context context)
         {

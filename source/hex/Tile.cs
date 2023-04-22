@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace TribesOfDust.Hex
 {
-    public class Tile : Sprite
+    public partial class Tile : Sprite2D
     {
         #region Factory
 
@@ -47,7 +47,7 @@ namespace TribesOfDust.Hex
             // Initialize tile with properties from tile asset
 
             Key = terrain.Key;
-            Texture = terrain.Texture;
+            Texture = terrain.Texture2D;
 
             _connections = (TileDirection)terrain.Connections;
             _direction = terrain.Direction;

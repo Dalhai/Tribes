@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
+using Godot;
 using TribesOfDust.Utils.Misc;
 
 namespace TribesOfDust.Utils
@@ -47,22 +47,14 @@ namespace TribesOfDust.Utils
         /// <returns>An empty list if there were no assets at the specified path.</returns>
         protected List<TAsset> LoadAll(string resourcePath)
         {
-            var dir = new Godot.Directory();
-            var err = dir.Open(resourcePath);
-            if (err != Godot.Error.Ok)
-            {
-                throw Error.Wrap(err);
-            }
-
             var results = new List<TAsset>();
+            var dir = DirAccess.Open(resourcePath);
+            if (dir is null) return results;
 
             // Iterate through all files in the directory.
-
-            err = dir.ListDirBegin(skipNavigational: true);
+            var err = dir.ListDirBegin();
             if (err != Godot.Error.Ok)
-            {
                 throw Error.Wrap(err);
-            }
 
             var name = dir.GetNext();
             while (!string.IsNullOrEmpty(name))

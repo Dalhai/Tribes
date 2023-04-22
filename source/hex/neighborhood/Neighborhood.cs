@@ -44,7 +44,7 @@ namespace TribesOfDust.Hex.Neighborhood
         protected abstract IEnumerable<AxialCoordinate> GetNext(AxialCoordinate coordinate);
     }
 
-    public class ConnectedNeighborhood : Neighborhood
+    public partial class ConnectedNeighborhood : Neighborhood
     {
 
         public ConnectedNeighborhood(int distance, ITileStorage<Tile> tiles)

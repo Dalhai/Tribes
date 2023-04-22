@@ -3,7 +3,7 @@ using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Pages
 {
-	public class MainPage : Node2D
+	public partial class MainPage : Node2D
 	{
 		public void OnPlayPressed() => Context.Get(this)?.Navigator.GoTo("play");
 

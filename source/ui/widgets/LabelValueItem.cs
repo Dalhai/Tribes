@@ -3,7 +3,7 @@ using static System.Diagnostics.Debug;
 
 namespace TribesOfDust.UI.Widgets
 {
-    public class LabelValueItem : Control
+    public partial class LabelValueItem : Control
     {
         [Export(PropertyHint.Range, "0,1,0.05")]
         public float ActiveVisibility;

@@ -1,11 +1,11 @@
 [gd_resource type="Resource" load_steps=3 format=2]
 
 [ext_resource path="res://source/hex/Terrain.cs" type="Script" id=1]
-[ext_resource path="res://assets/textures/terrain/rocks_3.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/terrain/rocks_3.png" type="Texture2D" id=2]
 
 [resource]
 script = ExtResource( 1 )
 Key = 4
-Texture = ExtResource( 2 )
+Texture2D = ExtResource( 2 )
 Direction = 0
 Connections = 63

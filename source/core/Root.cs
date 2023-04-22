@@ -4,7 +4,7 @@ using TribesOfDust.UI.Navigation;
 namespace TribesOfDust.Core
 {
 	[Tool]
-	public class Root : Node, INavigatable<Node2D>
+	public partial class Root : Node, INavigatable<Node2D>
 	{
 		/// <summary>
 		/// Try to get the current root node based on the godot viewport.
@@ -18,8 +18,8 @@ namespace TribesOfDust.Core
 			Context = new(this);
 
 			// Setup named routes
-			Context.Navigator.Route("main", context => (Node2D)GD.Load<PackedScene>("res://scenes/ui/pages/main_page.tscn").Instance());
-			Context.Navigator.Route("editor", context => (Node2D)GD.Load<PackedScene>("res://scenes/ui/pages/editor_page.tscn").Instance());
+			Context.Navigator.Route("main", context => (Node2D)GD.Load<PackedScene>("res://scenes/ui/pages/main_page.tscn").Instantiate());
+			Context.Navigator.Route("editor", context => (Node2D)GD.Load<PackedScene>("res://scenes/ui/pages/editor_page.tscn").Instantiate());
 		}
 
 		/// <summary>

@@ -2,7 +2,7 @@ using Godot;
 
 namespace TribesOfDust.Core.Entities
 {
-	public class Movement : Resource
+	public partial class Movement : Resource
 	{
 		[Export(PropertyHint.Range, "0,10,1")]
 		public double TundraCost = 1.0;

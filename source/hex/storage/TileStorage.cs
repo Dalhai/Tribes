@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TribesOfDust.Hex.Storage
 {
-    public class TileStorage<T> : ITileStorage<T>
+    public partial class TileStorage<T> : ITileStorage<T>
     {
         #region Constructors
 

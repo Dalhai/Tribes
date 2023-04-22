@@ -5,7 +5,7 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public class Repositories
+    public partial class Repositories
     {
         public Repositories(Game game)
         {

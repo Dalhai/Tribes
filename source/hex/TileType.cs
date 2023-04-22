@@ -1,4 +1,4 @@
-﻿namespace TribesOfDust.Hex
+namespace TribesOfDust.Hex
 {
     /// <summary>
     /// Tile types describe the fundamental properties of a hex tile such as the setting and art.

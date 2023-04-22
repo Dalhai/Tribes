@@ -5,12 +5,12 @@ using TribesOfDust.Utils;
 namespace TribesOfDust.UI.Widgets
 {
     [Tool]
-    public class PaperPanel : NinePatchRect
+    public partial class PaperPanel : NinePatchRect
     {
         public override void _Ready()
         {
             // Register with the viewport to update necessary shader parameters.
-            GetTree().Root.Connect("size_changed", this, "OnSizeChanged");
+            GetTree().Root.Connect("size_changed", new Callable(this, "OnSizeChanged"));
 
             // Trigger signal handler immediately for initialization of variables.
             OnSizeChanged();
@@ -25,7 +25,7 @@ namespace TribesOfDust.UI.Widgets
 
             if (shaderMaterial is not null)
             {
-                shaderMaterial.SetShaderParam(ShaderParams.ViewportSize, viewportSize);
+                shaderMaterial.SetShaderParameter(ShaderParams.ViewportSize, viewportSize);
             }
         }
     }

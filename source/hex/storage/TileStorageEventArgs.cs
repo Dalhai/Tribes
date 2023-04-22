@@ -4,7 +4,7 @@ using Godot;
 
 namespace TribesOfDust.Hex.Storage
 {
-    public class TileStorageEventArgs<T> : EventArgs
+    public partial class TileStorageEventArgs<T> : EventArgs
     {
         public TileStorageEventArgs(AxialCoordinate coordinates, T item)
         {

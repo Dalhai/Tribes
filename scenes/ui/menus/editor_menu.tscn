@@ -1,15 +1,15 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://source/ui/menus/EditorMenu.cs" type="Script" id=1]
-[ext_resource path="res://assets/fonts/paul_maul.tres" type="DynamicFont" id=2]
+[ext_resource path="res://assets/fonts/paul_maul.tres" type="FontFile" id=2]
 [ext_resource path="res://scenes/ui/widgets/label_value_item.tscn" type="PackedScene" id=3]
 
 [node name="EditorMenu" type="MarginContainer"]
 anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 245.0
-margin_bottom = -5.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 245.0
+offset_bottom = -5.0
 size_flags_horizontal = 3
 script = ExtResource( 1 )
 __meta__ = {
@@ -17,27 +17,27 @@ __meta__ = {
 }
 
 [node name="List" type="VBoxContainer" parent="."]
-margin_right = 240.0
-margin_bottom = 590.0
+offset_right = 240.0
+offset_bottom = 590.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Title" type="Label" parent="List"]
-margin_right = 240.0
-margin_bottom = 28.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 2 )
+offset_right = 240.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color( 0, 0, 0, 1 )
+theme_override_fonts/font = ExtResource( 2 )
 text = "Tile Counts"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ActiveTileTypeSeparator" type="HSeparator" parent="List"]
-margin_top = 32.0
-margin_right = 240.0
-margin_bottom = 36.0
+offset_top = 32.0
+offset_right = 240.0
+offset_bottom = 36.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -48,37 +48,37 @@ __meta__ = {
 text = "Tundra"
 
 [node name="RocksCount" parent="List" instance=ExtResource( 3 )]
-margin_top = 78.0
-margin_bottom = 112.0
+offset_top = 78.0
+offset_bottom = 112.0
 
 [node name="Label" parent="List/RocksCount/Line" index="0"]
 text = "Rocks"
 
 [node name="DunesCount" parent="List" instance=ExtResource( 3 )]
-margin_top = 116.0
-margin_bottom = 150.0
+offset_top = 116.0
+offset_bottom = 150.0
 
 [node name="Label" parent="List/DunesCount/Line" index="0"]
 text = "Dunes"
 
 [node name="CanyonCount" parent="List" instance=ExtResource( 3 )]
-margin_top = 154.0
-margin_bottom = 188.0
+offset_top = 154.0
+offset_bottom = 188.0
 
 [node name="Label" parent="List/CanyonCount/Line" index="0"]
 text = "Canyon"
 
 [node name="EmtpyTileCountSeparator" type="HSeparator" parent="List"]
-margin_top = 192.0
-margin_right = 240.0
-margin_bottom = 196.0
+offset_top = 192.0
+offset_right = 240.0
+offset_bottom = 196.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AvailableCount" parent="List" instance=ExtResource( 3 )]
-margin_top = 200.0
-margin_bottom = 234.0
+offset_top = 200.0
+offset_bottom = 234.0
 
 [node name="Label" parent="List/AvailableCount/Line" index="0"]
 text = "Available"

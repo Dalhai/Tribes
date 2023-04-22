@@ -6,7 +6,7 @@ using TribesOfDust.Utils;
 
 namespace TribesOfDust.Hex
 {
-    public class TerrainRepository : Repository<TileType, Terrain>
+    public partial class TerrainRepository : Repository<TileType, Terrain>
     {
         /// <summary>
         /// The default resource path used for tile assets.
@@ -18,10 +18,10 @@ namespace TribesOfDust.Hex
         {
             asset = GD.Load<Terrain>(resourcePath);
 
-            if (asset != null && asset.Texture != null)
+            if (asset != null && asset.Texture2D != null)
             {
-                float width = asset.Texture.GetWidth();
-                float height = asset.Texture.GetHeight();
+                float width = asset.Texture2D.GetWidth();
+                float height = asset.Texture2D.GetHeight();
                 float ratio = width / height;
 
                 if (!Mathf.IsEqualApprox(ratio, HexConstants.DefaultRatio))

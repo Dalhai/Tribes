@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 using Godot;
 
 namespace TribesOfDust.Hex
@@ -51,9 +51,9 @@ namespace TribesOfDust.Hex
         public static CubeCoordinate From(Vector3 vector)
         {
             var rounded = vector.Round();
-            var x = (int) rounded.x;
-            var y = (int) rounded.y;
-            var z = (int) rounded.z;
+            var x = (int) rounded.X;
+            var y = (int) rounded.Y;
+            var z = (int) rounded.Z;
 
             return new (x, y, z);
         }
@@ -133,8 +133,8 @@ namespace TribesOfDust.Hex
         public static AxialCoordinate From(Vector2 vector)
         {
             var rounded = vector.Round();
-            var q = (int) rounded.x;
-            var r = (int) rounded.y;
+            var q = (int) rounded.X;
+            var r = (int) rounded.Y;
 
             return new (q, r);
         }

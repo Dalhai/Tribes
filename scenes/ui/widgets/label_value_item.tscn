@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://source/ui/widgets/LabelValueItem.cs" type="Script" id=1]
-[ext_resource path="res://assets/fonts/lane_narrow.tres" type="DynamicFont" id=2]
+[ext_resource path="res://assets/fonts/lane_narrow.tres" type="FontFile" id=2]
 
 [node name="Item" type="PanelContainer"]
 self_modulate = Color( 1, 1, 1, 0 )
-margin_top = 40.0
-margin_right = 240.0
-margin_bottom = 74.0
+offset_top = 40.0
+offset_right = 240.0
+offset_bottom = 74.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -15,33 +15,33 @@ __meta__ = {
 ActiveVisibility = 0.25
 
 [node name="Line" type="HBoxContainer" parent="."]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 233.0
-margin_bottom = 27.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 233.0
+offset_bottom = 27.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="Line"]
-margin_right = 111.0
-margin_bottom = 20.0
+offset_right = 111.0
+offset_bottom = 20.0
 size_flags_horizontal = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 2 )
+theme_override_colors/font_color = Color( 0, 0, 0, 1 )
+theme_override_fonts/font = ExtResource( 2 )
 text = "Label"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Value" type="Label" parent="Line"]
-margin_left = 115.0
-margin_right = 226.0
-margin_bottom = 20.0
+offset_left = 115.0
+offset_right = 226.0
+offset_bottom = 20.0
 size_flags_horizontal = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = ExtResource( 2 )
+theme_override_colors/font_color = Color( 0, 0, 0, 1 )
+theme_override_fonts/font = ExtResource( 2 )
 text = "Value"
 __meta__ = {
 "_edit_use_anchors_": false

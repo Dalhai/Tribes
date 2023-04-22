@@ -10,7 +10,7 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public class Display
+    public partial class Display
     {
         public Display(Game game) 
         {

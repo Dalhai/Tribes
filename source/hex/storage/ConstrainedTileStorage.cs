@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace TribesOfDust.Hex.Storage
 {
-    public class ConstraintedTileStorage<T> : TileStorage<T>
+    public partial class ConstraintedTileStorage<T> : TileStorage<T>
     {
         public ConstraintedTileStorage(ITileStorageView constraint) : this(constraint, EqualityComparer<T>.Default)
         {

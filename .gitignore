@@ -1,4 +1,6 @@
 .vs/
+.vscode/
+.godot/
 .idea/
 
 # IDE-specified ignores

@@ -7,7 +7,7 @@ using TribesOfDust.Utils;
 namespace TribesOfDust.Core
 {
     [DataContract]
-    public class Player : IVariant<string>
+    public partial class Player : IVariant<string>
     {
         public Player(string name, long id, Color? color = null)
         {

@@ -2,10 +2,10 @@ using Godot;
 
 namespace TribesOfDust.UI.Widgets
 {
-    public class HoverButton : Label
+    public partial class HoverButton : Label
     {
         [Signal]
-        public delegate void Pressed();
+        public delegate void PressedEventHandler();
 
         /// <summary>
         ///  The item to be modulated, if any.
@@ -40,16 +40,13 @@ namespace TribesOfDust.UI.Widgets
 
             if (_modulationColorTarget is not null)
                 _modulationColor = _modulationColorTarget.Modulate;
-
-            if (_fontColorTarget is not null)
-                _fontColor = _fontColorTarget.GetColor("font_color");
         }
 
         public override void _GuiInput(InputEvent @event)
         {
             if (@event is InputEventMouseButton mouse && mouse.IsPressed()) 
             {
-                EmitSignal(nameof(Pressed));
+                EmitSignal(nameof(PressedEventHandler));
             }
 
             base._GuiInput(@event);
@@ -61,7 +58,7 @@ namespace TribesOfDust.UI.Widgets
                 _modulationColorTarget.Modulate = HoverColor;
 
             if (_fontColorTarget is not null)
-                _fontColorTarget.AddColorOverride("font_color", HoverColor);
+                _fontColorTarget.AddThemeColorOverride("font_color", HoverColor);
 
             _isHovered = true;
         }
@@ -72,7 +69,7 @@ namespace TribesOfDust.UI.Widgets
                 _modulationColorTarget.Modulate = _modulationColor;
 
             if (_fontColorTarget is not null)
-                _fontColorTarget.AddColorOverride("font_color", _fontColor);
+                _fontColorTarget.AddThemeColorOverride("font_color", _fontColor);
 
             _isHovered = false;
         }

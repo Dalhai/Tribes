@@ -13,7 +13,7 @@ namespace TribesOfDust.Core
         T Root { get; }
     }
 
-    public class Context : IContext<Root>
+    public partial class Context : IContext<Root>
     {   
         /// <summary>
         /// Try to get the current context based on the godot viewport.

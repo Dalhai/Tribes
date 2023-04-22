@@ -6,7 +6,7 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public class Level
+    public partial class Level
     {
         public Level(Game game)
         {

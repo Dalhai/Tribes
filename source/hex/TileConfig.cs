@@ -3,7 +3,7 @@ using Godot;
 namespace TribesOfDust.Hex
 {
     [Tool]
-    public class TileConfig : Resource
+    public partial class TileConfig : Resource
     {
         public const string DefaultTileConfigResourcePath = "res://config/tile_config.tres";
 

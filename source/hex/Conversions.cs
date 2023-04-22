@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 
 namespace TribesOfDust.Hex
 {
@@ -40,8 +40,8 @@ namespace TribesOfDust.Hex
 
             // Q: Top Left to Bottom Right
             // R: Top to Bottom
-            var q =  position.x / centerToCenterDistance;
-            var r = -position.x / 3.0f + position.y / UnitHeight;
+            var q =  position.X / centerToCenterDistance;
+            var r = -position.X / 3.0f + position.Y / UnitHeight;
 
             // There is no direct relation of the third here to any of our other values.
             // This is a direct result of inverting the above conversion matrix. We divide
@@ -67,22 +67,22 @@ namespace TribesOfDust.Hex
             // Find the component with the largest offset and reset it to what is needed by the other components.
             // This is necessary because for cube coordinates, x + y + z must be fullfilled.
 
-            int rx = (int) rounded.x, ry = (int) rounded.y, rz = (int) rounded.z;
+            int rx = (int) rounded.X, ry = (int) rounded.Y, rz = (int) rounded.Z;
 
             // For our floating point cube coordinate this has to be the case. For our rounded
             // floating point cube coordinate, this might however not be the case anymore.
             // Readjusting the component that is wrong "the most", will fix this issue and give
             // us the correct coordinate again.
 
-            if (delta.x >= delta.y && delta.x >= delta.z)
+            if (delta.X >= delta.Y && delta.X >= delta.Z)
             {
                 rx = -(ry + rz);
             }
-            else if (delta.y >= delta.x && delta.y >= delta.z)
+            else if (delta.Y >= delta.X && delta.Y >= delta.Z)
             {
                 ry = -(rx + rz);
             }
-            else if (delta.z >= delta.x && delta.z >= delta.y)
+            else if (delta.Z >= delta.X && delta.Z >= delta.Y)
             {
                 rz = -(rx + ry);
             }

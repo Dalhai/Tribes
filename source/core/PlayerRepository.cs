@@ -3,7 +3,7 @@ using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core
 {
-    public class PlayerRepository : Repository<string, Player>
+    public partial class PlayerRepository : Repository<string, Player>
     {
         /// <summary>
         /// The default resource path used for tile assets.

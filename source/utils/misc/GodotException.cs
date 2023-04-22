@@ -5,7 +5,7 @@ using Godot;
 
 namespace TribesOfDust.Utils.Misc
 {
-    public class GodotException : Exception
+    public partial class GodotException : Exception
     {
         /// <summary>
         /// Initializes a new <see cref="GodotException"> for the specified error.

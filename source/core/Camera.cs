@@ -6,7 +6,7 @@ using Godot;
 
 namespace TribesOfDust.Core
 {
-    public class Camera : Godot.Camera2D
+    public partial class Camera3D : Camera2D
     {
         public const string InputActionZoomIn = "zoom_in";
         public const string InputActionZoomOut = "zoom_out";
@@ -16,45 +16,44 @@ namespace TribesOfDust.Core
         public const float OffsetSpeed = 3000.0f;
         public const float MovementSpeed = 10000.0f;
 
-
-        public override void _Process(float delta)
+        public override void _Process(double delta)
         {
             if (GDIn.IsActionPressed(Actions.CameraUp))
             {
-                Position = Position.MoveToward(Position + Vector2.Up, delta * MovementSpeed);
+                Position = Position.MoveToward(Position + Vector2.Up, (float)delta * MovementSpeed);
             }
 
             if (GDIn.IsActionPressed(Actions.CameraDown))
             {
-                Position = Position.MoveToward(Position + Vector2.Down, delta * MovementSpeed);
+                Position = Position.MoveToward(Position + Vector2.Down, (float)delta * MovementSpeed);
             }
 
             if (GDIn.IsActionPressed(Actions.CameraLeft))
             {
-                Position = Position.MoveToward(Position + Vector2.Left, delta * MovementSpeed);
+                Position = Position.MoveToward(Position + Vector2.Left, (float)delta * MovementSpeed);
             }
 
             if (GDIn.IsActionPressed(Actions.CameraRight))
             {
-                Position = Position.MoveToward(Position + Vector2.Right, delta * MovementSpeed);
+                Position = Position.MoveToward(Position + Vector2.Right, (float)delta * MovementSpeed);
             }
 
             if (GDIn.IsActionJustPressed(Actions.ZoomIn))
             {
-                if (Zoom.x > ZoomMax && Zoom.y > ZoomMax)
+                if (Zoom.X > ZoomMax && Zoom.Y > ZoomMax)
                 {
                     Vector2 oldZoom = Zoom;
-                    Vector2 newZoom = oldZoom * (1.0f - ZoomChange * delta);
+                    Vector2 newZoom = oldZoom * (1.0f - ZoomChange * (float)delta);
 
-                    Vector2 offset = GetGlobalMousePosition() - GetCameraScreenCenter();
+                    Vector2 offset = GetGlobalMousePosition() - GetScreenCenterPosition();
                     Vector2 offsetNormalized = offset.Normalized();
 
                     float maxOffsetWeight = offset.Length() * OffsetLengthWeight;
-                    float currentOffsetWeight = OffsetSpeed * delta * (float)Math.Pow(newZoom.x, 2f);
+                    float currentOffsetWeight = OffsetSpeed * (float)delta * (float)Math.Pow(newZoom.X, 2f);
                     float offsetWeight = (float)Math.Min(maxOffsetWeight, currentOffsetWeight);
 
                     Viewport viewport = GetViewport();
-                    Position = Position + 0.5f * viewport.Size * (oldZoom - newZoom) + offsetNormalized * offsetWeight;
+                    Position = Position + 0.5f * viewport.GetVisibleRect().Size * (oldZoom - newZoom) + offsetNormalized * offsetWeight;
                     Zoom = newZoom;
                 }
             }
@@ -63,10 +62,10 @@ namespace TribesOfDust.Core
             if (GDIn.IsActionJustPressed(Actions.ZoomOut))
             {
                 Vector2 oldZoom = Zoom;
-                Vector2 newZoom = oldZoom * (1.0f + ZoomChange * delta);
+                Vector2 newZoom = oldZoom * (1.0f + ZoomChange * (float)delta);
 
                 Viewport viewport = GetViewport();
-                Position = Position + 0.5f * viewport.Size * (oldZoom - newZoom);
+                Position = Position + 0.5f * viewport.GetVisibleRect().Size * (oldZoom - newZoom);
                 Zoom = newZoom;
             }
 

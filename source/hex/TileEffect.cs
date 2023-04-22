@@ -1,4 +1,4 @@
-﻿namespace TribesOfDust.Hex
+namespace TribesOfDust.Hex
 {
     /// <summary>
     /// Tile effects add a special effect to a tile.

@@ -43,8 +43,11 @@ namespace TribesOfDust.Utils.Extensions
             int valueIndex = 1;
             foreach(var value in values)
             {
-                sb.AppendLine($"Value {valueIndex++}".Indent(count, indent));
-                sb.AppendLine(value.ToString().Indent(count + 1, indent));
+                if (value is string s)
+                {
+                    sb.AppendLine($"Value {valueIndex++}".Indent(count, indent));
+                    sb.AppendLine(s.Indent(count + 1, indent));
+                }
             }
 
             return sb;

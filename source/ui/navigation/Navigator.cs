@@ -7,7 +7,7 @@ using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Navigation
 {
-    public class Navigator<TTarget>
+    public partial class Navigator<TTarget>
     {
         public Navigator(Context context, INavigatable<TTarget> navigated)
         { 

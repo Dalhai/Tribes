@@ -1,16 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://dgcyx78g01q7v"]
 
-[ext_resource path="res://scenes/ui/pages/main_page.tscn" type="PackedScene" id=1]
-[ext_resource path="res://source/core/Root.cs" type="Script" id=2]
-[ext_resource path="res://assets/music/title_seas-of-sands.wav" type="AudioStream" id=3]
+[ext_resource type="PackedScene" path="res://scenes/ui/pages/main_page.tscn" id="1"]
+[ext_resource type="AudioStream" uid="uid://vqyd4qi475f6" path="res://assets/music/title_seas-of-sands.wav" id="3"]
 
 [node name="Root" type="Node2D"]
-script = ExtResource( 2 )
 
-[node name="Scene" parent="." instance=ExtResource( 1 )]
-position = Vector2( -185.838, 2.51984 )
+[node name="Scene" parent="." instance=ExtResource("1")]
+position = Vector2(-185.838, 2.51984)
 
 [node name="Audio" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 3 )
+stream = ExtResource("3")
 volume_db = -5.0
 autoplay = true

@@ -10,7 +10,7 @@ using TribesOfDust.UI.Widgets;
 
 namespace TribesOfDust.UI.Menus
 {
-	public class EditorMenu : Control
+	public partial class EditorMenu : Control
 	{
 		public override void _EnterTree()
 		{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TribesOfDust.Core
 {
-    public class Session
+    public partial class Session
     {
         public Session(Game game) => Game = game;
 

@@ -6,16 +6,16 @@ using TribesOfDust.Utils.Misc;
 
 namespace TribesOfDust.Entities
 {
-    public class Coin : Node2D
+    public partial class Coin : Node2D
     {
         #region Constructors
 
-        public Coin(Texture coinTexture, Texture symbolTexture)
+        public Coin(Texture2D coinTexture, Texture2D symbolTexture)
             : this(Vector2.One, coinTexture, symbolTexture)
         {
         }
 
-        public Coin(Vector2 scale, Texture coinTexture, Texture symbolTexture)
+        public Coin(Vector2 scale, Texture2D coinTexture, Texture2D symbolTexture)
         {
             // Check that the scale is not zero.
 
@@ -34,7 +34,7 @@ namespace TribesOfDust.Entities
 
             // Setup the coin sprite properties and attach it to the coin root node.
 
-            _coinSprite = new Sprite()
+            _coinSprite = new Sprite2D()
             {
                 Texture  = coinTexture,
                 Centered = true,
@@ -48,7 +48,7 @@ namespace TribesOfDust.Entities
             // like this it will fit within the coin sprite. This is not very robust, of course and
             // should eventually be adapted.
 
-            _symbolSprite = new Sprite()
+            _symbolSprite = new Sprite2D()
             {
                 Texture  = symbolTexture,
                 Centered = true,
@@ -60,7 +60,7 @@ namespace TribesOfDust.Entities
 
         #endregion
 
-        private readonly Sprite _coinSprite;
-        private readonly Sprite _symbolSprite;
+        private readonly Sprite2D _coinSprite;
+        private readonly Sprite2D _symbolSprite;
     }
 }

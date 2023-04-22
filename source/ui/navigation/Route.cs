@@ -4,7 +4,7 @@ using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Navigation
 {
-    public class Route<TTarget>
+    public partial class Route<TTarget>
     {
         public Route(string name, Func<Context, TTarget> createTarget)
         {
@@ -20,7 +20,7 @@ namespace TribesOfDust.UI.Navigation
         public Func<Context, TTarget> CreateTarget { get; init; }
     }
 
-    public class RouteArgs
+    public partial class RouteArgs
     {
         public string? Name { get; init; }
         public object? Source { get; init; }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -9,7 +9,7 @@ using TribesOfDust.Utils;
 namespace TribesOfDust.Hex
 {
     [DataContract]
-    public class Map : IVariant<string>
+    public partial class Map : IVariant<string>
     {
         public Map(string name)
         {

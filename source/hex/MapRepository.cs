@@ -1,6 +1,7 @@
 using Godot;
 
 using System.Collections.Generic;
+using System.Runtime;
 using System.Runtime.Serialization;
 using System.Xml;
 using System.Text;
@@ -10,7 +11,7 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core
 {
-    public class MapRepository : Repository<string, Map>
+    public partial class MapRepository : Repository<string, Map>
     {
         /// <summary>
         /// The default resource path used for maps.
@@ -21,16 +22,15 @@ namespace TribesOfDust.Core
         protected override bool TryLoad(string resourcePath, out Map? asset)
         {
 			asset = null;
-			var targetFile = new File();
-
-			// Try to open the default map file to load our default map.
-			Godot.Error fileOpenError = targetFile.Open(resourcePath, File.ModeFlags.Read);
+			
+			var targetFile = FileAccess.Open(resourcePath, FileAccess.ModeFlags.Read);
+			var fileOpenError = targetFile.GetError();
 
 			// If opening the file worked, deserialize the template map.
 			if (fileOpenError == Godot.Error.Ok)
 			{
 				using var reader = new System.IO.StringReader(targetFile.GetAsText());
-				using var xml = System.Xml.XmlReader.Create(reader);
+				using var xml = XmlReader.Create(reader);
 
 				var deserializer = new DataContractSerializer(typeof(Map));
 				asset = deserializer.ReadObject(xml) as Map;
@@ -47,11 +47,10 @@ namespace TribesOfDust.Core
         /// <returns>True, if the map was saved succesfully, false otherwise.</returns>
         public bool TrySave(Map asset)
         {
-			var targetFile = new File();
             var targetPath = DefaultPath + "/"  + asset.Name.ToLower().Replace(' ', '_');
-
-			// Try to open the default map file to save our default map.
-			Godot.Error fileOpenError = targetFile.Open(targetPath, File.ModeFlags.Write);
+	        var targetFile = FileAccess.Open(targetPath, FileAccess.ModeFlags.Write);
+	        
+			var fileOpenError = targetFile.GetError();
 
 			// If opening the file worked, serialize the template map and store it in the file as JSON.
 			if (fileOpenError == Godot.Error.Ok)

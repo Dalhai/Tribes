@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 using TribesOfDust.Utils;
@@ -5,7 +6,7 @@ using TribesOfDust.Utils.Misc;
 
 namespace TribesOfDust.Hex
 {
-    public class Terrain : Resource, IVariant<TileType>
+    public partial class Terrain : Resource, IVariant<TileType>
     {
         public override string ToString() => $"Terrain: {Key}";
 
@@ -20,8 +21,8 @@ namespace TribesOfDust.Hex
         /// <summary>
         /// The texture associated with the tile.
         /// </summary>
-        [Export(PropertyHint.ResourceType, "Texture")]
-        public Texture? Texture;
+        [Export(PropertyHint.ResourceType, "Texture2D")]
+        public Texture2D? Texture2D;
 
         /// <summary>
         /// The direction of the tile.
@@ -40,7 +41,7 @@ namespace TribesOfDust.Hex
         /// <remarks>
         /// Most tiles will have connections to all surrounding tiles.
         /// </remarks>
-        [ExportFlags(typeof(TileDirection))]
+        [Export(PropertyHint.Flags)]
         public int Connections = (int)TileDirections.All;
 
         #endregion
@@ -49,12 +50,12 @@ namespace TribesOfDust.Hex
         /// <summary>
         /// Gets the scale in x-direction necessary to match the expected width.
         /// </summary>
-        public float WidthScaleToExpected => Texture != null ? HexConstants.DefaultWidth / Texture.GetWidth() : 1.0f;
+        public float WidthScaleToExpected => Texture2D != null ? HexConstants.DefaultWidth / Texture2D.GetWidth() : 1.0f;
 
         /// <summary>
         /// Gets the scale in y-direction necessary to match the expected height.
         /// </summary>
-        public float HeightScaleToExpected => Texture != null ? HexConstants.DefaultHeight / Texture.GetHeight() : 1.0f;
+        public float HeightScaleToExpected => Texture2D != null ? HexConstants.DefaultHeight / Texture2D.GetHeight() : 1.0f;
 
         #endregion
     }
