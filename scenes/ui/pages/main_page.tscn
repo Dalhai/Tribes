@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://cfoe6l2n6a7cw"]
 
 [ext_resource type="Theme" uid="uid://cc1p7417x760j" path="res://assets/themes/menu.tres" id="1"]
-[ext_resource type="Texture2D" uid="uid://7gem50mhgjiv" path="res://assets/textures/ui/paper.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://c8hsn0xxif10s" path="res://assets/textures/ui/paper.png" id="3"]
 [ext_resource type="Material" uid="uid://coxeg6vs40b1l" path="res://assets/shaders/ui/mat_paper.tres" id="4"]
 [ext_resource type="Script" path="res://source/ui/widgets/PaperPanel.cs" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/ui/widgets/hover_button.tscn" id="6_eunmr"]
@@ -75,5 +75,7 @@ vertical_alignment = 1
 ModulationColored = null
 FontColored = null
 HoverColor = null
+
+[connection signal="Pressed" from="CanvasLayer/MainMenu/Editor" to="." method="OnEditorPressed"]
 
 [editable path="CanvasLayer/MainMenu"]

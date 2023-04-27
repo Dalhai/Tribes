@@ -67,7 +67,7 @@
         <Q>11</Q>
         <R>-1</R>
       </d2p1:Key>
-      <d2p1:Value>Dunes</d2p1:Value>
+      <d2p1:Value>Open</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -249,7 +249,7 @@
         <Q>15</Q>
         <R>0</R>
       </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
+      <d2p1:Value>Tundra</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -284,7 +284,7 @@
         <Q>11</Q>
         <R>-2</R>
       </d2p1:Key>
-      <d2p1:Value>Dunes</d2p1:Value>
+      <d2p1:Value>Open</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -298,7 +298,7 @@
         <Q>13</Q>
         <R>-3</R>
       </d2p1:Key>
-      <d2p1:Value>Dunes</d2p1:Value>
+      <d2p1:Value>Rocks</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -312,7 +312,7 @@
         <Q>15</Q>
         <R>-4</R>
       </d2p1:Key>
-      <d2p1:Value>Dunes</d2p1:Value>
+      <d2p1:Value>Rocks</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -858,7 +858,7 @@
         <Q>22</Q>
         <R>-7</R>
       </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
+      <d2p1:Value>Rocks</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -1054,14 +1054,14 @@
         <Q>21</Q>
         <R>-6</R>
       </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
+      <d2p1:Value>Rocks</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
         <Q>20</Q>
         <R>-5</R>
       </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
+      <d2p1:Value>Rocks</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -1096,14 +1096,14 @@
         <Q>17</Q>
         <R>-4</R>
       </d2p1:Key>
-      <d2p1:Value>Dunes</d2p1:Value>
+      <d2p1:Value>Rocks</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
         <Q>18</Q>
         <R>-4</R>
       </d2p1:Key>
-      <d2p1:Value>Dunes</d2p1:Value>
+      <d2p1:Value>Rocks</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -1167,503 +1167,6 @@
         <R>-5</R>
       </d2p1:Key>
       <d2p1:Value>Dunes</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-5</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-5</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-6</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-6</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>22</Q>
-        <R>-5</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>22</Q>
-        <R>-4</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-4</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-7</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-6</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-7</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-8</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-9</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>26</Q>
-        <R>-9</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>26</Q>
-        <R>-8</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>26</Q>
-        <R>-7</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>26</Q>
-        <R>-6</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-5</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-3</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>22</Q>
-        <R>-2</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>21</Q>
-        <R>-3</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>22</Q>
-        <R>-3</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-4</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-3</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>26</Q>
-        <R>-4</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>26</Q>
-        <R>-5</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>27</Q>
-        <R>-6</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>27</Q>
-        <R>-7</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-4</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-3</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-2</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-2</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>21</Q>
-        <R>-5</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>21</Q>
-        <R>-4</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>22</Q>
-        <R>-6</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-7</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-8</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-8</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>20</Q>
-        <R>-4</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>20</Q>
-        <R>-3</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>20</Q>
-        <R>-2</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>21</Q>
-        <R>-2</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>21</Q>
-        <R>-1</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>22</Q>
-        <R>-1</R>
-      </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-9</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-9</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-10</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>26</Q>
-        <R>-10</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>27</Q>
-        <R>-10</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>27</Q>
-        <R>-9</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>27</Q>
-        <R>-8</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>28</Q>
-        <R>-8</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>28</Q>
-        <R>-7</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>28</Q>
-        <R>-6</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>27</Q>
-        <R>-5</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>27</Q>
-        <R>-4</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>26</Q>
-        <R>-3</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>25</Q>
-        <R>-2</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-1</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>20</Q>
-        <R>0</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>20</Q>
-        <R>-1</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>19</Q>
-        <R>-1</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>19</Q>
-        <R>-2</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>19</Q>
-        <R>-3</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>21</Q>
-        <R>0</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>22</Q>
-        <R>0</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>24</Q>
-        <R>-1</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>33</Q>
-        <R>-17</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>32</Q>
-        <R>-16</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>23</Q>
-        <R>-10</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>29</Q>
-        <R>-15</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
-    </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-    <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
-      <d2p1:Key>
-        <Q>27</Q>
-        <R>-1</R>
-      </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
   </_tiles>
 </Map>

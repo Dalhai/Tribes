@@ -265,7 +265,7 @@ namespace TribesOfDust.UI.Pages
 
 		#region Constants
 
-		private const string EditorMenuPath = "CameraRoot/CanvasLayer/EditorMenu";
+		private const string EditorMenuPath = "Canvas/CanvasLayer/EditorMenu";
 
 		#endregion
 	}
