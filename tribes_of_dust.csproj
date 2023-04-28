@@ -4,5 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningsAsErrors>nullable</WarningsAsErrors>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
 </Project>

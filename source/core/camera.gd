@@ -58,9 +58,7 @@ func zoom_stable(anchor: Vector2, amount: float):
 		canvas_anchor = window_anchor * Vector2(viewport.size)
 		
 		var target = get_canvas_transform().affine_inverse() * canvas_anchor
-		var offset = target - anchor
+		var target_offset = target - anchor
 		
-		position -= offset
+		position -= target_offset
 		force_update_scroll()
-
-

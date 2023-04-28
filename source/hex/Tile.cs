@@ -11,7 +11,7 @@ namespace TribesOfDust.Hex
 
         public static Tile Create(AxialCoordinate coordinates, Terrain terrain)
         {
-            return new(TileConfig.Default, coordinates, terrain);
+            return new Tile(coordinates, terrain);
         }
 
         #endregion
@@ -34,12 +34,8 @@ namespace TribesOfDust.Hex
             Position = HexConversions.HexToUnit(Coordinates) * HexConstants.DefaultSize;
         }
 
-        private Tile(TileConfig config, AxialCoordinate coordinates, Terrain terrain)
+        private Tile(AxialCoordinate coordinates, Terrain terrain)
         {
-            // Initialize tile with tile config shared properties
-
-            Material = config.Material;
-
             // Initialize tile with proper coordinates
 
             Coordinates = coordinates;

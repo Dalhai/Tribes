@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dgcyx78g01q7v"]
+[gd_scene load_steps=9 format=3 uid="uid://dgcyx78g01q7v"]
 
 [ext_resource type="PackedScene" uid="uid://cfoe6l2n6a7cw" path="res://scenes/ui/pages/main_page.tscn" id="1"]
 [ext_resource type="Script" path="res://source/core/Root.cs" id="1_2cua2"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://cii4jbco2xu8q" path="res://assets/music/sparkles.wav" id="4_ip8kx"]
 [ext_resource type="AudioStream" uid="uid://dipo08fyubbe8" path="res://assets/music/turmoil.wav" id="5_k2bkd"]
 [ext_resource type="AudioStream" uid="uid://dtcfcpribvwo7" path="res://assets/music/twinkles.wav" id="6_y5b7i"]
+[ext_resource type="Script" path="res://source/audio/Looper.gd" id="7_hsjse"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sp18j"]
 streams_count = 4
@@ -22,7 +23,6 @@ stream_3/weight = 1.0
 
 [node name="Root" type="Node2D"]
 script = ExtResource("1_2cua2")
-Scene = null
 
 [node name="Scene" parent="." instance=ExtResource("1")]
 position = Vector2(-185.838, 2.51984)
@@ -32,3 +32,4 @@ stream = SubResource("AudioStreamRandomizer_sp18j")
 volume_db = -3.0
 pitch_scale = 0.5
 autoplay = true
+script = ExtResource("7_hsjse")

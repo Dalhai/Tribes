@@ -17,7 +17,7 @@ namespace TribesOfDust.UI.Pages
 	{
 		public override void _Ready()
 		{
-			_context = Context.Get(this);
+			_context = Context.GetRootContext(this);
 			if (_context is not null)
 			{
 				// Load map and register level with context

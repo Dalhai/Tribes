@@ -6,7 +6,6 @@ signal pressed
 @onready var button_border: NinePatchRect = $Border as NinePatchRect
 
 func _ready():
-	FOCUS_CLICK
 	connect("mouse_entered", on_mouse_entered)
 	connect("mouse_exited", on_mouse_exited)
 	connect("gui_input", on_gui_input)
