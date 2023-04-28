@@ -3,7 +3,6 @@ using TribesOfDust.UI.Navigation;
 
 namespace TribesOfDust.Core
 {
-	[Tool]
 	public partial class Root : Node, INavigatable<Node2D>
 	{
 		/// <summary>

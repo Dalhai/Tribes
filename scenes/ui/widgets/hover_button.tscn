@@ -1,46 +1,32 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://cgjcd38fy8mwq"]
 
-[ext_resource path="res://assets/textures/ui/widgets/button_3.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/fonts/great_vibes.tres" type="FontFile" id=2]
-[ext_resource path="res://source/ui/widgets/HoverButton.cs" type="Script" id=3]
+[ext_resource type="FontFile" uid="uid://cgf5lpievnreh" path="res://assets/fonts/PaulMaul.ttf" id="1_ohe7b"]
+[ext_resource type="Script" path="res://source/ui/widgets/HoverButton.gd" id="2_n5lub"]
+[ext_resource type="Texture2D" uid="uid://c3terdsuu2bdo" path="res://assets/textures/ui/widgets/menu_button.png" id="3_wclbc"]
 
 [node name="Label" type="Label"]
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_colors/font_color = Color( 0, 0, 0, 1 )
-theme_override_fonts/font = ExtResource( 2 )
-text = "Label"
-align = 1
-valign = 1
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-ModulationColored = NodePath("")
-FontColored = NodePath(".")
-
-[node name="Border" type="NinePatchRect" parent="."]
-show_behind_parent = true
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -5.0
-offset_top = -10.0
-offset_right = 5.0
-offset_bottom = 10.0
-mouse_filter = 1
-mouse_default_cursor_shape = 2
-texture = ExtResource( 1 )
-region_rect = Rect2( 23, 20, 343, 136 )
-patch_margin_left = 16
-patch_margin_top = 14
-patch_margin_right = 17
-patch_margin_bottom = 17
-__meta__ = {
-"_edit_use_anchors_": false
-}
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ohe7b")
+theme_override_font_sizes/font_size = 50
+text = "Label"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_n5lub")
 
-[connection signal="mouse_entered" from="Border" to="." method="OnMouseEntered"]
-[connection signal="mouse_exited" from="Border" to="." method="OnMouseExited"]
+[node name="Border" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_wclbc")
+expand_mode = 2

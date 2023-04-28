@@ -1,12 +1,34 @@
-[gd_scene load_steps=3 format=3 uid="uid://dgcyx78g01q7v"]
+[gd_scene load_steps=8 format=3 uid="uid://dgcyx78g01q7v"]
 
 [ext_resource type="PackedScene" uid="uid://cfoe6l2n6a7cw" path="res://scenes/ui/pages/main_page.tscn" id="1"]
 [ext_resource type="Script" path="res://source/core/Root.cs" id="1_2cua2"]
+[ext_resource type="AudioStream" uid="uid://m302xga2p517" path="res://assets/music/machine.wav" id="3_5bx3v"]
+[ext_resource type="AudioStream" uid="uid://cii4jbco2xu8q" path="res://assets/music/sparkles.wav" id="4_ip8kx"]
+[ext_resource type="AudioStream" uid="uid://dipo08fyubbe8" path="res://assets/music/turmoil.wav" id="5_k2bkd"]
+[ext_resource type="AudioStream" uid="uid://dtcfcpribvwo7" path="res://assets/music/twinkles.wav" id="6_y5b7i"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sp18j"]
+streams_count = 4
+random_pitch = 1.5
+random_volume_offset_db = 2.0
+stream_0/stream = ExtResource("3_5bx3v")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("4_ip8kx")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("5_k2bkd")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("6_y5b7i")
+stream_3/weight = 1.0
 
 [node name="Root" type="Node2D"]
 script = ExtResource("1_2cua2")
-Scene = Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(-185.838, 2.51984),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":Resource("res://source/ui/pages/MainPage.cs"))
-
+Scene = null
 
 [node name="Scene" parent="." instance=ExtResource("1")]
 position = Vector2(-185.838, 2.51984)
+
+[node name="Audio" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_sp18j")
+volume_db = -3.0
+pitch_scale = 0.5
+autoplay = true
