@@ -1,14 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmnnwjpkfpjl1"]
+[gd_scene load_steps=3 format=3 uid="uid://bsob68yufref1"]
 
-[ext_resource type="Script" path="res://ui/widgets/label_value_item.gd" id="1_1j8xc"]
 [ext_resource type="FontFile" path="res://assets/fonts/lane_narrow.tres" id="2"]
+
+[sub_resource type="GDScript" id="GDScript_vs1na"]
+script/source = "extends PanelContainer
+
+@export_range(0, 1, 0.05) var ActiveVisibility: float = 1.0
+
+@onready var label: Label = $Line/Label
+@onready var value: Label = $Line/Value
+
+@onready var active_color = Color(self.self_modulate, ActiveVisibility)
+@onready var inactive_color = Color(self.self_modulate, 0.0)
+	
+
+func _process(delta):
+	pass
+"
 
 [node name="Item" type="PanelContainer"]
 self_modulate = Color(1, 1, 1, 0)
 offset_top = 40.0
 offset_right = 240.0
 offset_bottom = 74.0
-script = ExtResource("1_1j8xc")
+script = SubResource("GDScript_vs1na")
 
 [node name="Line" type="HBoxContainer" parent="."]
 layout_mode = 2

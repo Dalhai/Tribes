@@ -1,9 +1,9 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://dhkl8nuigw2l"]
 
 [ext_resource type="Theme" uid="uid://cc1p7417x760j" path="res://assets/themes/menu.tres" id="1"]
+[ext_resource type="Material" path="res://ui/widgets/paper_mat.tres" id="2_fhbl8"]
 [ext_resource type="Texture2D" uid="uid://c8hsn0xxif10s" path="res://assets/textures/ui/paper.png" id="3"]
-[ext_resource type="Material" uid="uid://coxeg6vs40b1l" path="res://assets/shaders/ui/mat_paper.tres" id="4"]
-[ext_resource type="Script" path="res://backend/ui/widgets/PaperPanel.cs" id="5"]
+[ext_resource type="Script" path="res://ui/widgets/paper.gd" id="5_uqakm"]
 [ext_resource type="FontFile" path="res://assets/fonts/paul_maul.tres" id="6_wc5vu"]
 [ext_resource type="PackedScene" path="res://ui/menus/main_menu.tscn" id="7"]
 [ext_resource type="Texture2D" uid="uid://bjjvr71onawxt" path="res://assets/textures/ui/main_menu_figures_1.png" id="7_6vwyq"]
@@ -15,7 +15,7 @@ script = ExtResource("8")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Paper" type="NinePatchRect" parent="CanvasLayer"]
-material = ExtResource("4")
+material = ExtResource("2_fhbl8")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -25,7 +25,7 @@ theme = ExtResource("1")
 texture = ExtResource("3")
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
-script = ExtResource("5")
+script = ExtResource("5_uqakm")
 
 [node name="Figures" type="TextureRect" parent="CanvasLayer/Paper"]
 layout_mode = 0

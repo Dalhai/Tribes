@@ -17,8 +17,8 @@ namespace TribesOfDust.Core
 			Context = new(this);
 
 			// Setup named routes
-			Context.Navigator.Route("main", context => (Node2D)GD.Load<PackedScene>("res://scenes/ui/pages/main_page.tscn").Instantiate());
-			Context.Navigator.Route("editor", context => (Node2D)GD.Load<PackedScene>("res://scenes/ui/pages/editor_page.tscn").Instantiate());
+			Context.Navigator.Route("main", context => (Node2D)GD.Load<PackedScene>("res://ui/pages/main_page.tscn").Instantiate());
+			Context.Navigator.Route("editor", context => (Node2D)GD.Load<PackedScene>("res://ui/pages/editor_page.tscn").Instantiate());
 		}
 
 		/// <summary>

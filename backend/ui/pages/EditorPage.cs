@@ -7,7 +7,6 @@ using TribesOfDust.Core;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Hex.Neighborhood;
 using TribesOfDust.Hex;
-using TribesOfDust.UI.Menus;
 using TribesOfDust.Utils.Extensions;
 using TribesOfDust.Core.Input;
 
@@ -21,9 +20,10 @@ namespace TribesOfDust.UI.Pages
 			if (_context is not null)
 			{
 				// Load map and register level with context
-
-				_context.Game.Level = new(_context.Game);
-				_context.Game.Level.Map = Load(_context);
+				_context.Game.Level = new(_context.Game)
+				{
+					Map = Load(_context)
+				};
 
 				foreach (var tile in _context.Game.Level.Tiles)
 				{
@@ -31,7 +31,6 @@ namespace TribesOfDust.UI.Pages
 				}
 
 				// Register overlays with context   
-				
 				_context.Game.Display = new(_context.Game);
 				_context.Game.Display?.AddOverlay(_activeTileOverlay);
 				_context.Game.Display?.AddOverlay(_activeTypeOverlay);
@@ -43,11 +42,7 @@ namespace TribesOfDust.UI.Pages
 				_neighborhood = new ConnectedNeighborhood(3, _context.Game.Level.Tiles);
 			}
 
-			// Initialize user interface.
-			_editorMenu = GetNode<EditorMenu>(EditorMenuPath);
-
 			// Initialize render state
-
 			UpdateActiveType();
 			UpdateTypeOverlay();
 
@@ -84,7 +79,7 @@ namespace TribesOfDust.UI.Pages
 		public override void _Input(InputEvent inputEvent)
 		{
 			var tiles = _context?.Game.Level?.Tiles;
-			var repo = _context?.Game.Repositories?.Terrains;
+			var repo = _context?.Game.Repositories.Terrains;
 
 			// Early exit if there are no tiles currently.
 
@@ -245,15 +240,10 @@ namespace TribesOfDust.UI.Pages
 
 			if (Input.IsActionPressed(Actions.Decrease))
 				map.TilePool.Update(_activeTileType, count => Math.Max(0, count - 1));
-
-			_editorMenu?.UpdateActiveTileType(_activeTileType);
-			_editorMenu?.UpdateCounts(tiles, map.TilePool);
 		}
 
 		private AxialCoordinate? _activeTileCoordinates;
 		private TileType _activeTileType = TileType.Tundra;
-
-		private EditorMenu? _editorMenu;
 
 		private Context? _context;
 		private INeighborhood? _neighborhood;
@@ -262,11 +252,5 @@ namespace TribesOfDust.UI.Pages
 		private readonly ITileStorage<Color> _activeTypeOverlay = new TileStorage<Color>();
 		private readonly ITileStorage<Color> _neighborhoodOverlay = new TileStorage<Color>();
 		private readonly ITileStorage<Color> _lineOverlay = new TileStorage<Color>();
-
-		#region Constants
-
-		private const string EditorMenuPath = "Canvas/CanvasLayer/EditorMenu";
-
-		#endregion
 	}
 }
