@@ -6,14 +6,13 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public partial class Level
+    public class Level : IContextual<EditorContext>
     {
-        public Level(Game game)
+        public Level(EditorContext context)
         {
-            Game = game;
+            Context = context;
 
             // Initialize persistent storages.
-
             Tiles = new TileStorage<Tile>();
         }
 
@@ -30,7 +29,7 @@ namespace TribesOfDust.Core
         /// The game this level belongs to.
         /// The game can be used to walk the context tree up.
         /// </summary>
-        public readonly Game Game;
+        public EditorContext Context { get; }
 
         /// <summary>
         /// The base terrain of the level.
@@ -64,7 +63,7 @@ namespace TribesOfDust.Core
                 _map = value;
                 if (_map is not null)
                 {
-                    _map.Generate(Game.Repositories.Terrains, Tiles);
+                    _map.Generate(Context.Repositories.Terrains, Tiles);
                 }
             }
         }

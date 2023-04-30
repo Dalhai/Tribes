@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://bwe3vp2j7j8ws"]
 
-[ext_resource type="Script" path="res://backend/core/Root.cs" id="1_d42ge"]
+[ext_resource type="Script" path="res://backend/core/Context.cs" id="1_evdpq"]
 [ext_resource type="PackedScene" uid="uid://dhkl8nuigw2l" path="res://ui/pages/main_page.tscn" id="2_wwwcn"]
 [ext_resource type="AudioStream" uid="uid://m302xga2p517" path="res://assets/music/machine.wav" id="3_dn065"]
 [ext_resource type="AudioStream" uid="uid://cii4jbco2xu8q" path="res://assets/music/sparkles.wav" id="4_tvmgl"]
@@ -21,8 +21,9 @@ stream_2/weight = 1.0
 stream_3/stream = ExtResource("6_3dudr")
 stream_3/weight = 1.0
 
-[node name="Root" type="Node2D"]
-script = ExtResource("1_d42ge")
+[node name="Context" type="Node2D"]
+process_priority = 1
+script = ExtResource("1_evdpq")
 
 [node name="Scene" parent="." instance=ExtResource("2_wwwcn")]
 position = Vector2(-185.838, 2.51984)

@@ -47,7 +47,7 @@ namespace TribesOfDust.Core
         /// <returns>True, if the map was saved succesfully, false otherwise.</returns>
         public bool TrySave(Map asset)
         {
-            var targetPath = DefaultPath + "/"  + asset.Name.ToLower().Replace(' ', '_');
+            var targetPath = DefaultPath + "/"  + asset.Name.ToLower().Replace(' ', '_') + ".xml";
 	        var targetFile = FileAccess.Open(targetPath, FileAccess.ModeFlags.Write);
 	        
 			var fileOpenError = targetFile.GetError();

@@ -1,62 +1,93 @@
 using Godot;
-using System.Text;
 using TribesOfDust.UI.Navigation;
-using TribesOfDust.Utils.Extensions;
 
-namespace TribesOfDust.Core ;
+namespace TribesOfDust.Core;
 
-public partial class Context : RefCounted, IContext<Root>
+public partial class Context : Node, INavigatable<Node2D>
 {
-    /// <summary>
-    /// Try to get the current context based on the godot viewport.
-    /// </summary>
-    /// <param name="start">The child node in the tree to start from.</param>
-    /// <returns>The root node context, if found, null otherwise.</returns>
-    public static Context? GetRootContext(Node start) => Root.Get(start)?.Context;
+	#region Constructors
+	
+	public Context()
+	{
+		// Setup named routes
+		Navigator = new(this);
+		Navigator.Route("main", _ => (Node2D)GD.Load<PackedScene>("res://ui/pages/main_page.tscn").Instantiate());
+		Navigator.Route("editor", _ => (Node2D)GD.Load<PackedScene>("res://ui/pages/editor_page.tscn").Instantiate());
+	}
+		
+	#endregion
+	#region Singleton
+	
+	public static Context Instance { get; private set; } = null!;
+	public override void _Ready() { Instance = this; } 
+	
+	#endregion
+	#region Navigation
+	
+	/// <summary>
+	/// Gets the current scene node if there is any.
+	/// </summary>
+	public Node2D? Scene
+	{
+		get => GetNodeOrNull<Node2D>("Scene");
+		set
+		{
+			Node2D? scene = Scene;
 
-    public Context(Root root) 
-    {
-        Root = root;
+			// Check that the new scene is not equal to the existing scene.
+			// Otherwise, we might accidentally free the new scene.
 
-        // Initialize Subcontexts
+			if (scene == value)
+				return;
 
-        Game = new(this);
-        Navigator = new(this, root);
-    }
+			// Properly free the old scene node.
 
-    #region Overrides
+			if (scene is not null)
+			{
+				RemoveChild(scene);
+				scene.QueueFree();
+			}
 
-    public override string ToString() => new StringBuilder()
-        .AppendIndented(nameof(Navigator), Navigator)
-        .AppendIndented(nameof(Game), Game)
-        .ToString();
+			// Properly attach the new scene node.
 
-    #endregion
+			if (value is not null)
+			{
+				value.Name = "Scene";
+				AddChild(value);
+			}
+		}
+	}
 
-    /// <summary>
-    /// Root Navigator
-    /// 
-    /// Use this to change between different scenes. For example, to get to the
-    /// main menu from anywhere, or to get to the editor or the game menu from 
-    /// anywhere as well. Note that some pages expect certain states to be set
-    /// on the route args, read up on the individual page route args in the 
-    /// different pages.
-    /// </summary>
-    public Navigator<Node2D> Navigator { get; init; }
+	/// <summary>
+	/// Root Navigator
+	/// 
+	/// Use this to change between different scenes. For example, to get to the
+	/// main menu from anywhere, or to get to the editor or the game menu from 
+	/// anywhere as well. Note that some pages expect certain states to be set
+	/// on the route args, read up on the individual page route args in the 
+	/// different pages.
+	/// </summary>
+	public Navigator Navigator { get; }
 
-    /// <summary>
-    /// Game Context
-    /// 
-    /// Contains information about the current game, including entities, state,
-    /// game mode (editor or played) and others. If you need to know about what's
-    /// going on on the map, this is the entity to check. It's a facade for everything
-    /// that's going on and provides most of the information you need.
-    /// </summary>
-    public Game Game { get; init; }
+	/// <summary>
+	/// Navigates to the page represented by the specified node.
+	/// </summary>
+	/// <param name="target">The node containing the next scene.</param>
+	/// <param name="route">The arguments passed along the route.</param>
+	/// <returns>True, if the scene was properly loaded, false otherwise.</returns>
+	bool INavigatable<Node2D>.NavigateTo(Node2D target, RouteArgs route)
+	{
+		Scene = target;
 
-    /// <summary>
-    /// The root node of the context.
-    /// </summary>
-    public Root Root { get; init; }
+		// Scene could potentially be null after assignment.
+		// Check is necessary to signal navigation success and failure.
+		return Scene is not null;
+	}
+	
+	#endregion
+}
 
+public interface IContextual<TContext>
+{
+	TContext Context { get; }
 }

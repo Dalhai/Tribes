@@ -10,16 +10,16 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public partial class Display
+    public class Display : IContextual<EditorContext>
     {
-        public Display(Game game) 
+        public Display(EditorContext context) 
         {
-            Game = game;
+            Context = context;
 
             // Setup event handlers.
 
-            _onOverlayTileAdded = (sender, args) => AddOverlayColor(args.Coordinates, args.Item); 
-            _onOverlayTileRemoved = (sender, args) => RemoveOverlayColor(args.Coordinates, args.Item); 
+            _onOverlayTileAdded = (_, args) => AddOverlayColor(args.Coordinates, args.Item); 
+            _onOverlayTileRemoved = (_, args) => RemoveOverlayColor(args.Coordinates, args.Item); 
         }
 
         #region Overrides
@@ -34,7 +34,7 @@ namespace TribesOfDust.Core
         /// The game this display belongs to.
         /// The game can be used to walk the context tree up.
         /// </summary>
-        public readonly Game Game;
+        public EditorContext Context { get; }
 
         /// <summary>
         /// Adds a new overlay to the game overlays.
@@ -85,10 +85,7 @@ namespace TribesOfDust.Core
 
         private void AddOverlayColor(AxialCoordinate coordinates, Color color) 
         {
-            if (Game.Level is null)
-                return;
-
-            Tile? tile = Game.Level.Tiles.Get(coordinates);
+            Tile? tile = Context.Level.Tiles.Get(coordinates);
 
             // Only add the overlay color if the tile is not null.
             // Handles the case where the overlay wants to color a tile
@@ -98,10 +95,7 @@ namespace TribesOfDust.Core
 
         private void RemoveOverlayColor(AxialCoordinate coordinates, Color color)
         {
-            if (Game.Level is null)
-                return;
-
-            Tile? tile = Game.Level.Tiles.Get(coordinates);
+            Tile? tile = Context.Level.Tiles.Get(coordinates);
 
             // Only add the overlay color if the tile is not null.
             // Handles the case where the overlay wants to color a tile

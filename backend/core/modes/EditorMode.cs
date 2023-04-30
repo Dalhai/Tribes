@@ -1,12 +1,10 @@
 using System;
 using System.Linq;
-
 using Godot;
 
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Hex.Neighborhood;
 using TribesOfDust.Hex;
-using TribesOfDust.Utils.Extensions;
 using TribesOfDust.Core.Input;
 
 namespace TribesOfDust.Core.Modes;
@@ -15,31 +13,22 @@ public partial class EditorMode : Node2D
 {
     public override void _Ready()
     {
-        _context = Context.GetRootContext(this);
-        if (_context is not null)
+        _context = new EditorContext(Context.Instance);
+        _context.Level.Map = Load(_context.Repositories);
+
+        foreach (var tile in _context.Level.Tiles)
         {
-            // Load map and register level with context
-            _context.Game.Level = new(_context.Game)
-            {
-                Map = Load(_context)
-            };
-
-            foreach (var tile in _context.Game.Level.Tiles)
-            {
-                AddChild(tile.Value);
-            }
-
-            // Register overlays with context   
-            _context.Game.Display = new(_context.Game);
-            _context.Game.Display?.AddOverlay(_activeTileOverlay);
-            _context.Game.Display?.AddOverlay(_activeTypeOverlay);
-            _context.Game.Display?.AddOverlay(_neighborhoodOverlay);
-            _context.Game.Display?.AddOverlay(_lineOverlay);
-
-            _context.Game.Level.Tiles.Added += (_, _) => UpdateTypeOverlay();
-
-            _neighborhood = new ConnectedNeighborhood(3, _context.Game.Level.Tiles);
+            AddChild(tile.Value);
         }
+
+        // Register overlays with context   
+        _context.Display.AddOverlay(_activeTileOverlay);
+        _context.Display.AddOverlay(_activeTypeOverlay);
+        _context.Display.AddOverlay(_neighborhoodOverlay);
+        _context.Display.AddOverlay(_lineOverlay);
+
+        _context.Level.Tiles.Added += (_, _) => UpdateTypeOverlay();
+        _neighborhood = new ConnectedNeighborhood(3, _context.Level.Tiles);
 
         // Initialize render state
         UpdateActiveType();
@@ -50,45 +39,33 @@ public partial class EditorMode : Node2D
 
     public override void _ExitTree()
     {
-        if (_context is not null)
-            Save(_context);
-
+        Save(_context.Level);
         base._ExitTree();
     }
 
-    private void Save(Context context)
+    private void Save(Level level)
     {
-        if (context.Game.Level is not null)
+        level.Map ??= new("World");
+        level.Map.Tiles.Clear();
+
+        foreach (var tile in level.Tiles)
         {
-            var level = context.Game.Level;
-            level.Map ??= new("World");
-            level.Map.Tiles.Clear();
-
-            foreach (var tile in level.Tiles)
-            {
-                level.Map.Tiles[tile.Key] = tile.Value.Key;
-            }
-
-            context.Game.Repositories.Maps.TrySave(level.Map);
+            level.Map.Tiles[tile.Key] = tile.Value.Key;
         }
+
+        _context.Repositories.Maps.TrySave(level.Map);
     }
 
-    private static Map Load(Context context) => context.Game.Repositories.Maps.First();
+    private static Map Load(Repositories repositories) => repositories.Maps.First();
 
     public override void _Input(InputEvent inputEvent)
     {
-        var tiles = _context?.Game.Level?.Tiles;
-        var repo = _context?.Game.Repositories.Terrains;
-
-        // Early exit if there are no tiles currently.
-
-        if (tiles is null || repo is null)
-            return;
+        var tiles = _context.Level.Tiles;
+        var repo = _context.Repositories.Terrains;
 
         // Update the active tile and color it accordingly.
         // The active tile is the tile the mouse cursor is currently hovering over.
         // The active tile is colored for highlighting purposes only, this will be removed later on.
-
         if (inputEvent is InputEventMouseMotion)
         {
             var world = GetGlobalMousePosition();
@@ -206,46 +183,24 @@ public partial class EditorMode : Node2D
 
         if (_activeTileType != previousTileType)
             UpdateTypeOverlay();
-
-        UpdateEditorMenu();
     }
 
     private void UpdateTypeOverlay()
     {
         _activeTypeOverlay.Clear();
 
-        var tiles = _context?.Game.Level?.Tiles;
-        var overlay = tiles?.Where(tile => tile.Value.Key == _activeTileType);
+        var tiles = _context.Level.Tiles;
+        var overlay = tiles.Where(tile => tile.Value.Key == _activeTileType);
 
-        if (overlay is not null)
-        {
-            foreach (var tile in overlay)
-                _activeTypeOverlay.Add(tile.Key, Colors.LightBlue);
-        }
-    }
-
-    private void UpdateEditorMenu()
-    {
-        var tiles = _context?.Game.Level?.Tiles;
-        var map = _context?.Game.Level?.Map;
-
-        // Early exit if the map doesn't currently exist.
-
-        if (tiles is null || map is null)
-            return;
-
-        if (Godot.Input.IsActionPressed(Actions.Increase))
-            map.TilePool.UpdateOrAdd(_activeTileType, count => count + 1, 1);
-
-        if (Godot.Input.IsActionPressed(Actions.Decrease))
-            map.TilePool.Update(_activeTileType, count => Math.Max(0, count - 1));
+        foreach (var tile in overlay)
+            _activeTypeOverlay.Add(tile.Key, Colors.LightBlue);
     }
 
     private AxialCoordinate? _activeTileCoordinates;
     private TileType _activeTileType = TileType.Tundra;
 
-    private Context? _context;
-    private INeighborhood? _neighborhood;
+    private EditorContext _context = null!;
+    private INeighborhood _neighborhood = null!;
 
     private readonly ITileStorage<Color> _activeTileOverlay = new TileStorage<Color>();
     private readonly ITileStorage<Color> _activeTypeOverlay = new TileStorage<Color>();

@@ -7,9 +7,9 @@ namespace TribesOfDust.Core
 {
     public partial class Repositories
     {
-        public Repositories(Game game)
+        public Repositories(EditorContext editorContext)
         {
-            Game = game;
+            EditorContext = editorContext;
 
             // Load all assets in all repositories immediately.
 
@@ -30,7 +30,7 @@ namespace TribesOfDust.Core
         /// The game these repositories belong to.
         /// The game can be used to walk the context tree up.
         /// </summary>
-        public readonly Game Game;
+        public readonly EditorContext EditorContext;
 
         /// <summary>
         /// The terrain repository for the current game.

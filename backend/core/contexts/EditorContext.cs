@@ -5,15 +5,17 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public partial class Game
+    public class EditorContext : IContextual<Context>
     {
-        public Game(Context context)
+        public EditorContext(Context context)
         {
             Context = context;
 
             // Initialize sub contexts.
 
             Repositories = new(this);
+            Display = new(this);
+            Level = new(this);
         }
 
         #region Overrides
@@ -26,14 +28,11 @@ namespace TribesOfDust.Core
 
         #endregion
 
-        public event Action<Level?>? LevelChanged;
-        public event Action<Display?>? DisplayChanged;
-
         /// <summary>
         /// The context this navigator belongs to.
         /// The context can be used to navigate the context tree.
         /// </summary>
-        public readonly Context Context;
+        public Context Context { get; }
 
         /// <summary>
         /// The repositories used for this game.
@@ -54,15 +53,7 @@ namespace TribesOfDust.Core
         /// Note that although everything on the map is represented here, how it is displayed
         /// is handled separately in the display layer.
         /// </summary>
-        public Level? Level
-        {
-            get => _level;
-            set
-            {
-                _level = value;
-            }
-        }
-        private Level? _level;
+        public readonly Level Level;
 
         /// <summary>
         /// All graphical elements of the current level.
@@ -71,17 +62,6 @@ namespace TribesOfDust.Core
         /// If you need to add anything purely visual, such as overlays and on-map
         /// displays that are strictly local, this is the context to access.
         /// </summary>
-        public Display? Display
-        {
-            get => _display;
-            set
-            {
-                _display = value;
-            }
-        }
-        private Display? _display;
-
-        protected virtual void OnLevelChanged() => LevelChanged?.Invoke(_level);
-        protected virtual void OnDisplayChanged() => DisplayChanged?.Invoke(_display);
+        public readonly Display Display;
     }
 }

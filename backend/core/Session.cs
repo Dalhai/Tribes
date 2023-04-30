@@ -5,12 +5,12 @@ namespace TribesOfDust.Core
 {
     public partial class Session
     {
-        public Session(Game game) => Game = game;
+        public Session(EditorContext editorContext) => EditorContext = editorContext;
 
         /// <summary>
         /// The game these repositories belong to.
         /// The game can be used to walk the context tree up.
         /// </summary>
-        public readonly Game Game;
+        public readonly EditorContext EditorContext;
     }
 }
