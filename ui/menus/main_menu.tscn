@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Theme" uid="uid://cc1p7417x760j" path="res://assets/themes/menu.tres" id="1"]
+[ext_resource type="PackedScene" uid="uid://cgjcd38fy8mwq" path="res://ui/widgets/hover_button.tscn" id="2"]
+
+[node name="MainMenu" type="VBoxContainer"]
+anchor_left = 0.4
+anchor_top = 0.5
+anchor_right = 0.6
+anchor_bottom = 0.9
+theme = ExtResource( 1 )
+theme_override_constants/separation = 30
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Play" parent="." instance=ExtResource( 2 )]
+offset_right = 204.0
+offset_bottom = 37.0
+text = "Play"
+
+[node name="Editor" parent="." instance=ExtResource( 2 )]
+offset_top = 67.0
+offset_right = 204.0
+offset_bottom = 105.0
+text = "Editor"
+
+[node name="Settings" parent="." instance=ExtResource( 2 )]
+offset_top = 135.0
+offset_right = 204.0
+offset_bottom = 172.0
+text = "Settings"
+
+[node name="Quit" parent="." instance=ExtResource( 2 )]
+offset_top = 202.0
+offset_right = 204.0
+offset_bottom = 240.0
+text = "Quit"

@@ -1,0 +1,35 @@
+[gd_scene load_steps=9 format=3 uid="uid://bwe3vp2j7j8ws"]
+
+[ext_resource type="Script" path="res://backend/core/Root.cs" id="1_d42ge"]
+[ext_resource type="PackedScene" path="res://ui/pages/main_page.tscn" id="2_wwwcn"]
+[ext_resource type="AudioStream" uid="uid://m302xga2p517" path="res://assets/music/machine.wav" id="3_dn065"]
+[ext_resource type="AudioStream" uid="uid://cii4jbco2xu8q" path="res://assets/music/sparkles.wav" id="4_tvmgl"]
+[ext_resource type="AudioStream" uid="uid://dipo08fyubbe8" path="res://assets/music/turmoil.wav" id="5_v1val"]
+[ext_resource type="AudioStream" uid="uid://dtcfcpribvwo7" path="res://assets/music/twinkles.wav" id="6_3dudr"]
+[ext_resource type="Script" path="res://backend/audio/Looper.gd" id="7_6qi4s"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sp18j"]
+streams_count = 4
+random_pitch = 1.5
+random_volume_offset_db = 2.0
+stream_0/stream = ExtResource("3_dn065")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("4_tvmgl")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("5_v1val")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("6_3dudr")
+stream_3/weight = 1.0
+
+[node name="Root" type="Node2D"]
+script = ExtResource("1_d42ge")
+
+[node name="Scene" parent="." instance=ExtResource("2_wwwcn")]
+position = Vector2(-185.838, 2.51984)
+
+[node name="Audio" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_sp18j")
+volume_db = -3.0
+pitch_scale = 0.5
+autoplay = true
+script = ExtResource("7_6qi4s")
