@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://fs63lujqpso6"]
 
-[ext_resource type="Script" path="res://backend/ui/pages/EditorPage.cs" id="1"]
+[ext_resource type="Script" path="res://backend/core/modes/EditorMode.cs" id="1_rof8x"]
 [ext_resource type="Material" path="res://ui/widgets/paper_mat.tres" id="2_v5r6s"]
 [ext_resource type="PackedScene" uid="uid://daevx1kxl3c3" path="res://ui/menus/editor_menu.tscn" id="3"]
 [ext_resource type="Theme" uid="uid://cc1p7417x760j" path="res://assets/themes/menu.tres" id="4"]
@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://backend/core/Camera.gd" id="7_njrqk"]
 
 [node name="Scene" type="Node2D"]
-script = ExtResource("1")
+script = ExtResource("1_rof8x")
 
 [node name="Canvas" type="Node2D" parent="."]
 

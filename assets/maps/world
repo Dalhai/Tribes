@@ -81,7 +81,7 @@
         <Q>15</Q>
         <R>-3</R>
       </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -221,7 +221,7 @@
         <Q>15</Q>
         <R>-2</R>
       </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -235,7 +235,7 @@
         <Q>14</Q>
         <R>-2</R>
       </d2p1:Key>
-      <d2p1:Value>Tundra</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -298,7 +298,7 @@
         <Q>13</Q>
         <R>-3</R>
       </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -312,7 +312,7 @@
         <Q>15</Q>
         <R>-4</R>
       </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -662,7 +662,7 @@
         <Q>16</Q>
         <R>-6</R>
       </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -711,7 +711,7 @@
         <Q>18</Q>
         <R>-6</R>
       </d2p1:Key>
-      <d2p1:Value>Open</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -739,7 +739,7 @@
         <Q>19</Q>
         <R>-7</R>
       </d2p1:Key>
-      <d2p1:Value>Open</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -1138,7 +1138,7 @@
         <Q>15</Q>
         <R>-5</R>
       </d2p1:Key>
-      <d2p1:Value>Rocks</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
@@ -1152,7 +1152,7 @@
         <Q>17</Q>
         <R>-5</R>
       </d2p1:Key>
-      <d2p1:Value>Open</d2p1:Value>
+      <d2p1:Value>Dunes</d2p1:Value>
     </d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
     <d2p1:KeyValueOfAxialCoordinateTileTypeXfr_PKys1>
       <d2p1:Key>
