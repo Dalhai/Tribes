@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://fs63lujqpso6"]
+[gd_scene load_steps=8 format=3 uid="uid://d2n6km4uo0lkd"]
 
 [ext_resource type="Script" path="res://backend/core/modes/EditorMode.cs" id="1_rof8x"]
 [ext_resource type="Material" path="res://ui/widgets/paper_mat.tres" id="2_v5r6s"]
@@ -6,7 +6,7 @@
 [ext_resource type="Theme" uid="uid://cc1p7417x760j" path="res://assets/themes/menu.tres" id="4"]
 [ext_resource type="Script" path="res://ui/widgets/paper.gd" id="5_2khdi"]
 [ext_resource type="Texture2D" uid="uid://c8hsn0xxif10s" path="res://assets/textures/ui/paper.png" id="7"]
-[ext_resource type="Script" path="res://backend/core/Camera.gd" id="7_njrqk"]
+[ext_resource type="Script" path="res://ui/camera.gd" id="7_e6b6m"]
 
 [node name="Scene" type="Node2D"]
 script = ExtResource("1_rof8x")
@@ -28,4 +28,4 @@ script = ExtResource("5_2khdi")
 
 [node name="Camera2D" type="Camera2D" parent="Canvas"]
 anchor_mode = 0
-script = ExtResource("7_njrqk")
+script = ExtResource("7_e6b6m")

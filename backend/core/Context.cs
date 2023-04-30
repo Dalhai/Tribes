@@ -86,8 +86,3 @@ public partial class Context : Node, INavigatable<Node2D>
 	
 	#endregion
 }
-
-public interface IContextual<TContext>
-{
-	TContext Context { get; }
-}

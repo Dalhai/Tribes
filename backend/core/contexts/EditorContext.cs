@@ -5,17 +5,16 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public class EditorContext : IContextual<Context>
+    public class EditorContext
     {
         public EditorContext(Context context)
         {
             Context = context;
 
             // Initialize sub contexts.
-
-            Repositories = new(this);
-            Display = new(this);
-            Level = new(this);
+            Repositories = new();
+            Level        = new(Repositories);
+            Display      = new(Level.Tiles);
         }
 
         #region Overrides

@@ -6,14 +6,12 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public class Level : IContextual<EditorContext>
+    public class Level
     {
-        public Level(EditorContext context)
+        public Level(Repositories repositories)
         {
-            Context = context;
-
-            // Initialize persistent storages.
             Tiles = new TileStorage<Tile>();
+            Repositories = repositories;
         }
 
         #region Overrides
@@ -26,12 +24,6 @@ namespace TribesOfDust.Core
         #endregion
 
         /// <summary>
-        /// The game this level belongs to.
-        /// The game can be used to walk the context tree up.
-        /// </summary>
-        public EditorContext Context { get; }
-
-        /// <summary>
         /// The base terrain of the level.
         ///
         /// This is the most basic form of looking at a level. The terrain storage also describes
@@ -39,7 +31,8 @@ namespace TribesOfDust.Core
         /// at coordinates that are not assigned a terrain, you won't get a rendered tile if the
         /// corresponding terrain is not assigned etc.
         /// </summary>
-        public ITileStorage<Tile> Tiles { get; init; }
+        public ITileStorage<Tile> Tiles { get; }
+        public Repositories Repositories { get; }
 
         /// <summary>
         /// The currently loaded map asset
@@ -63,7 +56,7 @@ namespace TribesOfDust.Core
                 _map = value;
                 if (_map is not null)
                 {
-                    _map.Generate(Context.Repositories.Terrains, Tiles);
+                    _map.Generate(Repositories.Terrains, Tiles);
                 }
             }
         }

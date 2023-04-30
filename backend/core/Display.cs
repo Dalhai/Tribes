@@ -10,18 +10,20 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core
 {
-    public class Display : IContextual<EditorContext>
+    public class Display
     {
-        public Display(EditorContext context) 
+        #region Constructors
+        
+        public Display(ITileStorageView<Tile> tiles)
         {
-            Context = context;
+            Tiles = tiles;
 
             // Setup event handlers.
-
             _onOverlayTileAdded = (_, args) => AddOverlayColor(args.Coordinates, args.Item); 
             _onOverlayTileRemoved = (_, args) => RemoveOverlayColor(args.Coordinates, args.Item); 
         }
 
+        #endregion
         #region Overrides
 
         public override string ToString() => new StringBuilder()
@@ -29,12 +31,12 @@ namespace TribesOfDust.Core
             .ToString();
 
         #endregion
-
-        /// <summary>
-        /// The game this display belongs to.
-        /// The game can be used to walk the context tree up.
-        /// </summary>
-        public EditorContext Context { get; }
+        #region Access
+        
+        public ITileStorageView<Tile> Tiles { get; }
+        
+        #endregion
+        #region Overlays
 
         /// <summary>
         /// Adds a new overlay to the game overlays.
@@ -85,7 +87,7 @@ namespace TribesOfDust.Core
 
         private void AddOverlayColor(AxialCoordinate coordinates, Color color) 
         {
-            Tile? tile = Context.Level.Tiles.Get(coordinates);
+            Tile? tile = Tiles.Get(coordinates);
 
             // Only add the overlay color if the tile is not null.
             // Handles the case where the overlay wants to color a tile
@@ -95,13 +97,15 @@ namespace TribesOfDust.Core
 
         private void RemoveOverlayColor(AxialCoordinate coordinates, Color color)
         {
-            Tile? tile = Context.Level.Tiles.Get(coordinates);
+            Tile? tile = Tiles.Get(coordinates);
 
             // Only add the overlay color if the tile is not null.
             // Handles the case where the overlay wants to color a tile
             // when the tile is not available in the list of tiles.
             tile?.RemoveOverlayColor(color);
         }
+        
+        #endregion
 
         private readonly EventHandler<TileStorageEventArgs<Color>> _onOverlayTileAdded;
         private readonly EventHandler<TileStorageEventArgs<Color>> _onOverlayTileRemoved;
