@@ -5,12 +5,32 @@ using Godot;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Hex.Neighborhood;
 using TribesOfDust.Hex;
-using TribesOfDust.Core.Input;
 
 namespace TribesOfDust.Core.Modes;
 
-public partial class EditorMode : Node2D
+public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
+    public static EditorMode? Instance { get; private set; }
+
+    public Rect2 GetMapExtents()
+    {
+        Vector2 minimum = Vector2.Inf;
+        Vector2 maximum = -Vector2.Inf;
+        foreach (var tile in _context.Level.Tiles)
+        {
+            var unitPosition = HexConversions.HexToUnit(tile.Key);
+            var x = unitPosition.X * HexConstants.DefaultWidth;
+            var y = unitPosition.Y * HexConstants.DefaultHeight;
+
+            minimum.X = Math.Min(minimum.X, x);
+            maximum.X = Math.Max(maximum.X, x);
+            minimum.Y = Math.Min(minimum.Y, y);
+            maximum.Y = Math.Max(maximum.Y, y);
+        }
+
+        return new(minimum, maximum - minimum);
+    }
+        
     public override void _Ready()
     {
         _context = new EditorContext(Context.Instance);
@@ -37,8 +57,16 @@ public partial class EditorMode : Node2D
         base._Ready();
     }
 
+    public override void _EnterTree()
+    {
+        Instance = this;
+        base._EnterTree();
+    }
+
     public override void _ExitTree()
     {
+        Instance = null;
+        
         Save(_context.Level);
         base._ExitTree();
     }
@@ -172,13 +200,13 @@ public partial class EditorMode : Node2D
     {
         TileType previousTileType = _activeTileType;
 
-        if (Godot.Input.IsActionPressed(Actions.Option1))
+        if (Input.IsKeyPressed(Key.Key1))
             _activeTileType = TileType.Tundra;
-        else if (Godot.Input.IsActionPressed(Actions.Option2))
+        else if (Input.IsKeyPressed(Key.Key2))
             _activeTileType = TileType.Rocks;
-        else if (Godot.Input.IsActionPressed(Actions.Option3))
+        else if (Input.IsKeyPressed(Key.Key3))
             _activeTileType = TileType.Dunes;
-        else if (Godot.Input.IsActionPressed(Actions.Option4))
+        else if (Input.IsKeyPressed(Key.Key4))
             _activeTileType = TileType.Canyon;
 
         if (_activeTileType != previousTileType)

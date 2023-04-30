@@ -6,7 +6,7 @@ using TribesOfDust.Utils;
 
 namespace TribesOfDust.Hex
 {
-    public partial class TerrainRepository : Repository<TileType, Terrain>
+    public class TerrainRepository : Repository<TileType, Terrain>
     {
         /// <summary>
         /// The default resource path used for tile assets.

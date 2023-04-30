@@ -18,6 +18,10 @@ config/features=PackedStringArray("4.0", "C#")
 
 buses/default_bus_layout="res://assets/music/bus_layout.tres"
 
+[debug]
+
+file_logging/enable_file_logging=true
+
 [display]
 
 window/vsync/vsync_mode=false

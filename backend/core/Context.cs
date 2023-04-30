@@ -1,9 +1,12 @@
 using Godot;
+using TribesOfDust.Core.Modes;
 using TribesOfDust.UI.Navigation;
 
 namespace TribesOfDust.Core;
 
-public partial class Context : Node, INavigatable<Node2D>
+public partial class Context : Node, 
+	ISingleton<Context>,  
+	INavigatable<Node2D>
 {
 	#region Constructors
 	
@@ -19,6 +22,9 @@ public partial class Context : Node, INavigatable<Node2D>
 	#region Singleton
 	
 	public static Context Instance { get; private set; } = null!;
+	public EditorMode? Editor => EditorMode.Instance;
+	public MainMode? Main => MainMode.Instance;
+	
 	public override void _Ready() { Instance = this; } 
 	
 	#endregion
