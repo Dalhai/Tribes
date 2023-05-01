@@ -1,0 +1,20 @@
+[gd_resource type="Shader" format=3 uid="uid://jjc0mdi0865u"]
+
+[resource]
+code = "shader_type canvas_item;
+
+uniform vec2 vp_size;
+uniform vec2 uv_scale;
+uniform vec2 uv_offset;
+uniform vec2 uv_area;
+uniform float opacity;
+
+
+void fragment() {
+	vec2 area_scale = vp_size / uv_area;
+	vec2 area_uvs = SCREEN_UV * area_scale;
+	vec2 modded_uvs = mod(uv_offset + area_uvs, 1.0);
+	
+	COLOR = texture(TEXTURE, modded_uvs * uv_scale);
+	COLOR = mix(vec4(1.0, 1.0, 1.0, 1.0), COLOR, opacity);
+}"
