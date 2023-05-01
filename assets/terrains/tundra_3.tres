@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://backend/hex/Terrain.cs" id="1"]
+[ext_resource type="Script" path="res://source/hex/Terrain.cs" id="1"]
 [ext_resource type="Texture2D" uid="uid://wpuisag8r4q4" path="res://assets/textures/terrain/tundra_3.png" id="2"]
 
 [resource]
