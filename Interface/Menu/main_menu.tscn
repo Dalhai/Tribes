@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddobccwufg0w0"]
+
+[ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="1_brs0p"]
+[ext_resource type="PackedScene" uid="uid://8244mvkeoeu6" path="res://Interface/Widgets/hover_button.tscn" id="2_tqv4a"]
+
+[node name="MainMenu" type="VBoxContainer"]
+offset_right = 225.0
+offset_bottom = 206.0
+theme = ExtResource("1_brs0p")
+theme_override_constants/separation = 0
+
+[node name="Play" parent="." instance=ExtResource("2_tqv4a")]
+layout_mode = 2
+
+[node name="Button" parent="Play" index="0"]
+text = "Play"
+
+[node name="Editor" parent="." instance=ExtResource("2_tqv4a")]
+layout_mode = 2
+
+[node name="Button" parent="Editor" index="0"]
+text = "Editor"
+
+[node name="Settings" parent="." instance=ExtResource("2_tqv4a")]
+layout_mode = 2
+
+[node name="Button" parent="Settings" index="0"]
+text = "Settings"
+
+[node name="Quit" parent="." instance=ExtResource("2_tqv4a")]
+layout_mode = 2
+
+[node name="Button" parent="Quit" index="0"]
+text = "Quit"
+
+[editable path="Play"]
+[editable path="Editor"]
+[editable path="Settings"]
+[editable path="Quit"]
