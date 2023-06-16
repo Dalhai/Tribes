@@ -44,19 +44,19 @@ namespace TribesOfDust.Hex.Neighborhood
         protected abstract IEnumerable<AxialCoordinate> GetNext(AxialCoordinate coordinate);
     }
 
-    public partial class ConnectedNeighborhood : Neighborhood
+    public class ConnectedNeighborhood : Neighborhood
     {
 
         public ConnectedNeighborhood(int distance, ITileStorage<Tile> tiles)
         {
-            Tiles = tiles;
             Distance = distance;
-            Distances = new TileStorage<int>();
+            Distances = new();
+            Tiles = tiles;
         }
 
-        public ITileStorage<Tile> Tiles { get; init; }
-        public int Distance { get; init; }
-        public ITileStorage<int> Distances { get; init; }
+        public int Distance { get; }
+        public ITileStorage<Tile> Tiles { get; }
+        public Dictionary<AxialCoordinate, int> Distances { get; }
 
         public override List<AxialCoordinate> GetNeighbors(AxialCoordinate axialCoordinate)
         {
@@ -70,7 +70,7 @@ namespace TribesOfDust.Hex.Neighborhood
             
             // Get distance of tile or zero distance, if it does not exist.
             var tile = Tiles.Get(coordinate);
-            int distance = Distances.Get(coordinate);
+            int distance = Distances[coordinate];
 
             if (!(tile is null) && distance < Distance)
             {

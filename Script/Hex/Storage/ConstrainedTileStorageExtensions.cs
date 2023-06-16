@@ -1,17 +1,13 @@
 using System.Collections.Generic;
+using TribesOfDust.Core;
 
 namespace TribesOfDust.Hex.Storage
 {
     public static class ConstraintedTileStorageExtensions
     {
-        public static ITileStorage<T> Constrain<T>(this ITileStorageView storageView)
+        public static ITileStorage<T> Constrain<T>(this ITileStorageView storageView) where T: Entity
         {
             return new ConstraintedTileStorage<T>(storageView);
-        }
-
-        public static ITileStorage<T> Constrain<T>(this ITileStorageView storageView, IEqualityComparer<T> comparer)
-        {
-            return new ConstraintedTileStorage<T>(storageView, comparer);
         }
     }
 }

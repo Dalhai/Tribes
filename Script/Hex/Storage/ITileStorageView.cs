@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TribesOfDust.Core;
 
 namespace TribesOfDust.Hex.Storage
 {
@@ -44,15 +45,14 @@ namespace TribesOfDust.Hex.Storage
         /// <returns>The item at the specified coordinates, or null, if not available..</returns>
         T? Get(AxialCoordinate coordinates);
 
+        /// <summary>Gets the coordinates of the item.</summary>
+        /// <param name="item">The item to get the coordinates of.</param>
+        /// <returns>The coordinate of the item, or null if the item is not in the storage.</returns>
+        AxialCoordinate? GetCoordinates(T item);
+
         /// <summary>Checks if the storage contains the item.</summary>
         /// <param name="item">The item to check for.</param>
         /// <returns>True, if the item is in the storage, false otherwise.</returns>
         bool Contains(T item);
-
-        /// <summary>Gets the coordinates of the item.</summary>
-        /// <remarks>Potentially very slow as possibly every entry has to be inspected.</remarks>
-        /// <param name="item">The item to get the coordinates of.</param>
-        /// <returns>A list of coordinates this item is stored at.</returns>
-        IEnumerable<AxialCoordinate> GetCoordinates(T item);
     }
 }

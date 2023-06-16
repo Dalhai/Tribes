@@ -3,36 +3,43 @@ using Godot;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Utils.Extensions;
+using TribesOfDust.Core.Units;
 
 namespace TribesOfDust.Core;
 
 public partial class Level : RefCounted
 {
+    #region Constructors
+    
     public Level(Repositories repositories)
     {
-        Tiles = new TileStorage<Tile>();
+        Tiles = new EntityTileStorage<Tile>();
+        Units = new EntityTileStorage<Unit>();
         Repositories = repositories;
     }
 
+    #endregion
     #region Overrides
 
     public override string ToString() => new StringBuilder()
         .AppendIndented(nameof(Map), Map)
         .AppendIndented(nameof(Tiles), Tiles)
+        .AppendIndented(nameof(Units), Units)
         .ToString();
 
     #endregion
+    #region Storages
 
-    /// <summary>
-    /// The base terrain of the level.
-    ///
-    /// This is the most basic form of looking at a level. The terrain storage also describes
-    /// in essence, where things can be placed on the map. A unit can't (or shouldn't) be placed
-    /// at coordinates that are not assigned a terrain, you won't get a rendered tile if the
-    /// corresponding terrain is not assigned etc.
-    /// </summary>
     public ITileStorage<Tile> Tiles { get; }
+    public ITileStorage<Unit> Units { get; }
+    
+    #endregion
+    #region Repositories
+    
     public Repositories Repositories { get; }
+    
+    #endregion
+    #region Map
 
     /// <summary>
     /// The currently loaded map asset
@@ -61,4 +68,6 @@ public partial class Level : RefCounted
         }
     }
     private Map? _map;
+    
+    #endregion
 }

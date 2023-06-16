@@ -1,8 +1,9 @@
 using System;
+using TribesOfDust.Core;
 
 namespace TribesOfDust.Hex.Storage
 {
-    public interface ITileStorage<T> : ITileStorageView<T>
+    public interface ITileStorage<T> : ITileStorageView<T> 
     {
         #region Add
 

@@ -2,20 +2,54 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TribesOfDust.Core;
 
 namespace TribesOfDust.Hex.Storage
 {
-    public partial class TileStorage<T> : ITileStorage<T>
+    public class EntityTileStorage<T> : TileStorage<T> where T: Entity
     {
-        #region Constructors
+        #region Overrides
 
-        public TileStorage() : this(EqualityComparer<T>.Default) {}
-        public TileStorage(IEqualityComparer<T> comparer)
+        public override bool Add(AxialCoordinate coordinates, T item)
         {
-            _comparer = comparer;
+            if (Contains(coordinates))
+                return false;
+
+            var eventArgs = new TileStorageEventArgs<T>(coordinates, item);
+
+            OnAdding(eventArgs);
+            Items.Add(coordinates, item);
+            _coords.Add(item.Id, coordinates);
+            OnAdded(eventArgs);
+
+            return true;
         }
 
+        public override bool Remove(AxialCoordinate coordinates)
+        {
+            if (!Contains(coordinates))
+                return false;
+
+            var eventArgs = new TileStorageEventArgs<T>(coordinates, Items[coordinates]);
+
+            OnRemoving(eventArgs);
+            Items.Remove(coordinates);
+            _coords.Remove(eventArgs.Item.Id);
+            OnRemoved(eventArgs);
+
+            return true;
+        }
+
+        public override bool Contains(T item) => _coords.ContainsKey(item.Id);
+        public override AxialCoordinate? GetCoordinates(T item) => _coords.ContainsKey(item.Id) ? _coords[item.Id] : null;
+
         #endregion
+
+        private readonly Dictionary<ulong, AxialCoordinate> _coords = new();
+    }
+    
+    public class TileStorage<T> : ITileStorage<T> where T: notnull
+    {
         #region Events
 
         public event EventHandler<AxialCoordinate>? RemovingAt;
@@ -63,7 +97,7 @@ namespace TribesOfDust.Hex.Storage
             var eventArgs = new TileStorageEventArgs<T>(coordinates, item);
 
             OnAdding(eventArgs);
-            _items.Add(coordinates, item);
+            Items.Add(coordinates, item);
             OnAdded(eventArgs);
 
             return true;
@@ -74,10 +108,10 @@ namespace TribesOfDust.Hex.Storage
             if (!Contains(coordinates))
                 return false;
 
-            var eventArgs = new TileStorageEventArgs<T>(coordinates, _items[coordinates]);
+            var eventArgs = new TileStorageEventArgs<T>(coordinates, Items[coordinates]);
 
             OnRemoving(eventArgs);
-            _items.Remove(coordinates);
+            Items.Remove(coordinates);
             OnRemoved(eventArgs);
 
             return true;
@@ -99,36 +133,32 @@ namespace TribesOfDust.Hex.Storage
         #endregion
         #region Properties
 
-        public int Count => _items.Count;
+        public int Count => Items.Count;
         public bool IsEmpty => Count == 0;
         public bool IsConstrained => false;
 
-        public IEnumerable<AxialCoordinate> Coordinates => _items.Keys;
+        public IEnumerable<AxialCoordinate> Coordinates => Items.Keys;
 
         #endregion
         #region Contains
 
-        public bool Contains(AxialCoordinate coordinates) => _items.ContainsKey(coordinates);
-        public bool Contains(T item) => _items.ContainsValue(item);
+        public virtual bool Contains(AxialCoordinate coordinates) => Items.ContainsKey(coordinates);
+        public virtual bool Contains(T item) => Items.ContainsValue(item);
 
         #endregion
         #region Get
 
-        public IEnumerable<AxialCoordinate> GetCoordinates(T item) => _items
-            .Where(stored => _comparer.Equals(stored.Value, item))
-            .Select(stored => stored.Key);
-
-        public T? Get(AxialCoordinate coordinates) => _items.ContainsKey(coordinates) ? _items[coordinates] : default;
+        public virtual AxialCoordinate? GetCoordinates(T item) => Items.First(entry => entry.Value.Equals(item)).Key;
+        public virtual T? Get(AxialCoordinate coordinates) => Items.ContainsKey(coordinates) ? Items[coordinates] : default;
 
         #endregion
         #region IEnumerable
 
-        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
-        IEnumerator<KeyValuePair<AxialCoordinate, T>> IEnumerable<KeyValuePair<AxialCoordinate, T>>.GetEnumerator() => _items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Items.GetEnumerator();
+        IEnumerator<KeyValuePair<AxialCoordinate, T>> IEnumerable<KeyValuePair<AxialCoordinate, T>>.GetEnumerator() => Items.GetEnumerator();
 
         #endregion
 
-        private readonly Dictionary<AxialCoordinate, T> _items = new();
-        private readonly IEqualityComparer<T> _comparer;
+        protected readonly Dictionary<AxialCoordinate, T> Items = new();
     }
 }

@@ -2,10 +2,11 @@ using Godot;
 
 using System.Linq;
 using System.Collections.Generic;
+using TribesOfDust.Core;
 
 namespace TribesOfDust.Hex
 {
-    public partial class Tile : Sprite2D
+    public partial class Tile : Entity
     {
         #region Factory
 
@@ -26,12 +27,12 @@ namespace TribesOfDust.Hex
             // Setup empty defaults for asset values
 
             Key = TileType.Unknown;
-            Scale = Vector2.Zero;
 
             // Position tile according to specified coordinates
 
-            Centered = true;
-            Position = HexConversions.HexToUnit(Coordinates) * HexConstants.DefaultSize;
+            _sprite.Scale = Vector2.Zero;
+            _sprite.Centered = true;
+            _sprite.Position = HexConversions.HexToUnit(Coordinates) * HexConstants.DefaultSize;
         }
 
         private Tile(AxialCoordinate coordinates, Terrain terrain)
@@ -43,33 +44,34 @@ namespace TribesOfDust.Hex
             // Initialize tile with properties from tile asset
 
             Key = terrain.Key;
-            Texture = terrain.Texture2D;
 
             _connections = (TileDirection)terrain.Connections;
             _direction = terrain.Direction;
 
             // Scale tile according to specified texture
 
-            Scale = new Vector2(terrain.WidthScaleToExpected, terrain.HeightScaleToExpected);
+            _sprite.Texture = terrain.Texture2D;
+            _sprite.Scale = new Vector2(terrain.WidthScaleToExpected, terrain.HeightScaleToExpected);
 
             // Position tile according to specified coordinates
 
-            Centered = true;
-            Position = HexConversions.HexToUnit(coordinates) * HexConstants.DefaultSize;
+            _sprite.Centered = true;
+            _sprite.Position = HexConversions.HexToUnit(coordinates) * HexConstants.DefaultSize;
         }
 
         #endregion
         #region Queries
 
         public float Size => Width / 2.0f;
-        public float Width => Texture.GetWidth();
-        public float Height => Texture.GetHeight();
+        public float Width => _sprite.Texture.GetWidth();
+        public float Height => _sprite.Texture.GetHeight();
 
         public TileType Key { get; private set; }
         public bool IsBlocked => Key == TileType.Blocked;
         public bool IsOpen => Key == TileType.Open;
 
         public AxialCoordinate Coordinates { get; private set; }
+        public Sprite2D Sprite => _sprite;
 
         #endregion
         #region Connectivity
@@ -91,7 +93,7 @@ namespace TribesOfDust.Hex
         public bool IsConnected(TileDirection direction) => _connections.HasFlag(direction);
 
         /// <summary>
-        /// Connect the tile in the specified <see cref="TileDirection">.
+        /// Connect the tile in the specified <see cref="TileDirection"/>.
         /// </summary>
         ///
         /// <param name="direction">The direction to connect.</param>
@@ -135,13 +137,13 @@ namespace TribesOfDust.Hex
         {
             if (_overlayColors.Count == 0)
             {
-                Modulate = Colors.White;
+                _sprite.Modulate = Colors.White;
             }
             else
             {
                 // Figure out the color mix and assign it to the modulation color
-                Modulate = _overlayColors.Aggregate((Next, Current) => Next + Current);
-                Modulate /= _overlayColors.Count;
+                _sprite.Modulate = _overlayColors.Aggregate((next, current) => next + current);
+                _sprite.Modulate /= _overlayColors.Count;
             }
         }
 
@@ -151,5 +153,6 @@ namespace TribesOfDust.Hex
         private TileDirection _direction = TileDirection.None;
 
         private readonly List<Color> _overlayColors = new();
+        private readonly Sprite2D _sprite = new();
     }
 }

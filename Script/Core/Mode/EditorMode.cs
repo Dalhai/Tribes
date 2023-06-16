@@ -38,7 +38,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
         foreach (var tile in _context.Level.Tiles)
         {
-            AddChild(tile.Value);
+            AddChild(tile.Value.Sprite);
         }
 
         // Register overlays with context   
@@ -133,10 +133,10 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                     tiles.Remove(hex);
 
                     if (tile is not null)
-                        RemoveChild(tile);
+                        RemoveChild(tile.Sprite);
 
                     tiles.Add(hexTile.Coordinates, hexTile);
-                    AddChild(hexTile);
+                    AddChild(hexTile.Sprite);
                 }
                 catch (ArgumentException exception)
                 {
@@ -156,7 +156,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 tiles.Remove(hex);
 
                 if (tile is not null)
-                    RemoveChild(tile);
+                    RemoveChild(tile.Sprite);
 
                 if (tile is null || tile.Key != TileType.Open)
                 {
@@ -164,7 +164,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                     {
                         var hexTile = Tile.Create(hex, repo.GetAsset(TileType.Open));
                         tiles.Add(hexTile.Coordinates, hexTile);
-                        AddChild(hexTile);
+                        AddChild(hexTile.Sprite);
                     }
                     catch (ArgumentException exception)
                     {
