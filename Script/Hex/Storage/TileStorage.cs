@@ -30,34 +30,26 @@ namespace TribesOfDust.Hex.Storage
 
         protected virtual void OnRemoving(TileStorageEventArgs<T> args)
         {
-            if (Removing is not null)
-                Removing(this, args);
-            if (RemovingAt is not null)
-                RemovingAt(this, args.Coordinates);
+            Removing?.Invoke(this, args);
+            RemovingAt?.Invoke(this, args.Coordinates);
         }
 
         protected virtual void OnRemoved(TileStorageEventArgs<T> args)
         {
-            if (Removed is not null)
-                Removed(this, args);
-            if (RemovedAt is not null)
-                RemovedAt(this, args.Coordinates);
+            Removed?.Invoke(this, args);
+            RemovedAt?.Invoke(this, args.Coordinates);
         }
 
         protected virtual void OnAdding(TileStorageEventArgs<T> args)
         {
-            if (Adding is not null)
-                Adding(this, args);
-            if (AddingAt is not null)
-                AddingAt(this, args.Coordinates);
+            Adding?.Invoke(this, args);
+            AddingAt?.Invoke(this, args.Coordinates);
         }
 
         protected virtual void OnAdded(TileStorageEventArgs<T> args)
         {
-            if (Added is not null)
-                Added(this, args);
-            if (AddedAt is not null)
-                AddedAt(this, args.Coordinates);
+            Added?.Invoke(this, args);
+            AddedAt?.Invoke(this, args.Coordinates);
         }
 
         #endregion
