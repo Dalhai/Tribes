@@ -21,7 +21,7 @@ namespace TribesOfDust.Utils
         public void Load() => LoadAll().ForEach(AddVariation);
 
         /// <summary>
-        /// Loads the default tiles of the repository.
+        /// Loads the default assets of the repository.
         /// </summary>
         ///
         /// <remarks>

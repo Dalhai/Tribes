@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using Godot;
 using TribesOfDust.Utils.Extensions;
@@ -6,22 +7,25 @@ namespace TribesOfDust.Core;
 
 public partial class EditorContext : RefCounted
 {
-    public EditorContext(Context context)
+    public EditorContext(Context parent)
     {
-        Context = context;
+        Parent = parent;
+        Maps   = new(Terrains);
+        
+        Terrains.Load();
+        Maps.Load();
 
         // Initialize sub contexts.
-        Repositories = new();
-        Level        = new(Repositories);
-        Display      = new(Level.Tiles);
+        Map     = Maps.FirstOrDefault() ?? new ("Default");
+        Display = new(Map.Tiles);
     }
 
     #region Overrides
 
     public override string ToString() => new StringBuilder()
-        .AppendIndented(nameof(Repositories), Repositories)
-        .AppendIndented(nameof(Level), Level)
+        .AppendIndented(nameof(Map), Map)
         .AppendIndented(nameof(Display), Display)
+        .AppendIndented(nameof(Parent), Parent)
         .ToString();
 
     #endregion
@@ -30,28 +34,23 @@ public partial class EditorContext : RefCounted
     /// The context this navigator belongs to.
     /// The context can be used to navigate the context tree.
     /// </summary>
-    public Context Context { get; }
+    public Context Parent { get; }
+    
 
     /// <summary>
-    /// The repositories used for this game.
+    /// The currently loaded map.
     /// 
-    /// Repositories automatically load assets for you based on how you access them.
-    /// Repositories are also used to preload some often used assets.
-    /// </summary>
-    public readonly Repositories Repositories;
-
-    /// <summary>
-    /// The currently loaded level.
-    /// 
-    /// Contains information about all entities and tiles in the level.
+    /// Contains information about all entities and tiles in the map.
     /// Contains information about health, stats and other properties of units.
-    /// Contains information about fountains, baseas, ruins and effects.
+    /// Contains information about fountains, bases, ruins and effects.
     /// 
     /// In general, anything that is happening on a map is in some capacity represented here.
     /// Note that although everything on the map is represented here, how it is displayed
     /// is handled separately in the display layer.
     /// </summary>
-    public readonly Level Level;
+    public readonly Map Map;
+    public readonly MapRepository Maps;
+    public readonly TerrainRepository Terrains = new();
 
     /// <summary>
     /// All graphical elements of the current level.

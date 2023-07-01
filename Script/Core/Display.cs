@@ -14,13 +14,13 @@ public partial class Display : RefCounted
 {
     #region Constructors
         
-    public Display(ITileStorageView<Tile> tiles)
+    public Display(ITileLayerView<Tile> tiles)
     {
         Tiles = tiles;
 
         // Setup event handlers.
-        _onOverlayTileAdded = (_, args) => AddOverlayColor(args.Coordinates, args.Item); 
-        _onOverlayTileRemoved = (_, args) => RemoveOverlayColor(args.Coordinates, args.Item); 
+        _onOverlayTileAdded = (_, color, coordinates) => AddOverlayColor(coordinates, color); 
+        _onOverlayTileRemoved = (_, color, coordinates) => RemoveOverlayColor(coordinates, color); 
     }
 
     #endregion
@@ -33,7 +33,7 @@ public partial class Display : RefCounted
     #endregion
     #region Access
         
-    public ITileStorageView<Tile> Tiles { get; }
+    public ITileLayerView<Tile> Tiles { get; }
         
     #endregion
     #region Overlays
@@ -46,7 +46,7 @@ public partial class Display : RefCounted
     /// times. You should, however, remember to unregister overlays once you don't need 
     /// them anymore.
     /// </summary>
-    public void AddOverlay(ITileStorageView<Color> overlay) 
+    public void AddOverlay(ITileLayerView<Color> overlay) 
     {
         if (_overlays.Contains(overlay))
             return;
@@ -69,7 +69,7 @@ public partial class Display : RefCounted
     /// You can reregister the overlay at any time though, no need to create a
     /// completely new one.
     /// </summary>
-    public void RemoveOverlay(ITileStorageView<Color> overlay) 
+    public void RemoveOverlay(ITileLayerView<Color> overlay) 
     {
         if (!_overlays.Contains(overlay))
             return;
@@ -107,7 +107,7 @@ public partial class Display : RefCounted
         
     #endregion
 
-    private readonly EventHandler<TileStorageEventArgs<Color>> _onOverlayTileAdded;
-    private readonly EventHandler<TileStorageEventArgs<Color>> _onOverlayTileRemoved;
-    private readonly HashSet<ITileStorageView<Color>> _overlays = new();
+    private readonly Action<ITileLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
+    private readonly Action<ITileLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;
+    private readonly HashSet<ITileLayerView<Color>> _overlays = new();
 }

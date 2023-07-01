@@ -2,23 +2,14 @@ using Godot;
 
 using System.Linq;
 using System.Collections.Generic;
-using TribesOfDust.Core;
 
 namespace TribesOfDust.Hex
 {
-    public partial class Tile : Entity
+    public class Tile 
     {
-        #region Factory
-
-        public static Tile Create(AxialCoordinate coordinates, Terrain terrain)
-        {
-            return new Tile(coordinates, terrain);
-        }
-
-        #endregion
         #region Constructors
 
-        private Tile()
+        public Tile()
         {
             // Default Zero Coordinates
 
@@ -35,7 +26,7 @@ namespace TribesOfDust.Hex
             _sprite.Position = HexConversions.HexToUnit(Coordinates) * HexConstants.DefaultSize;
         }
 
-        private Tile(AxialCoordinate coordinates, Terrain terrain)
+        public Tile(AxialCoordinate coordinates, Terrain terrain)
         {
             // Initialize tile with proper coordinates
 

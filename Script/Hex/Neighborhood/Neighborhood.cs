@@ -47,7 +47,7 @@ namespace TribesOfDust.Hex.Neighborhood
     public class ConnectedNeighborhood : Neighborhood
     {
 
-        public ConnectedNeighborhood(int distance, ITileStorage<Tile> tiles)
+        public ConnectedNeighborhood(int distance, ITileLayer<Tile> tiles)
         {
             Distance = distance;
             Distances = new();
@@ -55,7 +55,7 @@ namespace TribesOfDust.Hex.Neighborhood
         }
 
         public int Distance { get; }
-        public ITileStorage<Tile> Tiles { get; }
+        public ITileLayer<Tile> Tiles { get; }
         public Dictionary<AxialCoordinate, int> Distances { get; }
 
         public override List<AxialCoordinate> GetNeighbors(AxialCoordinate axialCoordinate)

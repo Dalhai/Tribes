@@ -19,11 +19,7 @@ namespace TribesOfDust.Hex
     /// <param name="X">Top Left to Bottom Right</param>
     /// <param name="Y">Top Right to Bottom Left</param>
     /// <param name="Z">Top to Bottom</param>
-    [DataContract]
-    public record CubeCoordinate(
-        [property: DataMember] int X,
-        [property: DataMember] int Y,
-        [property: DataMember] int Z)
+    public record CubeCoordinate(int X, int Y, int Z)
     {
         #region Constants
 
@@ -103,10 +99,7 @@ namespace TribesOfDust.Hex
     ///
     /// <param name="Q">Top Left to Bottom Right</param>
     /// <param name="R">Top to Bottom</param>
-    [DataContract]
-    public record AxialCoordinate(
-        [property: DataMember] int Q,
-        [property: DataMember] int R)
+    public record AxialCoordinate(int Q, int R)
     {
         #region Constants
 

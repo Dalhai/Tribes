@@ -16,7 +16,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         Vector2 minimum = Vector2.Inf;
         Vector2 maximum = -Vector2.Inf;
-        foreach (var tile in _context.Level.Tiles)
+        foreach (var tile in _context.Map.Tiles)
         {
             var unitPosition = HexConversions.HexToUnit(tile.Key);
             var x = unitPosition.X * HexConstants.DefaultWidth;
@@ -34,9 +34,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     public override void _Ready()
     {
         _context = new EditorContext(Context.Instance);
-        _context.Level.Map = Load(_context.Repositories);
 
-        foreach (var tile in _context.Level.Tiles)
+        foreach (var tile in _context.Map.Tiles)
         {
             AddChild(tile.Value.Sprite);
         }
@@ -47,8 +46,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         _context.Display.AddOverlay(_neighborhoodOverlay);
         _context.Display.AddOverlay(_lineOverlay);
 
-        _context.Level.Tiles.Added += (_, _) => UpdateTypeOverlay();
-        _neighborhood = new ConnectedNeighborhood(3, _context.Level.Tiles);
+        _context.Map.Tiles.Added += (_, _, _) => UpdateTypeOverlay();
+        _neighborhood = new ConnectedNeighborhood(3, _context.Map.Tiles);
 
         // Initialize render state
         UpdateActiveType();
@@ -67,29 +66,15 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         Instance = null;
         
-        Save(_context.Level);
+        _context.Maps.TrySave(_context.Map);
+        
         base._ExitTree();
     }
 
-    private void Save(Level level)
-    {
-        level.Map ??= new("World");
-        level.Map.Tiles.Clear();
-
-        foreach (var tile in level.Tiles)
-        {
-            level.Map.Tiles[tile.Key] = tile.Value.Key;
-        }
-
-        _context.Repositories.Maps.TrySave(level.Map);
-    }
-
-    private static Map Load(Repositories repositories) => repositories.Maps.First();
-
     public override void _Input(InputEvent inputEvent)
     {
-        var tiles = _context.Level.Tiles;
-        var repo = _context.Repositories.Terrains;
+        var tiles = _context.Map.Tiles;
+        var repo = _context.Terrains;
 
         // Update the active tile and color it accordingly.
         // The active tile is the tile the mouse cursor is currently hovering over.
@@ -103,13 +88,13 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             {
                 _activeTileCoordinates = hex;
                 _activeTileOverlay.Clear();
-                _activeTileOverlay.Add(hex, Colors.Aqua);
+                _activeTileOverlay.Add(Colors.Aqua, hex);
             }
 
             _lineOverlay.Clear();
             foreach (var coordinate in Intersections.Line(Vector2.Zero, world / HexConstants.DefaultSize))
             {
-                _lineOverlay.Add(coordinate, Colors.YellowGreen);
+                _lineOverlay.Add(Colors.YellowGreen, coordinate);
             }
         }
 
@@ -127,7 +112,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
                 try
                 {
-                    var hexTile = Tile.Create(hex, repo.GetAsset(_activeTileType));
+                    var hexTile = new Tile(hex, repo.GetAsset(_activeTileType));
                     var tile = tiles.Get(hex);
 
                     tiles.Remove(hex);
@@ -135,7 +120,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                     if (tile is not null)
                         RemoveChild(tile.Sprite);
 
-                    tiles.Add(hexTile.Coordinates, hexTile);
+                    tiles.Add(hexTile, hexTile.Coordinates);
                     AddChild(hexTile.Sprite);
                 }
                 catch (ArgumentException exception)
@@ -162,8 +147,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 {
                     try
                     {
-                        var hexTile = Tile.Create(hex, repo.GetAsset(TileType.Open));
-                        tiles.Add(hexTile.Coordinates, hexTile);
+                        var hexTile = new Tile(hex, repo.GetAsset(TileType.Open));
+                        tiles.Add(hexTile, hexTile.Coordinates);
                         AddChild(hexTile.Sprite);
                     }
                     catch (ArgumentException exception)
@@ -175,7 +160,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
             // Display neighborhood overlay on the tile that has been clicked.
 
-            else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Middle } && _neighborhood is not null)
+            else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Middle })
             {
                 _neighborhoodOverlay.Clear();
 
@@ -187,7 +172,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 {
                     foreach (var neighbor in _neighborhood.GetNeighbors(tile.Coordinates))
                     {
-                        _neighborhoodOverlay.Add(neighbor, Colors.SaddleBrown);
+                        _neighborhoodOverlay.Add(Colors.SaddleBrown, neighbor);
                     }
                 }
             }
@@ -217,11 +202,11 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         _activeTypeOverlay.Clear();
 
-        var tiles = _context.Level.Tiles;
+        var tiles = _context.Map.Tiles;
         var overlay = tiles.Where(tile => tile.Value.Key == _activeTileType);
 
         foreach (var tile in overlay)
-            _activeTypeOverlay.Add(tile.Key, Colors.LightBlue);
+            _activeTypeOverlay.Add(Colors.LightBlue, tile.Key);
     }
 
     private AxialCoordinate? _activeTileCoordinates;
@@ -230,8 +215,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     private EditorContext _context = null!;
     private INeighborhood _neighborhood = null!;
 
-    private readonly ITileStorage<Color> _activeTileOverlay = new TileStorage<Color>();
-    private readonly ITileStorage<Color> _activeTypeOverlay = new TileStorage<Color>();
-    private readonly ITileStorage<Color> _neighborhoodOverlay = new TileStorage<Color>();
-    private readonly ITileStorage<Color> _lineOverlay = new TileStorage<Color>();
+    private readonly ITileLayer<Color> _activeTileOverlay = new TileLayer<Color>();
+    private readonly ITileLayer<Color> _activeTypeOverlay = new TileLayer<Color>();
+    private readonly ITileLayer<Color> _neighborhoodOverlay = new TileLayer<Color>();
+    private readonly ITileLayer<Color> _lineOverlay = new TileLayer<Color>();
 }

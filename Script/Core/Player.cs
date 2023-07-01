@@ -6,8 +6,7 @@ using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core
 {
-    [DataContract]
-    public partial class Player : IVariant<string>
+    public class Player : IVariant<string>
     {
         public Player(string name, long id, Color? color = null)
         {
@@ -30,8 +29,7 @@ namespace TribesOfDust.Core
         /// identity for the player. Instead, refer to <see cref="Player.Id"/>
         /// for an identity that is unique across network instances as well.
         /// </summary>
-        [DataMember] 
-        public string Name { get; init; }
+        public string Name { get; }
         string IVariant<string>.Key => Name;
 
         /// <summary>
@@ -46,7 +44,6 @@ namespace TribesOfDust.Core
         /// entities, but overlays can make use of this color to highlight things by
         /// player color.
         /// </summary>
-        [DataMember] 
         public Color Color { get; init; }
     }
 }
