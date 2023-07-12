@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text;
 using Godot;
+using TribesOfDust.Core.Entities;
 using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core;
@@ -13,6 +14,7 @@ public partial class EditorContext : RefCounted
         Maps   = new(Terrains);
         
         Terrains.Load();
+        Classes.Load();
         Maps.Load();
 
         // Initialize sub contexts.
@@ -51,6 +53,7 @@ public partial class EditorContext : RefCounted
     public readonly Map Map;
     public readonly MapRepository Maps;
     public readonly TerrainRepository Terrains = new();
+    public readonly UnitClassRepository Classes = new();
 
     /// <summary>
     /// All graphical elements of the current level.
