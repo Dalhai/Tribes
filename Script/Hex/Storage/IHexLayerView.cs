@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace TribesOfDust.Hex.Storage;
 
-public interface ITileLayerView
+public interface IHexLayerView
 {
-    event Action<ITileLayerView, AxialCoordinate>? RemovingAt;
-    event Action<ITileLayerView, AxialCoordinate>? RemovedAt;
-    event Action<ITileLayerView, AxialCoordinate>? AddingAt;
-    event Action<ITileLayerView, AxialCoordinate>? AddedAt;
+    event Action<IHexLayerView, AxialCoordinate>? RemovingAt;
+    event Action<IHexLayerView, AxialCoordinate>? RemovedAt;
+    event Action<IHexLayerView, AxialCoordinate>? AddingAt;
+    event Action<IHexLayerView, AxialCoordinate>? AddedAt;
 
     /// <summary>Checks if the storage contains the coordinates.</summary>
     /// <param name="coordinates">The coordinates to chek for.</param>
@@ -29,14 +29,14 @@ public interface ITileLayerView
     IEnumerable<AxialCoordinate> Coordinates { get; }
 }
 
-public interface ITileLayerView<T> :
-    ITileLayerView,
+public interface IHexLayerView<T> :
+    IHexLayerView,
     IEnumerable<KeyValuePair<AxialCoordinate, T>>
 {
-    event Action<ITileLayerView<T>, T, AxialCoordinate>? Removing;
-    event Action<ITileLayerView<T>, T, AxialCoordinate>? Removed;
-    event Action<ITileLayerView<T>, T, AxialCoordinate>? Adding;
-    event Action<ITileLayerView<T>, T, AxialCoordinate>? Added;
+    event Action<IHexLayerView<T>, T, AxialCoordinate>? Removing;
+    event Action<IHexLayerView<T>, T, AxialCoordinate>? Removed;
+    event Action<IHexLayerView<T>, T, AxialCoordinate>? Adding;
+    event Action<IHexLayerView<T>, T, AxialCoordinate>? Added;
 
     /// <summary>Gets the item at the specified coordinates.</summary>
     /// <param name="coordinates">The coordinates of the item to get.</param>

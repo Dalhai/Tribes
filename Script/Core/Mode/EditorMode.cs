@@ -16,7 +16,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         Vector2 minimum = Vector2.Inf;
         Vector2 maximum = -Vector2.Inf;
-        foreach (var tile in _context.Map.Tiles)
+        foreach (var tile in _context.Map.Hexes)
         {
             var unitPosition = HexConversions.HexToUnit(tile.Key);
             var x = unitPosition.X * HexConstants.DefaultWidth;
@@ -37,7 +37,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         
         // Register tiles
 
-        foreach (var tile in _context.Map.Tiles)
+        foreach (var tile in _context.Map.Hexes)
             AddChild(tile.Value.Sprite);
         
         // Register units
@@ -55,13 +55,13 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         AddChild(unit3.Sprite);
 
         // Register overlays with context   
-        _context.Display.AddOverlay(_activeTileOverlay);
+        _context.Display.AddOverlay(_activeHexOverlay);
         _context.Display.AddOverlay(_activeTypeOverlay);
         _context.Display.AddOverlay(_neighborhoodOverlay);
         _context.Display.AddOverlay(_lineOverlay);
 
-        _context.Map.Tiles.Added += (_, _, _) => UpdateTypeOverlay();
-        _neighborhood = new ConnectedNeighborhood(3, _context.Map.Tiles);
+        _context.Map.Hexes.Added += (_, _, _) => UpdateTypeOverlay();
+        _neighborhood = new ConnectedNeighborhood(3, _context.Map.Hexes);
 
         // Initialize render state
         UpdateActiveType();
@@ -87,7 +87,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
     public override void _Input(InputEvent inputEvent)
     {
-        var tiles = _context.Map.Tiles;
+        var tiles = _context.Map.Hexes;
         var repo = _context.Terrains;
 
         // Update the active tile and color it accordingly.
@@ -101,8 +101,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             if (_activeTileCoordinates != hex)
             {
                 _activeTileCoordinates = hex;
-                _activeTileOverlay.Clear();
-                _activeTileOverlay.Add(Colors.Aqua, hex);
+                _activeHexOverlay.Clear();
+                _activeHexOverlay.Add(Colors.Aqua, hex);
             }
 
             _lineOverlay.Clear();
@@ -216,7 +216,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         _activeTypeOverlay.Clear();
 
-        var tiles = _context.Map.Tiles;
+        var tiles = _context.Map.Hexes;
         var overlay = tiles.Where(tile => tile.Value.Key == _activeTileType);
 
         foreach (var tile in overlay)
@@ -229,8 +229,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     private EditorContext _context = null!;
     private INeighborhood _neighborhood = null!;
 
-    private readonly ITileLayer<Color> _activeTileOverlay = new TileLayer<Color>();
-    private readonly ITileLayer<Color> _activeTypeOverlay = new TileLayer<Color>();
-    private readonly ITileLayer<Color> _neighborhoodOverlay = new TileLayer<Color>();
-    private readonly ITileLayer<Color> _lineOverlay = new TileLayer<Color>();
+    private readonly IHexLayer<Color> _activeHexOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<Color> _activeTypeOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<Color> _neighborhoodOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<Color> _lineOverlay = new HexLayer<Color>();
 }

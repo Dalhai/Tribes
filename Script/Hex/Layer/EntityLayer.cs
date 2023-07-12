@@ -4,7 +4,7 @@ using TribesOfDust.Hex.Storage;
 
 namespace TribesOfDust.Hex.Layer;
 
-public class EntityLayer<T> : TileLayer<T> where T: IEntity
+public class EntityLayer<T> : HexLayer<T> where T: IEntity
 {
     #region Add
 

@@ -47,15 +47,15 @@ namespace TribesOfDust.Hex.Neighborhood
     public class ConnectedNeighborhood : Neighborhood
     {
 
-        public ConnectedNeighborhood(int distance, ITileLayer<Tile> tiles)
+        public ConnectedNeighborhood(int distance, IHexLayer<Tile> hexes)
         {
             Distance = distance;
             Distances = new();
-            Tiles = tiles;
+            Hexes = hexes;
         }
 
         public int Distance { get; }
-        public ITileLayer<Tile> Tiles { get; }
+        public IHexLayer<Tile> Hexes { get; }
         public Dictionary<AxialCoordinate, int> Distances { get; }
 
         public override List<AxialCoordinate> GetNeighbors(AxialCoordinate axialCoordinate)
@@ -69,46 +69,46 @@ namespace TribesOfDust.Hex.Neighborhood
             List<AxialCoordinate> next = new();
             
             // Get distance of tile or zero distance, if it does not exist.
-            var tile = Tiles.Get(coordinate);
+            var tile = Hexes.Get(coordinate);
             int distance = Distances[coordinate];
 
             if (!(tile is null) && distance < Distance)
             {
-                var tileNW = Tiles.Get(tile.Coordinates.NW);
+                var tileNW = Hexes.Get(tile.Coordinates.NW);
                 if (tileNW is not null && Tile.AreConnected(tile, tileNW))
                 {
                     next.Add(coordinate.NW);
                     Distances.Add(coordinate.NW, distance + 1);
                 }
 
-                var tileN = Tiles.Get(tile.Coordinates.N);
+                var tileN = Hexes.Get(tile.Coordinates.N);
                 if (tileN is not null && Tile.AreConnected(tile, tileN)) 
                 {
                     next.Add(coordinate.N);
                     Distances.Add(coordinate.N, distance + 1);
                 }
-                var tileNE = Tiles.Get(tile.Coordinates.NE);
+                var tileNE = Hexes.Get(tile.Coordinates.NE);
                 if (tileNE is not null && Tile.AreConnected(tile, tileNE))
                 {
                     next.Add(coordinate.NE);
                     Distances.Add(coordinate.NE, distance + 1);
                 }
 
-                var tileSE = Tiles.Get(tile.Coordinates.SE);
+                var tileSE = Hexes.Get(tile.Coordinates.SE);
                 if (tileSE is not null && Tile.AreConnected(tile, tileSE))
                 {
                     next.Add(coordinate.SE);
                     Distances.Add(coordinate.SE, distance + 1);
                 }
 
-                var tileS = Tiles.Get(tile.Coordinates.S);
+                var tileS = Hexes.Get(tile.Coordinates.S);
                 if (tileS is not null && Tile.AreConnected(tile, tileS))
                 {
                     next.Add(coordinate.S);
                     Distances.Add(coordinate.S, distance + 1);
                 }
 
-                var tileSW = Tiles.Get(tile.Coordinates.SW);
+                var tileSW = Hexes.Get(tile.Coordinates.SW);
                 if (tileSW is not null && Tile.AreConnected(tile, tileSW))
                 {
                     next.Add(coordinate.SW);

@@ -5,19 +5,19 @@ using System.Linq;
 
 namespace TribesOfDust.Hex.Storage;
     
-public class TileLayer<T> : ITileLayer<T> where T: notnull
+public class HexLayer<T> : IHexLayer<T> where T: notnull
 {
     #region Events
 
-    public event Action<ITileLayerView, AxialCoordinate>? RemovingAt;
-    public event Action<ITileLayerView, AxialCoordinate>? RemovedAt;
-    public event Action<ITileLayerView, AxialCoordinate>? AddingAt;
-    public event Action<ITileLayerView, AxialCoordinate>? AddedAt;
+    public event Action<IHexLayerView, AxialCoordinate>? RemovingAt;
+    public event Action<IHexLayerView, AxialCoordinate>? RemovedAt;
+    public event Action<IHexLayerView, AxialCoordinate>? AddingAt;
+    public event Action<IHexLayerView, AxialCoordinate>? AddedAt;
 
-    public event Action<ITileLayerView<T>, T, AxialCoordinate>? Removing;
-    public event Action<ITileLayerView<T>, T, AxialCoordinate>? Removed;
-    public event Action<ITileLayerView<T>, T, AxialCoordinate>? Adding;
-    public event Action<ITileLayerView<T>, T, AxialCoordinate>? Added;
+    public event Action<IHexLayerView<T>, T, AxialCoordinate>? Removing;
+    public event Action<IHexLayerView<T>, T, AxialCoordinate>? Removed;
+    public event Action<IHexLayerView<T>, T, AxialCoordinate>? Adding;
+    public event Action<IHexLayerView<T>, T, AxialCoordinate>? Added;
 
     protected void OnRemoving(T item, AxialCoordinate coordinates)
     {

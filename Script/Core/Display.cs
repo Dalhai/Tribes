@@ -14,9 +14,9 @@ public partial class Display : RefCounted
 {
     #region Constructors
         
-    public Display(ITileLayerView<Tile> tiles)
+    public Display(IHexLayerView<Tile> hexes)
     {
-        Tiles = tiles;
+        Hexes = hexes;
 
         // Setup event handlers.
         _onOverlayTileAdded = (_, color, coordinates) => AddOverlayColor(coordinates, color); 
@@ -33,7 +33,7 @@ public partial class Display : RefCounted
     #endregion
     #region Access
         
-    public ITileLayerView<Tile> Tiles { get; }
+    public IHexLayerView<Tile> Hexes { get; }
         
     #endregion
     #region Overlays
@@ -46,7 +46,7 @@ public partial class Display : RefCounted
     /// times. You should, however, remember to unregister overlays once you don't need 
     /// them anymore.
     /// </summary>
-    public void AddOverlay(ITileLayerView<Color> overlay) 
+    public void AddOverlay(IHexLayerView<Color> overlay) 
     {
         if (_overlays.Contains(overlay))
             return;
@@ -69,7 +69,7 @@ public partial class Display : RefCounted
     /// You can reregister the overlay at any time though, no need to create a
     /// completely new one.
     /// </summary>
-    public void RemoveOverlay(ITileLayerView<Color> overlay) 
+    public void RemoveOverlay(IHexLayerView<Color> overlay) 
     {
         if (!_overlays.Contains(overlay))
             return;
@@ -87,7 +87,7 @@ public partial class Display : RefCounted
 
     private void AddOverlayColor(AxialCoordinate coordinates, Color color) 
     {
-        Tile? tile = Tiles.Get(coordinates);
+        Tile? tile = Hexes.Get(coordinates);
 
         // Only add the overlay color if the tile is not null.
         // Handles the case where the overlay wants to color a tile
@@ -97,7 +97,7 @@ public partial class Display : RefCounted
 
     private void RemoveOverlayColor(AxialCoordinate coordinates, Color color)
     {
-        Tile? tile = Tiles.Get(coordinates);
+        Tile? tile = Hexes.Get(coordinates);
 
         // Only add the overlay color if the tile is not null.
         // Handles the case where the overlay wants to color a tile
@@ -107,7 +107,7 @@ public partial class Display : RefCounted
         
     #endregion
 
-    private readonly Action<ITileLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
-    private readonly Action<ITileLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;
-    private readonly HashSet<ITileLayerView<Color>> _overlays = new();
+    private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
+    private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;
+    private readonly HashSet<IHexLayerView<Color>> _overlays = new();
 }

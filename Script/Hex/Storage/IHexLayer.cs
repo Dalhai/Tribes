@@ -1,6 +1,6 @@
 namespace TribesOfDust.Hex.Storage;
 
-public interface ITileLayer<T> : ITileLayerView<T> 
+public interface IHexLayer<T> : IHexLayerView<T> 
 {
     #region Add
 

@@ -75,7 +75,7 @@ public class MapRepository : Repository<string, Map>
             {
                 asset = new Map(mapName);
                 foreach (var tile in mapTiles)
-                    asset.Tiles.Add(tile, tile.Coordinates);
+                    asset.Hexes.Add(tile, tile.Coordinates);
             }
         }
 
@@ -95,7 +95,7 @@ public class MapRepository : Repository<string, Map>
             var jsonObject = new JsonObject();
             var jsonTiles = new JsonArray();
 
-            foreach (var tile in asset.Tiles)
+            foreach (var tile in asset.Hexes)
             {
                 var jsonTile = new JsonObject
                 {

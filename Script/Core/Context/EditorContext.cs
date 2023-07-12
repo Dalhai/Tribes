@@ -19,7 +19,7 @@ public partial class EditorContext : RefCounted
 
         // Initialize sub contexts.
         Map     = Maps.FirstOrDefault() ?? new ("Default");
-        Display = new(Map.Tiles);
+        Display = new(Map.Hexes);
     }
 
     #region Overrides
