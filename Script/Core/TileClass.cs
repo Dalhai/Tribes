@@ -1,10 +1,10 @@
 using Godot;
-
+using TribesOfDust.Core;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Hex;
 
-public partial class Terrain : Resource, IVariant<TileType>
+public partial class TileClass : Resource, IVariant<TileType>
 {
     public override string ToString() => $"Terrain: {Key}";
 
@@ -30,7 +30,7 @@ public partial class Terrain : Resource, IVariant<TileType>
     /// Most tiles will not be directed, which is allowed as well.
     /// </remarks>
     [Export(PropertyHint.Enum)]
-    public TileDirection Direction = TileDirection.None;
+    public HexDirection Direction = HexDirection.None;
 
     /// <summary>
     /// The connections to other tiles this tile has.
@@ -40,7 +40,7 @@ public partial class Terrain : Resource, IVariant<TileType>
     /// Most tiles will have connections to all surrounding tiles.
     /// </remarks>
     [Export(PropertyHint.Flags)]
-    public int Connections = (int)TileDirections.All;
+    public int Connections = (int)HexDirections.All;
 
     #endregion
     #region Size

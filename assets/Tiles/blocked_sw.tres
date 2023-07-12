@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bu56nehrksj4l"]
+
+[ext_resource type="Script" path="res://Script/Core/TileClass.cs" id="1"]
+[ext_resource type="Texture2D" uid="uid://dp51mbevplh54" path="res://Assets/Textures/TileClass/blocked_sw.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+Key = 2
+Texture2D = ExtResource("2")
+Direction = 32
+Connections = 0

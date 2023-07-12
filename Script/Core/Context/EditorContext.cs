@@ -11,9 +11,9 @@ public partial class EditorContext : RefCounted
     public EditorContext(Context parent)
     {
         Parent = parent;
-        Maps   = new(Terrains);
+        Maps   = new(TileClasses);
         
-        Terrains.Load();
+        TileClasses.Load();
         Classes.Load();
         Maps.Load();
 
@@ -52,7 +52,7 @@ public partial class EditorContext : RefCounted
     /// </summary>
     public readonly Map Map;
     public readonly MapRepository Maps;
-    public readonly TerrainRepository Terrains = new();
+    public readonly TileClassRepository TileClasses = new();
     public readonly UnitClassRepository Classes = new();
 
     /// <summary>

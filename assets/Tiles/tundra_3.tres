@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dfx8e12almamj"]
+
+[ext_resource type="Script" path="res://Script/Core/TileClass.cs" id="1"]
+[ext_resource type="Texture2D" uid="uid://wpuisag8r4q4" path="res://Assets/Textures/TileClass/tundra_3.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+Key = 3
+Texture2D = ExtResource("2")
+Direction = 0
+Connections = 63

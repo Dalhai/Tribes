@@ -3,7 +3,6 @@ using System.Linq;
 using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex.Storage;
-using TribesOfDust.Hex.Neighborhood;
 using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Modes;
@@ -61,7 +60,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         _context.Display.AddOverlay(_lineOverlay);
 
         _context.Map.Hexes.Added += (_, _, _) => UpdateTypeOverlay();
-        _neighborhood = new ConnectedNeighborhood(3, _context.Map.Hexes);
 
         // Initialize render state
         UpdateActiveType();
@@ -88,7 +86,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     public override void _Input(InputEvent inputEvent)
     {
         var tiles = _context.Map.Hexes;
-        var repo = _context.Terrains;
+        var repo = _context.TileClasses;
 
         // Update the active tile and color it accordingly.
         // The active tile is the tile the mouse cursor is currently hovering over.
@@ -171,25 +169,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                     }
                 }
             }
-
-            // Display neighborhood overlay on the tile that has been clicked.
-
-            else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Middle })
-            {
-                _neighborhoodOverlay.Clear();
-
-                var world = GetGlobalMousePosition();
-                var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
-                var tile = tiles.Get(hex);
-
-                if (tile is not null)
-                {
-                    foreach (var neighbor in _neighborhood.GetNeighbors(tile.Coordinates))
-                    {
-                        _neighborhoodOverlay.Add(Colors.SaddleBrown, neighbor);
-                    }
-                }
-            }
         }
 
         UpdateActiveType();
@@ -227,7 +206,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     private TileType _activeTileType = TileType.Tundra;
 
     private EditorContext _context = null!;
-    private INeighborhood _neighborhood = null!;
 
     private readonly IHexLayer<Color> _activeHexOverlay = new HexLayer<Color>();
     private readonly IHexLayer<Color> _activeTypeOverlay = new HexLayer<Color>();

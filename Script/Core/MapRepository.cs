@@ -13,9 +13,9 @@ public class MapRepository : Repository<string, Map>
 {
     #region Constructor
     
-    public MapRepository(TerrainRepository terrainRepository)
+    public MapRepository(TileClassRepository tileClassRepository)
     {
-        _terrainRepository = terrainRepository;
+        _tileClassRepository = tileClassRepository;
     }
     
     #endregion
@@ -63,7 +63,7 @@ public class MapRepository : Repository<string, Map>
                 if (t is null)
                     return null;
 
-                return new Tile(new(q.Value, r.Value), _terrainRepository.GetAsset((TileType)t.Value));
+                return new Tile(new(q.Value, r.Value), _tileClassRepository.GetAsset((TileType)t.Value));
             }
 
             var mapTiles = mapTilesJson
@@ -111,7 +111,6 @@ public class MapRepository : Repository<string, Map>
 
             var jsonString = jsonObject.ToJsonString();
             
-            GD.Print(jsonString);
             targetFile.StoreString(jsonString);
             targetFile.Flush();
             targetFile.Close();
@@ -129,5 +128,5 @@ public class MapRepository : Repository<string, Map>
     
     #endregion
 
-    private readonly TerrainRepository _terrainRepository;
+    private readonly TileClassRepository _tileClassRepository;
 }
