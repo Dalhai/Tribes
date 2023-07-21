@@ -32,7 +32,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         
     public override void _Ready()
     {
-        _context = new EditorContext(Context.Instance);
+        _context = new MapContext(Context.Instance);
         
         // Register tiles
 
@@ -205,7 +205,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     private AxialCoordinate? _activeTileCoordinates;
     private TileType _activeTileType = TileType.Tundra;
 
-    private EditorContext _context = null!;
+    private MapContext _context = null!;
 
     private readonly IHexLayer<Color> _activeHexOverlay = new HexLayer<Color>();
     private readonly IHexLayer<Color> _activeTypeOverlay = new HexLayer<Color>();
