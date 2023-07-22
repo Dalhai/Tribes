@@ -24,17 +24,4 @@ public partial class UnitClass : Resource, IVariant<string>
     public Texture2D? Texture2D;
 
     #endregion
-    #region Size
-
-    /// <summary>
-    /// Gets the scale in x-direction necessary to match the expected width.
-    /// </summary>
-    public float WidthScaleToExpected => Texture2D != null ? HexConstants.DefaultWidth / Texture2D.GetWidth() : 1.0f;
-
-    /// <summary>
-    /// Gets the scale in y-direction necessary to match the expected height.
-    /// </summary>
-    public float HeightScaleToExpected => Texture2D != null ? HexConstants.DefaultHeight / Texture2D.GetHeight() : 1.0f;
-
-    #endregion
 }

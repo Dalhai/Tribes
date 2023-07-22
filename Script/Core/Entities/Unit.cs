@@ -19,8 +19,11 @@ public class Unit : IEntity
         Sprite.ZIndex = 10;
         
         // Initialize and reduce scale so the unit sprite fits
+
+        float widthScaleToExpected = @class.Texture2D != null ? HexConstants.DefaultWidth / @class.Texture2D.GetWidth() : 1.0f;
+        float heightScaleToExpected = @class.Texture2D != null ? HexConstants.DefaultHeight / @class.Texture2D.GetHeight() : 1.0f;
         
-        Sprite.Scale = new Vector2(@class.WidthScaleToExpected, @class.HeightScaleToExpected);
+        Sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
         Sprite.Scale *= 0.5f;
         
         // Position unit according to specified coordinates
