@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Godot;
-using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Hex;
 
@@ -35,23 +34,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         _context = new MapContext(Context.Instance);
         
         // Register tiles
-
         foreach (var tile in _context.Map.Hexes)
             AddChild(tile.Value.Sprite);
-        
-        // Register units
-        var @class = _context.Classes.GetAsset();
-        var unit1 = new Unit(new(-2, -4), @class);
-        var unit2 = new Unit(new( 2,  1), @class);
-        var unit3 = new Unit(new( 1, -2), @class);
-        
-        _context.Map.Units.Add(unit1, unit1.Coordinates);
-        _context.Map.Units.Add(unit2, unit2.Coordinates);
-        _context.Map.Units.Add(unit3, unit3.Coordinates);
-        
-        AddChild(unit1.Sprite);
-        AddChild(unit2.Sprite);
-        AddChild(unit3.Sprite);
 
         // Register overlays with context   
         _context.Display.AddOverlay(_activeHexOverlay);
