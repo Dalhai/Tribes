@@ -1,4 +1,5 @@
 using System.Text;
+using TribesOfDust.Core.Controllers;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Utils.Extensions;
 using TribesOfDust.Core.Entities;
@@ -24,7 +25,10 @@ public class Map: IEntity, IVariant<string>
     public Map(string name)
     {
         Name = name;
+        Owner = null;
+        
         Identity = Identities.GetNextIdentity();
+        
         Hexes = new HexLayer<Tile>();
         Units = new HexLayer<Unit>();
     }
@@ -48,6 +52,7 @@ public class Map: IEntity, IVariant<string>
     #region Entity
     
     public ulong Identity { get; }
+    public IController? Owner { get; }
     
     #endregion
     #region Variant

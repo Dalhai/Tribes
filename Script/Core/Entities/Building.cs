@@ -4,11 +4,11 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Entities;
 
-public class Unit : IEntity
+public abstract class Building : IEntity
 {
     #region Constructors
     
-    public Unit(AxialCoordinate coordinates, UnitClass @class, IController owner)
+    protected Building(AxialCoordinate coordinates, BuildingClass @class, IController owner)
     {
         Coordinates = coordinates;
         Owner = owner;
@@ -20,7 +20,7 @@ public class Unit : IEntity
         Sprite.Modulate = owner.Color;
         Sprite.ZIndex = 10;
         
-        // Initialize and reduce scale so the unit sprite fits
+        // Initialize and reduce scale so the building sprite fits
 
         float widthScaleToExpected = @class.Texture2D != null ? HexConstants.DefaultWidth / @class.Texture2D.GetWidth() : 1.0f;
         float heightScaleToExpected = @class.Texture2D != null ? HexConstants.DefaultHeight / @class.Texture2D.GetHeight() : 1.0f;
@@ -39,7 +39,7 @@ public class Unit : IEntity
     
     public ulong Identity { get; }
     public IController? Owner { get; }
-
+    
     public AxialCoordinate Coordinates { get; }
     public Sprite2D Sprite { get; }
     
