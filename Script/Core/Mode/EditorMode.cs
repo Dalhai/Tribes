@@ -62,7 +62,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         Instance = null;
         
-        _context.Maps.TrySave(_context.Map);
+        _context.Repos.Maps.TrySave(_context.Map);
         
         base._ExitTree();
     }
@@ -70,7 +70,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     public override void _Input(InputEvent inputEvent)
     {
         var tiles = _context.Map.Hexes;
-        var repo = _context.TileClasses;
+        var repo = _context.Repos.Tiles;
 
         // Update the active tile and color it accordingly.
         // The active tile is the tile the mouse cursor is currently hovering over.

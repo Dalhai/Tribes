@@ -11,14 +11,26 @@ public partial class MapContext : RefCounted
     public MapContext(Context parent)
     {
         Parent = parent;
-        Maps   = new(TileClasses);
-        
-        TileClasses.Load();
-        Classes.Load();
-        Maps.Load();
 
+        var tilesRepository     = new TileClassRepository();
+        var unitsRepository     = new UnitClassRepository();
+        var buildingsRepository = new BuildingClassRepository();
+        var mapsRepositoriy     = new MapRepository(tilesRepository);
+
+        Repos = new(
+            mapsRepositoriy, 
+            tilesRepository, 
+            unitsRepository, 
+            buildingsRepository
+        );
+        
+        Repos.Tiles.Load();
+        Repos.Buildings.Load();
+        Repos.Units.Load();
+        Repos.Maps.Load();
+        
         // Initialize sub contexts.
-        Map     = Maps.FirstOrDefault() ?? new ("Default");
+        Map     = Repos.Maps.FirstOrDefault() ?? new ("Default");
         Display = new(Map.Hexes);
     }
 
@@ -31,6 +43,7 @@ public partial class MapContext : RefCounted
         .ToString();
 
     #endregion
+    #region Context
 
     /// <summary>
     /// The context this navigator belongs to.
@@ -38,7 +51,9 @@ public partial class MapContext : RefCounted
     /// </summary>
     public Context Parent { get; }
     
-
+    #endregion
+    #region Map
+    
     /// <summary>
     /// The currently loaded map.
     /// 
@@ -51,10 +66,22 @@ public partial class MapContext : RefCounted
     /// is handled separately in the display layer.
     /// </summary>
     public readonly Map Map;
-    public readonly MapRepository Maps;
-    public readonly TileClassRepository TileClasses = new();
-    public readonly UnitClassRepository Classes = new();
+    
+    #endregion
+    #region Repositories
+    
+    public record Repositories(
+        MapRepository Maps,
+        TileClassRepository Tiles, 
+        UnitClassRepository Units, 
+        BuildingClassRepository Buildings
+    );
 
+    public Repositories Repos { get; }
+    
+    #endregion
+    #region Display
+    
     /// <summary>
     /// All graphical elements of the current level.
     /// 
@@ -63,4 +90,6 @@ public partial class MapContext : RefCounted
     /// displays that are strictly local, this is the context to access.
     /// </summary>
     public readonly Display Display;
+    
+    #endregion
 }

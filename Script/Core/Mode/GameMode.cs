@@ -38,7 +38,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             AddChild(tile.Value.Sprite);
         
         // Register units
-        var @class = _context.Classes.GetAsset();
+        var @class = _context.Repos.Units.GetAsset();
         var unit1 = new Unit(new(-2, -4), @class);
         var unit2 = new Unit(new( 2,  1), @class);
         var unit3 = new Unit(new( 1, -2), @class);
@@ -50,6 +50,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         AddChild(unit1.Sprite);
         AddChild(unit2.Sprite);
         AddChild(unit3.Sprite);
+        
+        // Register buildings
+        
 
         base._Ready();
     }
