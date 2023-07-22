@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
 using Godot;
-
+using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex.Storage;
-using TribesOfDust.Hex.Neighborhood;
 using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Modes;
@@ -16,7 +15,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         Vector2 minimum = Vector2.Inf;
         Vector2 maximum = -Vector2.Inf;
-        foreach (var tile in _context.Level.Tiles)
+        foreach (var tile in _context.Map.Hexes)
         {
             var unitPosition = HexConversions.HexToUnit(tile.Key);
             var x = unitPosition.X * HexConstants.DefaultWidth;
@@ -33,22 +32,34 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         
     public override void _Ready()
     {
-        _context = new EditorContext(Context.Instance);
-        _context.Level.Map = Load(_context.Repositories);
+        _context = new MapContext(Context.Instance);
+        
+        // Register tiles
 
-        foreach (var tile in _context.Level.Tiles)
-        {
-            AddChild(tile.Value);
-        }
+        foreach (var tile in _context.Map.Hexes)
+            AddChild(tile.Value.Sprite);
+        
+        // Register units
+        var @class = _context.Classes.GetAsset();
+        var unit1 = new Unit(new(-2, -4), @class);
+        var unit2 = new Unit(new( 2,  1), @class);
+        var unit3 = new Unit(new( 1, -2), @class);
+        
+        _context.Map.Units.Add(unit1, unit1.Coordinates);
+        _context.Map.Units.Add(unit2, unit2.Coordinates);
+        _context.Map.Units.Add(unit3, unit3.Coordinates);
+        
+        AddChild(unit1.Sprite);
+        AddChild(unit2.Sprite);
+        AddChild(unit3.Sprite);
 
         // Register overlays with context   
-        _context.Display.AddOverlay(_activeTileOverlay);
+        _context.Display.AddOverlay(_activeHexOverlay);
         _context.Display.AddOverlay(_activeTypeOverlay);
         _context.Display.AddOverlay(_neighborhoodOverlay);
         _context.Display.AddOverlay(_lineOverlay);
 
-        _context.Level.Tiles.Added += (_, _) => UpdateTypeOverlay();
-        _neighborhood = new ConnectedNeighborhood(3, _context.Level.Tiles);
+        _context.Map.Hexes.Added += (_, _, _) => UpdateTypeOverlay();
 
         // Initialize render state
         UpdateActiveType();
@@ -67,29 +78,15 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         Instance = null;
         
-        Save(_context.Level);
+        _context.Maps.TrySave(_context.Map);
+        
         base._ExitTree();
     }
 
-    private void Save(Level level)
-    {
-        level.Map ??= new("World");
-        level.Map.Tiles.Clear();
-
-        foreach (var tile in level.Tiles)
-        {
-            level.Map.Tiles[tile.Key] = tile.Value.Key;
-        }
-
-        _context.Repositories.Maps.TrySave(level.Map);
-    }
-
-    private static Map Load(Repositories repositories) => repositories.Maps.First();
-
     public override void _Input(InputEvent inputEvent)
     {
-        var tiles = _context.Level.Tiles;
-        var repo = _context.Repositories.Terrains;
+        var tiles = _context.Map.Hexes;
+        var repo = _context.TileClasses;
 
         // Update the active tile and color it accordingly.
         // The active tile is the tile the mouse cursor is currently hovering over.
@@ -102,14 +99,14 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             if (_activeTileCoordinates != hex)
             {
                 _activeTileCoordinates = hex;
-                _activeTileOverlay.Clear();
-                _activeTileOverlay.Add(hex, Colors.Aqua);
+                _activeHexOverlay.Clear();
+                _activeHexOverlay.Add(Colors.Aqua, hex);
             }
 
             _lineOverlay.Clear();
             foreach (var coordinate in Intersections.Line(Vector2.Zero, world / HexConstants.DefaultSize))
             {
-                _lineOverlay.Add(coordinate, Colors.YellowGreen);
+                _lineOverlay.Add(Colors.YellowGreen, coordinate);
             }
         }
 
@@ -127,16 +124,16 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
                 try
                 {
-                    var hexTile = Tile.Create(hex, repo.GetAsset(_activeTileType));
+                    var hexTile = new Tile(hex, repo.GetAsset(_activeTileType));
                     var tile = tiles.Get(hex);
 
                     tiles.Remove(hex);
 
                     if (tile is not null)
-                        RemoveChild(tile);
+                        RemoveChild(tile.Sprite);
 
-                    tiles.Add(hexTile.Coordinates, hexTile);
-                    AddChild(hexTile);
+                    tiles.Add(hexTile, hexTile.Coordinates);
+                    AddChild(hexTile.Sprite);
                 }
                 catch (ArgumentException exception)
                 {
@@ -156,38 +153,19 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 tiles.Remove(hex);
 
                 if (tile is not null)
-                    RemoveChild(tile);
+                    RemoveChild(tile.Sprite);
 
                 if (tile is null || tile.Key != TileType.Open)
                 {
                     try
                     {
-                        var hexTile = Tile.Create(hex, repo.GetAsset(TileType.Open));
-                        tiles.Add(hexTile.Coordinates, hexTile);
-                        AddChild(hexTile);
+                        var hexTile = new Tile(hex, repo.GetAsset(TileType.Open));
+                        tiles.Add(hexTile, hexTile.Coordinates);
+                        AddChild(hexTile.Sprite);
                     }
                     catch (ArgumentException exception)
                     {
                         GD.PrintErr(exception.Message);
-                    }
-                }
-            }
-
-            // Display neighborhood overlay on the tile that has been clicked.
-
-            else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Middle } && _neighborhood is not null)
-            {
-                _neighborhoodOverlay.Clear();
-
-                var world = GetGlobalMousePosition();
-                var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
-                var tile = tiles.Get(hex);
-
-                if (tile is not null)
-                {
-                    foreach (var neighbor in _neighborhood.GetNeighbors(tile.Coordinates))
-                    {
-                        _neighborhoodOverlay.Add(neighbor, Colors.SaddleBrown);
                     }
                 }
             }
@@ -217,21 +195,20 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         _activeTypeOverlay.Clear();
 
-        var tiles = _context.Level.Tiles;
+        var tiles = _context.Map.Hexes;
         var overlay = tiles.Where(tile => tile.Value.Key == _activeTileType);
 
         foreach (var tile in overlay)
-            _activeTypeOverlay.Add(tile.Key, Colors.LightBlue);
+            _activeTypeOverlay.Add(Colors.LightBlue, tile.Key);
     }
 
     private AxialCoordinate? _activeTileCoordinates;
     private TileType _activeTileType = TileType.Tundra;
 
-    private EditorContext _context = null!;
-    private INeighborhood _neighborhood = null!;
+    private MapContext _context = null!;
 
-    private readonly ITileStorage<Color> _activeTileOverlay = new TileStorage<Color>();
-    private readonly ITileStorage<Color> _activeTypeOverlay = new TileStorage<Color>();
-    private readonly ITileStorage<Color> _neighborhoodOverlay = new TileStorage<Color>();
-    private readonly ITileStorage<Color> _lineOverlay = new TileStorage<Color>();
+    private readonly IHexLayer<Color> _activeHexOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<Color> _activeTypeOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<Color> _neighborhoodOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<Color> _lineOverlay = new HexLayer<Color>();
 }

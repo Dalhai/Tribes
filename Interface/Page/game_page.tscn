@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cobxnn0eb6q6a"]
+
+[ext_resource type="Script" path="res://Script/Core/Mode/GameMode.cs" id="1_yb8rm"]
+[ext_resource type="Script" path="res://Script/Interface/Camera.cs" id="7_1sk2g"]
+
+[node name="Scene" type="Node2D"]
+script = ExtResource("1_yb8rm")
+
+[node name="Canvas" type="Node2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Canvas"]
+
+[node name="Camera2D" type="Camera2D" parent="Canvas"]
+anchor_mode = 0
+script = ExtResource("7_1sk2g")

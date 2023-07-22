@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bmqic7o2xxogk"]
+
+[ext_resource type="Texture2D" uid="uid://bi76ohqbq0lga" path="res://Assets/Textures/Romans/armor_roman_helmet.png" id="1_p12ey"]
+[ext_resource type="Script" path="res://Script/Core/Entities/UnitClass.cs" id="2_jgb45"]
+
+[resource]
+script = ExtResource("2_jgb45")
+Key = "Unit"
+Texture2D = ExtResource("1_p12ey")

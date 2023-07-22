@@ -14,7 +14,8 @@ public partial class Context : Node,
 	{
 		// Setup named routes
 		Navigator = new(this);
-		Navigator.Route("main", _ => (Node2D)GD.Load<PackedScene>("res://Interface/Page/main_page.tscn").Instantiate());
+		Navigator.Route("main",   _ => (Node2D)GD.Load<PackedScene>("res://Interface/Page/main_page.tscn").Instantiate());
+		Navigator.Route("play",   _ => (Node2D)GD.Load<PackedScene>("res://Interface/Page/game_page.tscn").Instantiate());
 		Navigator.Route("editor", _ => (Node2D)GD.Load<PackedScene>("res://Interface/Page/editor_page.tscn").Instantiate());
 	}
 		
