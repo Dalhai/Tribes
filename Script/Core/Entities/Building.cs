@@ -1,4 +1,5 @@
 ﻿using Godot;
+using TribesOfDust.Core.Controllers;
 using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Entities;
@@ -7,15 +8,16 @@ public abstract class Building : IEntity
 {
     #region Constructors
     
-    protected Building(AxialCoordinate coordinates, BuildingClass @class)
+    protected Building(AxialCoordinate coordinates, BuildingClass @class, IController owner)
     {
         Coordinates = coordinates;
+        Owner = owner;
         
         Identity = Identities.GetNextIdentity();
         
         Sprite = new();
         Sprite.Texture = @class.Texture2D;
-        Sprite.Modulate = Colors.Beige;
+        Sprite.Modulate = owner.Color;
         Sprite.ZIndex = 10;
         
         // Initialize and reduce scale so the building sprite fits
@@ -36,6 +38,7 @@ public abstract class Building : IEntity
     #region Queries
     
     public ulong Identity { get; }
+    public IController? Owner { get; }
     
     public AxialCoordinate Coordinates { get; }
     public Sprite2D Sprite { get; }

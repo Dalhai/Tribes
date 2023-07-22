@@ -1,11 +1,18 @@
-﻿namespace TribesOfDust.Core.Entities;
+﻿using TribesOfDust.Core.Controllers;
+
+namespace TribesOfDust.Core.Entities;
 
 public interface IEntity
 {
     /// <summary>
-    /// Gets a unique identity for the entity.
+    /// The unique identity of the entity.
     /// </summary>
     ulong Identity { get; }
+    
+    /// <summary>
+    /// The owner of the entity.
+    /// </summary>
+    IController? Owner { get; }
 }
 
 public static class Identities

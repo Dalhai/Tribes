@@ -2,6 +2,7 @@ using Godot;
 
 using System.Linq;
 using System.Collections.Generic;
+using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
 
@@ -11,25 +12,24 @@ public class Tile : IEntity
 {
     #region Constructors
 
-    public Tile(AxialCoordinate coordinates, TileClass tileClass)
+    public Tile(AxialCoordinate coordinates, TileClass @class)
     {
-        // Initialize tile with proper coordinates
-
         Coordinates = coordinates;
+        Owner = null;
 
         // Initialize tile with properties from tile asset
 
-        Key = tileClass.Key;
+        Key = @class.Key;
         Identity = Identities.GetNextIdentity();
 
-        _connections = (HexDirection)tileClass.Connections;
-        _direction = tileClass.Direction;
+        _connections = (HexDirection)@class.Connections;
+        _direction = @class.Direction;
 
         // Scale tile according to specified texture
 
         Sprite = new();
-        Sprite.Texture = tileClass.Texture2D;
-        Sprite.Scale = new Vector2(tileClass.WidthScaleToExpected, tileClass.HeightScaleToExpected);
+        Sprite.Texture = @class.Texture2D;
+        Sprite.Scale = new Vector2(@class.WidthScaleToExpected, @class.HeightScaleToExpected);
 
         // Position tile according to specified coordinates
 
@@ -40,12 +40,14 @@ public class Tile : IEntity
     #endregion
     #region Queries
 
+    public ulong Identity { get; }
+    public TileType Key { get; }
+    public IController? Owner { get; }
+
     public float Size => Width / 2.0f;
     public float Width => Sprite.Texture.GetWidth();
     public float Height => Sprite.Texture.GetHeight();
-
-    public ulong Identity { get; }
-    public TileType Key { get; }
+    
     public bool IsBlocked => Key == TileType.Blocked;
     public bool IsOpen => Key == TileType.Open;
 
@@ -128,8 +130,8 @@ public class Tile : IEntity
 
     #endregion
 
-    private HexDirection _connections = HexDirection.None;
-    private HexDirection _direction = HexDirection.None;
+    private HexDirection _connections;
+    private HexDirection _direction;
 
     private readonly List<Color> _overlayColors = new();
 }
