@@ -32,6 +32,16 @@ public class Unit : IEntity
 
         Sprite.Centered = true;
         Sprite.Position = HexConversions.HexToUnit(coordinates) * HexConstants.DefaultSize;
+        
+        // Initialize stats
+
+        Health = 10;
+        MaxHealth = 10;
+
+        Water = 10;
+        MaxWater = 10;
+
+        Speed = 5;
     }
     
     #endregion
@@ -42,6 +52,17 @@ public class Unit : IEntity
 
     public AxialCoordinate Coordinates { get; }
     public Sprite2D Sprite { get; }
+    
+    #endregion
+    #region Stats
+    
+    public double Health { get; set; }
+    public double MaxHealth { get; }
+    
+    public double Water { get; set; }
+    public double MaxWater { get; }
+    
+    public double Speed { get; }
     
     #endregion
 }
