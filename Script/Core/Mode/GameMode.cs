@@ -4,11 +4,15 @@ using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Core.Entities.Buildings;
 using TribesOfDust.Hex;
+using TribesOfDust.Hex.Storage;
 
 namespace TribesOfDust.Core.Modes;
 
 public partial class GameMode : Node2D, IUnique<GameMode>
 {
+    [Export] public NodePath? HealthPath; 
+    [Export] public NodePath? WaterPath; 
+    
     public static GameMode? Instance { get; private set; }
 
     public Rect2 GetMapExtents()
@@ -33,6 +37,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     public override void _Ready()
     {
         _context = new MapContext(Context.Instance);
+        _context.Display.AddOverlay(_selectionOverlay);
         
         // Register tiles
 
@@ -90,6 +95,41 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         base._Ready();
     }
 
+    public override void _Input(InputEvent @event)
+    {
+        if (@event is InputEventMouseMotion)
+        {
+            var position = GetGlobalMousePosition();
+            var coordinates = HexConversions.UnitToHex(position / HexConstants.DefaultSize);
+            
+            bool hasUnit = _context.Map.Units.Contains(coordinates);
+            
+            _selectionOverlay.Clear();
+            _selectionOverlay.Add(
+                hasUnit
+                    ? Colors.Blue.Lightened(0.9f) 
+                    : Colors.Red.Lightened(0.9f),
+                coordinates);
+        }
+        else if (@event is InputEventMouseButton mouseButton)
+        {
+            var position = GetGlobalMousePosition();
+            var coordinates = HexConversions.UnitToHex(position / HexConstants.DefaultSize);
+
+            if (mouseButton.ButtonIndex == MouseButton.Left && _context.Map.Units.Get(coordinates) is {} unit)
+            {
+                Label? healthLabel = GetNode<Label>(HealthPath);
+                Label? waterLabel = GetNode<Label>(WaterPath);
+
+                if (healthLabel is { } && waterLabel is { })
+                {
+                    healthLabel.Text = $"{unit.Health} / {unit.MaxHealth}";
+                    waterLabel.Text = $"{unit.Water} / {unit.MaxWater}";
+                }
+            }
+        }
+    }
+
     public override void _EnterTree()
     {
         Instance = this;
@@ -103,6 +143,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     }
 
     private MapContext _context = null!;
-    private Player _player1 = new("Player 1", Colors.Red);
-    private Player _player2 = new("Player 2", Colors.Blue);
+    private readonly Player _player1 = new("Player 1", Colors.Red);
+    private readonly Player _player2 = new("Player 2", Colors.Blue);
+    private readonly IHexLayer<Color> _selectionOverlay = new HexLayer<Color>();
 }
