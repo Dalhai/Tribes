@@ -1,10 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://blovp872n3gmi"]
+[gd_scene load_steps=7 format=3 uid="uid://blovp872n3gmi"]
 
 [ext_resource type="Script" path="res://Script/Core/Mode/MainMode.cs" id="1_i0mqw"]
-[ext_resource type="Material" path="res://Interface/Widgets/paper_mat.tres" id="2_aw07p"]
+[ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/Textures/Interface/paper_mat.tres" id="2_3orge"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_10b7i"]
-[ext_resource type="Texture2D" uid="uid://c8hsn0xxif10s" path="res://Assets/Textures/Interface/paper.png" id="4_x7c7i"]
-[ext_resource type="Script" path="res://Interface/Widgets/paper.gd" id="5_iomjn"]
 [ext_resource type="Texture2D" uid="uid://bjjvr71onawxt" path="res://Assets/Textures/Interface/main_menu_figures_1.png" id="6_cm0p5"]
 [ext_resource type="FontFile" uid="uid://dt6hvp7s76i1v" path="res://Assets/Fonts/GreatVibes.otf" id="7_0jxo3"]
 [ext_resource type="PackedScene" uid="uid://ddobccwufg0w0" path="res://Interface/Menu/main_menu.tscn" id="8_s4jcs"]
@@ -14,25 +12,25 @@ script = ExtResource("1_i0mqw")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Paper" type="NinePatchRect" parent="CanvasLayer"]
-material = ExtResource("2_aw07p")
+[node name="Paper" type="Panel" parent="CanvasLayer"]
+material = ExtResource("2_3orge")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_10b7i")
-texture = ExtResource("4_x7c7i")
-axis_stretch_horizontal = 1
-axis_stretch_vertical = 1
-script = ExtResource("5_iomjn")
 
 [node name="Figures" type="TextureRect" parent="CanvasLayer/Paper"]
-layout_mode = 0
-offset_left = 366.0
-offset_top = -114.0
-offset_right = 1153.0
-offset_bottom = 673.0
+custom_minimum_size = Vector2(0, 750)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.301
+anchor_right = 0.999
+anchor_bottom = 1.0
+offset_left = 0.247955
+offset_right = 162.152
+offset_bottom = 193.0
+scale = Vector2(0.832544, 0.801389)
 texture = ExtResource("6_cm0p5")
 expand_mode = 3
 

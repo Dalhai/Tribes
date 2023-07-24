@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://8244mvkeoeu6"]
 
-[ext_resource type="Texture2D" uid="uid://c3terdsuu2bdo" path="res://Assets/Textures/Interface/widgets/menu_button.png" id="1_1vr1e"]
+[ext_resource type="Texture2D" uid="uid://c3terdsuu2bdo" path="res://Assets/Textures/Interface/Widgets/menu_button.png" id="1_1vr1e"]
 
 [node name="Border" type="TextureRect"]
 anchors_preset = 15
