@@ -40,13 +40,20 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             AddChild(tile.Value.Sprite);
         
         // Register buildings
-        var buildingClass = _context.Repos.Buildings.GetAsset();
-        var camp1 = new Camp(new(-2, -3), buildingClass, _player1);
-        var camp2 = new Camp(new( 5,  4), buildingClass, _player2);
-        
+        var campClass = _context.Repos.Buildings.GetAsset("Camp");
+        var camp1 = new Camp(new(-2, -3), campClass, _player1);
+        var camp2 = new Camp(new(5, 4), campClass, _player2);
+
         AddChild(camp1.Sprite);
         AddChild(camp2.Sprite);
+
+        var fountainClass = _context.Repos.Buildings.GetAsset("Fountain");
+        var fountain1 = new Fountain(new (1, -1), fountainClass);
+        var fountain2 = new Fountain(new (5,  1), fountainClass);
         
+        AddChild(fountain1.Sprite);
+        AddChild(fountain2.Sprite);
+
         // Register units
         var unitClass = _context.Repos.Units.GetAsset();
         

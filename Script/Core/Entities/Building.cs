@@ -8,7 +8,7 @@ public abstract class Building : IEntity
 {
     #region Constructors
     
-    protected Building(AxialCoordinate coordinates, BuildingClass @class, IController owner)
+    protected Building(AxialCoordinate coordinates, BuildingClass @class, IController? owner)
     {
         Coordinates = coordinates;
         Owner = owner;
@@ -17,7 +17,7 @@ public abstract class Building : IEntity
         
         Sprite = new();
         Sprite.Texture = @class.Texture2D;
-        Sprite.Modulate = owner.Color;
+        Sprite.Modulate = owner?.Color ?? Colors.White;
         Sprite.ZIndex = 10;
         
         // Initialize and reduce scale so the building sprite fits
@@ -26,7 +26,7 @@ public abstract class Building : IEntity
         float heightScaleToExpected = @class.Texture2D != null ? HexConstants.DefaultHeight / @class.Texture2D.GetHeight() : 1.0f;
         
         Sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
-        Sprite.Scale *= 0.5f;
+        Sprite.Scale *= 0.8f;
         
         // Position unit according to specified coordinates
 
