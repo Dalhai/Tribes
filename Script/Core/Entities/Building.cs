@@ -10,7 +10,7 @@ public abstract class Building : IEntity
     
     protected Building(AxialCoordinate coordinates, BuildingClass @class, IController? owner)
     {
-        _class = @class;
+        Class = @class;
         
         // Initialize position and looks
         
@@ -50,7 +50,7 @@ public abstract class Building : IEntity
     #endregion
     #region Class
 
-    private readonly BuildingClass _class;
+    public readonly BuildingClass Class;
 
     #endregion
 }

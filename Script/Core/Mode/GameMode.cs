@@ -19,7 +19,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     {
         Vector2 minimum = Vector2.Inf;
         Vector2 maximum = -Vector2.Inf;
-        foreach (var tile in _context.Map.Hexes)
+        foreach (var tile in _context.Map.Tiles)
         {
             var unitPosition = HexConversions.HexToUnit(tile.Key);
             var x = unitPosition.X * HexConstants.DefaultWidth;
@@ -38,10 +38,11 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     {
         _context = new MapContext(Context.Instance);
         _context.Display.AddOverlay(_selectionOverlay);
+        _context.Display.AddOverlay(_movementOverlay);
         
         // Register tiles
 
-        foreach (var tile in _context.Map.Hexes)
+        foreach (var tile in _context.Map.Tiles)
             AddChild(tile.Value.Sprite);
         
         // Register buildings
@@ -132,6 +133,11 @@ public partial class GameMode : Node2D, IUnique<GameMode>
                     healthLabel.Text = $"{unit.Health} / {unit.MaxHealth}";
                     waterLabel.Text = $"{unit.Water} / {unit.MaxWater}";
                 }
+                
+                // Update movement overlay
+                _movementOverlay.Clear();
+                foreach (var (coordinate, cost) in unit.ComputerReachable(_context.Map.Tiles))
+                    _movementOverlay.Add(Colors.Aqua.Lightened((float)(cost / unit.Water)), coordinate);
             }
         }
     }
@@ -152,4 +158,5 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     private readonly Player _player1 = new("Player 1", Colors.Red);
     private readonly Player _player2 = new("Player 2", Colors.Blue);
     private readonly IHexLayer<Color> _selectionOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<Color> _movementOverlay = new HexLayer<Color>();
 }

@@ -10,7 +10,7 @@ public class Unit : IEntity
     
     public Unit(AxialCoordinate coordinates, UnitClass @class, IController owner)
     {
-        _class = @class;
+        Class = @class;
         
         // Initialize position and look
         
@@ -71,7 +71,7 @@ public class Unit : IEntity
     #endregion
     #region Class
 
-    private readonly UnitClass _class;
+    public readonly UnitClass Class;
 
     #endregion
 }

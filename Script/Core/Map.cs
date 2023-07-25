@@ -29,7 +29,7 @@ public class Map: IEntity, IVariant<string>
         
         Identity = Identities.GetNextIdentity();
         
-        Hexes = new HexLayer<Tile>();
+        Tiles = new HexLayer<Tile>();
         Units = new HexLayer<Unit>();
     }
 
@@ -37,7 +37,7 @@ public class Map: IEntity, IVariant<string>
     #region Overrides
 
     public override string ToString() => new StringBuilder()
-        .AppendIndented(nameof(Hexes), Hexes)
+        .AppendIndented(nameof(Tiles), Tiles)
         .AppendIndented(nameof(Units), Units)
         .ToString();
 
@@ -45,7 +45,7 @@ public class Map: IEntity, IVariant<string>
     #region Data
 
     public string Name { get;  }
-    public IHexLayer<Tile> Hexes { get; }
+    public IHexLayer<Tile> Tiles { get; }
     public IHexLayer<Unit> Units { get; }
     
     #endregion
