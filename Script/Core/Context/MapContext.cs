@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Godot;
@@ -8,6 +9,8 @@ namespace TribesOfDust.Core;
 
 public partial class MapContext : RefCounted
 {
+    #region Constructor
+    
     public MapContext(Context parent)
     {
         Parent = parent;
@@ -15,10 +18,10 @@ public partial class MapContext : RefCounted
         var tilesRepository     = new TileClassRepository();
         var unitsRepository     = new UnitClassRepository();
         var buildingsRepository = new BuildingClassRepository();
-        var mapsRepositoriy     = new MapRepository(tilesRepository);
+        var mapsRepository     = new MapRepository(tilesRepository);
 
         Repos = new(
-            mapsRepositoriy, 
+            mapsRepository, 
             tilesRepository, 
             unitsRepository, 
             buildingsRepository
@@ -34,6 +37,7 @@ public partial class MapContext : RefCounted
         Display = new(Map.Hexes);
     }
 
+    #endregion
     #region Overrides
 
     public override string ToString() => new StringBuilder()
@@ -66,7 +70,27 @@ public partial class MapContext : RefCounted
     /// is handled separately in the display layer.
     /// </summary>
     public readonly Map Map;
-    
+
+    /// <summary>
+    /// The first selected entity, if any.
+    /// </summary>
+    public IEntity? Selected
+    {
+        get => Selection.FirstOrDefault();
+        set
+        {
+            Selection.Clear(); 
+            
+            if (value is not null)
+                Selection.Add(value);
+        }
+    }
+
+    /// <summary>
+    /// The currently selected entities.
+    /// </summary>
+    public List<IEntity> Selection { get; } = new();
+
     #endregion
     #region Repositories
     
@@ -90,6 +114,6 @@ public partial class MapContext : RefCounted
     /// displays that are strictly local, this is the context to access.
     /// </summary>
     public readonly Display Display;
-    
+
     #endregion
 }

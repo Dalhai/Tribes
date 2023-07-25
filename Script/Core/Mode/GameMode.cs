@@ -118,6 +118,12 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
             if (mouseButton.ButtonIndex == MouseButton.Left && _context.Map.Units.Get(coordinates) is {} unit)
             {
+                if (_context.Selected is Unit previousUnit)
+                    previousUnit.Sprite.Modulate = previousUnit.Owner?.Color ?? Colors.White;
+                
+                _context.Selected = unit;
+                unit.Sprite.Modulate = Colors.Yellow;
+                
                 Label? healthLabel = GetNode<Label>(HealthPath);
                 Label? waterLabel = GetNode<Label>(WaterPath);
 

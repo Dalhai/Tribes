@@ -50,13 +50,23 @@ public class Map: IEntity, IVariant<string>
     
     #endregion
     #region Entity
-    
+
+    /// <summary>
+    /// The unique identity of the entity.
+    /// </summary>
     public ulong Identity { get; }
+
+    /// <summary>
+    /// The owner of the entity.
+    /// </summary>
     public IController? Owner { get; }
     
     #endregion
     #region Variant
 
+    /// <summary>
+    /// The key this asset should be mapped to.
+    /// </summary>
     public string Key => Name;
 
     #endregion
