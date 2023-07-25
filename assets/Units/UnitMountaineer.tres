@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://bt86fbgm0s1hn"]
+
+[ext_resource type="Resource" uid="uid://dld3rr5iru00r" path="res://Assets/Units/MovementCostMountaineer.tres" id="1_1in54"]
+[ext_resource type="Texture2D" uid="uid://ts7ybjlf7wpg" path="res://Assets/Textures/Druids/weapon_druid_staff.png" id="2_awbv2"]
+[ext_resource type="Script" path="res://Script/Core/Entities/UnitClass.cs" id="3_a23mg"]
+
+[resource]
+script = ExtResource("3_a23mg")
+Key = "Mountaineer"
+Texture2D = ExtResource("2_awbv2")
+MovementCosts = ExtResource("1_1in54")

@@ -58,15 +58,15 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         
         AddChild(fountain1.Sprite);
         AddChild(fountain2.Sprite);
-
-        // Register units
-        var unitClass = _context.Repos.Units.GetAsset();
         
+        // Register units
+        UnitClass GetUnitClass() => _context.Repos.Units.GetAsset();
+
         if (camp1.Owner != null)
         {
-            var unit1 = new Unit(camp1.Coordinates.N, unitClass, camp1.Owner);
-            var unit2 = new Unit(camp1.Coordinates.NE, unitClass, camp1.Owner);
-            var unit3 = new Unit(camp1.Coordinates.SE, unitClass, camp1.Owner);
+            var unit1 = new Unit(camp1.Coordinates.N, GetUnitClass(), camp1.Owner);
+            var unit2 = new Unit(camp1.Coordinates.NE, GetUnitClass(), camp1.Owner);
+            var unit3 = new Unit(camp1.Coordinates.SE, GetUnitClass(), camp1.Owner);
         
             _context.Map.Units.Add(unit1, unit1.Coordinates);
             _context.Map.Units.Add(unit2, unit2.Coordinates);
@@ -79,9 +79,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         
         if (camp2.Owner != null)
         {
-            var unit1 = new Unit(camp2.Coordinates.N, unitClass, camp2.Owner);
-            var unit2 = new Unit(camp2.Coordinates.NE, unitClass, camp2.Owner);
-            var unit3 = new Unit(camp2.Coordinates.SE, unitClass, camp2.Owner);
+            var unit1 = new Unit(camp2.Coordinates.N, GetUnitClass(), camp2.Owner);
+            var unit2 = new Unit(camp2.Coordinates.NE, GetUnitClass(), camp2.Owner);
+            var unit3 = new Unit(camp2.Coordinates.SE, GetUnitClass(), camp2.Owner);
         
             _context.Map.Units.Add(unit1, unit1.Coordinates);
             _context.Map.Units.Add(unit2, unit2.Coordinates);
