@@ -10,6 +10,10 @@ public class Unit : IEntity
     
     public Unit(AxialCoordinate coordinates, UnitClass @class, IController owner)
     {
+        _class = @class;
+        
+        // Initialize position and look
+        
         Coordinates = coordinates;
         Owner = owner;
         
@@ -64,5 +68,10 @@ public class Unit : IEntity
     
     public double Speed { get; }
     
+    #endregion
+    #region Class
+
+    private readonly UnitClass _class;
+
     #endregion
 }
