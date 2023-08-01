@@ -10,6 +10,10 @@ public abstract class Building : IEntity
     
     protected Building(AxialCoordinate coordinates, BuildingClass @class, IController? owner)
     {
+        Class = @class;
+        
+        // Initialize position and looks
+        
         Coordinates = coordinates;
         Owner = owner;
         
@@ -43,5 +47,10 @@ public abstract class Building : IEntity
     public AxialCoordinate Coordinates { get; }
     public Sprite2D Sprite { get; }
     
+    #endregion
+    #region Class
+
+    public readonly BuildingClass Class;
+
     #endregion
 }

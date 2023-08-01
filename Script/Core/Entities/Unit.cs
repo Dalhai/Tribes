@@ -10,8 +10,9 @@ public class Unit : IEntity
     
     public Unit(AxialCoordinate coordinates, UnitClass @class, IController owner)
     {
-        Coordinates = coordinates;
-        Owner = owner;
+        Class = @class;
+        
+        // Initialize position and look
         
         Identity = Identities.GetNextIdentity();
         
@@ -31,7 +32,9 @@ public class Unit : IEntity
         // Position unit according to specified coordinates
 
         Sprite.Centered = true;
-        Sprite.Position = HexConversions.HexToUnit(coordinates) * HexConstants.DefaultSize;
+        
+        Coordinates = coordinates;
+        Owner = owner;
         
         // Initialize stats
 
@@ -45,12 +48,22 @@ public class Unit : IEntity
     }
     
     #endregion
-    #region Queries
+    #region Data
     
     public ulong Identity { get; }
     public IController? Owner { get; }
 
-    public AxialCoordinate Coordinates { get; }
+    private AxialCoordinate _coordinates;
+    public AxialCoordinate Coordinates
+    {
+        get => _coordinates;
+        set
+        {
+            _coordinates = value;
+            Sprite.Position = HexConversions.HexToUnit(value) * HexConstants.DefaultSize;
+        }
+    }
+    
     public Sprite2D Sprite { get; }
     
     #endregion
@@ -64,5 +77,10 @@ public class Unit : IEntity
     
     public double Speed { get; }
     
+    #endregion
+    #region Class
+
+    public readonly UnitClass Class;
+
     #endregion
 }

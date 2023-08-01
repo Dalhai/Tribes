@@ -23,5 +23,11 @@ public partial class UnitClass : Resource, IVariant<string>
     [Export(PropertyHint.ResourceType, "Texture2D")]
     public Texture2D? Texture2D;
 
+    /// <summary>
+    /// The movement costs for this unit.
+    /// </summary>
+    [Export(PropertyHint.ResourceType, "TileTypeCostTable")]
+    public TileTypeCostTable? MovementCosts;
+
     #endregion
 }

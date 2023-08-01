@@ -3,7 +3,6 @@ using TribesOfDust.Core.Controllers;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Utils.Extensions;
 using TribesOfDust.Core.Entities;
-using TribesOfDust.Hex;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core;
@@ -29,15 +28,16 @@ public class Map: IEntity, IVariant<string>
         
         Identity = Identities.GetNextIdentity();
         
-        Hexes = new HexLayer<Tile>();
+        Tiles = new HexLayer<Tile>();
         Units = new HexLayer<Unit>();
+        Buildings = new HexLayer<Building>();
     }
 
     #endregion
     #region Overrides
 
     public override string ToString() => new StringBuilder()
-        .AppendIndented(nameof(Hexes), Hexes)
+        .AppendIndented(nameof(Tiles), Tiles)
         .AppendIndented(nameof(Units), Units)
         .ToString();
 
@@ -45,18 +45,29 @@ public class Map: IEntity, IVariant<string>
     #region Data
 
     public string Name { get;  }
-    public IHexLayer<Tile> Hexes { get; }
+    public IHexLayer<Tile> Tiles { get; }
     public IHexLayer<Unit> Units { get; }
+    public IHexLayer<Building> Buildings { get; }
     
     #endregion
     #region Entity
-    
+
+    /// <summary>
+    /// The unique identity of the entity.
+    /// </summary>
     public ulong Identity { get; }
+
+    /// <summary>
+    /// The owner of the entity.
+    /// </summary>
     public IController? Owner { get; }
     
     #endregion
     #region Variant
 
+    /// <summary>
+    /// The key this asset should be mapped to.
+    /// </summary>
     public string Key => Name;
 
     #endregion
