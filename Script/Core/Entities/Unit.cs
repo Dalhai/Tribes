@@ -14,9 +14,6 @@ public class Unit : IEntity
         
         // Initialize position and look
         
-        Coordinates = coordinates;
-        Owner = owner;
-        
         Identity = Identities.GetNextIdentity();
         
         Sprite = new();
@@ -35,7 +32,9 @@ public class Unit : IEntity
         // Position unit according to specified coordinates
 
         Sprite.Centered = true;
-        Sprite.Position = HexConversions.HexToUnit(coordinates) * HexConstants.DefaultSize;
+        
+        Coordinates = coordinates;
+        Owner = owner;
         
         // Initialize stats
 
@@ -49,12 +48,22 @@ public class Unit : IEntity
     }
     
     #endregion
-    #region Queries
+    #region Data
     
     public ulong Identity { get; }
     public IController? Owner { get; }
 
-    public AxialCoordinate Coordinates { get; }
+    private AxialCoordinate _coordinates;
+    public AxialCoordinate Coordinates
+    {
+        get => _coordinates;
+        set
+        {
+            _coordinates = value;
+            Sprite.Position = HexConversions.HexToUnit(value) * HexConstants.DefaultSize;
+        }
+    }
+    
     public Sprite2D Sprite { get; }
     
     #endregion
