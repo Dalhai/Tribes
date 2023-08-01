@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
@@ -50,12 +51,18 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         var camp1 = new Camp(new(-2, -3), campClass, _player1);
         var camp2 = new Camp(new(5, 4), campClass, _player2);
 
+        _context.Map.Buildings.Add(camp1, camp1.Coordinates);
+        _context.Map.Buildings.Add(camp2, camp2.Coordinates);
+
         AddChild(camp1.Sprite);
         AddChild(camp2.Sprite);
 
         var fountainClass = _context.Repos.Buildings.GetAsset("Fountain");
         var fountain1 = new Fountain(new (1, -1), fountainClass);
         var fountain2 = new Fountain(new (5,  1), fountainClass);
+
+        _context.Map.Buildings.Add(fountain1, fountain1.Coordinates);
+        _context.Map.Buildings.Add(fountain2, fountain2.Coordinates);
         
         AddChild(fountain1.Sprite);
         AddChild(fountain2.Sprite);
@@ -116,6 +123,8 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         {
             var position = GetGlobalMousePosition();
             var coordinates = HexConversions.UnitToHex(position / HexConstants.DefaultSize);
+            
+            // Select a unit
 
             if (mouseButton.ButtonIndex == MouseButton.Left && _context.Map.Units.Get(coordinates) is {} unit)
             {
@@ -136,8 +145,33 @@ public partial class GameMode : Node2D, IUnique<GameMode>
                 
                 // Update movement overlay
                 _movementOverlay.Clear();
-                foreach (var (coordinate, cost) in unit.ComputerReachable(_context.Map.Tiles))
+                foreach (var (coordinate, cost) in unit.ComputeReachable(_context.Map.Tiles))
                     _movementOverlay.Add(Colors.Aqua.Lightened((float)(cost / unit.Water)), coordinate);
+            }
+
+            // Move the selected unit to the selected tile
+            
+            if (mouseButton.ButtonIndex == MouseButton.Left 
+                && _context.Selected is Unit selectedUnit 
+                && _context.Map.Units.Get(coordinates) is null)
+            {
+                var reachableTiles = selectedUnit.ComputeReachable(_context.Map.Tiles);
+                var unoccupiedTiles = reachableTiles
+                    .Select(entry => entry.Item1)
+                    .Where(entry => !_context.Map.Units.Contains(entry))
+                    .Where(entry => !_context.Map.Buildings.Contains(entry))
+                    .ToList();
+
+                if (unoccupiedTiles.Contains(coordinates))
+                {
+                    selectedUnit.Coordinates = coordinates;
+                    _context.Map.Units.Remove(selectedUnit.Coordinates);
+                    _context.Map.Units.Add(selectedUnit, selectedUnit.Coordinates);
+
+                    selectedUnit.Sprite.Modulate = selectedUnit.Owner?.Color ?? Colors.White;
+                    _context.Selected = null;
+                    _movementOverlay.Clear();
+                }
             }
         }
     }

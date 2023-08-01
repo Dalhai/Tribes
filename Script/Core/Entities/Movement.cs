@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
 
@@ -7,7 +6,7 @@ namespace TribesOfDust.Core.Entities;
 
 public static class Movement
 {
-    public static IEnumerable<(AxialCoordinate, double)> ComputerReachable(this Unit unit, IHexLayer<Tile> tiles)
+    public static IEnumerable<(AxialCoordinate, double)> ComputeReachable(this Unit unit, IHexLayer<Tile> tiles)
     {
         // The current position can always be reached without any movement
         yield return (unit.Coordinates, 0.0);
