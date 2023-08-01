@@ -3,7 +3,6 @@ using TribesOfDust.Core.Controllers;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Utils.Extensions;
 using TribesOfDust.Core.Entities;
-using TribesOfDust.Hex;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core;
@@ -31,6 +30,7 @@ public class Map: IEntity, IVariant<string>
         
         Tiles = new HexLayer<Tile>();
         Units = new HexLayer<Unit>();
+        Buildings = new HexLayer<Building>();
     }
 
     #endregion
@@ -47,6 +47,7 @@ public class Map: IEntity, IVariant<string>
     public string Name { get;  }
     public IHexLayer<Tile> Tiles { get; }
     public IHexLayer<Unit> Units { get; }
+    public IHexLayer<Building> Buildings { get; }
     
     #endregion
     #region Entity
