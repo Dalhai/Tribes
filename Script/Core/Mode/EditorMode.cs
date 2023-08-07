@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
 using Godot;
+using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
-using TribesOfDust.Hex.Storage;
+using TribesOfDust.Hex.Layers;
 
 namespace TribesOfDust.Core.Modes;
 
@@ -34,8 +35,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         _context = new MapContext(Context.Instance);
         
         // Register tiles
-        foreach (var tile in _context.Map.Tiles)
-            AddChild(tile.Value.Sprite);
+        foreach (var (_, tile) in _context.Map.Tiles)
+            RegisterEntity(tile);
 
         // Register overlays with context   
         _context.Display.AddOverlay(_activeHexOverlay);
@@ -113,11 +114,14 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
                     tiles.Remove(hex);
 
-                    if (tile is not null)
-                        RemoveChild(tile.Sprite);
+                    if (tile is { Identity: var identity })
+                    {
+                        Sprite2D sprite = _context.Display.Sprites[identity];
+                        _context.Display.Sprites.Remove(identity);
+                        RemoveChild(sprite);
+                    }
 
-                    tiles.Add(hexTile, hexTile.Coordinates);
-                    AddChild(hexTile.Sprite);
+                    RegisterEntity(hexTile);
                 }
                 catch (ArgumentException exception)
                 {
@@ -136,16 +140,19 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
                 tiles.Remove(hex);
 
-                if (tile is not null)
-                    RemoveChild(tile.Sprite);
+                if (tile is { Identity: var identity })
+                {
+                    Sprite2D sprite = _context.Display.Sprites[identity];
+                    _context.Display.Sprites.Remove(identity);
+                    RemoveChild(sprite);
+                }
 
                 if (tile is null || tile.Key != TileType.Open)
                 {
                     try
                     {
                         var hexTile = new Tile(hex, repo.GetAsset(TileType.Open));
-                        tiles.Add(hexTile, hexTile.Coordinates);
-                        AddChild(hexTile.Sprite);
+                        RegisterEntity(hexTile);
                     }
                     catch (ArgumentException exception)
                     {
@@ -184,6 +191,47 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
         foreach (var tile in overlay)
             _activeTypeOverlay.Add(Colors.LightBlue, tile.Key);
+    }
+
+    private void RegisterEntity(IEntity<IConfiguration> entity)
+    {
+        Sprite2D sprite = new();
+
+        float widthScaleToExpected = entity.Configuration.Texture != null
+            ? HexConstants.DefaultWidth / entity.Configuration.Texture.GetWidth()
+            : 1.0f;
+        float heightScaleToExpected = entity.Configuration.Texture != null
+            ? HexConstants.DefaultHeight / entity.Configuration.Texture.GetHeight()
+            : 1.0f;
+
+        sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
+        sprite.Centered = true;
+        sprite.Position = HexConversions.HexToUnit(entity.Location) * HexConstants.DefaultSize;
+        sprite.Texture = entity.Configuration.Texture;
+        sprite.Modulate = entity.Owner?.Color ?? Colors.White;
+
+        switch (entity)
+        {
+            case Building building:
+                _context.Map.Buildings.Add(building, building.Location);
+                sprite.Scale *= 0.8f;
+                sprite.ZIndex = 10;
+                break;
+            case Unit unit:
+                _context.Map.Units.Add(unit, unit.Location);
+                sprite.Scale *= 0.8f;
+                sprite.ZIndex = 10;
+                break;
+            case Tile tile:
+                _context.Map.Tiles.Add(tile, tile.Location);
+                sprite.Scale *= 1.0f;
+                sprite.ZIndex = 1;
+                break;
+        }
+
+        _context.Display.Sprites.Add(entity.Identity, sprite);
+        
+        AddChild(sprite);
     }
 
     private AxialCoordinate? _activeTileCoordinates;

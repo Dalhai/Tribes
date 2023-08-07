@@ -3,20 +3,13 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Godot;
+using TribesOfDust.Core.Entities;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core;
 
-public class MapRepository : Repository<string, Map>
+public class MapRepository(TileConfigurationRepository tileConfigurationRepository) : Repository<string, Map>
 {
-    #region Constructor
-    
-    public MapRepository(TileClassRepository tileClassRepository)
-    {
-        _tileClassRepository = tileClassRepository;
-    }
-    
-    #endregion
     #region Defaults
     
     private static readonly string DefaultPath = "res://Assets/Maps";
@@ -61,7 +54,7 @@ public class MapRepository : Repository<string, Map>
                 if (t is null)
                     return null;
 
-                return new Tile(new(q.Value, r.Value), _tileClassRepository.GetAsset((TileType)t.Value));
+                return new Tile(new(q.Value, r.Value), tileConfigurationRepository.GetAsset((TileType)t.Value));
             }
 
             var mapTiles = mapTilesJson
@@ -73,7 +66,7 @@ public class MapRepository : Repository<string, Map>
             {
                 asset = new Map(mapName);
                 foreach (var tile in mapTiles)
-                    asset.Tiles.Add(tile, tile.Coordinates);
+                    asset.Tiles.Add(tile, tile.Location);
             }
         }
 
@@ -125,6 +118,4 @@ public class MapRepository : Repository<string, Map>
     }
     
     #endregion
-
-    private readonly TileClassRepository _tileClassRepository;
 }

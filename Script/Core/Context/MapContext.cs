@@ -15,9 +15,9 @@ public partial class MapContext : RefCounted
     {
         Parent = parent;
 
-        var tilesRepository     = new TileClassRepository();
-        var unitsRepository     = new UnitClassRepository();
-        var buildingsRepository = new BuildingClassRepository();
+        var tilesRepository     = new TileConfigurationRepository();
+        var unitsRepository     = new UnitConfigurationRepository();
+        var buildingsRepository = new BuildingConfigurationRepository();
         var mapsRepository     = new MapRepository(tilesRepository);
 
         Repos = new(
@@ -96,9 +96,9 @@ public partial class MapContext : RefCounted
     
     public record Repositories(
         MapRepository Maps,
-        TileClassRepository Tiles, 
-        UnitClassRepository Units, 
-        BuildingClassRepository Buildings
+        TileConfigurationRepository Tiles, 
+        UnitConfigurationRepository Units, 
+        BuildingConfigurationRepository Buildings
     );
 
     public Repositories Repos { get; }

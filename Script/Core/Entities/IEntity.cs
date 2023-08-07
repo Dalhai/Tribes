@@ -1,25 +1,25 @@
 ﻿using TribesOfDust.Core.Controllers;
+using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Entities;
 
-public interface IEntity
+public interface IEntity : IIdentifiable
 {
-    /// <summary>
-    /// The unique identity of the entity.
-    /// </summary>
-    ulong Identity { get; }
-    
     /// <summary>
     /// The owner of the entity.
     /// </summary>
     IController? Owner { get; }
+    
+    /// <summary>
+    /// The location of the entity.
+    /// </summary>
+    AxialCoordinate Location { get; }
 }
 
-public static class Identities
+public interface IEntity<out TConfiguration> : IEntity
 {
     /// <summary>
-    /// Gets the next globally unique identity.
+    /// The configuration of the entity.
     /// </summary>
-    public static ulong GetNextIdentity() => _lastIdentity++;
-    private static ulong _lastIdentity;
+    TConfiguration Configuration { get; }
 }

@@ -1,34 +1,41 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Godot;
 using TribesOfDust.Hex;
-using TribesOfDust.Hex.Storage;
+using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core;
 
 public partial class Display : RefCounted
 {
-    #region Constructors
-        
-    public Display(IHexLayerView<Tile> hexes)
+    public Display(IHexLayerView<Tile> tiles)
     {
-        _hexes = hexes;
+        this.tiles = tiles;
 
         // Setup event handlers.
-        _onOverlayTileAdded = (_, color, coordinates) => AddOverlayColor(coordinates, color); 
-        _onOverlayTileRemoved = (_, color, coordinates) => RemoveOverlayColor(coordinates, color); 
-    }
+        _onOverlayTileAdded = (_, color, coordinate) =>
+        {
+            if (tiles.Get(coordinate) is { } tile)
+                AddOverlayColor(tile, color);
+        };
 
-    #endregion
-    #region Overrides
+        _onOverlayTileRemoved = (_, color, coordinate) =>
+        {
+            if (tiles.Get(coordinate) is { } tile)
+                RemoveOverlayColor(tile, color);
+        };
+    }
 
     public override string ToString() => new StringBuilder()
         .AppendEnumerable(nameof(_overlays).Remove('_').Capitalize(), _overlays)
         .ToString();
 
-    #endregion
+    public readonly Dictionary<ulong, Sprite2D> Sprites = new();
+    public readonly Dictionary<ulong, HashSet<Color>> Colors = new();
+
     #region Overlays
 
     /// <summary>
@@ -39,14 +46,15 @@ public partial class Display : RefCounted
     /// times. You should, however, remember to unregister overlays once you don't need 
     /// them anymore.
     /// </summary>
-    public void AddOverlay(IHexLayerView<Color> overlay) 
+    public void AddOverlay(IHexLayerView<Color> overlay)
     {
         if (_overlays.Contains(overlay))
             return;
 
-        foreach (var entry in overlay)
+        foreach (var (coordinate, color) in overlay)
         {
-            AddOverlayColor(entry.Key, entry.Value);
+            if (tiles.Get(coordinate) is { } tile)
+                AddOverlayColor(tile, color);
         }
 
         overlay.Added += _onOverlayTileAdded;
@@ -62,14 +70,15 @@ public partial class Display : RefCounted
     /// You can reregister the overlay at any time though, no need to create a
     /// completely new one.
     /// </summary>
-    public void RemoveOverlay(IHexLayerView<Color> overlay) 
+    public void RemoveOverlay(IHexLayerView<Color> overlay)
     {
         if (!_overlays.Contains(overlay))
             return;
 
-        foreach (var entry in overlay)
+        foreach (var (coordinate, color) in overlay)
         {
-            RemoveOverlayColor(entry.Key, entry.Value);
+            if (tiles.Get(coordinate) is { } tile)
+                RemoveOverlayColor(tile, color);
         }
 
         overlay.Added -= _onOverlayTileAdded;
@@ -78,29 +87,42 @@ public partial class Display : RefCounted
         _overlays.Remove(overlay);
     }
 
-    private void AddOverlayColor(AxialCoordinate coordinates, Color color) 
+    private void AddOverlayColor(IIdentifiable identifiable, Color color)
     {
-        Tile? tile = _hexes.Get(coordinates);
-
-        // Only add the overlay color if the tile is not null.
-        // Handles the case where the overlay wants to color a tile
-        // when the tile is not available in the list of tiles.
-        tile?.AddOverlayColor(color);
+        if (Sprites.TryGetValue(identifiable.Identity, out var sprite)) 
+        {
+            if (!Colors.TryGetValue(identifiable.Identity, out var colors))
+            {
+                colors = new();
+                Colors.Add(identifiable.Identity, colors);
+            }
+                
+            colors.Add(color);
+            
+            // Mix the colors evenly
+            sprite.Modulate = colors.Count == 0
+                ? Godot.Colors.White
+                : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
+        }
     }
 
-    private void RemoveOverlayColor(AxialCoordinate coordinates, Color color)
+    private void RemoveOverlayColor(IIdentifiable identifiable, Color color)
     {
-        Tile? tile = _hexes.Get(coordinates);
-
-        // Only add the overlay color if the tile is not null.
-        // Handles the case where the overlay wants to color a tile
-        // when the tile is not available in the list of tiles.
-        tile?.RemoveOverlayColor(color);
+        if (Sprites.TryGetValue(identifiable.Identity, out var sprite) &&
+            Colors.TryGetValue(identifiable.Identity, out var colors))
+        {
+            colors.Remove(color);
+            
+            // Mix the colors evenly
+            sprite.Modulate = colors.Count == 0
+                ? Godot.Colors.White
+                : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
+        }
     }
-        
+
     #endregion
 
-    private readonly IHexLayerView<Tile> _hexes;
+    private readonly IHexLayerView<Tile> tiles;
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;
     private readonly HashSet<IHexLayerView<Color>> _overlays = new();

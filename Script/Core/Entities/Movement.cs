@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using TribesOfDust.Hex;
-using TribesOfDust.Hex.Storage;
+using TribesOfDust.Hex.Layers;
 
 namespace TribesOfDust.Core.Entities;
 
@@ -9,14 +9,14 @@ public static class Movement
     public static IEnumerable<(AxialCoordinate, double)> ComputeReachable(this Unit unit, IHexLayer<Tile> tiles)
     {
         // The current position can always be reached without any movement
-        yield return (unit.Coordinates, 0.0);
+        yield return (unit.Location, 0.0);
 
         Queue<AxialCoordinate> openQueue = new();
         HexLayer<double> costLayer = new();
         
         // Add the initial coordinate
-        costLayer.Add(0.0, unit.Coordinates);
-        openQueue.Enqueue(unit.Coordinates);
+        costLayer.Add(0.0, unit.Location);
+        openQueue.Enqueue(unit.Location);
 
         while (openQueue.TryDequeue(out var coordinates))
         {
