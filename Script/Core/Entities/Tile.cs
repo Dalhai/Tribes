@@ -7,28 +7,28 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core;
 
-public class Tile : IEntity
+public class Tile : IEntity<TileConfiguration>
 {
     #region Constructors
 
-    public Tile(AxialCoordinate coordinates, TileClass @class)
+    public Tile(AxialCoordinate coordinates, TileConfiguration configuration)
     {
+        Configuration = configuration;
         Coordinates = coordinates;
-        Owner = null;
 
         // Initialize tile with properties from tile asset
 
-        Key = @class.Key;
+        Key = configuration.Key;
         Identity = Identities.GetNextIdentity();
 
-        _connections = (HexDirection)@class.Connections;
-        _direction = @class.Direction;
+        _connections = (HexDirection)configuration.Connections;
+        _direction = configuration.Direction;
 
         // Scale tile according to specified texture
 
         Sprite = new();
-        Sprite.Texture = @class.Texture2D;
-        Sprite.Scale = new Vector2(@class.WidthScaleToExpected, @class.HeightScaleToExpected);
+        Sprite.Texture = configuration.Texture2D;
+        Sprite.Scale = new Vector2(configuration.WidthScaleToExpected, configuration.HeightScaleToExpected);
 
         // Position tile according to specified coordinates
 
@@ -41,17 +41,16 @@ public class Tile : IEntity
 
     public ulong Identity { get; }
     public TileType Key { get; }
-    public IController? Owner { get; }
+    public TileConfiguration Configuration { get; }
 
     public float Size => Width / 2.0f;
-    public float Width => Sprite.Texture.GetWidth();
-    public float Height => Sprite.Texture.GetHeight();
+    public float Width => Configuration.Texture.GetWidth();
+    public float Height => Configuration.Texture.GetHeight();
     
     public bool IsBlocked => Key == TileType.Blocked;
     public bool IsOpen => Key == TileType.Open;
 
     public AxialCoordinate Coordinates { get; }
-    public Sprite2D Sprite { get; }
 
     #endregion
     #region Connectivity
@@ -93,44 +92,7 @@ public class Tile : IEntity
     }
 
     #endregion
-    #region Display
-
-    public void AddOverlayColor(Color color) 
-    {
-        _overlayColors.Add(color);
-        UpdateOverlayColor();
-    }
-
-    public void RemoveOverlayColor(Color color)
-    {
-        _overlayColors.Remove(color);
-        UpdateOverlayColor();
-    }
-
-    public void ClearOverlayColor()
-    {
-        _overlayColors.Clear();
-        UpdateOverlayColor();
-    }
-
-    private void UpdateOverlayColor() 
-    {
-        if (_overlayColors.Count == 0)
-        {
-            Sprite.Modulate = Colors.White;
-        }
-        else
-        {
-            // Figure out the color mix and assign it to the modulation color
-            Sprite.Modulate = _overlayColors.Aggregate((next, current) => next + current);
-            Sprite.Modulate /= _overlayColors.Count;
-        }
-    }
-
-    #endregion
 
     private HexDirection _connections;
     private HexDirection _direction;
-
-    private readonly List<Color> _overlayColors = new();
 }

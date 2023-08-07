@@ -5,7 +5,7 @@ using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core;
 
-public class TileClassRepository : Repository<TileType, TileClass>
+public class TileClassRepository : Repository<TileType, TileConfiguration>
 {
     /// <summary>
     /// The default resource path used for tile assets.
@@ -23,7 +23,7 @@ public class TileClassRepository : Repository<TileType, TileClass>
     /// </remarks>
     ///
     /// <returns>A list of loaded assets.</returns>
-    protected override List<TileClass> LoadAll() => LoadAll(DefaultPath);
+    protected override List<TileConfiguration> LoadAll() => LoadAll(DefaultPath);
 
     /// <summary>
     /// Try to load a single asset from the specified resource path.
@@ -33,11 +33,11 @@ public class TileClassRepository : Repository<TileType, TileClass>
     /// <param name="asset">The asset to be initialized, if found.</param>
     ///
     /// <returns>True, if the asset could be loaded, false otherwise.</returns>
-    protected override bool TryLoad(string resourcePath, out TileClass? asset)
+    protected override bool TryLoad(string resourcePath, out TileConfiguration? asset)
     {
         GD.Print($"Loading Terrain: {resourcePath}");
         var resource = GD.Load(resourcePath);
-        asset = resource as TileClass;
+        asset = resource as TileConfiguration;
 
         if (asset is { Texture2D: not null })
         {

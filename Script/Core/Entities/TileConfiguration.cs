@@ -4,7 +4,7 @@ using TribesOfDust.Utils;
 
 namespace TribesOfDust.Hex;
 
-public partial class TileClass : Resource, IVariant<TileType>
+public partial class TileConfiguration : Resource, IVariant<TileType>
 {
     public override string ToString() => $"Terrain: {Key}";
 
