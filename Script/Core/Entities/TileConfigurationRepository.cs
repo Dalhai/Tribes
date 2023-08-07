@@ -3,9 +3,9 @@ using Godot;
 using TribesOfDust.Hex;
 using TribesOfDust.Utils;
 
-namespace TribesOfDust.Core;
+namespace TribesOfDust.Core.Entities;
 
-public class TileClassRepository : Repository<TileType, TileConfiguration>
+public class TileConfigurationRepository : Repository<TileType, TileConfiguration>
 {
     /// <summary>
     /// The default resource path used for tile assets.
@@ -39,10 +39,10 @@ public class TileClassRepository : Repository<TileType, TileConfiguration>
         var resource = GD.Load(resourcePath);
         asset = resource as TileConfiguration;
 
-        if (asset is { Texture2D: not null })
+        if (asset is { Texture: not null })
         {
-            float width = asset.Texture2D.GetWidth();
-            float height = asset.Texture2D.GetHeight();
+            float width = asset.Texture.GetWidth();
+            float height = asset.Texture.GetHeight();
             float ratio = width / height;
 
             if (!Mathf.IsEqualApprox(ratio, HexConstants.DefaultRatio))

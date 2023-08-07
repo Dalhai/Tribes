@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
@@ -7,58 +5,15 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core;
 
-public class Tile : IEntity<TileConfiguration>
+public class Tile(AxialCoordinate location, TileConfiguration configuration)
+    : IEntity<TileConfiguration>
 {
-    #region Constructors
-
-    public Tile(AxialCoordinate coordinates, TileConfiguration configuration)
-    {
-        Configuration = configuration;
-        Coordinates = coordinates;
-
-        // Initialize tile with properties from tile asset
-
-        Key = configuration.Key;
-        Identity = Identities.GetNextIdentity();
-
-        _connections = (HexDirection)configuration.Connections;
-        _direction = configuration.Direction;
-
-        // Scale tile according to specified texture
-
-        Sprite = new();
-        Sprite.Texture = configuration.Texture2D;
-        Sprite.Scale = new Vector2(configuration.WidthScaleToExpected, configuration.HeightScaleToExpected);
-
-        // Position tile according to specified coordinates
-
-        Sprite.Centered = true;
-        Sprite.Position = HexConversions.HexToUnit(coordinates) * HexConstants.DefaultSize;
-    }
-
-    #endregion
-    #region Queries
-
-    public ulong Identity { get; }
-    public TileType Key { get; }
-    public TileConfiguration Configuration { get; }
-
-    public float Size => Width / 2.0f;
-    public float Width => Configuration.Texture.GetWidth();
-    public float Height => Configuration.Texture.GetHeight();
-    
-    public bool IsBlocked => Key == TileType.Blocked;
-    public bool IsOpen => Key == TileType.Open;
-
-    public AxialCoordinate Coordinates { get; }
-
-    #endregion
     #region Connectivity
 
     public static bool AreConnected(Tile first, Tile second) 
     {
-        var firstToSecond = HexDirections.FromOffset(second.Coordinates - first.Coordinates);
-        var secondToFirst = HexDirections.FromOffset(first.Coordinates - second.Coordinates);
+        var firstToSecond = HexDirections.FromOffset(second.Location - first.Location);
+        var secondToFirst = HexDirections.FromOffset(first.Location - second.Location);
 
         return first.IsConnected(firstToSecond) && second.IsConnected(secondToFirst);
     }
@@ -93,6 +48,20 @@ public class Tile : IEntity<TileConfiguration>
 
     #endregion
 
-    private HexDirection _connections;
-    private HexDirection _direction;
+    public ulong Identity { get; } = Identities.GetNextIdentity();
+    public TileType Key { get; } = configuration.Key;
+    public TileConfiguration Configuration { get; } = configuration;
+    public IController? Owner { get; } = null;
+
+    public float Size => Width / 2.0f;
+    public float Width => Configuration.Texture?.GetWidth() ?? 0f;
+    public float Height => Configuration.Texture?.GetHeight() ?? 0f;
+    
+    public bool IsBlocked => Key == TileType.Blocked;
+    public bool IsOpen => Key == TileType.Open;
+
+    public AxialCoordinate Location { get; } = location;
+    
+    private HexDirection _connections = (HexDirection)configuration.Connections;
+    private HexDirection _direction = configuration.Direction;
 }

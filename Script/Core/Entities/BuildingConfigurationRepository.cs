@@ -4,7 +4,7 @@ using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Entities;
 
-public class BuildingClassRepository : Repository<string, BuildingConfiguration>
+public class BuildingConfigurationRepository : Repository<string, BuildingConfiguration>
 {
     /// <summary>
     /// The default resource path used for unit class assets.

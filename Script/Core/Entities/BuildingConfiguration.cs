@@ -1,8 +1,9 @@
 ﻿using Godot;
+using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Entities;
 
-public partial class BuildingConfiguration : Resource, IEntityConfiguration<string>
+public partial class BuildingConfiguration : Resource, IConfiguration, IVariant<string>
 {
     public override string ToString() => $"Building: {Key}";
 

@@ -1,9 +1,9 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://dfm17y02j7x33"]
 
 [ext_resource type="Texture2D" uid="uid://pcj3f2i3rogm" path="res://Assets/Buildings/Fountain.png" id="1_xpdda"]
-[ext_resource type="Script" path="res://Script/Core/Entities/BuildingClass.cs" id="2_t7o73"]
+[ext_resource type="Script" path="res://Script/Core/Entities/BuildingConfiguration.cs" id="2_t7o73"]
 
 [resource]
 script = ExtResource("2_t7o73")
 Key = "Fountain"
-Texture2D = ExtResource("1_xpdda")
+Texture = ExtResource("1_xpdda")

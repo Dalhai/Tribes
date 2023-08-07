@@ -1,9 +1,10 @@
 ﻿
 using Godot;
+using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Entities;
 
-public partial class UnitConfiguration : Resource, IEntityConfiguration<string>
+public partial class UnitConfiguration : Resource, IConfiguration, IVariant<string>
 {
     public override string ToString() => $"Unit: {Key}";
     

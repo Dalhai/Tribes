@@ -19,7 +19,7 @@ public enum HexDirection
     /// <summary>
     /// A special tile direction for when no direction is needed.
     /// </summary>
-    None = 0
+    Undirected = 0x8000
 }
 
 public static class HexDirections
@@ -36,7 +36,7 @@ public static class HexDirections
         ( 1,  0) => HexDirection.SE,
         ( 0,  1) => HexDirection.S,
         ( -1, 1) => HexDirection.SW,
-        _        => HexDirection.None
+        _        => HexDirection.Undirected
     };
 }
 

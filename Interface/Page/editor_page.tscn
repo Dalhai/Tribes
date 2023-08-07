@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://8pk0ym0vm0yx"]
+[gd_scene load_steps=7 format=3 uid="uid://8pk0ym0vm0yx"]
 
 [ext_resource type="Script" path="res://Script/Core/Mode/EditorMode.cs" id="1_g0a8x"]
-[ext_resource type="Material" path="res://Interface/Widgets/paper_mat.tres" id="2_tvgla"]
 [ext_resource type="PackedScene" uid="uid://ds0rpwhoptn5" path="res://Interface/Menu/editor_menu.tscn" id="3"]
-[ext_resource type="Theme" uid="uid://c3fvgolq3mxyx" path="res://Assets/Theme/ThemeMenu.tres" id="3_dqtih"]
-[ext_resource type="Texture2D" uid="uid://c8hsn0xxif10s" path="res://Assets/Textures/Interface/paper.png" id="4_pxyql"]
+[ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_dqtih"]
+[ext_resource type="Texture2D" uid="uid://c7a8c7bxodjtv" path="res://Assets/Textures/Interface/paper.png" id="4_pxyql"]
 [ext_resource type="Script" path="res://Interface/Widgets/paper.gd" id="5_e61m6"]
 [ext_resource type="Script" path="res://Script/Interface/Camera.cs" id="7_a23om"]
 
@@ -16,7 +15,6 @@ script = ExtResource("1_g0a8x")
 [node name="CanvasLayer" type="CanvasLayer" parent="Canvas"]
 
 [node name="Background" type="NinePatchRect" parent="Canvas/CanvasLayer"]
-material = ExtResource("2_tvgla")
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 250.0

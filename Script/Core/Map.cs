@@ -1,7 +1,7 @@
 using System.Text;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
-using TribesOfDust.Hex.Storage;
+using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils;
 using TribesOfDust.Utils.Extensions;
 
@@ -17,23 +17,8 @@ namespace TribesOfDust.Core;
 /// A map can cover a whole world, but doesn't necessarily have to. Maps can be used to partition the
 /// world into logical sub-worlds. 
 /// </remarks>
-public class Map: IEntity, IVariant<string>
+public class Map(string name) : IVariant<string>
 {
-    #region Constructors
-    
-    public Map(string name)
-    {
-        Name = name;
-        Owner = null;
-        
-        Identity = Identities.GetNextIdentity();
-        
-        Tiles = new HexLayer<Tile>();
-        Units = new HexLayer<Unit>();
-        Buildings = new HexLayer<Building>();
-    }
-
-    #endregion
     #region Overrides
 
     public override string ToString() => new StringBuilder()
@@ -44,24 +29,11 @@ public class Map: IEntity, IVariant<string>
     #endregion
     #region Data
 
-    public string Name { get;  }
-    public IHexLayer<Tile> Tiles { get; }
-    public IHexLayer<Unit> Units { get; }
-    public IHexLayer<Building> Buildings { get; }
-    
-    #endregion
-    #region Entity
+    public string Name { get;  } = name;
+    public IHexLayer<Tile> Tiles { get; } = new HexLayer<Tile>();
+    public IHexLayer<Unit> Units { get; } = new HexLayer<Unit>();
+    public IHexLayer<Building> Buildings { get; } = new HexLayer<Building>();
 
-    /// <summary>
-    /// The unique identity of the entity.
-    /// </summary>
-    public ulong Identity { get; }
-
-    /// <summary>
-    /// The owner of the entity.
-    /// </summary>
-    public IController? Owner { get; }
-    
     #endregion
     #region Variant
 

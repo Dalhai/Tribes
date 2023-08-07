@@ -5,15 +5,15 @@ using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Core.Entities.Buildings;
 using TribesOfDust.Hex;
-using TribesOfDust.Hex.Storage;
+using TribesOfDust.Hex.Layers;
 
 namespace TribesOfDust.Core.Modes;
 
 public partial class GameMode : Node2D, IUnique<GameMode>
 {
-    [Export] public NodePath? HealthPath; 
-    [Export] public NodePath? WaterPath; 
-    
+    [Export] public NodePath? HealthPath;
+    [Export] public NodePath? WaterPath;
+
     public static GameMode? Instance { get; private set; }
 
     public Rect2 GetMapExtents()
@@ -34,64 +34,56 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
         return new(minimum, maximum - minimum);
     }
-        
+
     public override void _Ready()
     {
         Context = new MapContext(Core.Context.Instance);
         Context.Display.AddOverlay(_selectionOverlay);
         Context.Display.AddOverlay(_movementOverlay);
-        
+
         // Register tiles
 
-        foreach (var tile in Context.Map.Tiles)
-            AddChild(tile.Value.Sprite);
-        
+        foreach (var (_, tile) in Context.Map.Tiles)
+            RegisterEntity(tile);
+
         // Register buildings
         var campClass = Context.Repos.Buildings.GetAsset("Camp");
         var camp1 = new Camp(new(-2, -3), campClass, _player1);
         var camp2 = new Camp(new(5, 4), campClass, _player2);
 
-        RegisterBuilding(camp1);
-        RegisterBuilding(camp2);
+        RegisterEntity(camp1);
+        RegisterEntity(camp2);
 
         var fountainClass = Context.Repos.Buildings.GetAsset("Fountain");
-        var fountain1 = new Fountain(new (1, -1), fountainClass);
-        var fountain2 = new Fountain(new (5,  1), fountainClass);
+        var fountain1 = new Fountain(new(1, -1), fountainClass);
+        var fountain2 = new Fountain(new(5, 1), fountainClass);
 
-        RegisterBuilding(fountain1);
-        RegisterBuilding(fountain2);
-        
+        RegisterEntity(fountain1);
+        RegisterEntity(fountain2);
+
         // Register units
-        UnitConfiguration GetUnitClass() => Context.Repos.Units.GetAsset();
+        UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
 
         if (camp1.Owner != null)
         {
-            var unit1 = new Unit(camp1.Coordinates.N, GetUnitClass(), camp1.Owner);
-            var unit2 = new Unit(camp1.Coordinates.NE, GetUnitClass(), camp1.Owner);
-            var unit3 = new Unit(camp1.Coordinates.SE, GetUnitClass(), camp1.Owner);
-        
-            Context.Map.Units.Add(unit1, unit1.Coordinates);
-            Context.Map.Units.Add(unit2, unit2.Coordinates);
-            Context.Map.Units.Add(unit3, unit3.Coordinates);
-        
-            AddChild(unit1.Sprite);
-            AddChild(unit2.Sprite);
-            AddChild(unit3.Sprite);
+            var unit1 = new Unit(camp1.Location.N, GetUnitConfiguration(), camp1.Owner);
+            var unit2 = new Unit(camp1.Location.NE, GetUnitConfiguration(), camp1.Owner);
+            var unit3 = new Unit(camp1.Location.SE, GetUnitConfiguration(), camp1.Owner);
+
+            RegisterEntity(unit1);
+            RegisterEntity(unit2);
+            RegisterEntity(unit3);
         }
-        
+
         if (camp2.Owner != null)
         {
-            var unit1 = new Unit(camp2.Coordinates.N, GetUnitClass(), camp2.Owner);
-            var unit2 = new Unit(camp2.Coordinates.NE, GetUnitClass(), camp2.Owner);
-            var unit3 = new Unit(camp2.Coordinates.SE, GetUnitClass(), camp2.Owner);
-        
-            Context.Map.Units.Add(unit1, unit1.Coordinates);
-            Context.Map.Units.Add(unit2, unit2.Coordinates);
-            Context.Map.Units.Add(unit3, unit3.Coordinates);
-        
-            AddChild(unit1.Sprite);
-            AddChild(unit2.Sprite);
-            AddChild(unit3.Sprite);
+            var unit1 = new Unit(camp2.Location.N, GetUnitConfiguration(), camp2.Owner);
+            var unit2 = new Unit(camp2.Location.NE, GetUnitConfiguration(), camp2.Owner);
+            var unit3 = new Unit(camp2.Location.SE, GetUnitConfiguration(), camp2.Owner);
+
+            RegisterEntity(unit1);
+            RegisterEntity(unit2);
+            RegisterEntity(unit3);
         }
 
         base._Ready();
@@ -103,13 +95,13 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         {
             var position = GetGlobalMousePosition();
             var coordinates = HexConversions.UnitToHex(position / HexConstants.DefaultSize);
-            
+
             bool hasUnit = Context.Map.Units.Contains(coordinates);
-            
+
             _selectionOverlay.Clear();
             _selectionOverlay.Add(
                 hasUnit
-                    ? Colors.Blue.Lightened(0.9f) 
+                    ? Colors.Blue.Lightened(0.9f)
                     : Colors.Red.Lightened(0.9f),
                 coordinates);
         }
@@ -117,17 +109,17 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         {
             var position = GetGlobalMousePosition();
             var coordinates = HexConversions.UnitToHex(position / HexConstants.DefaultSize);
-            
+
             // Select a unit
 
-            if (mouseButton.ButtonIndex == MouseButton.Left && Context.Map.Units.Get(coordinates) is {} unit)
+            if (mouseButton.ButtonIndex == MouseButton.Left && Context.Map.Units.Get(coordinates) is { } unit)
             {
                 if (Context.Selected is Unit previousUnit)
-                    previousUnit.Sprite.Modulate = previousUnit.Owner?.Color ?? Colors.White;
-                
+                    Context.Display.Sprites[previousUnit.Identity].Modulate = previousUnit.Owner?.Color ?? Colors.White;
+
                 Context.Selected = unit;
-                unit.Sprite.Modulate = Colors.Yellow;
-                
+                Context.Display.Sprites[unit.Identity].Modulate = Colors.Yellow;
+
                 Label? healthLabel = GetNode<Label>(HealthPath);
                 Label? waterLabel = GetNode<Label>(WaterPath);
 
@@ -136,7 +128,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
                     healthLabel.Text = $"{unit.Health} / {unit.MaxHealth}";
                     waterLabel.Text = $"{unit.Water} / {unit.MaxWater}";
                 }
-                
+
                 // Update movement overlay
                 _movementOverlay.Clear();
                 foreach (var (coordinate, cost) in unit.ComputeReachable(Context.Map.Tiles))
@@ -144,29 +136,30 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             }
 
             // Move the selected unit to the selected tile
-            
-            if (mouseButton.ButtonIndex == MouseButton.Left 
-                && Context.Selected is Unit selectedUnit 
-                && Context.Map.Units.Get(coordinates) is null)
-            {
-                var reachableTiles = selectedUnit.ComputeReachable(Context.Map.Tiles);
-                var unoccupiedTiles = reachableTiles
-                    .Select(entry => entry.Item1)
-                    .Where(entry => !Context.Map.Units.Contains(entry))
-                    .Where(entry => !Context.Map.Buildings.Contains(entry))
-                    .ToList();
 
-                if (unoccupiedTiles.Contains(coordinates))
-                {
-                    selectedUnit.Coordinates = coordinates;
-                    Context.Map.Units.Remove(selectedUnit.Coordinates);
-                    Context.Map.Units.Add(selectedUnit, selectedUnit.Coordinates);
-
-                    selectedUnit.Sprite.Modulate = selectedUnit.Owner?.Color ?? Colors.White;
-                    Context.Selected = null;
-                    _movementOverlay.Clear();
-                }
-            }
+            // TODO(MM): Reimplement unit movement. Current view model (Context.Display) does not support this properly.
+            // if (mouseButton.ButtonIndex == MouseButton.Left
+            //     && Context.Selected is Unit selectedUnit
+            //     && Context.Map.Units.Get(coordinates) is null)
+            // {
+            //     var reachableTiles = selectedUnit.ComputeReachable(Context.Map.Tiles);
+            //     var unoccupiedTiles = reachableTiles
+            //         .Select(entry => entry.Item1)
+            //         .Where(entry => !Context.Map.Units.Contains(entry))
+            //         .Where(entry => !Context.Map.Buildings.Contains(entry))
+            //         .ToList();
+            //
+            //     if (unoccupiedTiles.Contains(coordinates))
+            //     {
+            //         selectedUnit.Location = coordinates;
+            //         Context.Map.Units.Remove(selectedUnit.Location);
+            //         Context.Map.Units.Add(selectedUnit, selectedUnit.Location);
+            //
+            //         selectedUnit.Sprite.Modulate = selectedUnit.Owner?.Color ?? Colors.White;
+            //         Context.Selected = null;
+            //         _movementOverlay.Clear();
+            //     }
+            // }
         }
     }
 
@@ -181,32 +174,46 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         Instance = null;
         base._ExitTree();
     }
-    
-    private Sprite2D RegisterBuilding(Building building)
+
+    private void RegisterEntity(IEntity<IConfiguration> entity)
     {
         Sprite2D sprite = new();
-        
-        sprite.Texture = building.Configuration.Texture;
-        sprite.Modulate = building.Owner?.Color ?? Colors.White;
-        sprite.ZIndex = 10;
-        
-        // Initialize and reduce scale so the building sprite fits
 
-        float widthScaleToExpected = building.Configuration.Texture != null ? HexConstants.DefaultWidth / building.Configuration.Texture.GetWidth() : 1.0f;
-        float heightScaleToExpected = building.Configuration.Texture != null ? HexConstants.DefaultHeight / building.Configuration.Texture.GetHeight() : 1.0f;
-        
+        float widthScaleToExpected = entity.Configuration.Texture != null
+            ? HexConstants.DefaultWidth / entity.Configuration.Texture.GetWidth()
+            : 1.0f;
+        float heightScaleToExpected = entity.Configuration.Texture != null
+            ? HexConstants.DefaultHeight / entity.Configuration.Texture.GetHeight()
+            : 1.0f;
+
         sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
-        sprite.Scale *= 0.8f;
-        
-        // Position unit according to specified coordinates
-
         sprite.Centered = true;
-        sprite.Position = HexConversions.HexToUnit(building.Coordinates) * HexConstants.DefaultSize;
+        sprite.Position = HexConversions.HexToUnit(entity.Location) * HexConstants.DefaultSize;
+        sprite.Texture = entity.Configuration.Texture;
+        sprite.Modulate = entity.Owner?.Color ?? Colors.White;
 
-        Context.Map.Buildings.Add(building, building.Coordinates);
-        AddChild(sprite);
+        switch (entity)
+        {
+            case Building building:
+                Context.Map.Buildings.Add(building, building.Location);
+                sprite.Scale *= 0.8f;
+                sprite.ZIndex = 10;
+                break;
+            case Unit unit:
+                Context.Map.Units.Add(unit, unit.Location);
+                sprite.Scale *= 0.8f;
+                sprite.ZIndex = 10;
+                break;
+            case Tile tile:
+                Context.Map.Tiles.Add(tile, tile.Location);
+                sprite.Scale *= 1.0f;
+                sprite.ZIndex = 1;
+                break;
+        }
+
+        Context.Display.Sprites.Add(entity.Identity, sprite);
         
-        return sprite;
+        AddChild(sprite);
     }
 
     public MapContext Context { get; private set; } = null!;
