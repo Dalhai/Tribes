@@ -1,11 +1,9 @@
 ﻿
 using Godot;
-using TribesOfDust.Hex;
-using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Entities;
 
-public partial class UnitClass : Resource, IVariant<string>
+public partial class UnitConfiguration : Resource, IEntityConfiguration<string>
 {
     public override string ToString() => $"Unit: {Key}";
     
@@ -21,13 +19,13 @@ public partial class UnitClass : Resource, IVariant<string>
     /// The texture associated with the unit.
     /// </summary>
     [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D? Texture2D;
+    public Texture2D? Texture { get; set; }
 
     /// <summary>
     /// The movement costs for this unit.
     /// </summary>
     [Export(PropertyHint.ResourceType, "TileTypeCostTable")]
-    public TileTypeCostTable? MovementCosts;
+    public TileTypeCostTable? MovementCosts { get; set; }
 
     #endregion
 }

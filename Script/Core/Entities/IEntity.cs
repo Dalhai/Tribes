@@ -21,5 +21,5 @@ public static class Identities
     /// Gets the next globally unique identity.
     /// </summary>
     public static ulong GetNextIdentity() => _lastIdentity++;
-    private static ulong _lastIdentity = 0;
+    private static ulong _lastIdentity;
 }

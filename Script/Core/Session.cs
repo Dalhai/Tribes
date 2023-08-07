@@ -1,9 +1,6 @@
-using System.Linq;
-using System.Collections.Generic;
-
 namespace TribesOfDust.Core
 {
-    public partial class Session
+    public class Session
     {
         public Session(MapContext mapContext) => MapContext = mapContext;
 

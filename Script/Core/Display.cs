@@ -1,9 +1,7 @@
-using Godot;
-
 using System;
-using System.Text;
 using System.Collections.Generic;
-
+using System.Text;
+using Godot;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Storage;
 using TribesOfDust.Utils.Extensions;
@@ -16,7 +14,7 @@ public partial class Display : RefCounted
         
     public Display(IHexLayerView<Tile> hexes)
     {
-        Hexes = hexes;
+        _hexes = hexes;
 
         // Setup event handlers.
         _onOverlayTileAdded = (_, color, coordinates) => AddOverlayColor(coordinates, color); 
@@ -30,11 +28,6 @@ public partial class Display : RefCounted
         .AppendEnumerable(nameof(_overlays).Remove('_').Capitalize(), _overlays)
         .ToString();
 
-    #endregion
-    #region Access
-        
-    public IHexLayerView<Tile> Hexes { get; }
-        
     #endregion
     #region Overlays
 
@@ -87,7 +80,7 @@ public partial class Display : RefCounted
 
     private void AddOverlayColor(AxialCoordinate coordinates, Color color) 
     {
-        Tile? tile = Hexes.Get(coordinates);
+        Tile? tile = _hexes.Get(coordinates);
 
         // Only add the overlay color if the tile is not null.
         // Handles the case where the overlay wants to color a tile
@@ -97,7 +90,7 @@ public partial class Display : RefCounted
 
     private void RemoveOverlayColor(AxialCoordinate coordinates, Color color)
     {
-        Tile? tile = Hexes.Get(coordinates);
+        Tile? tile = _hexes.Get(coordinates);
 
         // Only add the overlay color if the tile is not null.
         // Handles the case where the overlay wants to color a tile
@@ -107,6 +100,7 @@ public partial class Display : RefCounted
         
     #endregion
 
+    private readonly IHexLayerView<Tile> _hexes;
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;
     private readonly HashSet<IHexLayerView<Color>> _overlays = new();

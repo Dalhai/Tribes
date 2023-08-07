@@ -1,7 +1,6 @@
-using Godot;
-
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;

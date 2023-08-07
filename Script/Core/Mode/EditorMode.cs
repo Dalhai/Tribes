@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using Godot;
-using TribesOfDust.Hex.Storage;
 using TribesOfDust.Hex;
+using TribesOfDust.Hex.Storage;
 
 namespace TribesOfDust.Core.Modes;
 

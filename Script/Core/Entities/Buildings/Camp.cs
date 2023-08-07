@@ -5,8 +5,8 @@ namespace TribesOfDust.Core.Entities.Buildings;
 
 public class Camp : Building
 {
-    public Camp(AxialCoordinate coordinates, BuildingClass @class, IController owner) 
-        : base(coordinates, @class, owner)
+    public Camp(AxialCoordinate coordinates, BuildingConfiguration configuration, IController owner) 
+        : base(coordinates, configuration, owner)
     {
     }
 }

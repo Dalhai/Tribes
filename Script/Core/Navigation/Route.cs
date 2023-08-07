@@ -1,10 +1,9 @@
-using Godot;
 using System;
 using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Navigation
 {
-    public partial class Route<TTarget>
+    public class Route<TTarget>
     {
         public Route(string name, Func<Context, TTarget> createTarget)
         {
@@ -20,7 +19,7 @@ namespace TribesOfDust.UI.Navigation
         public Func<Context, TTarget> CreateTarget { get; init; }
     }
 
-    public partial class RouteArgs
+    public class RouteArgs
     {
         public string? Name { get; init; }
         public object? Source { get; init; }

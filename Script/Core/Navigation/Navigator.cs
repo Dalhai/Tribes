@@ -1,8 +1,6 @@
-using Godot;
-
 using System;
 using System.Collections.Generic;
-
+using Godot;
 using TribesOfDust.Core;
 
 namespace TribesOfDust.UI.Navigation
@@ -57,7 +55,7 @@ namespace TribesOfDust.UI.Navigation
                 return false;
 
             var selectedRoute = _routes[route];
-            var selectedRouteArgs = new RouteArgs() 
+            var selectedRouteArgs = new RouteArgs
             {
                 Name = selectedRoute.Name,
                 Source = selectedRoute.Source,
@@ -77,7 +75,7 @@ namespace TribesOfDust.UI.Navigation
         /// <returns>True, if the scene change was successful, false otherwise.</returns>
         public bool GoTo(Func<Context, Node2D> createTarget, object? args = null)
         {
-            var selectedRouteArgs = new RouteArgs() 
+            var selectedRouteArgs = new RouteArgs
             {
                 Name = string.Empty,
                 Arguments = args,

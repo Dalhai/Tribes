@@ -46,10 +46,10 @@ public static class Movement
 
                 double movementCosts = candidateTile.Key switch
                 {
-                    TileType.Tundra => unit.Class.MovementCosts?.Tundra ?? 1.0,
-                    TileType.Rocks => unit.Class.MovementCosts?.Rocks ?? 1.0,
-                    TileType.Dunes => unit.Class.MovementCosts?.Dunes ?? 1.0,
-                    TileType.Canyon => unit.Class.MovementCosts?.Canyon ?? 1.0,
+                    TileType.Tundra => unit.Configuration.MovementCosts?.Tundra ?? 1.0,
+                    TileType.Rocks => unit.Configuration.MovementCosts?.Rocks ?? 1.0,
+                    TileType.Dunes => unit.Configuration.MovementCosts?.Dunes ?? 1.0,
+                    TileType.Canyon => unit.Configuration.MovementCosts?.Canyon ?? 1.0,
                     
                     // TODO (MM): Needs to be handled properly, these are all invalid
                     _ => double.PositiveInfinity

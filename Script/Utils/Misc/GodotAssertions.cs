@@ -1,6 +1,5 @@
-using static System.Diagnostics.Debug;
-
 using Godot;
+using static System.Diagnostics.Debug;
 
 namespace TribesOfDust.Utils.Misc
 {

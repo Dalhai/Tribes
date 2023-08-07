@@ -8,23 +8,23 @@ public class Unit : IEntity
 {
     #region Constructors
     
-    public Unit(AxialCoordinate coordinates, UnitClass @class, IController owner)
+    public Unit(AxialCoordinate coordinates, UnitConfiguration configuration, IController owner)
     {
-        Class = @class;
+        Configuration = configuration;
         
         // Initialize position and look
         
         Identity = Identities.GetNextIdentity();
         
         Sprite = new();
-        Sprite.Texture = @class.Texture2D;
+        Sprite.Texture = configuration.Texture;
         Sprite.Modulate = owner.Color;
         Sprite.ZIndex = 10;
         
         // Initialize and reduce scale so the unit sprite fits
 
-        float widthScaleToExpected = @class.Texture2D != null ? HexConstants.DefaultWidth / @class.Texture2D.GetWidth() : 1.0f;
-        float heightScaleToExpected = @class.Texture2D != null ? HexConstants.DefaultHeight / @class.Texture2D.GetHeight() : 1.0f;
+        float widthScaleToExpected = configuration.Texture != null ? HexConstants.DefaultWidth / configuration.Texture.GetWidth() : 1.0f;
+        float heightScaleToExpected = configuration.Texture != null ? HexConstants.DefaultHeight / configuration.Texture.GetHeight() : 1.0f;
         
         Sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
         Sprite.Scale *= 0.5f;
@@ -80,7 +80,7 @@ public class Unit : IEntity
     #endregion
     #region Class
 
-    public readonly UnitClass Class;
+    public readonly UnitConfiguration Configuration;
 
     #endregion
 }

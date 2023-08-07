@@ -1,11 +1,9 @@
 using System;
 using System.Diagnostics;
 
-using Godot;
-
 namespace TribesOfDust.Utils.Misc
 {
-    public partial class GodotException : Exception
+    public class GodotException : Exception
     {
         /// <summary>
         /// Initializes a new <see cref="GodotException"> for the specified error.

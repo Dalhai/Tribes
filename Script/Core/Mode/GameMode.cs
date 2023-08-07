@@ -20,7 +20,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     {
         Vector2 minimum = Vector2.Inf;
         Vector2 maximum = -Vector2.Inf;
-        foreach (var tile in _context.Map.Tiles)
+        foreach (var tile in Context.Map.Tiles)
         {
             var unitPosition = HexConversions.HexToUnit(tile.Key);
             var x = unitPosition.X * HexConstants.DefaultWidth;
@@ -37,38 +37,32 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         
     public override void _Ready()
     {
-        _context = new MapContext(Context.Instance);
-        _context.Display.AddOverlay(_selectionOverlay);
-        _context.Display.AddOverlay(_movementOverlay);
+        Context = new MapContext(Core.Context.Instance);
+        Context.Display.AddOverlay(_selectionOverlay);
+        Context.Display.AddOverlay(_movementOverlay);
         
         // Register tiles
 
-        foreach (var tile in _context.Map.Tiles)
+        foreach (var tile in Context.Map.Tiles)
             AddChild(tile.Value.Sprite);
         
         // Register buildings
-        var campClass = _context.Repos.Buildings.GetAsset("Camp");
+        var campClass = Context.Repos.Buildings.GetAsset("Camp");
         var camp1 = new Camp(new(-2, -3), campClass, _player1);
         var camp2 = new Camp(new(5, 4), campClass, _player2);
 
-        _context.Map.Buildings.Add(camp1, camp1.Coordinates);
-        _context.Map.Buildings.Add(camp2, camp2.Coordinates);
+        RegisterBuilding(camp1);
+        RegisterBuilding(camp2);
 
-        AddChild(camp1.Sprite);
-        AddChild(camp2.Sprite);
-
-        var fountainClass = _context.Repos.Buildings.GetAsset("Fountain");
+        var fountainClass = Context.Repos.Buildings.GetAsset("Fountain");
         var fountain1 = new Fountain(new (1, -1), fountainClass);
         var fountain2 = new Fountain(new (5,  1), fountainClass);
 
-        _context.Map.Buildings.Add(fountain1, fountain1.Coordinates);
-        _context.Map.Buildings.Add(fountain2, fountain2.Coordinates);
-        
-        AddChild(fountain1.Sprite);
-        AddChild(fountain2.Sprite);
+        RegisterBuilding(fountain1);
+        RegisterBuilding(fountain2);
         
         // Register units
-        UnitClass GetUnitClass() => _context.Repos.Units.GetAsset();
+        UnitConfiguration GetUnitClass() => Context.Repos.Units.GetAsset();
 
         if (camp1.Owner != null)
         {
@@ -76,9 +70,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             var unit2 = new Unit(camp1.Coordinates.NE, GetUnitClass(), camp1.Owner);
             var unit3 = new Unit(camp1.Coordinates.SE, GetUnitClass(), camp1.Owner);
         
-            _context.Map.Units.Add(unit1, unit1.Coordinates);
-            _context.Map.Units.Add(unit2, unit2.Coordinates);
-            _context.Map.Units.Add(unit3, unit3.Coordinates);
+            Context.Map.Units.Add(unit1, unit1.Coordinates);
+            Context.Map.Units.Add(unit2, unit2.Coordinates);
+            Context.Map.Units.Add(unit3, unit3.Coordinates);
         
             AddChild(unit1.Sprite);
             AddChild(unit2.Sprite);
@@ -91,9 +85,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             var unit2 = new Unit(camp2.Coordinates.NE, GetUnitClass(), camp2.Owner);
             var unit3 = new Unit(camp2.Coordinates.SE, GetUnitClass(), camp2.Owner);
         
-            _context.Map.Units.Add(unit1, unit1.Coordinates);
-            _context.Map.Units.Add(unit2, unit2.Coordinates);
-            _context.Map.Units.Add(unit3, unit3.Coordinates);
+            Context.Map.Units.Add(unit1, unit1.Coordinates);
+            Context.Map.Units.Add(unit2, unit2.Coordinates);
+            Context.Map.Units.Add(unit3, unit3.Coordinates);
         
             AddChild(unit1.Sprite);
             AddChild(unit2.Sprite);
@@ -110,7 +104,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             var position = GetGlobalMousePosition();
             var coordinates = HexConversions.UnitToHex(position / HexConstants.DefaultSize);
             
-            bool hasUnit = _context.Map.Units.Contains(coordinates);
+            bool hasUnit = Context.Map.Units.Contains(coordinates);
             
             _selectionOverlay.Clear();
             _selectionOverlay.Add(
@@ -126,12 +120,12 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             
             // Select a unit
 
-            if (mouseButton.ButtonIndex == MouseButton.Left && _context.Map.Units.Get(coordinates) is {} unit)
+            if (mouseButton.ButtonIndex == MouseButton.Left && Context.Map.Units.Get(coordinates) is {} unit)
             {
-                if (_context.Selected is Unit previousUnit)
+                if (Context.Selected is Unit previousUnit)
                     previousUnit.Sprite.Modulate = previousUnit.Owner?.Color ?? Colors.White;
                 
-                _context.Selected = unit;
+                Context.Selected = unit;
                 unit.Sprite.Modulate = Colors.Yellow;
                 
                 Label? healthLabel = GetNode<Label>(HealthPath);
@@ -145,31 +139,31 @@ public partial class GameMode : Node2D, IUnique<GameMode>
                 
                 // Update movement overlay
                 _movementOverlay.Clear();
-                foreach (var (coordinate, cost) in unit.ComputeReachable(_context.Map.Tiles))
+                foreach (var (coordinate, cost) in unit.ComputeReachable(Context.Map.Tiles))
                     _movementOverlay.Add(Colors.Aqua.Lightened((float)(cost / unit.Water)), coordinate);
             }
 
             // Move the selected unit to the selected tile
             
             if (mouseButton.ButtonIndex == MouseButton.Left 
-                && _context.Selected is Unit selectedUnit 
-                && _context.Map.Units.Get(coordinates) is null)
+                && Context.Selected is Unit selectedUnit 
+                && Context.Map.Units.Get(coordinates) is null)
             {
-                var reachableTiles = selectedUnit.ComputeReachable(_context.Map.Tiles);
+                var reachableTiles = selectedUnit.ComputeReachable(Context.Map.Tiles);
                 var unoccupiedTiles = reachableTiles
                     .Select(entry => entry.Item1)
-                    .Where(entry => !_context.Map.Units.Contains(entry))
-                    .Where(entry => !_context.Map.Buildings.Contains(entry))
+                    .Where(entry => !Context.Map.Units.Contains(entry))
+                    .Where(entry => !Context.Map.Buildings.Contains(entry))
                     .ToList();
 
                 if (unoccupiedTiles.Contains(coordinates))
                 {
                     selectedUnit.Coordinates = coordinates;
-                    _context.Map.Units.Remove(selectedUnit.Coordinates);
-                    _context.Map.Units.Add(selectedUnit, selectedUnit.Coordinates);
+                    Context.Map.Units.Remove(selectedUnit.Coordinates);
+                    Context.Map.Units.Add(selectedUnit, selectedUnit.Coordinates);
 
                     selectedUnit.Sprite.Modulate = selectedUnit.Owner?.Color ?? Colors.White;
-                    _context.Selected = null;
+                    Context.Selected = null;
                     _movementOverlay.Clear();
                 }
             }
@@ -187,8 +181,35 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         Instance = null;
         base._ExitTree();
     }
+    
+    private Sprite2D RegisterBuilding(Building building)
+    {
+        Sprite2D sprite = new();
+        
+        sprite.Texture = building.Configuration.Texture;
+        sprite.Modulate = building.Owner?.Color ?? Colors.White;
+        sprite.ZIndex = 10;
+        
+        // Initialize and reduce scale so the building sprite fits
 
-    private MapContext _context = null!;
+        float widthScaleToExpected = building.Configuration.Texture != null ? HexConstants.DefaultWidth / building.Configuration.Texture.GetWidth() : 1.0f;
+        float heightScaleToExpected = building.Configuration.Texture != null ? HexConstants.DefaultHeight / building.Configuration.Texture.GetHeight() : 1.0f;
+        
+        sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
+        sprite.Scale *= 0.8f;
+        
+        // Position unit according to specified coordinates
+
+        sprite.Centered = true;
+        sprite.Position = HexConversions.HexToUnit(building.Coordinates) * HexConstants.DefaultSize;
+
+        Context.Map.Buildings.Add(building, building.Coordinates);
+        AddChild(sprite);
+        
+        return sprite;
+    }
+
+    public MapContext Context { get; private set; } = null!;
     private readonly Player _player1 = new("Player 1", Colors.Red);
     private readonly Player _player2 = new("Player 2", Colors.Blue);
     private readonly IHexLayer<Color> _selectionOverlay = new HexLayer<Color>();

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-
 using Godot;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Entities;
 
-public class BuildingClassRepository : Repository<string, BuildingClass>
+public class BuildingClassRepository : Repository<string, BuildingConfiguration>
 {
     /// <summary>
     /// The default resource path used for unit class assets.
@@ -23,7 +22,7 @@ public class BuildingClassRepository : Repository<string, BuildingClass>
     /// </remarks>
     ///
     /// <returns>A list of loaded assets.</returns>
-    protected override List<BuildingClass> LoadAll() => LoadAll(DefaultPath);
+    protected override List<BuildingConfiguration> LoadAll() => LoadAll(DefaultPath);
 
     /// <summary>
     /// Try to load a single asset from the specified resource path.
@@ -33,13 +32,13 @@ public class BuildingClassRepository : Repository<string, BuildingClass>
     /// <param name="asset">The asset to be initialized, if found.</param>
     ///
     /// <returns>True, if the asset could be loaded, false otherwise.</returns>
-    protected override bool TryLoad(string resourcePath, out BuildingClass? asset)
+    protected override bool TryLoad(string resourcePath, out BuildingConfiguration? asset)
     {
         GD.Print($"Loading Building Class: {resourcePath}");
         var resource = GD.Load(resourcePath);
-        asset = resource as BuildingClass;
+        asset = resource as BuildingConfiguration;
 
-        if (asset is { Texture2D: not null })
+        if (asset is { Texture: not null })
         {
             return true;
         }
