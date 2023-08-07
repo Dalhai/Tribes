@@ -1,10 +1,10 @@
 using Godot;
-using TribesOfDust.Core;
+using TribesOfDust.Hex;
 using TribesOfDust.Utils;
 
-namespace TribesOfDust.Hex;
+namespace TribesOfDust.Core.Entities;
 
-public partial class TileConfiguration : Resource, IVariant<TileType>
+public partial class TileConfiguration : Resource, IConfiguration, IVariant<TileType>
 {
     public override string ToString() => $"Terrain: {Key}";
 
@@ -20,7 +20,7 @@ public partial class TileConfiguration : Resource, IVariant<TileType>
     /// The texture associated with the tile.
     /// </summary>
     [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D? Texture2D;
+    public Texture2D? Texture { get; set; }
 
     /// <summary>
     /// The direction of the tile.
@@ -30,7 +30,7 @@ public partial class TileConfiguration : Resource, IVariant<TileType>
     /// Most tiles will not be directed, which is allowed as well.
     /// </remarks>
     [Export(PropertyHint.Enum)]
-    public HexDirection Direction = HexDirection.None;
+    public HexDirection Direction { get; set; } = HexDirection.Undirected;
 
     /// <summary>
     /// The connections to other tiles this tile has.
@@ -39,8 +39,8 @@ public partial class TileConfiguration : Resource, IVariant<TileType>
     /// <remarks>
     /// Most tiles will have connections to all surrounding tiles.
     /// </remarks>
-    [Export(PropertyHint.Flags)]
-    public int Connections = (int)HexDirections.All;
+    [Export(PropertyHint.Flags, "NW,N,NE,SE,S,SW")]
+    public int Connections { get; set; }= (int)HexDirections.All;
 
     #endregion
     #region Size
@@ -48,12 +48,12 @@ public partial class TileConfiguration : Resource, IVariant<TileType>
     /// <summary>
     /// Gets the scale in x-direction necessary to match the expected width.
     /// </summary>
-    public float WidthScaleToExpected => Texture2D != null ? HexConstants.DefaultWidth / Texture2D.GetWidth() : 1.0f;
+    public float WidthScaleToExpected => Texture != null ? HexConstants.DefaultWidth / Texture.GetWidth() : 1.0f;
 
     /// <summary>
     /// Gets the scale in y-direction necessary to match the expected height.
     /// </summary>
-    public float HeightScaleToExpected => Texture2D != null ? HexConstants.DefaultHeight / Texture2D.GetHeight() : 1.0f;
+    public float HeightScaleToExpected => Texture != null ? HexConstants.DefaultHeight / Texture.GetHeight() : 1.0f;
 
     #endregion
 }
