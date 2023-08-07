@@ -1,11 +1,11 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://gt6ubu4hpvyi"]
 
-[ext_resource type="Script" path="res://Script/Core/TileClass.cs" id="1"]
-[ext_resource type="Texture2D" uid="uid://dudh7ncosbxo2" path="res://Assets/Textures/TileClass/rocks_2.png" id="2"]
+[ext_resource type="Script" path="res://Script/Core/Entities/TileConfiguration.cs" id="1"]
+[ext_resource type="Texture2D" uid="uid://dd6duf5c1qacc" path="res://Assets/Textures/Terrain/rocks_2.png" id="2"]
 
 [resource]
 script = ExtResource("1")
 Key = 4
-Texture2D = ExtResource("2")
-Direction = 0
+Texture = ExtResource("2")
+Direction = 32768
 Connections = 63
