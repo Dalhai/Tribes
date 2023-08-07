@@ -3,15 +3,11 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Entities;
 
-public abstract class Building(AxialCoordinate coordinates, BuildingConfiguration configuration, IController? owner)
-    : IEntity
+public abstract class Building(AxialCoordinate location, BuildingConfiguration configuration, IController? owner)
+    : IEntity<BuildingConfiguration>
 {
-    #region Queries
-    
     public ulong Identity { get; } = Identities.GetNextIdentity();
     public IController? Owner { get; } = owner;
-    public AxialCoordinate Coordinates { get; } = coordinates;
-    public readonly BuildingConfiguration Configuration = configuration;
-
-    #endregion
+    public BuildingConfiguration Configuration => configuration;
+    public AxialCoordinate Location { get; } = location;
 }
