@@ -1,4 +1,4 @@
-namespace TribesOfDust.Hex.Storage;
+namespace TribesOfDust.Hex.Layers;
 
 public interface IHexLayer<T> : IHexLayerView<T> 
 {

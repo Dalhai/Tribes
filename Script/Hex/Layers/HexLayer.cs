@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TribesOfDust.Hex.Storage;
+namespace TribesOfDust.Hex.Layers;
     
 public class HexLayer<T> : IHexLayer<T> where T: notnull
 {

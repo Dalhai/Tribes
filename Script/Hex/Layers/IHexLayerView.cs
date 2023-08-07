@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TribesOfDust.Hex.Storage;
+namespace TribesOfDust.Hex.Layers;
 
 public interface IHexLayerView
 {
