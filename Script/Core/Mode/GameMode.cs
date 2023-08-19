@@ -44,46 +44,46 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         // Register tiles
 
         foreach (var (_, tile) in Context.Map.Tiles)
-            RegisterEntity(tile);
-
+            RegisterSprite(tile);
+        
         // Register buildings
         var campClass = Context.Repos.Buildings.GetAsset("Camp");
-        var camp1 = new Camp(new(-2, -3), campClass, _player1);
-        var camp2 = new Camp(new(5, 4), campClass, _player2);
+        var camp1 = new Camp(Context.Map.Buildings, new(-2, -3), campClass, _player1);
+        var camp2 = new Camp(Context.Map.Buildings, new(5, 4), campClass, _player2);
 
-        RegisterEntity(camp1);
-        RegisterEntity(camp2);
+        RegisterSprite(camp1);
+        RegisterSprite(camp2);
 
         var fountainClass = Context.Repos.Buildings.GetAsset("Fountain");
-        var fountain1 = new Fountain(new(1, -1), fountainClass);
-        var fountain2 = new Fountain(new(5, 1), fountainClass);
+        var fountain1 = new Fountain(Context.Map.Buildings, new(1, -1), fountainClass);
+        var fountain2 = new Fountain(Context.Map.Buildings, new(5, 1), fountainClass);
 
-        RegisterEntity(fountain1);
-        RegisterEntity(fountain2);
+        RegisterSprite(fountain1);
+        RegisterSprite(fountain2);
 
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
 
         if (camp1.Owner != null)
         {
-            var unit1 = new Unit(camp1.Location.N, GetUnitConfiguration(), camp1.Owner);
-            var unit2 = new Unit(camp1.Location.NE, GetUnitConfiguration(), camp1.Owner);
-            var unit3 = new Unit(camp1.Location.SE, GetUnitConfiguration(), camp1.Owner);
+            var unit1 = new Unit(Context.Map.Units, camp1.Location.N, GetUnitConfiguration(), camp1.Owner);
+            var unit2 = new Unit(Context.Map.Units, camp1.Location.NE, GetUnitConfiguration(), camp1.Owner);
+            var unit3 = new Unit(Context.Map.Units, camp1.Location.SE, GetUnitConfiguration(), camp1.Owner);
 
-            RegisterEntity(unit1);
-            RegisterEntity(unit2);
-            RegisterEntity(unit3);
+            RegisterSprite(unit1);
+            RegisterSprite(unit2);
+            RegisterSprite(unit3);
         }
 
         if (camp2.Owner != null)
         {
-            var unit1 = new Unit(camp2.Location.N, GetUnitConfiguration(), camp2.Owner);
-            var unit2 = new Unit(camp2.Location.NE, GetUnitConfiguration(), camp2.Owner);
-            var unit3 = new Unit(camp2.Location.SE, GetUnitConfiguration(), camp2.Owner);
+            var unit1 = new Unit(Context.Map.Units, camp2.Location.N, GetUnitConfiguration(), camp2.Owner);
+            var unit2 = new Unit(Context.Map.Units, camp2.Location.NE, GetUnitConfiguration(), camp2.Owner);
+            var unit3 = new Unit(Context.Map.Units, camp2.Location.SE, GetUnitConfiguration(), camp2.Owner);
 
-            RegisterEntity(unit1);
-            RegisterEntity(unit2);
-            RegisterEntity(unit3);
+            RegisterSprite(unit1);
+            RegisterSprite(unit2);
+            RegisterSprite(unit3);
         }
 
         base._Ready();
@@ -137,29 +137,27 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
             // Move the selected unit to the selected tile
 
-            // TODO(MM): Reimplement unit movement. Current view model (Context.Display) does not support this properly.
-            // if (mouseButton.ButtonIndex == MouseButton.Left
-            //     && Context.Selected is Unit selectedUnit
-            //     && Context.Map.Units.Get(coordinates) is null)
-            // {
-            //     var reachableTiles = selectedUnit.ComputeReachable(Context.Map.Tiles);
-            //     var unoccupiedTiles = reachableTiles
-            //         .Select(entry => entry.Item1)
-            //         .Where(entry => !Context.Map.Units.Contains(entry))
-            //         .Where(entry => !Context.Map.Buildings.Contains(entry))
-            //         .ToList();
-            //
-            //     if (unoccupiedTiles.Contains(coordinates))
-            //     {
-            //         selectedUnit.Location = coordinates;
-            //         Context.Map.Units.Remove(selectedUnit.Location);
-            //         Context.Map.Units.Add(selectedUnit, selectedUnit.Location);
-            //
-            //         selectedUnit.Sprite.Modulate = selectedUnit.Owner?.Color ?? Colors.White;
-            //         Context.Selected = null;
-            //         _movementOverlay.Clear();
-            //     }
-            // }
+            if (mouseButton.ButtonIndex == MouseButton.Left
+                && Context.Selected is Unit selectedUnit
+                && Context.Map.Units.Get(coordinates) is null)
+            {
+                var reachableTiles = selectedUnit.ComputeReachable(Context.Map.Tiles);
+                var unoccupiedTiles = reachableTiles
+                    .Select(entry => entry.Item1)
+                    .Where(entry => !Context.Map.Units.Contains(entry))
+                    .Where(entry => !Context.Map.Buildings.Contains(entry))
+                    .ToList();
+            
+                if (unoccupiedTiles.Contains(coordinates))
+                {
+                    selectedUnit.Location = coordinates;
+            
+                    Context.Display.Sprites[selectedUnit.Identity].Modulate = selectedUnit.Owner?.Color ?? Colors.White;
+                    Context.Display.Sprites[selectedUnit.Identity].Position = HexConversions.HexToUnit(selectedUnit.Location) * HexConstants.DefaultSize;
+                    Context.Selected = null;
+                    _movementOverlay.Clear();
+                }
+            }
         }
     }
 
@@ -175,7 +173,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         base._ExitTree();
     }
 
-    private void RegisterEntity(IEntity<IConfiguration> entity)
+    private void RegisterSprite(IEntity<IConfiguration> entity)
     {
         Sprite2D sprite = new();
 
@@ -195,24 +193,20 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         switch (entity)
         {
             case Building building:
-                Context.Map.Buildings.Add(building, building.Location);
                 sprite.Scale *= 0.8f;
                 sprite.ZIndex = 10;
                 break;
             case Unit unit:
-                Context.Map.Units.Add(unit, unit.Location);
                 sprite.Scale *= 0.8f;
                 sprite.ZIndex = 10;
                 break;
             case Tile tile:
-                Context.Map.Tiles.Add(tile, tile.Location);
                 sprite.Scale *= 1.0f;
                 sprite.ZIndex = 1;
                 break;
         }
 
         Context.Display.Sprites.Add(entity.Identity, sprite);
-        
         AddChild(sprite);
     }
 

@@ -36,7 +36,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         
         // Register tiles
         foreach (var (_, tile) in _context.Map.Tiles)
-            RegisterEntity(tile);
+            RegisterSprite(tile);
 
         // Register overlays with context   
         _context.Display.AddOverlay(_activeHexOverlay);
@@ -109,7 +109,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
                 try
                 {
-                    var hexTile = new Tile(hex, repo.GetAsset(_activeTileType));
+                    var hexTile = new Tile(_context.Map.Tiles, hex, repo.GetAsset(_activeTileType));
                     var tile = tiles.Get(hex);
 
                     tiles.Remove(hex);
@@ -121,7 +121,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                         RemoveChild(sprite);
                     }
 
-                    RegisterEntity(hexTile);
+                    RegisterSprite(hexTile);
                 }
                 catch (ArgumentException exception)
                 {
@@ -151,8 +151,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 {
                     try
                     {
-                        var hexTile = new Tile(hex, repo.GetAsset(TileType.Open));
-                        RegisterEntity(hexTile);
+                        var hexTile = new Tile(_context.Map.Tiles, hex, repo.GetAsset(TileType.Open));
+                        RegisterSprite(hexTile);
                     }
                     catch (ArgumentException exception)
                     {
@@ -193,7 +193,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             _activeTypeOverlay.Add(Colors.LightBlue, tile.Key);
     }
 
-    private void RegisterEntity(IEntity<IConfiguration> entity)
+    private void RegisterSprite(IEntity<IConfiguration> entity)
     {
         Sprite2D sprite = new();
 
@@ -213,17 +213,14 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         switch (entity)
         {
             case Building building:
-                _context.Map.Buildings.Add(building, building.Location);
                 sprite.Scale *= 0.8f;
                 sprite.ZIndex = 10;
                 break;
             case Unit unit:
-                _context.Map.Units.Add(unit, unit.Location);
                 sprite.Scale *= 0.8f;
                 sprite.ZIndex = 10;
                 break;
             case Tile tile:
-                _context.Map.Tiles.Add(tile, tile.Location);
                 sprite.Scale *= 1.0f;
                 sprite.ZIndex = 1;
                 break;

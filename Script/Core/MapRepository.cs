@@ -39,34 +39,28 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
             // Extract the top level objects
             var mapName = jsonObject["name"]?.GetValue<string>();
             var mapTilesJson = jsonObject["tiles"]?.AsArray();
+
+            if (mapName is null || mapTilesJson is null) 
+                return false;
+            
+            asset = new Map(mapName);
             
             // Extract all the tiles
-            JsonObject? ToObj(JsonNode? node) => node?.AsObject();
-            Tile? ToTile(JsonObject? obj)
+            foreach (var tile in mapTilesJson)
             {
-                var q = obj?["q"]?.GetValue<int>();
-                var r = obj?["r"]?.GetValue<int>();
+                var tileNode = tile?.AsObject();
                 
+                var q = tileNode?["q"]?.GetValue<int>();
+                var r = tileNode?["r"]?.GetValue<int>();
+
                 if (q is null || r is null)
-                    return null;
+                    continue;
 
-                var t = obj?["type"]?.GetValue<int>();
+                var t = tileNode?["type"]?.GetValue<int>();
                 if (t is null)
-                    return null;
+                    continue;
 
-                return new Tile(new(q.Value, r.Value), tileConfigurationRepository.GetAsset((TileType)t.Value));
-            }
-
-            var mapTiles = mapTilesJson
-                ?.Select(ToObj)
-                ?.Select(ToTile)
-                ?.Cast<Tile>();
-
-            if (mapTiles is not null && mapName is not null)
-            {
-                asset = new Map(mapName);
-                foreach (var tile in mapTiles)
-                    asset.Tiles.Add(tile, tile.Location);
+                new Tile(asset.Tiles, new(q.Value, r.Value), tileConfigurationRepository.GetAsset((TileType)t.Value));
             }
         }
 
