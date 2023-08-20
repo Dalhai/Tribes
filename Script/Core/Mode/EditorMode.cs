@@ -73,13 +73,13 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         if (inputEvent is InputEventMouseMotion)
         {
             var world = GetGlobalMousePosition();
-            var hoveredCoordinate = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
+            var hoveredLocation = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
 
-            if (_hoveredCoordinate != hoveredCoordinate)
+            if (_hoveredLocation != hoveredLocation)
             {
-                _hoveredCoordinate = hoveredCoordinate;
+                _hoveredLocation = hoveredLocation;
                 _hoveredOverlay.Clear();
-                _hoveredOverlay.Add(hoveredCoordinate, Colors.Aqua);
+                _hoveredOverlay.Add(hoveredLocation, Colors.Aqua);
             }
         }
 
@@ -94,23 +94,22 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Left })
             {
                 var mousePosition = GetGlobalMousePosition();
-                var clickedCoordinate = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+                var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
                 
                 // Remove the tile that has been clicked from the tiles list
-                if (Context.Map.Tiles.Get(clickedCoordinate) is { Identity: var identity })
+                if (Context.Map.Tiles.Get(clickedLocation) is { Identity: var identity } tile)
                 {
                     Sprite2D sprite = Context.Display.Sprites[identity];
                     Context.Display.Sprites.Remove(identity);
-                    Context.Map.Tiles.Remove(clickedCoordinate);
+                    Context.Map.Remove(tile);
                     RemoveChild(sprite);
                 }
                 
                 // Create a new tile with the selected tile type and register it with the context
-                var newCoordinate = clickedCoordinate;
-                var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType));
+                var newLocation = clickedLocation;
+                var newTile = Context.Map.Create(Context.Repos.Tiles.GetAsset(_activeTileType), newLocation);
                 
-                Context.Map.Tiles.Add(newCoordinate, newTile);
-                CreateSprite(newCoordinate, newTile);
+                CreateSprite(newLocation, newTile);
             }
 
             // Remove open tiles on right mouse click.
@@ -119,26 +118,25 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Right })
             {
                 var mousePosition = GetGlobalMousePosition();
-                var clickedCoordinate = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
-                var clickedTile = Context.Map.Tiles.Get(clickedCoordinate);
+                var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+                var clickedTile = Context.Map.Tiles.Get(clickedLocation);
 
                 // Remove the tile that has been clicked from the tiles list
-                if (clickedTile is { Identity: var identity })
+                if (clickedTile is { Identity: var identity } tile)
                 {
                     Sprite2D sprite = Context.Display.Sprites[identity];
                     Context.Display.Sprites.Remove(identity);
-                    Context.Map.Tiles.Remove(clickedCoordinate);
+                    Context.Map.Remove(tile);
                     RemoveChild(sprite);
                 }
 
                 // Create a new tile with the open tile type and register it with the context
                 if (clickedTile is null || clickedTile.Configuration.Key != TileType.Open)
                 {
-                    var newCoordinate = clickedCoordinate;
-                    var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open));
+                    var newLocation = clickedLocation;
+                    var newTile = Context.Map.Create(Context.Repos.Tiles.GetAsset(TileType.Open), newLocation);
 
-                    Context.Map.Tiles.Add(newCoordinate, newTile);
-                    CreateSprite(newCoordinate, newTile);
+                    CreateSprite(newLocation, newTile);
                 }
             }
         }
@@ -212,7 +210,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         AddChild(sprite);
     }
 
-    private AxialCoordinate? _hoveredCoordinate;
+    private AxialCoordinate? _hoveredLocation;
     private TileType _activeTileType = TileType.Tundra;
 
     public MapContext Context { get; private set; } = null!;

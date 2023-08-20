@@ -1,14 +1,19 @@
 ﻿using TribesOfDust.Core.Controllers;
+using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Entities;
 
 public class Unit : IEntity<UnitConfiguration>
 {
-    public Unit(UnitConfiguration configuration, IController owner)
+    public Unit(UnitConfiguration configuration, IPlacement placement, IController owner)
     {
         Identity      = Identities.GetNextIdentity();
         Configuration = configuration;
         Owner         = owner;
+        
+        // Keep track of the placement of the unit.
+        // Can only be set from the outside.
+        _placement = placement;
     }
 
     /// <summary>
@@ -22,6 +27,11 @@ public class Unit : IEntity<UnitConfiguration>
     public UnitConfiguration Configuration { get; }
 
     /// <summary>
+    /// The location of the entity.
+    /// </summary>
+    public AxialCoordinate? Location => _placement.Location;
+
+    /// <summary>
     /// The owner of the entity.
     /// </summary>
     public IController? Owner { get; }
@@ -31,4 +41,6 @@ public class Unit : IEntity<UnitConfiguration>
     public double Water { get; set; } = 10;
     public double MaxWater { get; } = 10;
     public double Speed { get; } = 5;
+    
+    private readonly IPlacement _placement;
 }

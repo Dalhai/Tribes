@@ -6,13 +6,17 @@ using TribesOfDust.Hex.Layers;
 
 namespace TribesOfDust.Core.Entities;
 
-public abstract class Building : IEntity<BuildingConfiguration>
+public class Building : IEntity<BuildingConfiguration>
 {
-    protected Building(BuildingConfiguration configuration, IController? owner)
+    public Building(BuildingConfiguration configuration, IPlacement placement, IController? owner)
     {
         Identity      = Identities.GetNextIdentity();
         Configuration = configuration;
         Owner         = owner;
+        
+        // Keep track of the placement of the unit.
+        // Can only be set from the outside.
+        _placement = placement;
     }
 
     /// <summary>
@@ -26,7 +30,14 @@ public abstract class Building : IEntity<BuildingConfiguration>
     public BuildingConfiguration Configuration { get; }
 
     /// <summary>
+    /// The location of the entity.
+    /// </summary>
+    public AxialCoordinate? Location => _placement.Location;
+
+    /// <summary>
     /// The owner of the entity.
     /// </summary>
     public IController? Owner { get; }
+
+    private readonly IPlacement _placement;
 }
