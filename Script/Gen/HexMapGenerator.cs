@@ -20,25 +20,20 @@ public class HexMapGenerator : IHexLayerGenerator<Tile>
     /// </summary>
     /// 
     /// <param name="layer">The layer to be filled.</param>
-    /// <param name="placements">The newly created placements.</param>
     /// 
     /// <returns>True, if the layer was filled.</returns>
     /// <returns>False, if the layer could not be filled.</returns>
-    public bool Generate(IHexLayer<Tile> layer, IDictionary<ulong, Placement> placements)
+    public bool Generate(IHexLayer<Tile> layer)
     {
         AxialCoordinate difference = _end - _start;
         for (int q = 0; q < difference.Q; ++q)
         for (int r = 0; r < difference.R; ++r)
         {
             var config = _repository.GetAsset(TileType.Tundra);
-            var placement = new Placement();
-            var tile = new Tile(config, placement);
-
             var location = new AxialCoordinate(_start.Q + q, _start.R + r);
-            placement.Location = location;
-            
-            placements.Add(tile.Identity, placement);
-            layer.Add(location, tile);
+            var tile = new Tile(config, location);
+
+            layer.TryAdd(location, tile);
         }
 
         return true;

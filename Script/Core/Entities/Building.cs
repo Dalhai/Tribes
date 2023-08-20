@@ -1,43 +1,19 @@
-﻿using static System.Diagnostics.Debug;
-
-using TribesOfDust.Core.Controllers;
+﻿using TribesOfDust.Core.Controllers;
 using TribesOfDust.Hex;
-using TribesOfDust.Hex.Layers;
 
 namespace TribesOfDust.Core.Entities;
 
-public class Building : IEntity<BuildingConfiguration>
+public class Building : Entity<BuildingConfiguration>
 {
-    public Building(BuildingConfiguration configuration, IPlacement placement, IController? owner)
+    /// <summary>
+    /// Creates a new building at the specified location.
+    /// </summary>
+    /// 
+    /// <param name="configuration">The kind of building to create.</param>
+    /// <param name="location">The location the building will initially be situated at.</param>
+    /// <param name="owner">The owning controller of the building, either player or non-player.</param>
+    public Building(BuildingConfiguration configuration, AxialCoordinate location, IController? owner = null)
+        : base(configuration, location, owner)
     {
-        Identity      = Identities.GetNextIdentity();
-        Configuration = configuration;
-        Owner         = owner;
-        
-        // Keep track of the placement of the unit.
-        // Can only be set from the outside.
-        _placement = placement;
     }
-
-    /// <summary>
-    /// The unique identity of the entity.
-    /// </summary>
-    public ulong Identity { get; }
-
-    /// <summary>
-    /// The configuration of the entity.
-    /// </summary>
-    public BuildingConfiguration Configuration { get; }
-
-    /// <summary>
-    /// The location of the entity.
-    /// </summary>
-    public AxialCoordinate? Location => _placement.Location;
-
-    /// <summary>
-    /// The owner of the entity.
-    /// </summary>
-    public IController? Owner { get; }
-
-    private readonly IPlacement _placement;
 }

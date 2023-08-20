@@ -61,7 +61,9 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
                     continue;
 
                 var config = tileConfigurationRepository.GetAsset((TileType)tileType.Value);
-                var tile = asset.Create(config, new(q.Value, r.Value));
+                var tile = new Tile(config, new(q.Value, r.Value));
+
+                asset.TryAddEntity(tile);
             }
         }
 

@@ -41,25 +41,34 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         Context.Display.AddOverlay(_selectionOverlay);
         Context.Display.AddOverlay(_movementOverlay);
         
+        var map = Context.Map;
+        var repo = Context.Repos;
+        
         // Generate tiles
         HexMapGenerator generator = new(new(-100, -100), new(100, 100), Context.Repos.Tiles);
-        Context.Map.ApplyGenerator(generator);
+        map.Generate(generator);
 
         // Register tiles
         foreach (var (_, tile) in Context.Map.Tiles)
             this.CreateSpriteForEntity(Context, tile);
         
         // Register buildings
-        var campClass = Context.Repos.Buildings.GetAsset("Camp");
-        var camp1 = Context.Map.Create(campClass, new(-2, -3), _player1);
-        var camp2 = Context.Map.Create(campClass, new(5, 4), _player2);
+        var campClass = repo.Buildings.GetAsset("Camp");
+        var camp1 = new Building(campClass, new(-2, -3), _player1);
+        var camp2 = new Building(campClass, new(5, 4), _player2);
+
+        map.TryAddEntity(camp1);
+        map.TryAddEntity(camp2);
 
         this.CreateSpriteForEntity(Context, camp1);
         this.CreateSpriteForEntity(Context, camp2);
 
-        var fountainClass = Context.Repos.Buildings.GetAsset("Fountain");
-        var fountain1 = Context.Map.Create(fountainClass, new(1, -1), null);
-        var fountain2 = Context.Map.Create(fountainClass, new(5, 1), null);
+        var fountainClass = repo.Buildings.GetAsset("Fountain");
+        var fountain1 = new Building(fountainClass, new(1, -1));
+        var fountain2 = new Building(fountainClass, new(5, 1));
+
+        map.TryAddEntity(fountain1);
+        map.TryAddEntity(fountain2);
 
         this.CreateSpriteForEntity(Context, fountain1);
         this.CreateSpriteForEntity(Context, fountain2);
@@ -67,22 +76,30 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
 
-        if (camp1.Owner != null && camp1.Location is not null)
+        if (camp1.Owner != null)
         {
-            var unit1 = Context.Map.Create(GetUnitConfiguration(), camp1.Location.N, camp1.Owner);
-            var unit2 = Context.Map.Create(GetUnitConfiguration(), camp1.Location.NE, camp1.Owner);
-            var unit3 = Context.Map.Create(GetUnitConfiguration(), camp1.Location.NW, camp1.Owner);
+            var unit1 = new Unit(GetUnitConfiguration(), camp1.Location.N, camp1.Owner);
+            var unit2 = new Unit(GetUnitConfiguration(), camp1.Location.NE, camp1.Owner);
+            var unit3 = new Unit(GetUnitConfiguration(), camp1.Location.NW, camp1.Owner);
+
+            map.TryAddEntity(unit1);
+            map.TryAddEntity(unit2);
+            map.TryAddEntity(unit3);
 
             this.CreateSpriteForEntity(Context, unit1);
             this.CreateSpriteForEntity(Context, unit2);
             this.CreateSpriteForEntity(Context, unit3);
         }
 
-        if (camp2.Owner != null && camp2.Location is not null)
+        if (camp2.Owner != null)
         {
-            var unit1 = Context.Map.Create(GetUnitConfiguration(), camp2.Location.N, camp2.Owner);
-            var unit2 = Context.Map.Create(GetUnitConfiguration(), camp2.Location.NE, camp2.Owner);
-            var unit3 = Context.Map.Create(GetUnitConfiguration(), camp2.Location.NW, camp2.Owner);
+            var unit1 = new Unit(GetUnitConfiguration(), camp2.Location.N, camp2.Owner);
+            var unit2 = new Unit(GetUnitConfiguration(), camp2.Location.NE, camp2.Owner);
+            var unit3 = new Unit(GetUnitConfiguration(), camp2.Location.NW, camp2.Owner);
+
+            map.TryAddEntity(unit1);
+            map.TryAddEntity(unit2);
+            map.TryAddEntity(unit3);
 
             this.CreateSpriteForEntity(Context, unit1);
             this.CreateSpriteForEntity(Context, unit2);
@@ -102,7 +119,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             bool hasUnit = Context.Map.Units.Contains(clickedLocation);
 
             _selectionOverlay.Clear();
-            _selectionOverlay.Add(clickedLocation, hasUnit
+            _selectionOverlay.TryAdd(clickedLocation, hasUnit
                 ? Colors.Blue.Lightened(0.9f)
                 : Colors.Red.Lightened(0.9f));
         }

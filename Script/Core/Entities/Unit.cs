@@ -3,44 +3,23 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Entities;
 
-public class Unit : IEntity<UnitConfiguration>
+public class Unit : Entity<UnitConfiguration>
 {
-    public Unit(UnitConfiguration configuration, IPlacement placement, IController owner)
+    /// <summary>
+    /// Creates a new unit instance.
+    /// </summary>
+    /// 
+    /// <param name="configuration">The configuration used for the unit.</param>
+    /// <param name="location">The location the unit is initially placed at.</param>
+    /// <param name="owner">The owner controlling the unit within the world.</param>
+    public Unit(UnitConfiguration configuration, AxialCoordinate location, IController owner)
+        : base(configuration, location, owner)
     {
-        Identity      = Identities.GetNextIdentity();
-        Configuration = configuration;
-        Owner         = owner;
-        
-        // Keep track of the placement of the unit.
-        // Can only be set from the outside.
-        _placement = placement;
     }
-
-    /// <summary>
-    /// The unique identity of the entity.
-    /// </summary>
-    public ulong Identity { get; }
-
-    /// <summary>
-    /// The configuration of the entity.
-    /// </summary>
-    public UnitConfiguration Configuration { get; }
-
-    /// <summary>
-    /// The location of the entity.
-    /// </summary>
-    public AxialCoordinate? Location => _placement.Location;
-
-    /// <summary>
-    /// The owner of the entity.
-    /// </summary>
-    public IController? Owner { get; }
     
     public double Health { get; set; } = 10;
     public double MaxHealth { get; } = 10;
     public double Water { get; set; } = 10;
     public double MaxWater { get; } = 10;
     public double Speed { get; } = 5;
-    
-    private readonly IPlacement _placement;
 }

@@ -46,7 +46,7 @@ public class HexLayer<T> : IHexLayer<T> where T: notnull
     #endregion
     #region Add
 
-    public virtual bool Add(AxialCoordinate location, T item)
+    public virtual bool TryAdd(AxialCoordinate location, T item)
     {
         if (Contains(location))
             return false;
@@ -61,7 +61,7 @@ public class HexLayer<T> : IHexLayer<T> where T: notnull
     #endregion
     #region Remove
 
-    public virtual bool Remove(AxialCoordinate location)
+    public virtual bool TryRemove(AxialCoordinate location)
     {
         if (!Contains(location))
             return false;
@@ -85,7 +85,7 @@ public class HexLayer<T> : IHexLayer<T> where T: notnull
 
         // Iterate through all coordinates and remove them individually to trigger events.
         foreach (var coordinate in coordinates)
-            Remove(coordinate);
+            TryRemove(coordinate);
     }
 
     #endregion

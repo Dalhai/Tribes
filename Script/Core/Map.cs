@@ -32,93 +32,32 @@ public class Map(string name) : IVariant<string>
     #endregion
     #region Generation
 
-    public bool ApplyGenerator(IHexLayerGenerator<Tile> generator)
-    {
-        return generator.Generate(_tiles, _placements);
-    }
+    public bool Generate(IHexLayerGenerator<Tile> generator) => generator.Generate(_tiles);
+    public bool Generate(IHexLayerGenerator<Building> generator) => generator.Generate(_buildings);
+    public bool Generate(IHexLayerGenerator<Unit> generator) => generator.Generate(_units);
     
     #endregion
     #region Entities
 
-    public Unit Create(UnitConfiguration configuration, AxialCoordinate location, IController owner)
+    public bool TryAddEntity(IEntity entity)
     {
-        var placement = new Placement();
-        var unit = new Unit(configuration, placement, owner);
-
-        _units.Add(location, unit);
-        _placements.Add(unit.Identity, placement);
-        placement.Location = location;
-
-        return unit;
-    }
-
-    public bool Remove(Unit unit)
-    {
-        if (_placements.TryGetValue(unit.Identity, out var placement)
-            && placement.Location is { } location
-            && _units.Get(location) is { Identity: var identity }
-            && identity == unit.Identity)
+        switch (entity)
         {
-            // The unit has a valid placement registered.
-            // The placement has an associated location.
-            _units.Remove(location);
-            return true;
+            case Unit     unit    : return _units.TryAdd(unit.Location, unit);
+            case Building building: return _buildings.TryAdd(building.Location, building);
+            case Tile     tile    : return _tiles.TryAdd(tile.Location, tile);
         }
 
         return false;
     }
 
-    public Building Create(BuildingConfiguration configuration, AxialCoordinate location, IController? owner)
+    public bool TryRemoveEntity(IEntity entity)
     {
-        var placement = new Placement();
-        var building = new Building(configuration, placement, owner);
-
-        _buildings.Add(location, building);
-        _placements.Add(building.Identity, placement);
-        placement.Location = location;
-
-        return building;
-    }
-
-    public bool Remove(Building building)
-    {
-        if (_placements.TryGetValue(building.Identity, out var placement)
-            && placement.Location is { } location
-            && _buildings.Get(location) is { Identity: var identity }
-            && identity == building.Identity)
+        switch (entity)
         {
-            // The unit has a valid placement registered.
-            // The placement has an associated location.
-            _buildings.Remove(location);
-            return true;
-        }
-
-        return false;
-    }
-
-    public Tile Create(TileConfiguration configuration, AxialCoordinate location)
-    {
-        var placement = new Placement();
-        var tile = new Tile(configuration, placement);
-
-        _tiles.Add(location, tile);
-        _placements.Add(tile.Identity, placement);
-        placement.Location = location;
-
-        return tile;
-    }
-
-    public bool Remove(Tile tile)
-    {
-        if (_placements.TryGetValue(tile.Identity, out var placement)
-            && placement.Location is { } location
-            && _tiles.Get(location) is { Identity: var identity }
-            && identity == tile.Identity)
-        {
-            // The unit has a valid placement registered.
-            // The placement has an associated location.
-            _tiles.Remove(location);
-            return true;
+            case Unit     unit    : return _units.TryRemove(unit.Location);
+            case Building building: return _buildings.TryRemove(building.Location);
+            case Tile     tile    : return _tiles.TryRemove(tile.Location);
         }
 
         return false;
@@ -129,14 +68,13 @@ public class Map(string name) : IVariant<string>
 
     public string Name { get; } = name;
 
-    public IHexLayerView<Tile> Tiles => _tiles;
-    public IHexLayerView<Unit> Units => _units;
+    public IHexLayerView<Tile> Tiles         => _tiles;
     public IHexLayerView<Building> Buildings => _buildings;
+    public IHexLayerView<Unit> Units         => _units;
 
-    private readonly IHexLayer<Tile> _tiles = new HexLayer<Tile>();
-    private readonly IHexLayer<Unit> _units = new HexLayer<Unit>();
+    private readonly IHexLayer<Tile> _tiles         = new HexLayer<Tile>();
     private readonly IHexLayer<Building> _buildings = new HexLayer<Building>();
-    private readonly Dictionary<ulong, Placement> _placements = new();
+    private readonly IHexLayer<Unit> _units         = new HexLayer<Unit>();
 
     #endregion
 

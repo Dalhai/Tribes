@@ -4,37 +4,17 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core;
 
-public class Tile : IEntity<TileConfiguration>
+public class Tile : Entity<TileConfiguration>
 {
-    public Tile(TileConfiguration configuration, IPlacement placement)
+    /// <summary>
+    /// Creates a new tile at the specified location.
+    /// </summary>
+    /// 
+    /// <param name="configuration">The kind of tile to create.</param>
+    /// <param name="location">The location the tile will initially be situated at.</param>
+    /// <param name="owner">The owning controller of the tile, either player or non-player.</param>
+    public Tile(TileConfiguration configuration, AxialCoordinate location, IController? owner = null)
+        : base(configuration, location, owner)
     {
-        Identity      = Identities.GetNextIdentity();
-        Configuration = configuration;
-        
-        // Keep track of the placement of the unit.
-        // Can only be set from the outside.
-        _placement = placement;
     }
-
-    /// <summary>
-    /// The unique identity of the entity.
-    /// </summary>
-    public ulong Identity { get; }
-
-    /// <summary>
-    /// The configuration of the entity.
-    /// </summary>
-    public TileConfiguration Configuration { get; }
-
-    /// <summary>
-    /// The location of the entity.
-    /// </summary>
-    public AxialCoordinate? Location => _placement.Location;
-
-    /// <summary>
-    /// The owner of the entity.
-    /// </summary>
-    public IController? Owner { get; } = null;
-
-    private readonly IPlacement _placement;
 }

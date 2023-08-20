@@ -79,7 +79,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             {
                 _hoveredLocation = hoveredLocation;
                 _hoveredOverlay.Clear();
-                _hoveredOverlay.Add(hoveredLocation, Colors.Aqua);
+                _hoveredOverlay.TryAdd(hoveredLocation, Colors.Aqua);
             }
         }
 
@@ -101,13 +101,14 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 {
                     Sprite2D sprite = Context.Display.Sprites[identity];
                     Context.Display.Sprites.Remove(identity);
-                    Context.Map.Remove(tile);
+                    Context.Map.TryRemoveEntity(tile);
                     RemoveChild(sprite);
                 }
                 
                 // Create a new tile with the selected tile type and register it with the context
                 var newLocation = clickedLocation;
-                var newTile = Context.Map.Create(Context.Repos.Tiles.GetAsset(_activeTileType), newLocation);
+                var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType), newLocation);
+                Context.Map.TryAddEntity(newTile);
                 
                 CreateSprite(newLocation, newTile);
             }
@@ -126,7 +127,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 {
                     Sprite2D sprite = Context.Display.Sprites[identity];
                     Context.Display.Sprites.Remove(identity);
-                    Context.Map.Remove(tile);
+                    Context.Map.TryRemoveEntity(tile);
                     RemoveChild(sprite);
                 }
 
@@ -134,7 +135,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 if (clickedTile is null || clickedTile.Configuration.Key != TileType.Open)
                 {
                     var newLocation = clickedLocation;
-                    var newTile = Context.Map.Create(Context.Repos.Tiles.GetAsset(TileType.Open), newLocation);
+                    var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open), newLocation);
+                    Context.Map.TryAddEntity(newTile);
 
                     CreateSprite(newLocation, newTile);
                 }
@@ -169,7 +171,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         var overlay = tiles.Where(tile => tile.Value.Configuration.Key == _activeTileType);
 
         foreach (var tile in overlay)
-            _activeTypeOverlay.Add(tile.Key, Colors.LightBlue);
+            _activeTypeOverlay.TryAdd(tile.Key, Colors.LightBlue);
     }
 
     private void CreateSprite(AxialCoordinate coordinate, IEntity<IConfiguration> entity)
