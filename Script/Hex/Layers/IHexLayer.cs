@@ -7,10 +7,10 @@ public interface IHexLayer<T> : IHexLayerView<T>
     /// <summary>
     /// Tries to add the item at the specified coordinates.
     /// </summary>
-    /// <param name="item">The item to add.</param>
     /// <param name="coordinates">The coordinates to add the item at.</param>
+    /// <param name="item">The item to add.</param>
     /// <returns>True, if the item was added, false otherwise.</returns>
-    bool Add(T item, AxialCoordinate coordinates);
+    bool Add(AxialCoordinate coordinates, T item);
 
     #endregion
     #region Remove

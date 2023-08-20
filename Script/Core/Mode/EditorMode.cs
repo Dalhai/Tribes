@@ -15,7 +15,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         Vector2 minimum = Vector2.Inf;
         Vector2 maximum = -Vector2.Inf;
-        foreach (var tile in _context.Map.Tiles)
+        foreach (var tile in Context.Map.Tiles)
         {
             var unitPosition = HexConversions.HexToUnit(tile.Key);
             var x = unitPosition.X * HexConstants.DefaultWidth;
@@ -32,19 +32,18 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         
     public override void _Ready()
     {
-        _context = new MapContext(Context.Instance);
+        Context = new MapContext(Core.Context.Instance);
         
         // Register tiles
-        foreach (var (_, tile) in _context.Map.Tiles)
-            RegisterSprite(tile);
+        foreach (var (coordinate, tile) in Context.Map.Tiles)
+            CreateSprite(coordinate, tile);
 
         // Register overlays with context   
-        _context.Display.AddOverlay(_activeHexOverlay);
-        _context.Display.AddOverlay(_activeTypeOverlay);
-        _context.Display.AddOverlay(_neighborhoodOverlay);
-        _context.Display.AddOverlay(_lineOverlay);
+        Context.Display.AddOverlay(_hoveredOverlay);
+        Context.Display.AddOverlay(_activeTypeOverlay);
+        Context.Display.AddOverlay(_neighborhoodOverlay);
 
-        _context.Map.Tiles.Added += (_, _, _) => UpdateTypeOverlay();
+        Context.Map.Tiles.Added += (_, _, _) => UpdateTypeOverlay();
 
         // Initialize render state
         UpdateActiveType();
@@ -62,36 +61,25 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     public override void _ExitTree()
     {
         Instance = null;
-        
-        _context.Repos.Maps.TrySave(_context.Map);
-        
+        Context.Repos.Maps.TrySave(Context.Map);
         base._ExitTree();
     }
 
     public override void _Input(InputEvent inputEvent)
     {
-        var tiles = _context.Map.Tiles;
-        var repo = _context.Repos.Tiles;
-
         // Update the active tile and color it accordingly.
         // The active tile is the tile the mouse cursor is currently hovering over.
         // The active tile is colored for highlighting purposes only, this will be removed later on.
         if (inputEvent is InputEventMouseMotion)
         {
             var world = GetGlobalMousePosition();
-            var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
+            var hoveredCoordinate = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
 
-            if (_activeTileCoordinates != hex)
+            if (_hoveredCoordinate != hoveredCoordinate)
             {
-                _activeTileCoordinates = hex;
-                _activeHexOverlay.Clear();
-                _activeHexOverlay.Add(Colors.Aqua, hex);
-            }
-
-            _lineOverlay.Clear();
-            foreach (var coordinate in Intersections.Line(Vector2.Zero, world / HexConstants.DefaultSize))
-            {
-                _lineOverlay.Add(Colors.YellowGreen, coordinate);
+                _hoveredCoordinate = hoveredCoordinate;
+                _hoveredOverlay.Clear();
+                _hoveredOverlay.Add(hoveredCoordinate, Colors.Aqua);
             }
         }
 
@@ -105,28 +93,24 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
             if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Left })
             {
-                var world = GetGlobalMousePosition();
-                var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
-                try
+                var mousePosition = GetGlobalMousePosition();
+                var clickedCoordinate = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+                
+                // Remove the tile that has been clicked from the tiles list
+                if (Context.Map.Tiles.Get(clickedCoordinate) is { Identity: var identity })
                 {
-                    var hexTile = new Tile(_context.Map.Tiles, hex, repo.GetAsset(_activeTileType));
-                    var tile = tiles.Get(hex);
-
-                    tiles.Remove(hex);
-
-                    if (tile is { Identity: var identity })
-                    {
-                        Sprite2D sprite = _context.Display.Sprites[identity];
-                        _context.Display.Sprites.Remove(identity);
-                        RemoveChild(sprite);
-                    }
-
-                    RegisterSprite(hexTile);
+                    Sprite2D sprite = Context.Display.Sprites[identity];
+                    Context.Display.Sprites.Remove(identity);
+                    Context.Map.Tiles.Remove(clickedCoordinate);
+                    RemoveChild(sprite);
                 }
-                catch (ArgumentException exception)
-                {
-                    GD.PrintErr(exception.Message);
-                }
+                
+                // Create a new tile with the selected tile type and register it with the context
+                var newCoordinate = clickedCoordinate;
+                var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType));
+                
+                Context.Map.Tiles.Add(newCoordinate, newTile);
+                CreateSprite(newCoordinate, newTile);
             }
 
             // Remove open tiles on right mouse click.
@@ -134,30 +118,27 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
             else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Right })
             {
-                var world = GetGlobalMousePosition();
-                var hex = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
-                var tile = tiles.Get(hex);
+                var mousePosition = GetGlobalMousePosition();
+                var clickedCoordinate = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+                var clickedTile = Context.Map.Tiles.Get(clickedCoordinate);
 
-                tiles.Remove(hex);
-
-                if (tile is { Identity: var identity })
+                // Remove the tile that has been clicked from the tiles list
+                if (clickedTile is { Identity: var identity })
                 {
-                    Sprite2D sprite = _context.Display.Sprites[identity];
-                    _context.Display.Sprites.Remove(identity);
+                    Sprite2D sprite = Context.Display.Sprites[identity];
+                    Context.Display.Sprites.Remove(identity);
+                    Context.Map.Tiles.Remove(clickedCoordinate);
                     RemoveChild(sprite);
                 }
 
-                if (tile is null || tile.Key != TileType.Open)
+                // Create a new tile with the open tile type and register it with the context
+                if (clickedTile is null || clickedTile.Configuration.Key != TileType.Open)
                 {
-                    try
-                    {
-                        var hexTile = new Tile(_context.Map.Tiles, hex, repo.GetAsset(TileType.Open));
-                        RegisterSprite(hexTile);
-                    }
-                    catch (ArgumentException exception)
-                    {
-                        GD.PrintErr(exception.Message);
-                    }
+                    var newCoordinate = clickedCoordinate;
+                    var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open));
+
+                    Context.Map.Tiles.Add(newCoordinate, newTile);
+                    CreateSprite(newCoordinate, newTile);
                 }
             }
         }
@@ -186,14 +167,14 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     {
         _activeTypeOverlay.Clear();
 
-        var tiles = _context.Map.Tiles;
-        var overlay = tiles.Where(tile => tile.Value.Key == _activeTileType);
+        var tiles = Context.Map.Tiles;
+        var overlay = tiles.Where(tile => tile.Value.Configuration.Key == _activeTileType);
 
         foreach (var tile in overlay)
-            _activeTypeOverlay.Add(Colors.LightBlue, tile.Key);
+            _activeTypeOverlay.Add(tile.Key, Colors.LightBlue);
     }
 
-    private void RegisterSprite(IEntity<IConfiguration> entity)
+    private void CreateSprite(AxialCoordinate coordinate, IEntity<IConfiguration> entity)
     {
         Sprite2D sprite = new();
 
@@ -206,7 +187,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
         sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
         sprite.Centered = true;
-        sprite.Position = HexConversions.HexToUnit(entity.Location) * HexConstants.DefaultSize;
+        sprite.Position = HexConversions.HexToUnit(coordinate) * HexConstants.DefaultSize;
         sprite.Texture = entity.Configuration.Texture;
         sprite.Modulate = entity.Owner?.Color ?? Colors.White;
 
@@ -226,18 +207,16 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 break;
         }
 
-        _context.Display.Sprites.Add(entity.Identity, sprite);
+        Context.Display.Sprites.Add(entity.Identity, sprite);
         
         AddChild(sprite);
     }
 
-    private AxialCoordinate? _activeTileCoordinates;
+    private AxialCoordinate? _hoveredCoordinate;
     private TileType _activeTileType = TileType.Tundra;
 
-    private MapContext _context = null!;
-
-    private readonly IHexLayer<Color> _activeHexOverlay = new HexLayer<Color>();
+    public MapContext Context { get; private set; } = null!;
+    private readonly IHexLayer<Color> _hoveredOverlay = new HexLayer<Color>();
     private readonly IHexLayer<Color> _activeTypeOverlay = new HexLayer<Color>();
     private readonly IHexLayer<Color> _neighborhoodOverlay = new HexLayer<Color>();
-    private readonly IHexLayer<Color> _lineOverlay = new HexLayer<Color>();
 }

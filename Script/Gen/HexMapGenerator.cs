@@ -27,7 +27,12 @@ public class HexMapGenerator : IHexLayerGenerator<Tile>
         AxialCoordinate difference = _end - _start;
         for (int q = 0; q < difference.Q; ++q)
         for (int r = 0; r < difference.R; ++r)
-            new Tile(layer, new(_start.Q + q, _start.R + r), _repository.GetAsset(TileType.Tundra));
+        {
+            var config = _repository.GetAsset(TileType.Tundra);
+            var tile = new Tile(config);
+
+            layer.Add(new(_start.Q + q, _start.R + r), tile);
+        }
 
         return true;
     }

@@ -46,9 +46,9 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
             asset = new Map(mapName);
             
             // Extract all the tiles
-            foreach (var tile in mapTilesJson)
+            foreach (var tileJson in mapTilesJson)
             {
-                var tileNode = tile?.AsObject();
+                var tileNode = tileJson?.AsObject();
                 
                 var q = tileNode?["q"]?.GetValue<int>();
                 var r = tileNode?["r"]?.GetValue<int>();
@@ -56,11 +56,14 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
                 if (q is null || r is null)
                     continue;
 
-                var t = tileNode?["type"]?.GetValue<int>();
-                if (t is null)
+                var tileType = tileNode?["type"]?.GetValue<int>();
+                if (tileType is null)
                     continue;
 
-                new Tile(asset.Tiles, new(q.Value, r.Value), tileConfigurationRepository.GetAsset((TileType)t.Value));
+                var config = tileConfigurationRepository.GetAsset((TileType)tileType.Value);
+                var tile = new Tile(config);
+
+                asset.Tiles.Add(new(q.Value, r.Value), tile);
             }
         }
 
@@ -84,7 +87,7 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
             {
                 var jsonTile = new JsonObject
                 {
-                    { "type", (int)tile.Value.Key },
+                    { "type", (int)tile.Value.Configuration.Key },
                     { "q", tile.Key.Q },
                     { "r", tile.Key.R }
                 };

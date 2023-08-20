@@ -46,7 +46,7 @@ public class HexLayer<T> : IHexLayer<T> where T: notnull
     #endregion
     #region Add
 
-    public virtual bool Add(T item, AxialCoordinate coordinates)
+    public virtual bool Add(AxialCoordinate coordinates, T item)
     {
         if (Contains(coordinates))
             return false;
