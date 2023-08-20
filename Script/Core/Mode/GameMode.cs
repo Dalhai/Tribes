@@ -4,6 +4,7 @@ using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Core.Entities.Buildings;
+using TribesOfDust.Gen;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 
@@ -40,9 +41,12 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         Context = new MapContext(Core.Context.Instance);
         Context.Display.AddOverlay(_selectionOverlay);
         Context.Display.AddOverlay(_movementOverlay);
+        
+        // Generate tiles
+        HexMapGenerator generator = new(new(-100, -100), new(100, 100), Context.Repos.Tiles);
+        generator.Generate(Context.Map.Tiles);
 
         // Register tiles
-
         foreach (var (_, tile) in Context.Map.Tiles)
             RegisterSprite(tile);
         

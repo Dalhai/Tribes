@@ -1,25 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://7vr54ejh03cr"]
+[gd_scene load_steps=3 format=3 uid="uid://7vr54ejh03cr"]
 
 [ext_resource type="Script" path="res://Script/Core/Context.cs" id="1_tj848"]
 [ext_resource type="PackedScene" uid="uid://blovp872n3gmi" path="res://Interface/Page/main_page.tscn" id="2_nelo1"]
-[ext_resource type="AudioStream" uid="uid://m302xga2p517" path="res://Assets/Music/machine.wav" id="3_d80fy"]
-[ext_resource type="AudioStream" uid="uid://cii4jbco2xu8q" path="res://Assets/Music/sparkles.wav" id="4_wu0kp"]
-[ext_resource type="AudioStream" uid="uid://dipo08fyubbe8" path="res://Assets/Music/turmoil.wav" id="5_e7tm5"]
-[ext_resource type="AudioStream" uid="uid://dtcfcpribvwo7" path="res://Assets/Music/twinkles.wav" id="6_roxmr"]
-[ext_resource type="Script" path="res://Script/Audio/Looper.gd" id="7_svgxp"]
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sp18j"]
-streams_count = 4
-random_pitch = 1.5
-random_volume_offset_db = 2.0
-stream_0/stream = ExtResource("3_d80fy")
-stream_0/weight = 1.0
-stream_1/stream = ExtResource("4_wu0kp")
-stream_1/weight = 1.0
-stream_2/stream = ExtResource("5_e7tm5")
-stream_2/weight = 1.0
-stream_3/stream = ExtResource("6_roxmr")
-stream_3/weight = 1.0
 
 [node name="Context" type="Node2D"]
 process_priority = 1
@@ -27,10 +9,3 @@ script = ExtResource("1_tj848")
 
 [node name="Scene" parent="." instance=ExtResource("2_nelo1")]
 position = Vector2(-185.838, 2.51984)
-
-[node name="Audio" type="AudioStreamPlayer" parent="."]
-stream = SubResource("AudioStreamRandomizer_sp18j")
-volume_db = -3.0
-pitch_scale = 0.5
-autoplay = true
-script = ExtResource("7_svgxp")
