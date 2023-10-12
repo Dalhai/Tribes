@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using Godot;
+
 using TribesOfDust.Core;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
@@ -26,14 +28,27 @@ public class HexMapGenerator : IHexLayerGenerator<Tile>
     public bool Generate(IHexLayer<Tile> layer)
     {
         AxialCoordinate difference = _end - _start;
+        FastNoiseLite noise = new FastNoiseLite();
+        
         for (int q = 0; q < difference.Q; ++q)
         for (int r = 0; r < difference.R; ++r)
         {
-            var config = _repository.GetAsset(TileType.Tundra);
-            var location = new AxialCoordinate(_start.Q + q, _start.R + r);
-            var tile = new Tile(config, location);
+            var hexLocation = new AxialCoordinate(_start.Q + q, _start.R + r);
+            var unitLocation = HexConversions.HexToUnit(hexLocation);
+            
+            var tileBiome = noise.GetNoise2D(unitLocation.X, unitLocation.Y) + 0.5f;
+            var tileType = tileBiome switch
+            {
+                var f when f >= 0.0f && f <= 0.3f => TileType.Tundra,
+                var f when f > 0.3f && f <= 0.6f => TileType.Rocks,
+                var f when f > 0.6f && f <= 1.0f => TileType.Dunes,
+                _ => TileType.Open
+            };
+            
+            var config = _repository.GetAsset(tileType);
+            var tile = new Tile(config, hexLocation);
 
-            layer.TryAdd(location, tile);
+            layer.TryAdd(hexLocation, tile);
         }
 
         return true;

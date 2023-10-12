@@ -10,25 +10,6 @@ namespace TribesOfDust.Core.Modes;
 public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
     public static EditorMode? Instance { get; private set; }
-
-    public Rect2 GetMapExtents()
-    {
-        Vector2 minimum = Vector2.Inf;
-        Vector2 maximum = -Vector2.Inf;
-        foreach (var tile in Context.Map.Tiles)
-        {
-            var unitPosition = HexConversions.HexToUnit(tile.Key);
-            var x = unitPosition.X * HexConstants.DefaultWidth;
-            var y = unitPosition.Y * HexConstants.DefaultHeight;
-
-            minimum.X = Math.Min(minimum.X, x);
-            maximum.X = Math.Max(maximum.X, x);
-            minimum.Y = Math.Min(minimum.Y, y);
-            maximum.Y = Math.Max(maximum.Y, y);
-        }
-
-        return new(minimum, maximum - minimum);
-    }
         
     public override void _Ready()
     {
