@@ -19,41 +19,41 @@ public class HexLayer<T> : IHexLayer<T> where T: notnull
     public event Action<IHexLayerView<T>, T, AxialCoordinate>? Adding;
     public event Action<IHexLayerView<T>, T, AxialCoordinate>? Added;
 
-    protected void OnRemoving(T item, AxialCoordinate coordinates)
+    protected void OnRemoving(T item, AxialCoordinate location)
     {
-        Removing?.Invoke(this, item, coordinates);
-        RemovingAt?.Invoke(this, coordinates);
+        Removing?.Invoke(this, item, location);
+        RemovingAt?.Invoke(this, location);
     }
 
-    protected void OnRemoved(T item, AxialCoordinate coordinates)
+    protected void OnRemoved(T item, AxialCoordinate location)
     {
-        Removed?.Invoke(this, item, coordinates);
-        RemovedAt?.Invoke(this, coordinates);
+        Removed?.Invoke(this, item, location);
+        RemovedAt?.Invoke(this, location);
     }
 
-    protected void OnAdding(T item, AxialCoordinate coordinates)
+    protected void OnAdding(T item, AxialCoordinate location)
     {
-        Adding?.Invoke(this, item, coordinates);
-        AddingAt?.Invoke(this, coordinates);
+        Adding?.Invoke(this, item, location);
+        AddingAt?.Invoke(this, location);
     }
 
-    protected void OnAdded(T item, AxialCoordinate coordinates)
+    protected void OnAdded(T item, AxialCoordinate location)
     {
-        Added?.Invoke(this, item, coordinates);
-        AddedAt?.Invoke(this, coordinates);
+        Added?.Invoke(this, item, location);
+        AddedAt?.Invoke(this, location);
     }
 
     #endregion
     #region Add
 
-    public virtual bool Add(T item, AxialCoordinate coordinates)
+    public virtual bool TryAdd(AxialCoordinate location, T item)
     {
-        if (Contains(coordinates))
+        if (Contains(location))
             return false;
 
-        OnAdding(item, coordinates);
-        Items.Add(coordinates, item);
-        OnAdded(item, coordinates);
+        OnAdding(item, location);
+        Items.Add(location, item);
+        OnAdded(item, location);
 
         return true;
     }
@@ -61,17 +61,17 @@ public class HexLayer<T> : IHexLayer<T> where T: notnull
     #endregion
     #region Remove
 
-    public virtual bool Remove(AxialCoordinate coordinates)
+    public virtual bool TryRemove(AxialCoordinate location)
     {
-        if (!Contains(coordinates))
+        if (!Contains(location))
             return false;
 
-        var item = Get(coordinates);
+        var item = Get(location);
         if (item is not null)
         {
-            OnRemoving(item, coordinates);
-            Items.Remove(coordinates);
-            OnRemoved(item, coordinates);
+            OnRemoving(item, location);
+            Items.Remove(location);
+            OnRemoved(item, location);
         }
 
         return true;
@@ -81,11 +81,11 @@ public class HexLayer<T> : IHexLayer<T> where T: notnull
     {
         // Clone the list so we don't end up removing while iterating.
         // Unfortunately very inefficient if we clone often. Will be tackled later on.
-        var coordinates = new List<AxialCoordinate>(Coordinates);
+        var coordinates = new List<AxialCoordinate>(Locations);
 
         // Iterate through all coordinates and remove them individually to trigger events.
         foreach (var coordinate in coordinates)
-            Remove(coordinate);
+            TryRemove(coordinate);
     }
 
     #endregion
@@ -95,19 +95,19 @@ public class HexLayer<T> : IHexLayer<T> where T: notnull
     public bool IsEmpty => Count == 0;
     public bool IsConstrained => false;
 
-    public IEnumerable<AxialCoordinate> Coordinates => Items.Keys;
+    public IEnumerable<AxialCoordinate> Locations => Items.Keys;
 
     #endregion
     #region Contains
 
-    public virtual bool Contains(AxialCoordinate coordinates) => Items.ContainsKey(coordinates);
+    public virtual bool Contains(AxialCoordinate location) => Items.ContainsKey(location);
     public virtual bool Contains(T item) => Items.ContainsValue(item);
 
     #endregion
     #region Get
 
     public virtual AxialCoordinate? GetCoordinates(T item) => Items.First(entry => entry.Value.Equals(item)).Key;
-    public virtual T? Get(AxialCoordinate coordinates) => Items.ContainsKey(coordinates) ? Items[coordinates] : default;
+    public virtual T? Get(AxialCoordinate location) => Items.ContainsKey(location) ? Items[location] : default;
 
     #endregion
     #region IEnumerable

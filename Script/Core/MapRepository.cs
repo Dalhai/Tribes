@@ -39,34 +39,31 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
             // Extract the top level objects
             var mapName = jsonObject["name"]?.GetValue<string>();
             var mapTilesJson = jsonObject["tiles"]?.AsArray();
+
+            if (mapName is null || mapTilesJson is null) 
+                return false;
+            
+            asset = new Map(mapName);
             
             // Extract all the tiles
-            JsonObject? ToObj(JsonNode? node) => node?.AsObject();
-            Tile? ToTile(JsonObject? obj)
+            foreach (var tileJson in mapTilesJson)
             {
-                var q = obj?["q"]?.GetValue<int>();
-                var r = obj?["r"]?.GetValue<int>();
+                var tileNode = tileJson?.AsObject();
                 
+                var q = tileNode?["q"]?.GetValue<int>();
+                var r = tileNode?["r"]?.GetValue<int>();
+
                 if (q is null || r is null)
-                    return null;
+                    continue;
 
-                var t = obj?["type"]?.GetValue<int>();
-                if (t is null)
-                    return null;
+                var tileType = tileNode?["type"]?.GetValue<int>();
+                if (tileType is null)
+                    continue;
 
-                return new Tile(new(q.Value, r.Value), tileConfigurationRepository.GetAsset((TileType)t.Value));
-            }
+                var config = tileConfigurationRepository.GetAsset((TileType)tileType.Value);
+                var tile = new Tile(config, new(q.Value, r.Value));
 
-            var mapTiles = mapTilesJson
-                ?.Select(ToObj)
-                ?.Select(ToTile)
-                ?.Cast<Tile>();
-
-            if (mapTiles is not null && mapName is not null)
-            {
-                asset = new Map(mapName);
-                foreach (var tile in mapTiles)
-                    asset.Tiles.Add(tile, tile.Location);
+                asset.TryAddEntity(tile);
             }
         }
 
@@ -90,7 +87,7 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
             {
                 var jsonTile = new JsonObject
                 {
-                    { "type", (int)tile.Value.Key },
+                    { "type", (int)tile.Value.Configuration.Key },
                     { "q", tile.Key.Q },
                     { "r", tile.Key.R }
                 };

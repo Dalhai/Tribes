@@ -33,7 +33,7 @@ public partial class MapContext : RefCounted
         Repos.Maps.Load();
         
         // Initialize sub contexts.
-        Map     = Repos.Maps.FirstOrDefault() ?? new ("Default");
+        Map     = new("Default");
         Display = new(Map.Tiles);
     }
 

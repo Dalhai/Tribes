@@ -13,7 +13,7 @@ public interface IEntity : IIdentifiable
     /// <summary>
     /// The location of the entity.
     /// </summary>
-    AxialCoordinate Location { get; }
+    AxialCoordinate Location { get; set; }
 }
 
 public interface IEntity<out TConfiguration> : IEntity

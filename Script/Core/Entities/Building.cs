@@ -3,11 +3,17 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core.Entities;
 
-public abstract class Building(AxialCoordinate location, BuildingConfiguration configuration, IController? owner)
-    : IEntity<BuildingConfiguration>
+public class Building : Entity<BuildingConfiguration>
 {
-    public ulong Identity { get; } = Identities.GetNextIdentity();
-    public IController? Owner { get; } = owner;
-    public BuildingConfiguration Configuration => configuration;
-    public AxialCoordinate Location { get; } = location;
+    /// <summary>
+    /// Creates a new building at the specified location.
+    /// </summary>
+    /// 
+    /// <param name="configuration">The kind of building to create.</param>
+    /// <param name="location">The location the building will initially be situated at.</param>
+    /// <param name="owner">The owning controller of the building, either player or non-player.</param>
+    public Building(BuildingConfiguration configuration, AxialCoordinate location, IController? owner = null)
+        : base(configuration, location, owner)
+    {
+    }
 }

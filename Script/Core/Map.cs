@@ -1,6 +1,9 @@
 using System.Text;
+using System.Collections.Generic;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
+using TribesOfDust.Gen;
+using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils;
 using TribesOfDust.Utils.Extensions;
@@ -27,14 +30,54 @@ public class Map(string name) : IVariant<string>
         .ToString();
 
     #endregion
-    #region Data
+    #region Generation
 
-    public string Name { get;  } = name;
-    public IHexLayer<Tile> Tiles { get; } = new HexLayer<Tile>();
-    public IHexLayer<Unit> Units { get; } = new HexLayer<Unit>();
-    public IHexLayer<Building> Buildings { get; } = new HexLayer<Building>();
+    public bool Generate(IHexLayerGenerator<Tile> generator) => generator.Generate(_tiles);
+    public bool Generate(IHexLayerGenerator<Building> generator) => generator.Generate(_buildings);
+    public bool Generate(IHexLayerGenerator<Unit> generator) => generator.Generate(_units);
+    
+    #endregion
+    #region Entities
+
+    public bool TryAddEntity(IEntity entity)
+    {
+        switch (entity)
+        {
+            case Unit     unit    : return _units.TryAdd(unit.Location, unit);
+            case Building building: return _buildings.TryAdd(building.Location, building);
+            case Tile     tile    : return _tiles.TryAdd(tile.Location, tile);
+        }
+
+        return false;
+    }
+
+    public bool TryRemoveEntity(IEntity entity)
+    {
+        switch (entity)
+        {
+            case Unit     unit    : return _units.TryRemove(unit.Location);
+            case Building building: return _buildings.TryRemove(building.Location);
+            case Tile     tile    : return _tiles.TryRemove(tile.Location);
+        }
+
+        return false;
+    }
 
     #endregion
+    #region Data
+
+    public string Name { get; } = name;
+
+    public IHexLayerView<Tile> Tiles         => _tiles;
+    public IHexLayerView<Building> Buildings => _buildings;
+    public IHexLayerView<Unit> Units         => _units;
+
+    private readonly IHexLayer<Tile> _tiles         = new HexLayer<Tile>();
+    private readonly IHexLayer<Building> _buildings = new HexLayer<Building>();
+    private readonly IHexLayer<Unit> _units         = new HexLayer<Unit>();
+
+    #endregion
+
     #region Variant
 
     /// <summary>
