@@ -13,6 +13,8 @@ namespace TribesOfDust.Core;
 /// </summary>
 public partial class HexMap : Node2D
 {
+    #region Properties
+
     /// <summary>
     /// The terrain layer that contains all terrain tiles.
     /// </summary>
@@ -22,6 +24,10 @@ public partial class HexMap : Node2D
     /// The single overlay layer for all overlay effects.
     /// </summary>
     public TileMapLayer OverlayLayer => _overlayLayer ??= GetOverlayLayer();
+
+    #endregion
+
+    #region Lifecycle
 
     public override void _Ready()
     {
@@ -43,6 +49,10 @@ public partial class HexMap : Node2D
         DisconnectFromMap();
         base._ExitTree();
     }
+
+    #endregion
+
+    #region Map Synchronization
 
     /// <summary>
     /// Syncs the TileMap with the provided Map's tile data and registers for automatic updates.
@@ -111,6 +121,10 @@ public partial class HexMap : Node2D
         RemoveTile(coordinate);
     }
 
+    #endregion
+
+    #region Tile Management
+
     /// <summary>
     /// Sets a tile at the specified hex coordinate.
     /// </summary>
@@ -151,6 +165,10 @@ public partial class HexMap : Node2D
         return (TileType)sourceId;
     }
 
+    #endregion
+
+    #region Coordinate Conversion
+
     /// <summary>
     /// Converts a world position to a hex coordinate.
     /// </summary>
@@ -177,6 +195,27 @@ public partial class HexMap : Node2D
         var localPosition = HexConversions.HexToWorldPosition(tileSize, hexCoordinate);
         return ToGlobal(localPosition);
     }
+
+    /// <summary>
+    /// Converts hex coordinates to TileMap coordinates.
+    /// For hex grids, this is typically a 1:1 mapping.
+    /// </summary>
+    private static Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
+    {
+        return new Vector2I(hexCoordinate.Q, hexCoordinate.R);
+    }
+
+    /// <summary>
+    /// Converts TileMap coordinates to hex coordinates.
+    /// </summary>
+    private static AxialCoordinate TileMapToHexCoordinate(Vector2I tileMapCoordinate)
+    {
+        return new AxialCoordinate(tileMapCoordinate.X, tileMapCoordinate.Y);
+    }
+
+    #endregion
+
+    #region Private Helpers
 
     /// <summary>
     /// Gets or creates the terrain layer.
@@ -248,22 +287,7 @@ public partial class HexMap : Node2D
         return _overlayLayer;
     }
 
-    /// <summary>
-    /// Converts hex coordinates to TileMap coordinates.
-    /// For hex grids, this is typically a 1:1 mapping.
-    /// </summary>
-    private static Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
-    {
-        return new Vector2I(hexCoordinate.Q, hexCoordinate.R);
-    }
-
-    /// <summary>
-    /// Converts TileMap coordinates to hex coordinates.
-    /// </summary>
-    private static AxialCoordinate TileMapToHexCoordinate(Vector2I tileMapCoordinate)
-    {
-        return new AxialCoordinate(tileMapCoordinate.X, tileMapCoordinate.Y);
-    }
+    #endregion
 
     #region Overlay Management
 
@@ -318,8 +342,12 @@ public partial class HexMap : Node2D
 
     #endregion
 
+    #region Private Fields
+
     private TileMapLayer _terrainLayer;
     private TileMapLayer _overlayLayer;
     private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
     private Map? _connectedMap;
+
+    #endregion
 }
