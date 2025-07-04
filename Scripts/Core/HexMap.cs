@@ -53,28 +53,6 @@ public partial class HexMap : Node2D
     #endregion
 
     #region Map Synchronization
-
-    /// <summary>
-    /// Syncs the TileMap with the provided Map's tile data and registers for automatic updates.
-    /// </summary>
-    /// <param name="map">The map containing tile data to sync</param>
-    public void SyncWithMap(Map map)
-    {
-        // Disconnect from previous map if any
-        DisconnectFromMap();
-        
-        // Clear existing tiles
-        TerrainLayer.Clear();
-        
-        // Add all tiles from the map
-        foreach (var (coordinate, tile) in map.Tiles)
-        {
-            SetTile(coordinate, tile);
-        }
-        
-        // Connect to the new map for automatic updates
-        ConnectToMap(map);
-    }
     
     /// <summary>
     /// Connects the HexMap to automatically react to tile changes in the specified Map.
@@ -86,6 +64,12 @@ public partial class HexMap : Node2D
         DisconnectFromMap();
         
         _connectedMap = map;
+        
+        // Add all tiles from the map
+        foreach (var (coordinate, tile) in map.Tiles)
+        {
+            SetTile(coordinate, tile);
+        }
         
         // Register event handlers for tile changes
         map.Tiles.Added += OnTileAdded;
@@ -99,6 +83,10 @@ public partial class HexMap : Node2D
     {
         if (_connectedMap != null)
         {
+            // Clear existing tiles
+            TerrainLayer.Clear();
+            OverlayLayer.Clear();
+        
             _connectedMap.Tiles.Added -= OnTileAdded;
             _connectedMap.Tiles.Removed -= OnTileRemoved;
             _connectedMap = null;
