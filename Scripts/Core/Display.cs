@@ -22,8 +22,8 @@ public partial class Display : RefCounted
             if (tiles.Get(coordinate) is { } tile)
                 AddOverlayColor(tile, color);
                 
-            // Handle TileMapNode overlays if available
-            TileMapNodeAddOverlayColor(coordinate, color);
+            // Handle HexMap overlays if available
+            HexMapAddOverlayColor(coordinate, color);
         };
 
         _onOverlayTileRemoved = (overlay, color, coordinate) =>
@@ -32,8 +32,8 @@ public partial class Display : RefCounted
             if (tiles.Get(coordinate) is { } tile)
                 RemoveOverlayColor(tile, color);
                 
-            // Handle TileMapNode overlays if available
-            TileMapNodeRemoveOverlayColor(coordinate, color);
+            // Handle HexMap overlays if available
+            HexMapRemoveOverlayColor(coordinate, color);
         };
     }
 
@@ -44,14 +44,14 @@ public partial class Display : RefCounted
     public readonly Dictionary<ulong, Sprite2D> Sprites = new();
     public readonly Dictionary<ulong, HashSet<Color>> Colors = new();
     
-    // Track overlay colors per coordinate for TileMapNode (similar to sprite system)
+    // Track overlay colors per coordinate for HexMap (similar to sprite system)
     private readonly Dictionary<AxialCoordinate, HashSet<Color>> _tileMapOverlayColors = new();
 
     /// <summary>
-    /// Optional TileMapNode for handling overlay tiles on TileMapLayers.
-    /// When set, overlays will also be rendered on the TileMapNode in addition to sprite modulation.
+    /// Optional HexMap for handling overlay tiles on TileMapLayers.
+    /// When set, overlays will also be rendered on the HexMap in addition to sprite modulation.
     /// </summary>
-    public TileMapNode? TileMapNode { get; set; }
+    public HexMap? HexMap { get; set; }
 
     #region Overlays
 
@@ -75,8 +75,8 @@ public partial class Display : RefCounted
                 AddOverlayColor(tile, color);
         }
 
-        // Add existing overlay tiles to TileMapNode if available
-        TileMapNodeSyncOverlay(overlay);
+        // Add existing overlay tiles to HexMap if available
+        HexMapSyncOverlay(overlay);
 
         overlay.Added += _onOverlayTileAdded;
         overlay.Removed += _onOverlayTileRemoved;
@@ -103,8 +103,8 @@ public partial class Display : RefCounted
                 RemoveOverlayColor(tile, color);
         }
 
-        // Remove overlay tiles from TileMapNode if available
-        TileMapNodeUnsyncOverlay(overlay);
+        // Remove overlay tiles from HexMap if available
+        HexMapUnsyncOverlay(overlay);
 
         overlay.Added -= _onOverlayTileAdded;
         overlay.Removed -= _onOverlayTileRemoved;
@@ -147,14 +147,14 @@ public partial class Display : RefCounted
 
     #endregion
 
-    #region TileMapNode Overlay Management
+    #region HexMap Overlay Management
 
     /// <summary>
-    /// Adds an overlay color to the TileMapNode system with color aggregation.
+    /// Adds an overlay color to the HexMap system with color aggregation.
     /// </summary>
-    private void TileMapNodeAddOverlayColor(AxialCoordinate coordinate, Color color)
+    private void HexMapAddOverlayColor(AxialCoordinate coordinate, Color color)
     {
-        if (TileMapNode == null)
+        if (HexMap == null)
             return;
 
         // Get or create color set for this coordinate
@@ -173,15 +173,15 @@ public partial class Display : RefCounted
             : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
         
         // Set the overlay tile with aggregated color
-        TileMapNode.SetOverlayTile(coordinate, aggregatedColor);
+        HexMap.SetOverlayTile(coordinate, aggregatedColor);
     }
 
     /// <summary>
-    /// Removes an overlay color from the TileMapNode system with color aggregation.
+    /// Removes an overlay color from the HexMap system with color aggregation.
     /// </summary>
-    private void TileMapNodeRemoveOverlayColor(AxialCoordinate coordinate, Color color)
+    private void HexMapRemoveOverlayColor(AxialCoordinate coordinate, Color color)
     {
-        if (TileMapNode == null)
+        if (HexMap == null)
             return;
 
         if (_tileMapOverlayColors.TryGetValue(coordinate, out var colors))
@@ -192,42 +192,42 @@ public partial class Display : RefCounted
             {
                 // Remove the overlay tile completely if no colors remain
                 _tileMapOverlayColors.Remove(coordinate);
-                TileMapNode.RemoveOverlayTile(coordinate);
+                HexMap.RemoveOverlayTile(coordinate);
             }
             else
             {
                 // Update the overlay tile with new aggregated color
                 var aggregatedColor = colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
-                TileMapNode.SetOverlayTile(coordinate, aggregatedColor);
+                HexMap.SetOverlayTile(coordinate, aggregatedColor);
             }
         }
     }
 
     /// <summary>
-    /// Syncs an overlay with the TileMapNode system.
+    /// Syncs an overlay with the HexMap system.
     /// </summary>
-    private void TileMapNodeSyncOverlay(IHexLayerView<Color> overlay)
+    private void HexMapSyncOverlay(IHexLayerView<Color> overlay)
     {
-        if (TileMapNode == null)
+        if (HexMap == null)
             return;
 
         foreach (var (coordinate, color) in overlay)
         {
-            TileMapNodeAddOverlayColor(coordinate, color);
+            HexMapAddOverlayColor(coordinate, color);
         }
     }
 
     /// <summary>
-    /// Removes an overlay from the TileMapNode system.
+    /// Removes an overlay from the HexMap system.
     /// </summary>
-    private void TileMapNodeUnsyncOverlay(IHexLayerView<Color> overlay)
+    private void HexMapUnsyncOverlay(IHexLayerView<Color> overlay)
     {
-        if (TileMapNode == null)
+        if (HexMap == null)
             return;
 
         foreach (var (coordinate, color) in overlay)
         {
-            TileMapNodeRemoveOverlayColor(coordinate, color);
+            HexMapRemoveOverlayColor(coordinate, color);
         }
     }
 

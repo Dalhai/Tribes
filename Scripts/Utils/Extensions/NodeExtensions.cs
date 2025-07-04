@@ -9,7 +9,7 @@ public static class NodeExtensions
 {
     /// <summary>
     /// Creates a sprite for entities. 
-    /// Note: Tile entities are skipped as they should be handled by TileMapNode.
+    /// Note: Tile entities are skipped as they should be handled by HexMap.
     /// </summary>
     /// <param name="node">The node to add the sprite to</param>
     /// <param name="context">The map context</param>
@@ -17,7 +17,7 @@ public static class NodeExtensions
     /// <param name="tileSize">The tile size to use for position calculations and scaling</param>
     public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity, Vector2I tileSize)
     {
-        // Skip tiles - they should be handled by TileMapNode
+        // Skip tiles - they should be handled by HexMap
         if (entity is Tile)
             return;
             

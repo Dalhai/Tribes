@@ -17,12 +17,12 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
     public static GameMode? Instance { get; private set; }
     
-    private TileMapNode _tileMapNode;
+    private HexMap _hexMap;
     
     /// <summary>
-    /// The TileMapNode responsible for rendering terrain tiles.
+    /// The HexMap responsible for rendering terrain tiles.
     /// </summary>
-    public TileMapNode TileMapNode => _tileMapNode ??= GetTileMapNode();
+    public HexMap HexMap => _hexMap ??= GetHexMap();
 
     public override void _Ready()
     {
@@ -37,15 +37,15 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         HexMapGenerator generator = new(new(-100, -100), new(100, 100), Context.Repos.Tiles);
         map.Generate(generator);
 
-        // Initialize the TileMapNode and sync tiles
-        _tileMapNode = GetTileMapNode();
-        _tileMapNode.SyncWithMap(Context.Map);
+        // Initialize the HexMap and sync tiles
+        _hexMap = GetHexMap();
+        _hexMap.SyncWithMap(Context.Map);
         
-        // Connect TileMapNode to Display for overlay support
-        Context.Display.TileMapNode = _tileMapNode;
+        // Connect HexMap to Display for overlay support
+        Context.Display.HexMap = _hexMap;
         
         // Get tile size for sprite positioning and scaling
-        var tileSize = _tileMapNode.TerrainLayer.TileSet.GetTileSize();
+        var tileSize = _hexMap.TerrainLayer.TileSet.GetTileSize();
         
         // Register buildings
         var campClass = repo.Buildings.GetAsset("Camp");
@@ -113,7 +113,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         if (@event is InputEventMouseMotion)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
+            var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
 
             bool hasUnit = Context.Map.Units.Contains(clickedLocation);
 
@@ -125,7 +125,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         else if (@event is InputEventMouseButton mouseButton)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
+            var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
 
             // Select a unit
 
@@ -168,30 +168,30 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     private readonly IHexLayer<Color> _movementOverlay = new HexLayer<Color>();
     
     /// <summary>
-    /// Gets or creates the TileMapNode for this game.
+    /// Gets or creates the HexMap for this game.
     /// </summary>
-    private TileMapNode GetTileMapNode()
+    private HexMap GetHexMap()
     {
-        if (_tileMapNode != null)
-            return _tileMapNode;
+        if (_hexMap != null)
+            return _hexMap;
             
-        // Look for existing TileMapNode
+        // Look for existing HexMap
         foreach (Node child in GetChildren())
         {
-            if (child is TileMapNode tileMapNode)
+            if (child is HexMap hexMap)
             {
-                _tileMapNode = tileMapNode;
-                return _tileMapNode;
+                _hexMap = hexMap;
+                return _hexMap;
             }
         }
         
-        // Create new TileMapNode if none exists
-        _tileMapNode = new TileMapNode
+        // Create new HexMap if none exists
+        _hexMap = new HexMap
         {
-            Name = "TileMapNode"
+            Name = "HexMap"
         };
         
-        AddChild(_tileMapNode);
-        return _tileMapNode;
+        AddChild(_hexMap);
+        return _hexMap;
     }
 }

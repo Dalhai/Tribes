@@ -12,25 +12,25 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
     public static EditorMode? Instance { get; private set; }
     
-    private TileMapNode _tileMapNode;
+    private HexMap _hexMap;
     
     /// <summary>
-    /// The TileMapNode responsible for rendering terrain tiles.
+    /// The HexMap responsible for rendering terrain tiles.
     /// </summary>
-    public TileMapNode TileMapNode => _tileMapNode ??= GetTileMapNode();
+    public HexMap HexMap => _hexMap ??= GetHexMap();
         
     public override void _Ready()
     {
         Context = new MapContext(Core.Context.Instance);
         
-        // Initialize the TileMapNode
-        _tileMapNode = GetTileMapNode();
+        // Initialize the HexMap
+        _hexMap = GetHexMap();
         
-        // Connect TileMapNode to Display for overlay support
-        Context.Display.TileMapNode = _tileMapNode;
+        // Connect HexMap to Display for overlay support
+        Context.Display.HexMap = _hexMap;
         
-        // Sync tiles with the TileMapNode
-        _tileMapNode.SyncWithMap(Context.Map);
+        // Sync tiles with the HexMap
+        _hexMap.SyncWithMap(Context.Map);
         
         // Register non-tile entities (buildings, units) with sprite rendering
         foreach (var (coordinate, building) in Context.Map.Buildings)
@@ -73,7 +73,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         if (inputEvent is InputEventMouseMotion)
         {
             var world = GetGlobalMousePosition();
-            var hoveredLocation = TileMapNode.WorldToHexCoordinate(world);
+            var hoveredLocation = HexMap.WorldToHexCoordinate(world);
 
             if (_hoveredLocation != hoveredLocation)
             {
@@ -94,7 +94,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Left })
             {
                 var mousePosition = GetGlobalMousePosition();
-                var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
+                var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
                 
                 // Remove the existing tile from the map data
                 if (Context.Map.Tiles.Get(clickedLocation) is { } existingTile)
@@ -106,8 +106,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType), clickedLocation);
                 Context.Map.TryAddEntity(newTile);
                 
-                // Update the TileMapNode
-                TileMapNode.SetTile(clickedLocation, newTile);
+                // Update the HexMap
+                HexMap.SetTile(clickedLocation, newTile);
             }
 
             // Remove open tiles on right mouse click.
@@ -116,14 +116,14 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Right })
             {
                 var mousePosition = GetGlobalMousePosition();
-                var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
+                var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
                 var clickedTile = Context.Map.Tiles.Get(clickedLocation);
 
                 // Remove the existing tile
                 if (clickedTile is { } tile)
                 {
                     Context.Map.TryRemoveEntity(tile);
-                    TileMapNode.RemoveTile(clickedLocation);
+                    HexMap.RemoveTile(clickedLocation);
                 }
 
                 // Create a new tile with the open tile type and register it with the context
@@ -131,7 +131,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 {
                     var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open), clickedLocation);
                     Context.Map.TryAddEntity(newTile);
-                    TileMapNode.SetTile(clickedLocation, newTile);
+                    HexMap.SetTile(clickedLocation, newTile);
                 }
             }
         }
@@ -169,11 +169,11 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
     /// <summary>
     /// Creates a sprite for non-tile entities (buildings, units).
-    /// Tiles are handled by the TileMapNode.
+    /// Tiles are handled by the HexMap.
     /// </summary>
     private void CreateSpriteForNonTileEntity(AxialCoordinate coordinate, IEntity<IConfiguration> entity)
     {
-        // Skip tiles - they are handled by TileMapNode
+        // Skip tiles - they are handled by HexMap
         if (entity is Tile)
             return;
 
@@ -181,7 +181,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
         sprite.Scale = Vector2.One;
         sprite.Centered = true;
-        sprite.Position = TileMapNode.HexToWorldPosition(coordinate);
+        sprite.Position = HexMap.HexToWorldPosition(coordinate);
         sprite.Texture = entity.Configuration.Texture;
         sprite.Modulate = entity.Owner?.Color ?? Colors.White;
 
@@ -202,31 +202,31 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     }
 
     /// <summary>
-    /// Gets or creates the TileMapNode for this editor.
+    /// Gets or creates the HexMap for this editor.
     /// </summary>
-    private TileMapNode GetTileMapNode()
+    private HexMap GetHexMap()
     {
-        if (_tileMapNode != null)
-            return _tileMapNode;
+        if (_hexMap != null)
+            return _hexMap;
             
-        // Look for existing TileMapNode
+        // Look for existing HexMap
         foreach (Node child in GetChildren())
         {
-            if (child is TileMapNode tileMapNode)
+            if (child is HexMap hexMap)
             {
-                _tileMapNode = tileMapNode;
-                return _tileMapNode;
+                _hexMap = hexMap;
+                return _hexMap;
             }
         }
         
-        // Create new TileMapNode if none exists
-        _tileMapNode = new TileMapNode
+        // Create new HexMap if none exists
+        _hexMap = new HexMap
         {
-            Name = "TileMapNode"
+            Name = "HexMap"
         };
         
-        AddChild(_tileMapNode);
-        return _tileMapNode;
+        AddChild(_hexMap);
+        return _hexMap;
     }
 
     private AxialCoordinate _hoveredLocation;

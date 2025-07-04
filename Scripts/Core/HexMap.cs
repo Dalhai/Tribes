@@ -10,7 +10,7 @@ namespace TribesOfDust.Core;
 /// A dedicated container node for efficiently rendering terrain tiles using TileMapLayer.
 /// Supports hex-based coordinate system and integrates with the existing Map data model.
 /// </summary>
-public partial class TileMapNode : Node2D
+public partial class HexMap : Node2D
 {
     private TileMapLayer _terrainLayer;
     private TileMapLayer _overlayLayer;
