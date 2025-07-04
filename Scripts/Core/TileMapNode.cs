@@ -13,12 +13,18 @@ namespace TribesOfDust.Core;
 public partial class TileMapNode : Node2D
 {
     private TileMapLayer _terrainLayer;
-    private readonly Dictionary<string, TileMapLayer> _overlayLayers = new();
+    private TileMapLayer _overlayLayer;
+    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
     
     /// <summary>
     /// The terrain layer that contains all terrain tiles.
     /// </summary>
     public TileMapLayer TerrainLayer => _terrainLayer ??= GetTerrainLayer();
+
+    /// <summary>
+    /// The single overlay layer for all overlay effects.
+    /// </summary>
+    public TileMapLayer OverlayLayer => _overlayLayer ??= GetOverlayLayer();
 
     public override void _Ready()
     {
@@ -27,6 +33,9 @@ public partial class TileMapNode : Node2D
         
         // Set up the TileMapLayer for hex layout
         _terrainLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/TerrainTileset.tres");
+        
+        // Ensure we have an overlay layer
+        _overlayLayer = GetOverlayLayer();
         
         base._Ready();
     }
@@ -149,6 +158,42 @@ public partial class TileMapNode : Node2D
     }
 
     /// <summary>
+    /// Gets or creates the single overlay layer.
+    /// </summary>
+    private TileMapLayer GetOverlayLayer()
+    {
+        if (_overlayLayer != null)
+            return _overlayLayer;
+            
+        // Look for existing overlay layer
+        foreach (Node child in GetChildren())
+        {
+            if (child is TileMapLayer layer && child.Name == "OverlayLayer")
+            {
+                _overlayLayer = layer;
+                return _overlayLayer;
+            }
+        }
+        
+        // Create new overlay layer if none exists
+        _overlayLayer = new TileMapLayer
+        {
+            Name = "OverlayLayer",
+            ZIndex = 10,  // Above terrain layer
+            YSortEnabled = false,
+            UseKinematicBodies = false,
+            CollisionEnabled = false,
+            NavigationEnabled = false
+        };
+
+        // Set the overlay tileset
+        _overlayLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/OverlayTileset.tres");
+
+        AddChild(_overlayLayer);
+        return _overlayLayer;
+    }
+
+    /// <summary>
     /// Converts hex coordinates to TileMap coordinates.
     /// For hex grids, this is typically a 1:1 mapping.
     /// </summary>
@@ -168,122 +213,54 @@ public partial class TileMapNode : Node2D
     #region Overlay Management
 
     /// <summary>
-    /// Gets or creates an overlay layer with the specified name.
-    /// </summary>
-    /// <param name="layerName">The name of the overlay layer</param>
-    /// <param name="zIndex">Optional Z-index for the layer (default: 10)</param>
-    /// <returns>The overlay TileMapLayer</returns>
-    public TileMapLayer GetOrCreateOverlayLayer(string layerName, int zIndex = 10)
-    {
-        if (_overlayLayers.TryGetValue(layerName, out var existingLayer))
-            return existingLayer;
-
-        // Create new overlay layer
-        var overlayLayer = new TileMapLayer
-        {
-            Name = $"OverlayLayer_{layerName}",
-            ZIndex = zIndex, // Configurable Z-index for layer ordering
-            YSortEnabled = false,
-            UseKinematicBodies = false,
-            CollisionEnabled = false,
-            NavigationEnabled = false
-        };
-
-        // Set the overlay tileset
-        overlayLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/OverlayTileset.tres");
-
-        AddChild(overlayLayer);
-        _overlayLayers[layerName] = overlayLayer;
-
-        return overlayLayer;
-    }
-
-    /// <summary>
     /// Sets an overlay tile at the specified hex coordinate with the given color.
-    /// Creates a color-specific layer to handle proper color rendering.
+    /// This replaces any existing overlay at that coordinate.
     /// </summary>
-    /// <param name="layerName">The base name of the overlay layer</param>
     /// <param name="hexCoordinate">The hex coordinate where to place the overlay tile</param>
     /// <param name="color">The color to modulate the overlay tile</param>
-    public void SetOverlayTile(string layerName, AxialCoordinate hexCoordinate, Color color)
+    public void SetOverlayTile(AxialCoordinate hexCoordinate, Color color)
     {
-        // Create a unique layer name that includes the color information
-        // Use a hash of the color to avoid very long layer names
-        var colorHash = color.ToHtml().GetHashCode().ToString("X8");
-        var coloredLayerName = $"{layerName}_C{colorHash}";
-        
-        // Different overlay types get different z-index ranges
-        var baseZIndex = GetOverlayTypeZIndex(layerName);
-        var overlayLayer = GetOrCreateOverlayLayer(coloredLayerName, baseZIndex);
         var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
         
         // Set the overlay tile (source ID 0, atlas coordinates 0,0)
-        overlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
+        OverlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
         
-        // Set the modulation color for this layer
-        overlayLayer.Modulate = color;
+        // Store the color for this coordinate
+        var colorSet = new HashSet<Color> { color };
+        _overlayColors[hexCoordinate] = colorSet;
+        
+        // Set the modulation color for the entire layer
+        // Note: This affects all overlay tiles on this layer
+        OverlayLayer.Modulate = color;
     }
 
     /// <summary>
     /// Removes an overlay tile at the specified hex coordinate.
     /// </summary>
-    /// <param name="layerName">The base name of the overlay layer</param>
     /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
-    /// <param name="color">The color of the overlay tile to remove</param>
-    public void RemoveOverlayTile(string layerName, AxialCoordinate hexCoordinate, Color color)
+    public void RemoveOverlayTile(AxialCoordinate hexCoordinate)
     {
-        // Create the same unique layer name that includes the color information
-        var colorHash = color.ToHtml().GetHashCode().ToString("X8");
-        var coloredLayerName = $"{layerName}_C{colorHash}";
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        OverlayLayer.EraseCell(tileMapCoordinate);
+        _overlayColors.Remove(hexCoordinate);
         
-        if (_overlayLayers.TryGetValue(coloredLayerName, out var overlayLayer))
+        // Reset modulation if no tiles remain
+        if (_overlayColors.Count == 0)
         {
-            var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
-            overlayLayer.EraseCell(tileMapCoordinate);
+            OverlayLayer.Modulate = Godot.Colors.White;
         }
     }
 
     /// <summary>
-    /// Clears all tiles from the specified overlay layer.
+    /// Clears all overlay colors and tiles.
     /// </summary>
-    /// <param name="layerName">The name of the overlay layer</param>
-    public void ClearOverlayLayer(string layerName)
+    public void ClearAllOverlays()
     {
-        if (_overlayLayers.TryGetValue(layerName, out var overlayLayer))
-        {
-            overlayLayer.Clear();
-        }
-    }
-
-    /// <summary>
-    /// Removes an overlay layer completely.
-    /// </summary>
-    /// <param name="layerName">The name of the overlay layer to remove</param>
-    public void RemoveOverlayLayer(string layerName)
-    {
-        if (_overlayLayers.TryGetValue(layerName, out var overlayLayer))
-        {
-            overlayLayer.QueueFree();
-            _overlayLayers.Remove(layerName);
-        }
+        _overlayColors.Clear();
+        OverlayLayer.Clear();
+        OverlayLayer.Modulate = Godot.Colors.White;
     }
 
     #endregion
 
-    /// <summary>
-    /// Gets the appropriate Z-index for different overlay types.
-    /// This ensures proper layering of different overlay types.
-    /// </summary>
-    private static int GetOverlayTypeZIndex(string layerName)
-    {
-        // Different overlay types get different z-index ranges for proper layering
-        return layerName.ToLowerInvariant() switch
-        {
-            var name when name.Contains("selection") => 15, // Selections on top
-            var name when name.Contains("highlight") => 12, // Highlights above movement
-            var name when name.Contains("movement") => 11,  // Movement overlays
-            var name when name.Contains("hover") => 10,     // Hover effects at base level
-            _ => 10 // Default overlay z-index
-        };
-    }
 }
