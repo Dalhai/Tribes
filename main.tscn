@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://7vr54ejh03cr"]
 
-[ext_resource type="Script" path="res://Script/Core/Context.cs" id="1_tj848"]
+[ext_resource type="Script" uid="uid://driw83f3fs6y6" path="res://Script/Core/Context.cs" id="1_tj848"]
 [ext_resource type="PackedScene" uid="uid://blovp872n3gmi" path="res://Interface/Page/main_page.tscn" id="2_nelo1"]
 
 [node name="Context" type="Node2D"]

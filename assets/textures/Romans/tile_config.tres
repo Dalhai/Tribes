@@ -1,6 +1,3 @@
-[gd_resource type="Resource" load_steps=2 format=2]
-
-[ext_resource path="res://source/data/config/TileConfig.cs" type="Script" id=1]
+[gd_resource type="Resource" format=3 uid="uid://cem3nhoh4ijln"]
 
 [resource]
-script = ExtResource( 1 )

@@ -1,8 +1,8 @@
 [gd_resource type="Resource" load_steps=4 format=3 uid="uid://bmqic7o2xxogk"]
 
 [ext_resource type="Resource" uid="uid://dwxj5d0nxy8j8" path="res://Assets/Units/MovementCostSimple.tres" id="1_yxwju"]
-[ext_resource type="Texture2D" uid="uid://8ws0d7phbsc5" path="res://Assets/Textures/Pirates/weapon_pirate_rapier.png" id="2_77pya"]
-[ext_resource type="Script" path="res://Script/Core/Entities/UnitConfiguration.cs" id="3_gsald"]
+[ext_resource type="Texture2D" uid="uid://ma65wc5x10jw" path="res://Assets/Textures/Pirates/weapon_pirate_rapier.png" id="2_77pya"]
+[ext_resource type="Script" uid="uid://bgdduo4eidq0v" path="res://Script/Core/Entities/UnitConfiguration.cs" id="3_gsald"]
 
 [resource]
 script = ExtResource("3_gsald")
