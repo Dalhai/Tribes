@@ -58,7 +58,7 @@ namespace TribesOfDust.Hex
 
         /// <summary> Converts a <see cref="CubeCoordinate"/> to a <see cref="AxialCoordinate"/>. </summary>
         /// <remarks> Conversion is marked as implicit to facilitate switching between coordinate types. </remarks>
-        /// <param name="coordinate">The coordiante to convert.</param>
+        /// <param name="coordinate">The coordinate to convert.</param>
         public static implicit operator AxialCoordinate(CubeCoordinate coordinate) => coordinate.ToAxialCoordinate();
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace TribesOfDust.Hex
     /// </summary>
     ///
     /// <remarks>
-    /// Axial coordiantes operate in two dimensions. The third dimension is implicit.
+    /// Axial coordinates operate in two dimensions. The third dimension is implicit.
     /// While the <see cref="Q"/> property describes the offset horizontally, the <see cref="R"/> property
     /// describes the offset along the bottom-left to top-right. This gives you all the axis you need to properly
     /// describe coordinates in a two dimensional system.
@@ -136,7 +136,7 @@ namespace TribesOfDust.Hex
 
         /// <summary> Converts a <see cref="AxialCoordinate"/> to a <see cref="CubeCoordinate"/>. </summary>
         /// <remarks> Conversion is marked as implicit to facilitate switching between coordinate types. </remarks>
-        /// <param name="coordinate">The coordiante to convert.</param>
+        /// <param name="coordinate">The coordinate to convert.</param>
         public static implicit operator CubeCoordinate(AxialCoordinate coordinate) => coordinate.ToCubeCoordinate();
 
         /// <summary>
