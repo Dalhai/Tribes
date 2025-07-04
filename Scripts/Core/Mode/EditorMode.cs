@@ -26,6 +26,9 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         // Initialize the TileMapNode
         _tileMapNode = GetTileMapNode();
         
+        // Connect TileMapNode to Display for overlay support
+        Context.Display.TileMapNode = _tileMapNode;
+        
         // Sync tiles with the TileMapNode
         _tileMapNode.SyncWithMap(Context.Map);
         

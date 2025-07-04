@@ -41,6 +41,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         _tileMapNode = GetTileMapNode();
         _tileMapNode.SyncWithMap(Context.Map);
         
+        // Connect TileMapNode to Display for overlay support
+        Context.Display.TileMapNode = _tileMapNode;
+        
         // Get tile size for sprite positioning and scaling
         var tileSize = _tileMapNode.TerrainLayer.TileSet.GetTileSize();
         

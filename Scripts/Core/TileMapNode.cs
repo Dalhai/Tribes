@@ -13,6 +13,7 @@ namespace TribesOfDust.Core;
 public partial class TileMapNode : Node2D
 {
     private TileMapLayer _terrainLayer;
+    private readonly Dictionary<string, TileMapLayer> _overlayLayers = new();
     
     /// <summary>
     /// The terrain layer that contains all terrain tiles.
@@ -163,4 +164,99 @@ public partial class TileMapNode : Node2D
     {
         return new AxialCoordinate(tileMapCoordinate.X, tileMapCoordinate.Y);
     }
+
+    #region Overlay Management
+
+    /// <summary>
+    /// Gets or creates an overlay layer with the specified name.
+    /// </summary>
+    /// <param name="layerName">The name of the overlay layer</param>
+    /// <returns>The overlay TileMapLayer</returns>
+    public TileMapLayer GetOrCreateOverlayLayer(string layerName)
+    {
+        if (_overlayLayers.TryGetValue(layerName, out var existingLayer))
+            return existingLayer;
+
+        // Create new overlay layer
+        var overlayLayer = new TileMapLayer
+        {
+            Name = $"OverlayLayer_{layerName}",
+            ZIndex = 10, // Render above terrain
+            YSortEnabled = false,
+            UseKinematicBodies = false,
+            CollisionEnabled = false,
+            NavigationEnabled = false
+        };
+
+        // Set the overlay tileset
+        overlayLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/OverlayTileset.tres");
+
+        AddChild(overlayLayer);
+        _overlayLayers[layerName] = overlayLayer;
+
+        return overlayLayer;
+    }
+
+    /// <summary>
+    /// Sets an overlay tile at the specified hex coordinate with the given color.
+    /// </summary>
+    /// <param name="layerName">The name of the overlay layer</param>
+    /// <param name="hexCoordinate">The hex coordinate where to place the overlay tile</param>
+    /// <param name="color">The color to modulate the overlay tile</param>
+    public void SetOverlayTile(string layerName, AxialCoordinate hexCoordinate, Color color)
+    {
+        // Create a unique layer name that includes the color information
+        var coloredLayerName = $"{layerName}_{color.ToHtml()}";
+        var overlayLayer = GetOrCreateOverlayLayer(coloredLayerName);
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        
+        // Set the overlay tile (source ID 0, atlas coordinates 0,0)
+        overlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
+        
+        // Set the modulation color for this layer
+        overlayLayer.Modulate = color;
+    }
+
+    /// <summary>
+    /// Removes an overlay tile at the specified hex coordinate.
+    /// </summary>
+    /// <param name="layerName">The name of the overlay layer</param>
+    /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
+    public void RemoveOverlayTile(string layerName, AxialCoordinate hexCoordinate, Color color)
+    {
+        // Create the same unique layer name that includes the color information
+        var coloredLayerName = $"{layerName}_{color.ToHtml()}";
+        if (_overlayLayers.TryGetValue(coloredLayerName, out var overlayLayer))
+        {
+            var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+            overlayLayer.EraseCell(tileMapCoordinate);
+        }
+    }
+
+    /// <summary>
+    /// Clears all tiles from the specified overlay layer.
+    /// </summary>
+    /// <param name="layerName">The name of the overlay layer</param>
+    public void ClearOverlayLayer(string layerName)
+    {
+        if (_overlayLayers.TryGetValue(layerName, out var overlayLayer))
+        {
+            overlayLayer.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Removes an overlay layer completely.
+    /// </summary>
+    /// <param name="layerName">The name of the overlay layer to remove</param>
+    public void RemoveOverlayLayer(string layerName)
+    {
+        if (_overlayLayers.TryGetValue(layerName, out var overlayLayer))
+        {
+            overlayLayer.QueueFree();
+            _overlayLayers.Remove(layerName);
+        }
+    }
+
+    #endregion
 }

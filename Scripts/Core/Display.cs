@@ -16,16 +16,32 @@ public partial class Display : RefCounted
         this.tiles = tiles;
 
         // Setup event handlers.
-        _onOverlayTileAdded = (_, color, coordinate) =>
+        _onOverlayTileAdded = (overlay, color, coordinate) =>
         {
+            // Handle sprite-based overlays (for non-tile entities)
             if (tiles.Get(coordinate) is { } tile)
                 AddOverlayColor(tile, color);
+                
+            // Handle TileMapNode overlays if available
+            if (TileMapNode != null)
+            {
+                var layerName = GetOverlayLayerName(overlay);
+                TileMapNode.SetOverlayTile(layerName, coordinate, color);
+            }
         };
 
-        _onOverlayTileRemoved = (_, color, coordinate) =>
+        _onOverlayTileRemoved = (overlay, color, coordinate) =>
         {
+            // Handle sprite-based overlays (for non-tile entities)
             if (tiles.Get(coordinate) is { } tile)
                 RemoveOverlayColor(tile, color);
+                
+            // Handle TileMapNode overlays if available
+            if (TileMapNode != null)
+            {
+                var layerName = GetOverlayLayerName(overlay);
+                TileMapNode.RemoveOverlayTile(layerName, coordinate, color);
+            }
         };
     }
 
@@ -35,6 +51,12 @@ public partial class Display : RefCounted
 
     public readonly Dictionary<ulong, Sprite2D> Sprites = new();
     public readonly Dictionary<ulong, HashSet<Color>> Colors = new();
+
+    /// <summary>
+    /// Optional TileMapNode for handling overlay tiles on TileMapLayers.
+    /// When set, overlays will also be rendered on the TileMapNode in addition to sprite modulation.
+    /// </summary>
+    public TileMapNode? TileMapNode { get; set; }
 
     #region Overlays
 
@@ -51,10 +73,21 @@ public partial class Display : RefCounted
         if (_overlays.Contains(overlay))
             return;
 
+        // Add existing overlay tiles to sprites
         foreach (var (coordinate, color) in overlay)
         {
             if (tiles.Get(coordinate) is { } tile)
                 AddOverlayColor(tile, color);
+        }
+
+        // Add existing overlay tiles to TileMapNode if available
+        if (TileMapNode != null)
+        {
+            var layerName = GetOverlayLayerName(overlay);
+            foreach (var (coordinate, color) in overlay)
+            {
+                TileMapNode.SetOverlayTile(layerName, coordinate, color);
+            }
         }
 
         overlay.Added += _onOverlayTileAdded;
@@ -75,10 +108,22 @@ public partial class Display : RefCounted
         if (!_overlays.Contains(overlay))
             return;
 
+        // Remove overlay tiles from sprites
         foreach (var (coordinate, color) in overlay)
         {
             if (tiles.Get(coordinate) is { } tile)
                 RemoveOverlayColor(tile, color);
+        }
+
+        // Remove overlay tiles from TileMapNode if available
+        if (TileMapNode != null)
+        {
+            var layerName = GetOverlayLayerName(overlay);
+            // Clear all color variations of this overlay layer
+            foreach (var (coordinate, color) in overlay)
+            {
+                TileMapNode.RemoveOverlayTile(layerName, coordinate, color);
+            }
         }
 
         overlay.Added -= _onOverlayTileAdded;
@@ -121,6 +166,16 @@ public partial class Display : RefCounted
     }
 
     #endregion
+
+    /// <summary>
+    /// Gets a unique layer name for the given overlay.
+    /// This creates a consistent mapping between overlay instances and TileMapLayer names.
+    /// </summary>
+    private string GetOverlayLayerName(IHexLayerView<Color> overlay)
+    {
+        // Use the overlay's hash code to create a unique but consistent layer name
+        return $"Overlay_{overlay.GetHashCode()}";
+    }
 
     private readonly IHexLayerView<Tile> tiles;
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
