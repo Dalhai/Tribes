@@ -59,10 +59,14 @@ namespace TribesOfDust.Utils
             var name = dir.GetNext();
             while (!string.IsNullOrEmpty(name))
             {
-                string path = $"{resourcePath}/{name}";
-                if (TryLoad(path, out TAsset? asset) && asset is not null)
+                // Only try to load .tres files (Godot resource files)
+                if (name.EndsWith(".tres"))
                 {
-                    results.Add(asset);
+                    string path = $"{resourcePath}/{name}";
+                    if (TryLoad(path, out TAsset? asset) && asset is not null)
+                    {
+                        results.Add(asset);
+                    }
                 }
 
                 name = dir.GetNext();
