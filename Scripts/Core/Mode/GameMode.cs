@@ -62,9 +62,49 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         FakeGenerator fake = new() { Repository = repo.Tiles };
         map.Generate(fake);
 
-        // Initialize the HexMap and sync tiles
+        // Initialize the HexMap and sync tiles first
         _hexMap = GetHexMap();
         _hexMap.ConnectToMap(Context.Map);
+        
+        // Run diagnostic to understand coordinate issues
+        GD.Print("=== Coordinate Conversion Diagnostics ===");
+        
+        // Test the three coordinates from FakeGenerator
+        var coords = new AxialCoordinate[]
+        {
+            AxialCoordinate.Zero,        // (0, 0)
+            AxialCoordinate.Zero.NW,     // (-1, 0) 
+            AxialCoordinate.Zero.SE      // (1, 0)
+        };
+        
+        var diagTileSize = _hexMap.TerrainLayer.TileSet.GetTileSize();
+        GD.Print($"Actual tile size from TileSet: {diagTileSize}");
+        
+        foreach (var coord in coords)
+        {
+            GD.Print($"AxialCoordinate: {coord}");
+            
+            // Show unit position (our hex math)
+            var unitPos = HexConversions.HexToUnit(coord);
+            GD.Print($"  Unit position (hex math): {unitPos}");
+            
+            // Show world position using old method
+            var worldPosOld = HexConversions.HexToWorldPosition(diagTileSize, coord);
+            GD.Print($"  World position (old method): {worldPosOld}");
+            
+            // Show world position using new Godot method
+            var worldPosNew = _hexMap.HexToWorldPosition(coord);
+            GD.Print($"  World position (new method): {worldPosNew}");
+            
+            // Show tilemap coordinate conversion
+            var tileMapCoordOld = new Vector2I(coord.Q, coord.R);  // Old method
+            GD.Print($"  TileMap coordinate (old 1:1): {tileMapCoordOld}");
+            
+            // Test reverse conversion using new method
+            var backToHex = _hexMap.WorldToHexCoordinate(worldPosNew);
+            GD.Print($"  Back to hex (new method): {backToHex}");
+            GD.Print("");
+        }
         
         // Connect HexMap to Display for overlay support
         Context.Display.HexMap = _hexMap;

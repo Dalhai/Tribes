@@ -215,9 +215,11 @@ public partial class HexMap : Node2D
     /// <returns>The corresponding hex coordinate</returns>
     public AxialCoordinate WorldToHexCoordinate(Vector2 worldPosition)
     {
-        // Convert to hex coordinate using the tile size-based conversion
-        var tileSize = TerrainLayer.TileSet.GetTileSize();
-        return HexConversions.WorldToHexCoordinate(tileSize, worldPosition);
+        // Use Godot's TileMapLayer to convert world position to tile map coordinates
+        var tileMapCoord = TerrainLayer.LocalToMap(worldPosition);
+        
+        // Convert tile map coordinates to our hex coordinates
+        return TileMapToHexCoordinate(tileMapCoord);
     }
 
     /// <summary>
@@ -227,17 +229,39 @@ public partial class HexMap : Node2D
     /// <returns>The corresponding world position</returns>
     public Vector2 HexToWorldPosition(AxialCoordinate hexCoordinate)
     {
-        var tileSize = TerrainLayer.TileSet.GetTileSize();
-        return HexConversions.HexToWorldPosition(tileSize, hexCoordinate);
+        // Convert hex coordinate to tile map coordinates
+        var tileMapCoord = HexToTileMapCoordinate(hexCoordinate);
+        
+        // Use Godot's TileMapLayer to convert tile map coordinates to world position
+        return TerrainLayer.MapToLocal(tileMapCoord);
     }
 
     /// <summary>
     /// Converts hex coordinates to TileMap coordinates.
-    /// For hex grids, this is typically a 1:1 mapping.
+    /// Converts from axial coordinates to offset coordinates based on Godot's hex tile system.
     /// </summary>
     private Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
     {
-        return new Vector2I(hexCoordinate.Q, hexCoordinate.R);
+        // Convert axial coordinates to offset coordinates for horizontal offset axis
+        // Formula: col = q + (r - (r&1)) / 2, row = r
+        var col = hexCoordinate.Q + (hexCoordinate.R - (hexCoordinate.R & 1)) / 2;
+        var row = hexCoordinate.R;
+        
+        return new Vector2I(col, row);
+    }
+
+    /// <summary>
+    /// Converts TileMap coordinates to hex coordinates.
+    /// Converts from offset coordinates to axial coordinates based on Godot's hex tile system.
+    /// </summary>
+    private AxialCoordinate TileMapToHexCoordinate(Vector2I tileMapCoordinate)
+    {
+        // Convert offset coordinates to axial coordinates for horizontal offset axis
+        // Formula: q = col - (row - (row&1)) / 2, r = row
+        var q = tileMapCoordinate.X - (tileMapCoordinate.Y - (tileMapCoordinate.Y & 1)) / 2;
+        var r = tileMapCoordinate.Y;
+        
+        return new AxialCoordinate(q, r);
     }
 
     #endregion
