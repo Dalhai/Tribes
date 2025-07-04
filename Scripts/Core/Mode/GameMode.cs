@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
@@ -56,8 +57,11 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(camp2);
 
         // Create sprites for camp buildings
-        this.CreateSpriteForEntity(Context, camp1, tileSize);
-        this.CreateSpriteForEntity(Context, camp2, tileSize);
+        var camp1Sprite = this.CreateSpriteForEntity(Context, camp1, tileSize);
+        if (camp1Sprite != null) _sprites.Add(camp1.Identity, camp1Sprite);
+        
+        var camp2Sprite = this.CreateSpriteForEntity(Context, camp2, tileSize);
+        if (camp2Sprite != null) _sprites.Add(camp2.Identity, camp2Sprite);
 
         var fountainClass = repo.Buildings.GetAsset("Fountain");
         var fountain1 = new Building(fountainClass, new(1, -1));
@@ -67,8 +71,11 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(fountain2);
 
         // Create sprites for fountain buildings
-        this.CreateSpriteForEntity(Context, fountain1, tileSize);
-        this.CreateSpriteForEntity(Context, fountain2, tileSize);
+        var fountain1Sprite = this.CreateSpriteForEntity(Context, fountain1, tileSize);
+        if (fountain1Sprite != null) _sprites.Add(fountain1.Identity, fountain1Sprite);
+        
+        var fountain2Sprite = this.CreateSpriteForEntity(Context, fountain2, tileSize);
+        if (fountain2Sprite != null) _sprites.Add(fountain2.Identity, fountain2Sprite);
 
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
@@ -84,9 +91,14 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit3);
 
             // Create sprites for units
-            this.CreateSpriteForEntity(Context, unit1, tileSize);
-            this.CreateSpriteForEntity(Context, unit2, tileSize);
-            this.CreateSpriteForEntity(Context, unit3, tileSize);
+            var unit1Sprite = this.CreateSpriteForEntity(Context, unit1, tileSize);
+            if (unit1Sprite != null) _sprites.Add(unit1.Identity, unit1Sprite);
+            
+            var unit2Sprite = this.CreateSpriteForEntity(Context, unit2, tileSize);
+            if (unit2Sprite != null) _sprites.Add(unit2.Identity, unit2Sprite);
+            
+            var unit3Sprite = this.CreateSpriteForEntity(Context, unit3, tileSize);
+            if (unit3Sprite != null) _sprites.Add(unit3.Identity, unit3Sprite);
         }
 
         if (camp2.Owner != null)
@@ -100,9 +112,14 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit3);
 
             // Create sprites for units
-            this.CreateSpriteForEntity(Context, unit1, tileSize);
-            this.CreateSpriteForEntity(Context, unit2, tileSize);
-            this.CreateSpriteForEntity(Context, unit3, tileSize);
+            var unit1Sprite = this.CreateSpriteForEntity(Context, unit1, tileSize);
+            if (unit1Sprite != null) _sprites.Add(unit1.Identity, unit1Sprite);
+            
+            var unit2Sprite = this.CreateSpriteForEntity(Context, unit2, tileSize);
+            if (unit2Sprite != null) _sprites.Add(unit2.Identity, unit2Sprite);
+            
+            var unit3Sprite = this.CreateSpriteForEntity(Context, unit3, tileSize);
+            if (unit3Sprite != null) _sprites.Add(unit3.Identity, unit3Sprite);
         }
 
         base._Ready();
@@ -132,10 +149,10 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             if (mouseButton.ButtonIndex == MouseButton.Left && Context.Map.Units.Get(clickedLocation) is { } unit)
             {
                 if (Context.Selected is Unit previousUnit)
-                    Context.Display.Sprites[previousUnit.Identity].Modulate = previousUnit.Owner?.Color ?? Colors.White;
+                    _sprites[previousUnit.Identity].Modulate = previousUnit.Owner?.Color ?? Colors.White;
 
                 Context.Selected = unit;
-                Context.Display.Sprites[unit.Identity].Modulate = Colors.Yellow;
+                _sprites[unit.Identity].Modulate = Colors.Yellow;
 
                 Label? healthLabel = GetNode<Label>(HealthPath);
                 Label? waterLabel = GetNode<Label>(WaterPath);
@@ -166,6 +183,11 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     private readonly Player _player2 = new("Player 2", Colors.Blue);
     private readonly IHexLayer<Color> _selectionOverlay = new HexLayer<Color>();
     private readonly IHexLayer<Color> _movementOverlay = new HexLayer<Color>();
+    
+    /// <summary>
+    /// Dictionary of sprites for non-tile entities (buildings, units) used for selection and visual effects.
+    /// </summary>
+    private readonly Dictionary<ulong, Sprite2D> _sprites = new();
     
     /// <summary>
     /// Gets or creates the HexMap for this game.

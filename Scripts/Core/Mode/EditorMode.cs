@@ -197,7 +197,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 break;
         }
 
-        Context.Display.Sprites.Add(entity.Identity, sprite);
+        // Note: In EditorMode, we don't need to track sprites in a dictionary
+        // since we don't use them for selection like in GameMode
         AddChild(sprite);
     }
 

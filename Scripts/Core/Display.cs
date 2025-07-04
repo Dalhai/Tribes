@@ -36,11 +36,6 @@ public partial class Display : RefCounted
 
 
     /// <summary>
-    /// Dictionary of sprites for non-tile entities (buildings, units).
-    /// </summary>
-    public Dictionary<ulong, Sprite2D> Sprites => _sprites;
-
-    /// <summary>
     /// Optional HexMap for handling overlay tiles on TileMapLayers.
     /// When set, overlays will also be rendered on the HexMap in addition to sprite modulation.
     /// </summary>
@@ -155,7 +150,6 @@ public partial class Display : RefCounted
     #endregion
 
     private readonly IHexLayerView<Tile> tiles;
-    private readonly Dictionary<ulong, Sprite2D> _sprites = new();
     private readonly Dictionary<ulong, HashSet<Color>> _colors = new();
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;

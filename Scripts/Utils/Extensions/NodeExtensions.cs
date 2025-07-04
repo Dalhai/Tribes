@@ -15,11 +15,12 @@ public static class NodeExtensions
     /// <param name="context">The map context</param>
     /// <param name="entity">The entity to create a sprite for</param>
     /// <param name="tileSize">The tile size to use for position calculations and scaling</param>
-    public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity, Vector2I tileSize)
+    /// <returns>The created sprite, or null if entity is a tile</returns>
+    public static Sprite2D? CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity, Vector2I tileSize)
     {
         // Skip tiles - they should be handled by HexMap
         if (entity is Tile)
-            return;
+            return null;
             
         if (entity.Location is {} location)
         {
@@ -52,8 +53,10 @@ public static class NodeExtensions
                     break;
             }
 
-            context.Display.Sprites.Add(entity.Identity, sprite);
             node.AddChild(sprite);
+            return sprite;
         }
+        
+        return null;
     }
 }
