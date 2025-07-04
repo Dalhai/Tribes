@@ -1,17 +1,17 @@
 [gd_scene load_steps=5 format=3 uid="uid://cobxnn0eb6q6a"]
 
 [ext_resource type="Script" uid="uid://buos1266jrmwc" path="res://Scripts/Core/Mode/GameMode.cs" id="1_yb8rm"]
-[ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/Textures/Interface/paper_mat.tres" id="2_bwukd"]
+[ext_resource type="Script" uid="uid://33mbdqerejba" path="res://Scripts/Core/HexMap.cs" id="2_4lp4x"]
+[ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/textures/Interface/paper_mat.tres" id="2_bwukd"]
 [ext_resource type="Script" uid="uid://6lnyb60rm5jj" path="res://Scripts/Interface/Camera.cs" id="7_1sk2g"]
-[ext_resource type="Script" path="res://Scripts/Core/TileMapNode.cs" id="8_3dk2m"]
 
 [node name="Scene" type="Node2D"]
 script = ExtResource("1_yb8rm")
 HealthPath = NodePath("Canvas/CanvasLayer/InfoPanel/Labels/HealthLabel")
 WaterPath = NodePath("Canvas/CanvasLayer/InfoPanel/Labels/WaterLabel")
 
-[node name="TileMapNode" type="Node2D" parent="."]
-script = ExtResource("8_3dk2m")
+[node name="HexMap" type="Node2D" parent="."]
+script = ExtResource("2_4lp4x")
 
 [node name="Canvas" type="Node2D" parent="."]
 

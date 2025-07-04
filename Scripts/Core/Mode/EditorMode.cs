@@ -30,7 +30,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         Context.Display.HexMap = _hexMap;
         
         // Sync tiles with the HexMap
-        _hexMap.SyncWithMap(Context.Map);
+        _hexMap.ConnectToMap(Context.Map);
         
         // Register non-tile entities (buildings, units) with sprite rendering
         foreach (var (coordinate, building) in Context.Map.Buildings)

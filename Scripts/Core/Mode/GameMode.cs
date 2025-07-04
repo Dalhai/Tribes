@@ -40,7 +40,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
         // Initialize the HexMap and sync tiles
         _hexMap = GetHexMap();
-        _hexMap.SyncWithMap(Context.Map);
+        _hexMap.ConnectToMap(Context.Map);
         
         // Connect HexMap to Display for overlay support
         Context.Display.HexMap = _hexMap;
