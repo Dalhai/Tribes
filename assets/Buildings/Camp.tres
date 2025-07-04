@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://prnlhs04qtno"]
 
-[ext_resource type="Texture2D" uid="uid://dkv2emaen645c" path="res://Assets/Buildings/Camp.png" id="1_nx14w"]
-[ext_resource type="Script" path="res://Script/Core/Entities/BuildingConfiguration.cs" id="2_nsaen"]
+[ext_resource type="Texture2D" uid="uid://u3smaaiju61j" path="res://Assets/Buildings/Camp.png" id="1_nx14w"]
+[ext_resource type="Script" uid="uid://dgas65b47q2ep" path="res://Script/Core/Entities/BuildingConfiguration.cs" id="2_nsaen"]
 
 [resource]
 script = ExtResource("2_nsaen")
