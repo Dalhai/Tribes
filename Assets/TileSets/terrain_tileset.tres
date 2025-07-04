@@ -8,38 +8,38 @@ tile_shape = 3
 # Tile IDs correspond to TribesOfDust.Core.TileType enum values.
 
 [ext_resource type="Texture2D" path="res://assets/textures/terrain/open.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/tundra_1.png" id="2"]
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/rocks_1.png" id="3"]
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/dunes_1.png" id="4"]
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/blocked_n.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/blocked_n.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/tundra_1.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/rocks_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/dunes_1.png" id="5"]
 
-# Open
+# Open (TileType.Open = 1)
 [sub_resource type="TileSetAtlasSource" id="tile_open"]
 texture = ExtResource("1")
 
-# Tundra
-[sub_resource type="TileSetAtlasSource" id="tile_tundra"]
+# Blocked (TileType.Blocked = 2)
+[sub_resource type="TileSetAtlasSource" id="tile_blocked"]
 texture = ExtResource("2")
 
-# Rocks
-[sub_resource type="TileSetAtlasSource" id="tile_rocks"]
+# Tundra (TileType.Tundra = 3)
+[sub_resource type="TileSetAtlasSource" id="tile_tundra"]
 texture = ExtResource("3")
 
-# Dunes
-[sub_resource type="TileSetAtlasSource" id="tile_dunes"]
+# Rocks (TileType.Rocks = 4)
+[sub_resource type="TileSetAtlasSource" id="tile_rocks"]
 texture = ExtResource("4")
 
-# Blocked (directional texture example)
-[sub_resource type="TileSetAtlasSource" id="tile_blocked"]
+# Dunes (TileType.Dunes = 5)
+[sub_resource type="TileSetAtlasSource" id="tile_dunes"]
 texture = ExtResource("5")
 
 # Map tile IDs to sub resources using enum values
 [resource]
-tiles = {
-    1: SubResource("tile_open"),
-    2: SubResource("tile_blocked"),
-    3: SubResource("tile_tundra"),
-    4: SubResource("tile_rocks"),
-    5: SubResource("tile_dunes"),
-    6: SubResource("tile_blocked") # Placeholder for Canyon (texture missing)
+sources = {
+    1: SubResource("tile_open"),     # TileType.Open
+    2: SubResource("tile_blocked"),  # TileType.Blocked  
+    3: SubResource("tile_tundra"),   # TileType.Tundra
+    4: SubResource("tile_rocks"),    # TileType.Rocks
+    5: SubResource("tile_dunes"),    # TileType.Dunes
+    6: SubResource("tile_blocked")   # TileType.Canyon (placeholder)
 }

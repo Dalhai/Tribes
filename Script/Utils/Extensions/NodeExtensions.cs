@@ -7,8 +7,16 @@ namespace TribesOfDust.Utils;
 
 public static class NodeExtensions
 {
+    /// <summary>
+    /// Creates a sprite for entities. 
+    /// Note: Tile entities are skipped as they should be handled by TileMapNode.
+    /// </summary>
     public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity)
     {
+        // Skip tiles - they should be handled by TileMapNode
+        if (entity is Tile)
+            return;
+            
         if (entity.Location is {} location)
         {
             Sprite2D sprite = new();
@@ -35,10 +43,6 @@ public static class NodeExtensions
                 case Unit:
                     sprite.Scale *= 0.8f;
                     sprite.ZIndex = 10;
-                    break;
-                case Tile:
-                    sprite.Scale *= 1.0f;
-                    sprite.ZIndex = 1;
                     break;
             }
 

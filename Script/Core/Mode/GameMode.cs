@@ -15,6 +15,13 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     [Export] public NodePath? WaterPath;
 
     public static GameMode? Instance { get; private set; }
+    
+    private TileMapNode? _tileMapNode;
+    
+    /// <summary>
+    /// The TileMapNode responsible for rendering terrain tiles.
+    /// </summary>
+    public TileMapNode TileMapNode => _tileMapNode ??= GetTileMapNode();
 
     public override void _Ready()
     {
@@ -29,9 +36,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         HexMapGenerator generator = new(new(-100, -100), new(100, 100), Context.Repos.Tiles);
         map.Generate(generator);
 
-        // Register tiles
-        foreach (var (_, tile) in Context.Map.Tiles)
-            this.CreateSpriteForEntity(Context, tile);
+        // Initialize the TileMapNode and sync tiles
+        _tileMapNode = GetTileMapNode();
+        _tileMapNode.SyncWithMap(Context.Map);
         
         // Register buildings
         var campClass = repo.Buildings.GetAsset("Camp");
@@ -148,4 +155,32 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     private readonly Player _player2 = new("Player 2", Colors.Blue);
     private readonly IHexLayer<Color> _selectionOverlay = new HexLayer<Color>();
     private readonly IHexLayer<Color> _movementOverlay = new HexLayer<Color>();
+    
+    /// <summary>
+    /// Gets or creates the TileMapNode for this game.
+    /// </summary>
+    private TileMapNode GetTileMapNode()
+    {
+        if (_tileMapNode != null)
+            return _tileMapNode;
+            
+        // Look for existing TileMapNode
+        foreach (Node child in GetChildren())
+        {
+            if (child is TileMapNode tileMapNode)
+            {
+                _tileMapNode = tileMapNode;
+                return _tileMapNode;
+            }
+        }
+        
+        // Create new TileMapNode if none exists
+        _tileMapNode = new TileMapNode
+        {
+            Name = "TileMapNode"
+        };
+        
+        AddChild(_tileMapNode);
+        return _tileMapNode;
+    }
 }

@@ -10,14 +10,29 @@ namespace TribesOfDust.Core.Modes;
 public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
     public static EditorMode? Instance { get; private set; }
+    
+    private TileMapNode? _tileMapNode;
+    
+    /// <summary>
+    /// The TileMapNode responsible for rendering terrain tiles.
+    /// </summary>
+    public TileMapNode TileMapNode => _tileMapNode ??= GetTileMapNode();
         
     public override void _Ready()
     {
         Context = new MapContext(Core.Context.Instance);
         
-        // Register tiles
-        foreach (var (coordinate, tile) in Context.Map.Tiles)
-            CreateSprite(coordinate, tile);
+        // Initialize the TileMapNode
+        _tileMapNode = GetTileMapNode();
+        
+        // Sync tiles with the TileMapNode
+        _tileMapNode.SyncWithMap(Context.Map);
+        
+        // Register non-tile entities (buildings, units) with sprite rendering
+        foreach (var (coordinate, building) in Context.Map.Buildings)
+            CreateSpriteForNonTileEntity(coordinate, building);
+        foreach (var (coordinate, unit) in Context.Map.Units)
+            CreateSpriteForNonTileEntity(coordinate, unit);
 
         // Register overlays with context   
         Context.Display.AddOverlay(_hoveredOverlay);
@@ -77,21 +92,18 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 var mousePosition = GetGlobalMousePosition();
                 var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
                 
-                // Remove the tile that has been clicked from the tiles list
-                if (Context.Map.Tiles.Get(clickedLocation) is { Identity: var identity } tile)
+                // Remove the existing tile from the map data
+                if (Context.Map.Tiles.Get(clickedLocation) is { } existingTile)
                 {
-                    Sprite2D sprite = Context.Display.Sprites[identity];
-                    Context.Display.Sprites.Remove(identity);
-                    Context.Map.TryRemoveEntity(tile);
-                    RemoveChild(sprite);
+                    Context.Map.TryRemoveEntity(existingTile);
                 }
                 
                 // Create a new tile with the selected tile type and register it with the context
-                var newLocation = clickedLocation;
-                var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType), newLocation);
+                var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType), clickedLocation);
                 Context.Map.TryAddEntity(newTile);
                 
-                CreateSprite(newLocation, newTile);
+                // Update the TileMapNode
+                TileMapNode.SetTile(clickedLocation, newTile);
             }
 
             // Remove open tiles on right mouse click.
@@ -103,23 +115,19 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
                 var clickedTile = Context.Map.Tiles.Get(clickedLocation);
 
-                // Remove the tile that has been clicked from the tiles list
-                if (clickedTile is { Identity: var identity } tile)
+                // Remove the existing tile
+                if (clickedTile is { } tile)
                 {
-                    Sprite2D sprite = Context.Display.Sprites[identity];
-                    Context.Display.Sprites.Remove(identity);
                     Context.Map.TryRemoveEntity(tile);
-                    RemoveChild(sprite);
+                    TileMapNode.RemoveTile(clickedLocation);
                 }
 
                 // Create a new tile with the open tile type and register it with the context
                 if (clickedTile is null || clickedTile.Configuration.Key != TileType.Open)
                 {
-                    var newLocation = clickedLocation;
-                    var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open), newLocation);
+                    var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open), clickedLocation);
                     Context.Map.TryAddEntity(newTile);
-
-                    CreateSprite(newLocation, newTile);
+                    TileMapNode.SetTile(clickedLocation, newTile);
                 }
             }
         }
@@ -155,8 +163,16 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             _activeTypeOverlay.TryAdd(tile.Key, Colors.LightBlue);
     }
 
-    private void CreateSprite(AxialCoordinate coordinate, IEntity<IConfiguration> entity)
+    /// <summary>
+    /// Creates a sprite for non-tile entities (buildings, units).
+    /// Tiles are handled by the TileMapNode.
+    /// </summary>
+    private void CreateSpriteForNonTileEntity(AxialCoordinate coordinate, IEntity<IConfiguration> entity)
     {
+        // Skip tiles - they are handled by TileMapNode
+        if (entity is Tile)
+            return;
+
         Sprite2D sprite = new();
 
         float widthScaleToExpected = entity.Configuration.Texture != null
@@ -182,15 +198,38 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 sprite.Scale *= 0.8f;
                 sprite.ZIndex = 10;
                 break;
-            case Tile tile:
-                sprite.Scale *= 1.0f;
-                sprite.ZIndex = 1;
-                break;
         }
 
         Context.Display.Sprites.Add(entity.Identity, sprite);
-        
         AddChild(sprite);
+    }
+
+    /// <summary>
+    /// Gets or creates the TileMapNode for this editor.
+    /// </summary>
+    private TileMapNode GetTileMapNode()
+    {
+        if (_tileMapNode != null)
+            return _tileMapNode;
+            
+        // Look for existing TileMapNode
+        foreach (Node child in GetChildren())
+        {
+            if (child is TileMapNode tileMapNode)
+            {
+                _tileMapNode = tileMapNode;
+                return _tileMapNode;
+            }
+        }
+        
+        // Create new TileMapNode if none exists
+        _tileMapNode = new TileMapNode
+        {
+            Name = "TileMapNode"
+        };
+        
+        AddChild(_tileMapNode);
+        return _tileMapNode;
     }
 
     private AxialCoordinate? _hoveredLocation;
