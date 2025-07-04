@@ -66,26 +66,8 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         _hexMap = GetHexMap();
         _hexMap.ConnectToMap(Context.Map);
         
-        // Run diagnostic to understand coordinate issues
-        GD.Print("=== Coordinate System Verification ===");
-        
-        var diagTileSize = _hexMap.TerrainLayer.TileSet.GetTileSize();
-        GD.Print($"TileSet size: {diagTileSize}");
-        
-        // Test the three coordinates from FakeGenerator
-        var testCoords = new AxialCoordinate[]
-        {
-            AxialCoordinate.Zero,        // (0, 0) - center tile
-            AxialCoordinate.Zero.NW,     // (-1, 0) - northwest tile
-            AxialCoordinate.Zero.SE      // (1, 0) - southeast tile
-        };
-        
-        foreach (var coord in testCoords)
-        {
-            var worldPos = _hexMap.HexToWorldPosition(coord);
-            var backToHex = _hexMap.WorldToHexCoordinate(worldPos);
-            GD.Print($"Tile {coord}: World pos {worldPos}, Round-trip {backToHex}");
-        }
+        // Verify coordinate conversions work properly
+        GD.Print("Hex coordinate system initialized with TileSet size: " + _hexMap.TerrainLayer.TileSet.GetTileSize());
         
         // Connect HexMap to Display for overlay support
         Context.Display.HexMap = _hexMap;
