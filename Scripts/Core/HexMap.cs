@@ -167,6 +167,59 @@ public partial class HexMap : Node2D
 
     #endregion
 
+    #region Overlay Management
+
+    /// <summary>
+    /// Sets an overlay tile at the specified hex coordinate with the given color.
+    /// This replaces any existing overlay at that coordinate.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate where to place the overlay tile</param>
+    /// <param name="color">The color to modulate the overlay tile</param>
+    public void SetOverlayTile(AxialCoordinate hexCoordinate, Color color)
+    {
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        
+        // Set the overlay tile (source ID 0, atlas coordinates 0,0)
+        OverlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
+        
+        // Store the color for this coordinate
+        var colorSet = new HashSet<Color> { color };
+        _overlayColors[hexCoordinate] = colorSet;
+        
+        // Set the modulation color for the entire layer
+        // Note: This affects all overlay tiles on this layer
+        OverlayLayer.Modulate = color;
+    }
+
+    /// <summary>
+    /// Removes an overlay tile at the specified hex coordinate.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
+    public void RemoveOverlayTile(AxialCoordinate hexCoordinate)
+    {
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        OverlayLayer.EraseCell(tileMapCoordinate);
+        _overlayColors.Remove(hexCoordinate);
+        
+        // Reset modulation if no tiles remain
+        if (_overlayColors.Count == 0)
+        {
+            OverlayLayer.Modulate = Godot.Colors.White;
+        }
+    }
+
+    /// <summary>
+    /// Clears all overlay colors and tiles.
+    /// </summary>
+    public void ClearAllOverlays()
+    {
+        _overlayColors.Clear();
+        OverlayLayer.Clear();
+        OverlayLayer.Modulate = Godot.Colors.White;
+    }
+
+    #endregion
+
     #region Coordinate Conversion
 
     /// <summary>
@@ -285,59 +338,6 @@ public partial class HexMap : Node2D
 
         AddChild(_overlayLayer);
         return _overlayLayer;
-    }
-
-    #endregion
-
-    #region Overlay Management
-
-    /// <summary>
-    /// Sets an overlay tile at the specified hex coordinate with the given color.
-    /// This replaces any existing overlay at that coordinate.
-    /// </summary>
-    /// <param name="hexCoordinate">The hex coordinate where to place the overlay tile</param>
-    /// <param name="color">The color to modulate the overlay tile</param>
-    public void SetOverlayTile(AxialCoordinate hexCoordinate, Color color)
-    {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
-        
-        // Set the overlay tile (source ID 0, atlas coordinates 0,0)
-        OverlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
-        
-        // Store the color for this coordinate
-        var colorSet = new HashSet<Color> { color };
-        _overlayColors[hexCoordinate] = colorSet;
-        
-        // Set the modulation color for the entire layer
-        // Note: This affects all overlay tiles on this layer
-        OverlayLayer.Modulate = color;
-    }
-
-    /// <summary>
-    /// Removes an overlay tile at the specified hex coordinate.
-    /// </summary>
-    /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
-    public void RemoveOverlayTile(AxialCoordinate hexCoordinate)
-    {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
-        OverlayLayer.EraseCell(tileMapCoordinate);
-        _overlayColors.Remove(hexCoordinate);
-        
-        // Reset modulation if no tiles remain
-        if (_overlayColors.Count == 0)
-        {
-            OverlayLayer.Modulate = Godot.Colors.White;
-        }
-    }
-
-    /// <summary>
-    /// Clears all overlay colors and tiles.
-    /// </summary>
-    public void ClearAllOverlays()
-    {
-        _overlayColors.Clear();
-        OverlayLayer.Clear();
-        OverlayLayer.Modulate = Godot.Colors.White;
     }
 
     #endregion
