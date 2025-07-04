@@ -18,7 +18,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
     public static GameMode? Instance { get; private set; }
     
-    private HexMap _hexMap;
+    private HexMap _hexMap = null!;
     
     /// <summary>
     /// The HexMap responsible for rendering terrain tiles.

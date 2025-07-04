@@ -12,7 +12,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
     public static EditorMode? Instance { get; private set; }
     
-    private HexMap _hexMap;
+    private HexMap _hexMap = null!;
     
     /// <summary>
     /// The HexMap responsible for rendering terrain tiles.
@@ -225,7 +225,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         return _hexMap;
     }
 
-    private AxialCoordinate _hoveredLocation;
+    private AxialCoordinate _hoveredLocation = AxialCoordinate.Zero;
     private TileType _activeTileType = TileType.Tundra;
 
     public MapContext Context { get; private set; } = null!;

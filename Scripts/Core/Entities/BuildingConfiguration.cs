@@ -19,7 +19,7 @@ public partial class BuildingConfiguration : Resource, IConfiguration, IVariant<
     /// The texture associated with the building.
     /// </summary>
     [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D Texture { get; set; }
+    public Texture2D Texture { get; set; } = null!;
 
     #endregion
 }
