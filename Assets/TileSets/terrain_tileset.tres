@@ -37,9 +37,9 @@ texture = ExtResource("5")
 [resource]
 tiles = {
     1: SubResource("tile_open"),
+    2: SubResource("tile_blocked"),
     3: SubResource("tile_tundra"),
     4: SubResource("tile_rocks"),
     5: SubResource("tile_dunes"),
-    2: SubResource("tile_blocked"),
     6: SubResource("tile_blocked") # Placeholder for Canyon (texture missing)
 }
