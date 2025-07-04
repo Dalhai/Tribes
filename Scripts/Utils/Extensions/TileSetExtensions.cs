@@ -1,4 +1,5 @@
 using Godot;
+using TribesOfDust.Hex;
 
 namespace TribesOfDust.Utils.Extensions;
 
@@ -15,7 +16,7 @@ public static class TileSetExtensions
     public static Vector2I GetTileSize(this TileSet tileSet)
     {
         if (tileSet.GetSourceCount() == 0)
-            return new Vector2I(516, 448); // Fallback to expected size
+            return HexConstants.ExpectedTileSize; // Fallback to expected size
             
         var sourceId = tileSet.GetSourceId(0);
         var source = tileSet.GetSource(sourceId);
@@ -25,7 +26,7 @@ public static class TileSetExtensions
             return atlasSource.TextureRegionSize;
         }
         
-        return new Vector2I(516, 448); // Fallback to expected size
+        return HexConstants.ExpectedTileSize; // Fallback to expected size
     }
     
     /// <summary>

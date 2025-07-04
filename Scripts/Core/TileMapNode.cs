@@ -98,7 +98,7 @@ public partial class TileMapNode : Node2D
         
         // Convert to hex coordinate using the tile size-based conversion
         var tileSize = TerrainLayer.TileSet.GetTileSize();
-        return tileSize.WorldToHexCoordinate(localPosition);
+        return HexConversions.WorldToHexCoordinate(tileSize, localPosition);
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ public partial class TileMapNode : Node2D
     public Vector2 HexToWorldPosition(AxialCoordinate hexCoordinate)
     {
         var tileSize = TerrainLayer.TileSet.GetTileSize();
-        var localPosition = tileSize.HexToWorldPosition(hexCoordinate);
+        var localPosition = HexConversions.HexToWorldPosition(tileSize, hexCoordinate);
         return ToGlobal(localPosition);
     }
 

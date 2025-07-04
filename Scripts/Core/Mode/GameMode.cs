@@ -52,10 +52,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(camp1);
         map.TryAddEntity(camp2);
 
-        // Calculate scale for camp buildings - since textures should match expected size, scale should be 1.0
-        var campScale = new Vector2(1.0f, 1.0f);
-        this.CreateSpriteForEntity(Context, camp1, tileSize, campScale);
-        this.CreateSpriteForEntity(Context, camp2, tileSize, campScale);
+        // Create sprites for camp buildings
+        this.CreateSpriteForEntity(Context, camp1, tileSize);
+        this.CreateSpriteForEntity(Context, camp2, tileSize);
 
         var fountainClass = repo.Buildings.GetAsset("Fountain");
         var fountain1 = new Building(fountainClass, new(1, -1));
@@ -64,10 +63,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(fountain1);
         map.TryAddEntity(fountain2);
 
-        // Calculate scale for fountain buildings - since textures should match expected size, scale should be 1.0
-        var fountainScale = new Vector2(1.0f, 1.0f);
-        this.CreateSpriteForEntity(Context, fountain1, tileSize, fountainScale);
-        this.CreateSpriteForEntity(Context, fountain2, tileSize, fountainScale);
+        // Create sprites for fountain buildings
+        this.CreateSpriteForEntity(Context, fountain1, tileSize);
+        this.CreateSpriteForEntity(Context, fountain2, tileSize);
 
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
@@ -82,11 +80,10 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit2);
             map.TryAddEntity(unit3);
 
-            // Calculate scale for units - since textures should match expected size, scale should be 1.0
-            var unitScale = new Vector2(1.0f, 1.0f);
-            this.CreateSpriteForEntity(Context, unit1, tileSize, unitScale);
-            this.CreateSpriteForEntity(Context, unit2, tileSize, unitScale);
-            this.CreateSpriteForEntity(Context, unit3, tileSize, unitScale);
+            // Create sprites for units
+            this.CreateSpriteForEntity(Context, unit1, tileSize);
+            this.CreateSpriteForEntity(Context, unit2, tileSize);
+            this.CreateSpriteForEntity(Context, unit3, tileSize);
         }
 
         if (camp2.Owner != null)
@@ -99,11 +96,10 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit2);
             map.TryAddEntity(unit3);
 
-            // Calculate scale for units - since textures should match expected size, scale should be 1.0  
-            var unitScale2 = new Vector2(1.0f, 1.0f);
-            this.CreateSpriteForEntity(Context, unit1, tileSize, unitScale2);
-            this.CreateSpriteForEntity(Context, unit2, tileSize, unitScale2);
-            this.CreateSpriteForEntity(Context, unit3, tileSize, unitScale2);
+            // Create sprites for units
+            this.CreateSpriteForEntity(Context, unit1, tileSize);
+            this.CreateSpriteForEntity(Context, unit2, tileSize);
+            this.CreateSpriteForEntity(Context, unit3, tileSize);
         }
 
         base._Ready();

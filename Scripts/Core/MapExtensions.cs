@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using Godot;
 using TribesOfDust.Hex;
-using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core;
 
@@ -27,7 +26,7 @@ public static class MapExtensions
         Vector2 maximum = -Vector2.Inf;
         foreach (var tile in map.Tiles)
         {
-            var worldPosition = tileSize.HexToWorldPosition(tile.Key);
+            var worldPosition = HexConversions.HexToWorldPosition(tileSize, tile.Key);
 
             minimum.X = Math.Min(minimum.X, worldPosition.X);
             maximum.X = Math.Max(maximum.X, worldPosition.X);
