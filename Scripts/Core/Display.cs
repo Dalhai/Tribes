@@ -18,22 +18,14 @@ public partial class Display : RefCounted
         // Setup event handlers.
         _onOverlayTileAdded = (overlay, color, coordinate) =>
         {
-            // Handle sprite-based overlays (for non-tile entities)
             if (tiles.Get(coordinate) is { } tile)
                 AddOverlayColor(tile, color);
-                
-            // Handle HexMap overlays if available
-            HexMapAddOverlayColor(coordinate, color);
         };
 
         _onOverlayTileRemoved = (overlay, color, coordinate) =>
         {
-            // Handle sprite-based overlays (for non-tile entities)
             if (tiles.Get(coordinate) is { } tile)
                 RemoveOverlayColor(tile, color);
-                
-            // Handle HexMap overlays if available
-            HexMapRemoveOverlayColor(coordinate, color);
         };
     }
 
@@ -41,11 +33,12 @@ public partial class Display : RefCounted
         .AppendEnumerable(nameof(_overlays).Remove('_').Capitalize(), _overlays)
         .ToString();
 
-    public readonly Dictionary<ulong, Sprite2D> Sprites = new();
-    public readonly Dictionary<ulong, HashSet<Color>> Colors = new();
-    
-    // Track overlay colors per coordinate for HexMap (similar to sprite system)
-    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _tileMapOverlayColors = new();
+
+
+    /// <summary>
+    /// Dictionary of sprites for non-tile entities (buildings, units).
+    /// </summary>
+    public Dictionary<ulong, Sprite2D> Sprites => _sprites;
 
     /// <summary>
     /// Optional HexMap for handling overlay tiles on TileMapLayers.
@@ -68,15 +61,12 @@ public partial class Display : RefCounted
         if (_overlays.Contains(overlay))
             return;
 
-        // Add existing overlay tiles to sprites
+        // Add existing overlay tiles
         foreach (var (coordinate, color) in overlay)
         {
             if (tiles.Get(coordinate) is { } tile)
                 AddOverlayColor(tile, color);
         }
-
-        // Add existing overlay tiles to HexMap if available
-        HexMapSyncOverlay(overlay);
 
         overlay.Added += _onOverlayTileAdded;
         overlay.Removed += _onOverlayTileRemoved;
@@ -96,15 +86,12 @@ public partial class Display : RefCounted
         if (!_overlays.Contains(overlay))
             return;
 
-        // Remove overlay tiles from sprites
+        // Remove overlay tiles
         foreach (var (coordinate, color) in overlay)
         {
             if (tiles.Get(coordinate) is { } tile)
                 RemoveOverlayColor(tile, color);
         }
-
-        // Remove overlay tiles from HexMap if available
-        HexMapUnsyncOverlay(overlay);
 
         overlay.Added -= _onOverlayTileAdded;
         overlay.Removed -= _onOverlayTileRemoved;
@@ -114,136 +101,62 @@ public partial class Display : RefCounted
 
     private void AddOverlayColor(IIdentifiable identifiable, Color color)
     {
-        if (Sprites.TryGetValue(identifiable.Identity, out var sprite)) 
+        if (!_colors.TryGetValue(identifiable.Identity, out var colors))
         {
-            if (!Colors.TryGetValue(identifiable.Identity, out var colors))
-            {
-                colors = new();
-                Colors.Add(identifiable.Identity, colors);
-            }
-                
-            colors.Add(color);
+            colors = new();
+            _colors.Add(identifiable.Identity, colors);
+        }
             
-            // Mix the colors evenly
-            sprite.Modulate = colors.Count == 0
-                ? Godot.Colors.White
-                : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
+        colors.Add(color);
+        
+        // Calculate aggregated color (mix colors evenly)
+        var aggregatedColor = colors.Count == 0
+            ? Godot.Colors.White
+            : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
+
+        // Update HexMap if available and this is a tile
+        if (HexMap != null && identifiable is Tile tile)
+        {
+            HexMap.SetOverlayTile(tile.Location, aggregatedColor);
         }
     }
 
     private void RemoveOverlayColor(IIdentifiable identifiable, Color color)
     {
-        if (Sprites.TryGetValue(identifiable.Identity, out var sprite) &&
-            Colors.TryGetValue(identifiable.Identity, out var colors))
-        {
-            colors.Remove(color);
-            
-            // Mix the colors evenly
-            sprite.Modulate = colors.Count == 0
-                ? Godot.Colors.White
-                : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
-        }
-    }
-
-    #endregion
-
-    #region HexMap Overlay Management
-
-    /// <summary>
-    /// Adds an overlay color to the HexMap system with color aggregation.
-    /// </summary>
-    private void HexMapAddOverlayColor(AxialCoordinate coordinate, Color color)
-    {
-        if (HexMap == null)
-            return;
-
-        // Get or create color set for this coordinate
-        if (!_tileMapOverlayColors.TryGetValue(coordinate, out var colors))
-        {
-            colors = new HashSet<Color>();
-            _tileMapOverlayColors[coordinate] = colors;
-        }
-        
-        // Add the color
-        colors.Add(color);
-        
-        // Calculate aggregated color (same logic as sprite system)
-        var aggregatedColor = colors.Count == 0
-            ? Godot.Colors.White
-            : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
-        
-        // Set the overlay tile with aggregated color
-        HexMap.SetOverlayTile(coordinate, aggregatedColor);
-    }
-
-    /// <summary>
-    /// Removes an overlay color from the HexMap system with color aggregation.
-    /// </summary>
-    private void HexMapRemoveOverlayColor(AxialCoordinate coordinate, Color color)
-    {
-        if (HexMap == null)
-            return;
-
-        if (_tileMapOverlayColors.TryGetValue(coordinate, out var colors))
+        if (_colors.TryGetValue(identifiable.Identity, out var colors))
         {
             colors.Remove(color);
             
             if (colors.Count == 0)
             {
-                // Remove the overlay tile completely if no colors remain
-                _tileMapOverlayColors.Remove(coordinate);
-                HexMap.RemoveOverlayTile(coordinate);
+                // Remove from dictionary if no colors remain
+                _colors.Remove(identifiable.Identity);
+                
+                // Remove from HexMap if available and this is a tile
+                if (HexMap != null && identifiable is Tile tile)
+                {
+                    HexMap.RemoveOverlayTile(tile.Location);
+                }
             }
             else
             {
-                // Update the overlay tile with new aggregated color
+                // Calculate aggregated color (mix colors evenly)
                 var aggregatedColor = colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
-                HexMap.SetOverlayTile(coordinate, aggregatedColor);
+                
+                // Update HexMap if available and this is a tile
+                if (HexMap != null && identifiable is Tile tile)
+                {
+                    HexMap.SetOverlayTile(tile.Location, aggregatedColor);
+                }
             }
-        }
-    }
-
-    /// <summary>
-    /// Syncs an overlay with the HexMap system.
-    /// </summary>
-    private void HexMapSyncOverlay(IHexLayerView<Color> overlay)
-    {
-        if (HexMap == null)
-            return;
-
-        foreach (var (coordinate, color) in overlay)
-        {
-            HexMapAddOverlayColor(coordinate, color);
-        }
-    }
-
-    /// <summary>
-    /// Removes an overlay from the HexMap system.
-    /// </summary>
-    private void HexMapUnsyncOverlay(IHexLayerView<Color> overlay)
-    {
-        if (HexMap == null)
-            return;
-
-        foreach (var (coordinate, color) in overlay)
-        {
-            HexMapRemoveOverlayColor(coordinate, color);
         }
     }
 
     #endregion
 
-    /// <summary>
-    /// Gets a unique layer name for the given overlay.
-    /// This creates a consistent mapping between overlay instances and TileMapLayer names.
-    /// </summary>
-    private static string GetOverlayLayerName(IHexLayerView<Color> overlay)
-    {
-        // Use the overlay's hash code to create a unique but consistent layer name
-        return $"Overlay_{overlay.GetHashCode()}";
-    }
-
     private readonly IHexLayerView<Tile> tiles;
+    private readonly Dictionary<ulong, Sprite2D> _sprites = new();
+    private readonly Dictionary<ulong, HashSet<Color>> _colors = new();
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
     private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;
     private readonly HashSet<IHexLayerView<Color>> _overlays = new();
