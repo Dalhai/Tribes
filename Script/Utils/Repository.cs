@@ -220,7 +220,7 @@ namespace TribesOfDust.Utils
         ///
         /// <param name="variation">The variation to get the asset from.</param>
         ///
-        /// <returns>The requested assetThe requested asset..</returns>
+        /// <returns>The requested asset.</returns>
         public TAsset GetAsset(TVariation variation)
         {
             if (HasVariations(variation))
