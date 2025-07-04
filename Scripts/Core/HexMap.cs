@@ -324,8 +324,8 @@ public partial class HexMap : Node2D
 
     #region Private Fields
 
-    private TileMapLayer _terrainLayer;
-    private TileMapLayer _overlayLayer;
+    private TileMapLayer _terrainLayer = null!;
+    private TileMapLayer _overlayLayer = null!;
     private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
     private Map? _connectedMap;
 
