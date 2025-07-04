@@ -171,8 +171,9 @@ public partial class TileMapNode : Node2D
     /// Gets or creates an overlay layer with the specified name.
     /// </summary>
     /// <param name="layerName">The name of the overlay layer</param>
+    /// <param name="zIndex">Optional Z-index for the layer (default: 10)</param>
     /// <returns>The overlay TileMapLayer</returns>
-    public TileMapLayer GetOrCreateOverlayLayer(string layerName)
+    public TileMapLayer GetOrCreateOverlayLayer(string layerName, int zIndex = 10)
     {
         if (_overlayLayers.TryGetValue(layerName, out var existingLayer))
             return existingLayer;
@@ -181,7 +182,7 @@ public partial class TileMapNode : Node2D
         var overlayLayer = new TileMapLayer
         {
             Name = $"OverlayLayer_{layerName}",
-            ZIndex = 10, // Render above terrain
+            ZIndex = zIndex, // Configurable Z-index for layer ordering
             YSortEnabled = false,
             UseKinematicBodies = false,
             CollisionEnabled = false,
@@ -199,15 +200,21 @@ public partial class TileMapNode : Node2D
 
     /// <summary>
     /// Sets an overlay tile at the specified hex coordinate with the given color.
+    /// Creates a color-specific layer to handle proper color rendering.
     /// </summary>
-    /// <param name="layerName">The name of the overlay layer</param>
+    /// <param name="layerName">The base name of the overlay layer</param>
     /// <param name="hexCoordinate">The hex coordinate where to place the overlay tile</param>
     /// <param name="color">The color to modulate the overlay tile</param>
     public void SetOverlayTile(string layerName, AxialCoordinate hexCoordinate, Color color)
     {
         // Create a unique layer name that includes the color information
-        var coloredLayerName = $"{layerName}_{color.ToHtml()}";
-        var overlayLayer = GetOrCreateOverlayLayer(coloredLayerName);
+        // Use a hash of the color to avoid very long layer names
+        var colorHash = color.ToHtml().GetHashCode().ToString("X8");
+        var coloredLayerName = $"{layerName}_C{colorHash}";
+        
+        // Different overlay types get different z-index ranges
+        var baseZIndex = GetOverlayTypeZIndex(layerName);
+        var overlayLayer = GetOrCreateOverlayLayer(coloredLayerName, baseZIndex);
         var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
         
         // Set the overlay tile (source ID 0, atlas coordinates 0,0)
@@ -220,12 +227,15 @@ public partial class TileMapNode : Node2D
     /// <summary>
     /// Removes an overlay tile at the specified hex coordinate.
     /// </summary>
-    /// <param name="layerName">The name of the overlay layer</param>
+    /// <param name="layerName">The base name of the overlay layer</param>
     /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
+    /// <param name="color">The color of the overlay tile to remove</param>
     public void RemoveOverlayTile(string layerName, AxialCoordinate hexCoordinate, Color color)
     {
         // Create the same unique layer name that includes the color information
-        var coloredLayerName = $"{layerName}_{color.ToHtml()}";
+        var colorHash = color.ToHtml().GetHashCode().ToString("X8");
+        var coloredLayerName = $"{layerName}_C{colorHash}";
+        
         if (_overlayLayers.TryGetValue(coloredLayerName, out var overlayLayer))
         {
             var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
@@ -259,4 +269,21 @@ public partial class TileMapNode : Node2D
     }
 
     #endregion
+
+    /// <summary>
+    /// Gets the appropriate Z-index for different overlay types.
+    /// This ensures proper layering of different overlay types.
+    /// </summary>
+    private static int GetOverlayTypeZIndex(string layerName)
+    {
+        // Different overlay types get different z-index ranges for proper layering
+        return layerName.ToLowerInvariant() switch
+        {
+            var name when name.Contains("selection") => 15, // Selections on top
+            var name when name.Contains("highlight") => 12, // Highlights above movement
+            var name when name.Contains("movement") => 11,  // Movement overlays
+            var name when name.Contains("hover") => 10,     // Hover effects at base level
+            _ => 10 // Default overlay z-index
+        };
+    }
 }
