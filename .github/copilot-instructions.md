@@ -1,0 +1,2 @@
+All branches must start with the issue number, followed by a description of the change (e.g. issue120-switch_to_tilemap).
+All commit must be written in imperative and postfixed with the issue number (e.g. "Update the tilemap to include units (#120)").
