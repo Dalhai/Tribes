@@ -246,14 +246,6 @@ public partial class HexMap : Node2D
         return new Vector2I(hexCoordinate.Q, hexCoordinate.R);
     }
 
-    /// <summary>
-    /// Converts TileMap coordinates to hex coordinates.
-    /// </summary>
-    private static AxialCoordinate TileMapToHexCoordinate(Vector2I tileMapCoordinate)
-    {
-        return new AxialCoordinate(tileMapCoordinate.X, tileMapCoordinate.Y);
-    }
-
     #endregion
 
     #region Private Helpers
