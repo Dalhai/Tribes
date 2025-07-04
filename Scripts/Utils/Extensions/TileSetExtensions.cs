@@ -1,11 +1,9 @@
 using Godot;
-using TribesOfDust.Hex;
 
 namespace TribesOfDust.Utils.Extensions;
 
 /// <summary>
-/// Extension methods for TileSet that provide hex coordinate conversions
-/// and utility functions based on the actual tile size.
+/// Extension methods for TileSet that provide basic tile size access.
 /// </summary>
 public static class TileSetExtensions
 {
@@ -59,40 +57,5 @@ public static class TileSetExtensions
     {
         var size = tileSet.GetTileSize();
         return (float)size.X / size.Y;
-    }
-    
-    /// <summary>
-    /// Converts hex coordinates to world position using the TileSet's tile size.
-    /// </summary>
-    /// <param name="tileSet">The TileSet to use for size calculations</param>
-    /// <param name="hexCoordinate">The hex coordinate to convert</param>
-    /// <returns>The world position</returns>
-    public static Vector2 HexToWorldPosition(this TileSet tileSet, AxialCoordinate hexCoordinate)
-    {
-        var unitPosition = HexConversions.HexToUnit(hexCoordinate);
-        var tileSize = tileSet.GetTileSize();
-        
-        // Scale the unit position by the actual tile size
-        // We use the smaller dimension to maintain proper hex proportions
-        var scale = Mathf.Min(tileSize.X, tileSize.Y);
-        return unitPosition * scale;
-    }
-    
-    /// <summary>
-    /// Converts world position to hex coordinates using the TileSet's tile size.
-    /// </summary>
-    /// <param name="tileSet">The TileSet to use for size calculations</param>
-    /// <param name="worldPosition">The world position to convert</param>
-    /// <returns>The hex coordinate</returns>
-    public static AxialCoordinate WorldToHexCoordinate(this TileSet tileSet, Vector2 worldPosition)
-    {
-        var tileSize = tileSet.GetTileSize();
-        
-        // Scale down by the actual tile size
-        // We use the smaller dimension to maintain proper hex proportions
-        var scale = Mathf.Min(tileSize.X, tileSize.Y);
-        var unitPosition = worldPosition / scale;
-        
-        return HexConversions.UnitToHex(unitPosition);
     }
 }

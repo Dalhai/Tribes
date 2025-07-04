@@ -15,8 +15,9 @@ public static class NodeExtensions
     /// <param name="node">The node to add the sprite to</param>
     /// <param name="context">The map context</param>
     /// <param name="entity">The entity to create a sprite for</param>
-    /// <param name="tileSet">The TileSet to use for size calculations</param>
-    public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity, TileSet tileSet)
+    /// <param name="tileSize">The tile size to use for position calculations</param>
+    /// <param name="scale">The scale to apply to the sprite</param>
+    public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity, Vector2I tileSize, Vector2 scale)
     {
         // Skip tiles - they should be handled by TileMapNode
         if (entity is Tile)
@@ -26,16 +27,9 @@ public static class NodeExtensions
         {
             Sprite2D sprite = new();
 
-            float widthScaleToExpected = entity.Configuration.Texture != null
-                ? tileSet.GetTileWidth() / entity.Configuration.Texture.GetWidth()
-                : 1.0f;
-            float heightScaleToExpected = entity.Configuration.Texture != null
-                ? tileSet.GetTileHeight() / entity.Configuration.Texture.GetHeight()
-                : 1.0f;
-
-            sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
+            sprite.Scale = scale;
             sprite.Centered = true;
-            sprite.Position = tileSet.HexToWorldPosition(location);
+            sprite.Position = tileSize.HexToWorldPosition(location);
             sprite.Texture = entity.Configuration.Texture;
             sprite.Modulate = entity.Owner?.Color ?? Colors.White;
 

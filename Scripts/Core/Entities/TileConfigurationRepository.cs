@@ -44,16 +44,13 @@ public class TileConfigurationRepository : Repository<TileType, TileConfiguratio
             float width = asset.Texture.GetWidth();
             float height = asset.Texture.GetHeight();
             float ratio = width / height;
-            
-            // Expected ratio for 516x448 tiles
-            float expectedRatio = 516.0f / 448.0f;
 
-            if (!Mathf.IsEqualApprox(ratio, expectedRatio))
+            if (!Mathf.IsEqualApprox(ratio, HexConstants.ExpectedTileRatio))
             {
                 GD.PushWarning
                 (
                     $"Tile: {asset.ResourcePath} has invalid ratio:\n" +
-                    $"Expected Ratio: {expectedRatio}\n" +
+                    $"Expected Ratio: {HexConstants.ExpectedTileRatio}\n" +
                     $"Actual Ratio: {ratio}"
                 );
             }

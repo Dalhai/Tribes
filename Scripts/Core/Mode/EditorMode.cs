@@ -176,14 +176,10 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
         Sprite2D sprite = new();
 
-        float widthScaleToExpected = entity.Configuration.Texture != null
-            ? TileMapNode.TerrainLayer.TileSet.GetTileWidth() / entity.Configuration.Texture.GetWidth()
-            : 1.0f;
-        float heightScaleToExpected = entity.Configuration.Texture != null
-            ? TileMapNode.TerrainLayer.TileSet.GetTileHeight() / entity.Configuration.Texture.GetHeight()
-            : 1.0f;
+        // Since textures should match expected size, scale should be 1.0
+        var scale = new Vector2(1.0f, 1.0f);
 
-        sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
+        sprite.Scale = scale;
         sprite.Centered = true;
         sprite.Position = TileMapNode.HexToWorldPosition(coordinate);
         sprite.Texture = entity.Configuration.Texture;
