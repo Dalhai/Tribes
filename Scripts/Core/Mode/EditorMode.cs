@@ -105,9 +105,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 // Create a new tile with the selected tile type and register it with the context
                 var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType), clickedLocation);
                 Context.Map.TryAddEntity(newTile);
-                
-                // Update the HexMap
-                HexMap.SetTile(clickedLocation, newTile);
             }
 
             // Remove open tiles on right mouse click.
@@ -123,7 +120,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 if (clickedTile is { } tile)
                 {
                     Context.Map.TryRemoveEntity(tile);
-                    HexMap.RemoveTile(clickedLocation);
                 }
 
                 // Create a new tile with the open tile type and register it with the context
@@ -131,7 +127,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 {
                     var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open), clickedLocation);
                     Context.Map.TryAddEntity(newTile);
-                    HexMap.SetTile(clickedLocation, newTile);
                 }
             }
         }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
+using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core;
@@ -15,6 +16,7 @@ public partial class HexMap : Node2D
     private TileMapLayer _terrainLayer;
     private TileMapLayer _overlayLayer;
     private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
+    private Map? _connectedMap;
     
     /// <summary>
     /// The terrain layer that contains all terrain tiles.
@@ -39,13 +41,23 @@ public partial class HexMap : Node2D
         
         base._Ready();
     }
+    
+    public override void _ExitTree()
+    {
+        // Clean up event connections when the node is destroyed
+        DisconnectFromMap();
+        base._ExitTree();
+    }
 
     /// <summary>
-    /// Syncs the TileMap with the provided Map's tile data.
+    /// Syncs the TileMap with the provided Map's tile data and registers for automatic updates.
     /// </summary>
     /// <param name="map">The map containing tile data to sync</param>
     public void SyncWithMap(Map map)
     {
+        // Disconnect from previous map if any
+        DisconnectFromMap();
+        
         // Clear existing tiles
         TerrainLayer.Clear();
         
@@ -54,6 +66,54 @@ public partial class HexMap : Node2D
         {
             SetTile(coordinate, tile);
         }
+        
+        // Connect to the new map for automatic updates
+        ConnectToMap(map);
+    }
+    
+    /// <summary>
+    /// Connects the HexMap to automatically react to tile changes in the specified Map.
+    /// </summary>
+    /// <param name="map">The map to connect to</param>
+    public void ConnectToMap(Map map)
+    {
+        // Disconnect from previous map first
+        DisconnectFromMap();
+        
+        _connectedMap = map;
+        
+        // Register event handlers for tile changes
+        map.Tiles.Added += OnTileAdded;
+        map.Tiles.Removed += OnTileRemoved;
+    }
+    
+    /// <summary>
+    /// Disconnects the HexMap from the currently connected Map.
+    /// </summary>
+    public void DisconnectFromMap()
+    {
+        if (_connectedMap != null)
+        {
+            _connectedMap.Tiles.Added -= OnTileAdded;
+            _connectedMap.Tiles.Removed -= OnTileRemoved;
+            _connectedMap = null;
+        }
+    }
+    
+    /// <summary>
+    /// Event handler for when a tile is added to the connected Map.
+    /// </summary>
+    private void OnTileAdded(IHexLayerView<Tile> layer, Tile tile, AxialCoordinate coordinate)
+    {
+        SetTile(coordinate, tile);
+    }
+    
+    /// <summary>
+    /// Event handler for when a tile is removed from the connected Map.
+    /// </summary>
+    private void OnTileRemoved(IHexLayerView<Tile> layer, Tile tile, AxialCoordinate coordinate)
+    {
+        RemoveTile(coordinate);
     }
 
     /// <summary>
