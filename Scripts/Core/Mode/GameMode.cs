@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
@@ -17,12 +18,12 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
     public static GameMode? Instance { get; private set; }
     
-    private TileMapNode _tileMapNode;
+    private HexMap _hexMap;
     
     /// <summary>
-    /// The TileMapNode responsible for rendering terrain tiles.
+    /// The HexMap responsible for rendering terrain tiles.
     /// </summary>
-    public TileMapNode TileMapNode => _tileMapNode ??= GetTileMapNode();
+    public HexMap HexMap => _hexMap ??= GetHexMap();
 
     public override void _Ready()
     {
@@ -37,12 +38,15 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         HexMapGenerator generator = new(new(-100, -100), new(100, 100), Context.Repos.Tiles);
         map.Generate(generator);
 
-        // Initialize the TileMapNode and sync tiles
-        _tileMapNode = GetTileMapNode();
-        _tileMapNode.SyncWithMap(Context.Map);
+        // Initialize the HexMap and sync tiles
+        _hexMap = GetHexMap();
+        _hexMap.SyncWithMap(Context.Map);
+        
+        // Connect HexMap to Display for overlay support
+        Context.Display.HexMap = _hexMap;
         
         // Get tile size for sprite positioning and scaling
-        var tileSize = _tileMapNode.TerrainLayer.TileSet.GetTileSize();
+        var tileSize = _hexMap.TerrainLayer.TileSet.GetTileSize();
         
         // Register buildings
         var campClass = repo.Buildings.GetAsset("Camp");
@@ -53,8 +57,11 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(camp2);
 
         // Create sprites for camp buildings
-        this.CreateSpriteForEntity(Context, camp1, tileSize);
-        this.CreateSpriteForEntity(Context, camp2, tileSize);
+        var camp1Sprite = this.CreateSpriteForEntity(Context, camp1, tileSize);
+        if (camp1Sprite != null) _sprites.Add(camp1.Identity, camp1Sprite);
+        
+        var camp2Sprite = this.CreateSpriteForEntity(Context, camp2, tileSize);
+        if (camp2Sprite != null) _sprites.Add(camp2.Identity, camp2Sprite);
 
         var fountainClass = repo.Buildings.GetAsset("Fountain");
         var fountain1 = new Building(fountainClass, new(1, -1));
@@ -64,8 +71,11 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(fountain2);
 
         // Create sprites for fountain buildings
-        this.CreateSpriteForEntity(Context, fountain1, tileSize);
-        this.CreateSpriteForEntity(Context, fountain2, tileSize);
+        var fountain1Sprite = this.CreateSpriteForEntity(Context, fountain1, tileSize);
+        if (fountain1Sprite != null) _sprites.Add(fountain1.Identity, fountain1Sprite);
+        
+        var fountain2Sprite = this.CreateSpriteForEntity(Context, fountain2, tileSize);
+        if (fountain2Sprite != null) _sprites.Add(fountain2.Identity, fountain2Sprite);
 
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
@@ -81,9 +91,14 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit3);
 
             // Create sprites for units
-            this.CreateSpriteForEntity(Context, unit1, tileSize);
-            this.CreateSpriteForEntity(Context, unit2, tileSize);
-            this.CreateSpriteForEntity(Context, unit3, tileSize);
+            var unit1Sprite = this.CreateSpriteForEntity(Context, unit1, tileSize);
+            if (unit1Sprite != null) _sprites.Add(unit1.Identity, unit1Sprite);
+            
+            var unit2Sprite = this.CreateSpriteForEntity(Context, unit2, tileSize);
+            if (unit2Sprite != null) _sprites.Add(unit2.Identity, unit2Sprite);
+            
+            var unit3Sprite = this.CreateSpriteForEntity(Context, unit3, tileSize);
+            if (unit3Sprite != null) _sprites.Add(unit3.Identity, unit3Sprite);
         }
 
         if (camp2.Owner != null)
@@ -97,9 +112,14 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit3);
 
             // Create sprites for units
-            this.CreateSpriteForEntity(Context, unit1, tileSize);
-            this.CreateSpriteForEntity(Context, unit2, tileSize);
-            this.CreateSpriteForEntity(Context, unit3, tileSize);
+            var unit1Sprite = this.CreateSpriteForEntity(Context, unit1, tileSize);
+            if (unit1Sprite != null) _sprites.Add(unit1.Identity, unit1Sprite);
+            
+            var unit2Sprite = this.CreateSpriteForEntity(Context, unit2, tileSize);
+            if (unit2Sprite != null) _sprites.Add(unit2.Identity, unit2Sprite);
+            
+            var unit3Sprite = this.CreateSpriteForEntity(Context, unit3, tileSize);
+            if (unit3Sprite != null) _sprites.Add(unit3.Identity, unit3Sprite);
         }
 
         base._Ready();
@@ -110,7 +130,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         if (@event is InputEventMouseMotion)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
+            var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
 
             bool hasUnit = Context.Map.Units.Contains(clickedLocation);
 
@@ -122,17 +142,17 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         else if (@event is InputEventMouseButton mouseButton)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
+            var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
 
             // Select a unit
 
             if (mouseButton.ButtonIndex == MouseButton.Left && Context.Map.Units.Get(clickedLocation) is { } unit)
             {
                 if (Context.Selected is Unit previousUnit)
-                    Context.Display.Sprites[previousUnit.Identity].Modulate = previousUnit.Owner?.Color ?? Colors.White;
+                    _sprites[previousUnit.Identity].Modulate = previousUnit.Owner?.Color ?? Colors.White;
 
                 Context.Selected = unit;
-                Context.Display.Sprites[unit.Identity].Modulate = Colors.Yellow;
+                _sprites[unit.Identity].Modulate = Colors.Yellow;
 
                 Label? healthLabel = GetNode<Label>(HealthPath);
                 Label? waterLabel = GetNode<Label>(WaterPath);
@@ -165,30 +185,35 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     private readonly IHexLayer<Color> _movementOverlay = new HexLayer<Color>();
     
     /// <summary>
-    /// Gets or creates the TileMapNode for this game.
+    /// Dictionary of sprites for non-tile entities (buildings, units) used for selection and visual effects.
     /// </summary>
-    private TileMapNode GetTileMapNode()
+    private readonly Dictionary<ulong, Sprite2D> _sprites = new();
+    
+    /// <summary>
+    /// Gets or creates the HexMap for this game.
+    /// </summary>
+    private HexMap GetHexMap()
     {
-        if (_tileMapNode != null)
-            return _tileMapNode;
+        if (_hexMap != null)
+            return _hexMap;
             
-        // Look for existing TileMapNode
+        // Look for existing HexMap
         foreach (Node child in GetChildren())
         {
-            if (child is TileMapNode tileMapNode)
+            if (child is HexMap hexMap)
             {
-                _tileMapNode = tileMapNode;
-                return _tileMapNode;
+                _hexMap = hexMap;
+                return _hexMap;
             }
         }
         
-        // Create new TileMapNode if none exists
-        _tileMapNode = new TileMapNode
+        // Create new HexMap if none exists
+        _hexMap = new HexMap
         {
-            Name = "TileMapNode"
+            Name = "HexMap"
         };
         
-        AddChild(_tileMapNode);
-        return _tileMapNode;
+        AddChild(_hexMap);
+        return _hexMap;
     }
 }

@@ -1,0 +1,11 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b8k2xfg3h0c7m"]
+
+[ext_resource type="Texture2D" uid="uid://cklvq65ffjy8s" path="res://Assets/Textures/Terrain/open.png" id="1"]
+
+[sub_resource type="TileSetAtlasSource" id="overlay_tile"]
+texture = ExtResource("1")
+texture_region_size = Vector2i(516, 448)
+
+[resource]
+tile_shape = 3
+sources/0 = SubResource("overlay_tile")
