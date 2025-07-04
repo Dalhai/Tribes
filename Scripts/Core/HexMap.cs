@@ -192,7 +192,7 @@ public partial class HexMap : Node2D
         // Reset modulation if no tiles remain
         if (_overlayColors.Count == 0)
         {
-            OverlayLayer.Modulate = Godot.Colors.White;
+            OverlayLayer.Modulate = Colors.White;
         }
     }
 
@@ -203,7 +203,7 @@ public partial class HexMap : Node2D
     {
         _overlayColors.Clear();
         OverlayLayer.Clear();
-        OverlayLayer.Modulate = Godot.Colors.White;
+        OverlayLayer.Modulate = Colors.White;
     }
 
     #endregion
@@ -217,12 +217,9 @@ public partial class HexMap : Node2D
     /// <returns>The corresponding hex coordinate</returns>
     public AxialCoordinate WorldToHexCoordinate(Vector2 worldPosition)
     {
-        // Convert world position to local position relative to this TileMap
-        var localPosition = ToLocal(worldPosition);
-        
         // Convert to hex coordinate using the tile size-based conversion
         var tileSize = TerrainLayer.TileSet.GetTileSize();
-        return HexConversions.WorldToHexCoordinate(tileSize, localPosition);
+        return HexConversions.WorldToHexCoordinate(tileSize, worldPosition);
     }
 
     /// <summary>
@@ -233,15 +230,14 @@ public partial class HexMap : Node2D
     public Vector2 HexToWorldPosition(AxialCoordinate hexCoordinate)
     {
         var tileSize = TerrainLayer.TileSet.GetTileSize();
-        var localPosition = HexConversions.HexToWorldPosition(tileSize, hexCoordinate);
-        return ToGlobal(localPosition);
+        return HexConversions.HexToWorldPosition(tileSize, hexCoordinate);
     }
 
     /// <summary>
     /// Converts hex coordinates to TileMap coordinates.
     /// For hex grids, this is typically a 1:1 mapping.
     /// </summary>
-    private static Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
+    private Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
     {
         return new Vector2I(hexCoordinate.Q, hexCoordinate.R);
     }

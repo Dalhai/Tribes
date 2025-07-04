@@ -12,11 +12,10 @@ public static class NodeExtensions
     /// Note: Tile entities are skipped as they should be handled by HexMap.
     /// </summary>
     /// <param name="node">The node to add the sprite to</param>
-    /// <param name="context">The map context</param>
     /// <param name="entity">The entity to create a sprite for</param>
     /// <param name="tileSize">The tile size to use for position calculations and scaling</param>
     /// <returns>The created sprite, or null if entity is a tile</returns>
-    public static Sprite2D? CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity, Vector2I tileSize)
+    public static Sprite2D? CreateSpriteForEntity(this Node2D node, IEntity<IConfiguration> entity, Vector2I tileSize)
     {
         // Skip tiles - they should be handled by HexMap
         if (entity is Tile)
@@ -33,7 +32,8 @@ public static class NodeExtensions
                 // Scale based on tile size and texture size to fit the entity in the tile
                 var scaleX = (float)tileSize.X / texture.GetWidth();
                 var scaleY = (float)tileSize.Y / texture.GetHeight();
-                sprite.Scale = new Vector2(scaleX, scaleY);
+                var minScale = Mathf.Min(scaleX, scaleY);
+                sprite.Scale = new Vector2(minScale, minScale);
             }
 
             sprite.Centered = true;
@@ -48,7 +48,7 @@ public static class NodeExtensions
                     sprite.ZIndex = 10;
                     break;
                 case Unit:
-                    sprite.Scale *= 0.8f;
+                    sprite.Scale *= 0.5f;
                     sprite.ZIndex = 10;
                     break;
             }

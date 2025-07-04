@@ -7,9 +7,32 @@ using TribesOfDust.Gen;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils;
-using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core.Modes;
+
+struct FakeGenerator : IHexLayerGenerator<Tile>
+{
+    public TileConfigurationRepository Repository { get; init; }
+    
+    public bool Generate(IHexLayer<Tile> layer)
+    {
+        var config = Repository.GetAsset();
+        
+        GD.Print($"tile1: {AxialCoordinate.Zero}");
+        var tile1 = new Tile(config, AxialCoordinate.Zero);
+        layer.TryAdd(tile1.Location, tile1);
+
+        GD.Print($"tile2: {AxialCoordinate.Zero.NW}");
+        var tile2 = new Tile(config, AxialCoordinate.Zero.NW);
+        layer.TryAdd(tile2.Location, tile2);
+
+        GD.Print($"tile3: {AxialCoordinate.Zero.SE}");
+        var tile3 = new Tile(config, AxialCoordinate.Zero.SE);
+        layer.TryAdd(tile3.Location, tile3);
+        
+        return true;
+    }
+}
 
 public partial class GameMode : Node2D, IUnique<GameMode>
 {
@@ -35,8 +58,10 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         var repo = Context.Repos;
         
         // Generate tiles
-        HexMapGenerator generator = new(new(-100, -100), new(100, 100), Context.Repos.Tiles);
-        map.Generate(generator);
+        // HexMapGenerator generator = new(new(-100, -100), new(100, 100), Context.Repos.Tiles);
+        // map.Generate(generator);
+        FakeGenerator fake = new() { Repository = repo.Tiles };
+        map.Generate(fake);
 
         // Initialize the HexMap and sync tiles
         _hexMap = GetHexMap();
@@ -50,31 +75,31 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         
         // Register buildings
         var campClass = repo.Buildings.GetAsset("Camp");
-        var camp1 = new Building(campClass, new(-2, -3), _player1);
+        var camp1 = new Building(campClass, new(0, 0), _player1);
         var camp2 = new Building(campClass, new(5, 4), _player2);
 
         map.TryAddEntity(camp1);
         map.TryAddEntity(camp2);
 
         // Create sprites for camp buildings
-        var camp1Sprite = this.CreateSpriteForEntity(Context, camp1, tileSize);
+        var camp1Sprite = this.CreateSpriteForEntity(camp1, tileSize);
         if (camp1Sprite != null) _sprites.Add(camp1.Identity, camp1Sprite);
         
-        var camp2Sprite = this.CreateSpriteForEntity(Context, camp2, tileSize);
+        var camp2Sprite = this.CreateSpriteForEntity(camp2, tileSize);
         if (camp2Sprite != null) _sprites.Add(camp2.Identity, camp2Sprite);
 
         var fountainClass = repo.Buildings.GetAsset("Fountain");
-        var fountain1 = new Building(fountainClass, new(1, -1));
+        var fountain1 = new Building(fountainClass, new(1, -3));
         var fountain2 = new Building(fountainClass, new(5, 1));
 
         map.TryAddEntity(fountain1);
         map.TryAddEntity(fountain2);
 
         // Create sprites for fountain buildings
-        var fountain1Sprite = this.CreateSpriteForEntity(Context, fountain1, tileSize);
+        var fountain1Sprite = this.CreateSpriteForEntity(fountain1, tileSize);
         if (fountain1Sprite != null) _sprites.Add(fountain1.Identity, fountain1Sprite);
         
-        var fountain2Sprite = this.CreateSpriteForEntity(Context, fountain2, tileSize);
+        var fountain2Sprite = this.CreateSpriteForEntity(fountain2, tileSize);
         if (fountain2Sprite != null) _sprites.Add(fountain2.Identity, fountain2Sprite);
 
         // Register units
@@ -91,13 +116,13 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit3);
 
             // Create sprites for units
-            var unit1Sprite = this.CreateSpriteForEntity(Context, unit1, tileSize);
+            var unit1Sprite = this.CreateSpriteForEntity(unit1, tileSize);
             if (unit1Sprite != null) _sprites.Add(unit1.Identity, unit1Sprite);
             
-            var unit2Sprite = this.CreateSpriteForEntity(Context, unit2, tileSize);
+            var unit2Sprite = this.CreateSpriteForEntity(unit2, tileSize);
             if (unit2Sprite != null) _sprites.Add(unit2.Identity, unit2Sprite);
             
-            var unit3Sprite = this.CreateSpriteForEntity(Context, unit3, tileSize);
+            var unit3Sprite = this.CreateSpriteForEntity(unit3, tileSize);
             if (unit3Sprite != null) _sprites.Add(unit3.Identity, unit3Sprite);
         }
 
@@ -112,13 +137,13 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit3);
 
             // Create sprites for units
-            var unit1Sprite = this.CreateSpriteForEntity(Context, unit1, tileSize);
+            var unit1Sprite = this.CreateSpriteForEntity(unit1, tileSize);
             if (unit1Sprite != null) _sprites.Add(unit1.Identity, unit1Sprite);
             
-            var unit2Sprite = this.CreateSpriteForEntity(Context, unit2, tileSize);
+            var unit2Sprite = this.CreateSpriteForEntity(unit2, tileSize);
             if (unit2Sprite != null) _sprites.Add(unit2.Identity, unit2Sprite);
             
-            var unit3Sprite = this.CreateSpriteForEntity(Context, unit3, tileSize);
+            var unit3Sprite = this.CreateSpriteForEntity(unit3, tileSize);
             if (unit3Sprite != null) _sprites.Add(unit3.Identity, unit3Sprite);
         }
 
@@ -130,12 +155,12 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         if (@event is InputEventMouseMotion)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
+            var hoveredLocation = HexMap.WorldToHexCoordinate(mousePosition);
 
-            bool hasUnit = Context.Map.Units.Contains(clickedLocation);
+            bool hasUnit = Context.Map.Units.Contains(hoveredLocation);
 
             _selectionOverlay.Clear();
-            _selectionOverlay.TryAdd(clickedLocation, hasUnit
+            _selectionOverlay.TryAdd(hoveredLocation, hasUnit
                 ? Colors.Blue.Lightened(0.9f)
                 : Colors.Red.Lightened(0.9f));
         }
