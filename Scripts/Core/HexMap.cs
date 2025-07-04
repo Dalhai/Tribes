@@ -13,11 +13,6 @@ namespace TribesOfDust.Core;
 /// </summary>
 public partial class HexMap : Node2D
 {
-    private TileMapLayer _terrainLayer;
-    private TileMapLayer _overlayLayer;
-    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
-    private Map? _connectedMap;
-    
     /// <summary>
     /// The terrain layer that contains all terrain tiles.
     /// </summary>
@@ -323,4 +318,8 @@ public partial class HexMap : Node2D
 
     #endregion
 
+    private TileMapLayer _terrainLayer;
+    private TileMapLayer _overlayLayer;
+    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
+    private Map? _connectedMap;
 }
