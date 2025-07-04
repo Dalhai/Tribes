@@ -4,9 +4,14 @@ namespace TribesOfDust.Hex
 {
     public static class HexConstants 
     {
-        public static readonly float DefaultSize = 100.0f;
-        public static readonly float DefaultWidth = 2.0f * DefaultSize;
-        public static readonly float DefaultHeight = 2.0f * Mathf.Sqrt(3.0f / 4.0f * DefaultSize * DefaultSize);
-        public static readonly float DefaultRatio = DefaultWidth / DefaultHeight;
+        /// <summary>
+        /// The expected tile size (516x448).
+        /// </summary>
+        public static readonly Vector2I ExpectedTileSize = new(516, 448);
+        
+        /// <summary>
+        /// The expected ratio for tile dimensions, computed from ExpectedTileSize.
+        /// </summary>
+        public static readonly float ExpectedTileRatio = (float)ExpectedTileSize.X / ExpectedTileSize.Y;
     }
 }

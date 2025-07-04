@@ -20,13 +20,13 @@ public partial class UnitConfiguration : Resource, IConfiguration, IVariant<stri
     /// The texture associated with the unit.
     /// </summary>
     [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D? Texture { get; set; }
+    public Texture2D Texture { get; set; }
 
     /// <summary>
     /// The movement costs for this unit.
     /// </summary>
     [Export(PropertyHint.ResourceType, "TileTypeCostTable")]
-    public TileTypeCostTable? MovementCosts { get; set; }
+    public TileTypeCostTable MovementCosts { get; set; }
 
     #endregion
 }

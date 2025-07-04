@@ -4,6 +4,7 @@ using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core.Modes;
 
@@ -11,7 +12,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
     public static EditorMode? Instance { get; private set; }
     
-    private TileMapNode? _tileMapNode;
+    private TileMapNode _tileMapNode;
     
     /// <summary>
     /// The TileMapNode responsible for rendering terrain tiles.
@@ -69,7 +70,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         if (inputEvent is InputEventMouseMotion)
         {
             var world = GetGlobalMousePosition();
-            var hoveredLocation = HexConversions.UnitToHex(world / HexConstants.DefaultSize);
+            var hoveredLocation = TileMapNode.WorldToHexCoordinate(world);
 
             if (_hoveredLocation != hoveredLocation)
             {
@@ -90,7 +91,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Left })
             {
                 var mousePosition = GetGlobalMousePosition();
-                var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+                var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
                 
                 // Remove the existing tile from the map data
                 if (Context.Map.Tiles.Get(clickedLocation) is { } existingTile)
@@ -112,7 +113,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Right })
             {
                 var mousePosition = GetGlobalMousePosition();
-                var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+                var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
                 var clickedTile = Context.Map.Tiles.Get(clickedLocation);
 
                 // Remove the existing tile
@@ -175,16 +176,9 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
         Sprite2D sprite = new();
 
-        float widthScaleToExpected = entity.Configuration.Texture != null
-            ? HexConstants.DefaultWidth / entity.Configuration.Texture.GetWidth()
-            : 1.0f;
-        float heightScaleToExpected = entity.Configuration.Texture != null
-            ? HexConstants.DefaultHeight / entity.Configuration.Texture.GetHeight()
-            : 1.0f;
-
-        sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
+        sprite.Scale = Vector2.One;
         sprite.Centered = true;
-        sprite.Position = HexConversions.HexToUnit(coordinate) * HexConstants.DefaultSize;
+        sprite.Position = TileMapNode.HexToWorldPosition(coordinate);
         sprite.Texture = entity.Configuration.Texture;
         sprite.Modulate = entity.Owner?.Color ?? Colors.White;
 
@@ -232,7 +226,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         return _tileMapNode;
     }
 
-    private AxialCoordinate? _hoveredLocation;
+    private AxialCoordinate _hoveredLocation;
     private TileType _activeTileType = TileType.Tundra;
 
     public MapContext Context { get; private set; } = null!;

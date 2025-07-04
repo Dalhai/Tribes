@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core;
 
@@ -11,7 +12,7 @@ namespace TribesOfDust.Core;
 /// </summary>
 public partial class TileMapNode : Node2D
 {
-    private TileMapLayer? _terrainLayer;
+    private TileMapLayer _terrainLayer;
     
     /// <summary>
     /// The terrain layer that contains all terrain tiles.
@@ -73,14 +74,14 @@ public partial class TileMapNode : Node2D
     /// Gets the tile at the specified hex coordinate.
     /// </summary>
     /// <param name="hexCoordinate">The hex coordinate to check</param>
-    /// <returns>The TileType if a tile exists, null otherwise</returns>
-    public TileType? GetTileType(AxialCoordinate hexCoordinate)
+    /// <returns>The TileType if a tile exists, Unknown otherwise</returns>
+    public TileType GetTileType(AxialCoordinate hexCoordinate)
     {
         var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
         var sourceId = TerrainLayer.GetCellSourceId(tileMapCoordinate);
         
         if (sourceId == -1)
-            return null;
+            return TileType.Unknown;
             
         return (TileType)sourceId;
     }
@@ -95,8 +96,9 @@ public partial class TileMapNode : Node2D
         // Convert world position to local position relative to this TileMap
         var localPosition = ToLocal(worldPosition);
         
-        // Convert to hex coordinate using the existing conversion system
-        return HexConversions.UnitToHex(localPosition / HexConstants.DefaultSize);
+        // Convert to hex coordinate using the tile size-based conversion
+        var tileSize = TerrainLayer.TileSet.GetTileSize();
+        return HexConversions.WorldToHexCoordinate(tileSize, localPosition);
     }
 
     /// <summary>
@@ -106,8 +108,9 @@ public partial class TileMapNode : Node2D
     /// <returns>The corresponding world position</returns>
     public Vector2 HexToWorldPosition(AxialCoordinate hexCoordinate)
     {
-        var unitPosition = HexConversions.HexToUnit(hexCoordinate) * HexConstants.DefaultSize;
-        return ToGlobal(unitPosition);
+        var tileSize = TerrainLayer.TileSet.GetTileSize();
+        var localPosition = HexConversions.HexToWorldPosition(tileSize, hexCoordinate);
+        return ToGlobal(localPosition);
     }
 
     /// <summary>
@@ -132,7 +135,12 @@ public partial class TileMapNode : Node2D
         _terrainLayer = new TileMapLayer
         {
             Name = "TerrainLayer",
-            ZIndex = 1  // Same as tiles in the original implementation
+            ZIndex = 1,  // Same as tiles in the original implementation
+            // Set to vertical orientation and disable collisions/navigation as per issue requirements
+            YSortEnabled = false,
+            UseKinematicBodies = false,
+            CollisionEnabled = false,
+            NavigationEnabled = false
         };
         
         AddChild(_terrainLayer);

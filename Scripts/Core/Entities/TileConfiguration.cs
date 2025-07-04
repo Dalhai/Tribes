@@ -20,7 +20,7 @@ public partial class TileConfiguration : Resource, IConfiguration, IVariant<Tile
     /// The texture associated with the tile.
     /// </summary>
     [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D? Texture { get; set; }
+    public Texture2D Texture { get; set; }
 
     /// <summary>
     /// The direction of the tile.
@@ -41,19 +41,6 @@ public partial class TileConfiguration : Resource, IConfiguration, IVariant<Tile
     /// </remarks>
     [Export(PropertyHint.Flags, "NW,N,NE,SE,S,SW")]
     public int Connections { get; set; }= (int)HexDirections.All;
-
-    #endregion
-    #region Size
-
-    /// <summary>
-    /// Gets the scale in x-direction necessary to match the expected width.
-    /// </summary>
-    public float WidthScaleToExpected => Texture != null ? HexConstants.DefaultWidth / Texture.GetWidth() : 1.0f;
-
-    /// <summary>
-    /// Gets the scale in y-direction necessary to match the expected height.
-    /// </summary>
-    public float HeightScaleToExpected => Texture != null ? HexConstants.DefaultHeight / Texture.GetHeight() : 1.0f;
 
     #endregion
 }

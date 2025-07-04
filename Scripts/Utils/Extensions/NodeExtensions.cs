@@ -11,7 +11,11 @@ public static class NodeExtensions
     /// Creates a sprite for entities. 
     /// Note: Tile entities are skipped as they should be handled by TileMapNode.
     /// </summary>
-    public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity)
+    /// <param name="node">The node to add the sprite to</param>
+    /// <param name="context">The map context</param>
+    /// <param name="entity">The entity to create a sprite for</param>
+    /// <param name="tileSize">The tile size to use for position calculations and scaling</param>
+    public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity, Vector2I tileSize)
     {
         // Skip tiles - they should be handled by TileMapNode
         if (entity is Tile)
@@ -20,18 +24,20 @@ public static class NodeExtensions
         if (entity.Location is {} location)
         {
             Sprite2D sprite = new();
+            
+            // Calculate scale to fit the sprite within the tile
+            var texture = entity.Configuration.Texture;
+            if (texture != null)
+            {
+                // Scale based on tile size and texture size to fit the entity in the tile
+                var scaleX = (float)tileSize.X / texture.GetWidth();
+                var scaleY = (float)tileSize.Y / texture.GetHeight();
+                sprite.Scale = new Vector2(scaleX, scaleY);
+            }
 
-            float widthScaleToExpected = entity.Configuration.Texture != null
-                ? HexConstants.DefaultWidth / entity.Configuration.Texture.GetWidth()
-                : 1.0f;
-            float heightScaleToExpected = entity.Configuration.Texture != null
-                ? HexConstants.DefaultHeight / entity.Configuration.Texture.GetHeight()
-                : 1.0f;
-
-            sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
             sprite.Centered = true;
-            sprite.Position = HexConversions.HexToUnit(location) * HexConstants.DefaultSize;
-            sprite.Texture = entity.Configuration.Texture;
+            sprite.Position = HexConversions.HexToWorldPosition(tileSize, location);
+            sprite.Texture = texture;
             sprite.Modulate = entity.Owner?.Color ?? Colors.White;
 
             switch (entity)

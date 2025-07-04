@@ -6,6 +6,7 @@ using TribesOfDust.Gen;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core.Modes;
 
@@ -16,7 +17,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
     public static GameMode? Instance { get; private set; }
     
-    private TileMapNode? _tileMapNode;
+    private TileMapNode _tileMapNode;
     
     /// <summary>
     /// The TileMapNode responsible for rendering terrain tiles.
@@ -40,6 +41,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         _tileMapNode = GetTileMapNode();
         _tileMapNode.SyncWithMap(Context.Map);
         
+        // Get tile size for sprite positioning and scaling
+        var tileSize = _tileMapNode.TerrainLayer.TileSet.GetTileSize();
+        
         // Register buildings
         var campClass = repo.Buildings.GetAsset("Camp");
         var camp1 = new Building(campClass, new(-2, -3), _player1);
@@ -48,8 +52,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(camp1);
         map.TryAddEntity(camp2);
 
-        this.CreateSpriteForEntity(Context, camp1);
-        this.CreateSpriteForEntity(Context, camp2);
+        // Create sprites for camp buildings
+        this.CreateSpriteForEntity(Context, camp1, tileSize);
+        this.CreateSpriteForEntity(Context, camp2, tileSize);
 
         var fountainClass = repo.Buildings.GetAsset("Fountain");
         var fountain1 = new Building(fountainClass, new(1, -1));
@@ -58,8 +63,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(fountain1);
         map.TryAddEntity(fountain2);
 
-        this.CreateSpriteForEntity(Context, fountain1);
-        this.CreateSpriteForEntity(Context, fountain2);
+        // Create sprites for fountain buildings
+        this.CreateSpriteForEntity(Context, fountain1, tileSize);
+        this.CreateSpriteForEntity(Context, fountain2, tileSize);
 
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
@@ -74,9 +80,10 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit2);
             map.TryAddEntity(unit3);
 
-            this.CreateSpriteForEntity(Context, unit1);
-            this.CreateSpriteForEntity(Context, unit2);
-            this.CreateSpriteForEntity(Context, unit3);
+            // Create sprites for units
+            this.CreateSpriteForEntity(Context, unit1, tileSize);
+            this.CreateSpriteForEntity(Context, unit2, tileSize);
+            this.CreateSpriteForEntity(Context, unit3, tileSize);
         }
 
         if (camp2.Owner != null)
@@ -89,9 +96,10 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit2);
             map.TryAddEntity(unit3);
 
-            this.CreateSpriteForEntity(Context, unit1);
-            this.CreateSpriteForEntity(Context, unit2);
-            this.CreateSpriteForEntity(Context, unit3);
+            // Create sprites for units
+            this.CreateSpriteForEntity(Context, unit1, tileSize);
+            this.CreateSpriteForEntity(Context, unit2, tileSize);
+            this.CreateSpriteForEntity(Context, unit3, tileSize);
         }
 
         base._Ready();
@@ -102,7 +110,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         if (@event is InputEventMouseMotion)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+            var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
 
             bool hasUnit = Context.Map.Units.Contains(clickedLocation);
 
@@ -114,7 +122,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         else if (@event is InputEventMouseButton mouseButton)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+            var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
 
             // Select a unit
 
