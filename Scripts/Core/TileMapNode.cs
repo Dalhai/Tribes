@@ -12,7 +12,7 @@ namespace TribesOfDust.Core;
 /// </summary>
 public partial class TileMapNode : Node2D
 {
-    private TileMapLayer? _terrainLayer;
+    private TileMapLayer _terrainLayer;
     
     /// <summary>
     /// The terrain layer that contains all terrain tiles.
@@ -74,14 +74,14 @@ public partial class TileMapNode : Node2D
     /// Gets the tile at the specified hex coordinate.
     /// </summary>
     /// <param name="hexCoordinate">The hex coordinate to check</param>
-    /// <returns>The TileType if a tile exists, null otherwise</returns>
-    public TileType? GetTileType(AxialCoordinate hexCoordinate)
+    /// <returns>The TileType if a tile exists, Unknown otherwise</returns>
+    public TileType GetTileType(AxialCoordinate hexCoordinate)
     {
         var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
         var sourceId = TerrainLayer.GetCellSourceId(tileMapCoordinate);
         
         if (sourceId == -1)
-            return null;
+            return TileType.Unknown;
             
         return (TileType)sourceId;
     }

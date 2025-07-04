@@ -21,7 +21,7 @@ public partial class TileConfiguration : Resource, IConfiguration, IVariant<Tile
     /// The texture associated with the tile.
     /// </summary>
     [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D? Texture { get; set; }
+    public Texture2D Texture { get; set; }
 
     /// <summary>
     /// The direction of the tile.

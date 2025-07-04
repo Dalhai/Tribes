@@ -17,7 +17,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
     public static GameMode? Instance { get; private set; }
     
-    private TileMapNode? _tileMapNode;
+    private TileMapNode _tileMapNode;
     
     /// <summary>
     /// The TileMapNode responsible for rendering terrain tiles.

@@ -12,7 +12,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
     public static EditorMode? Instance { get; private set; }
     
-    private TileMapNode? _tileMapNode;
+    private TileMapNode _tileMapNode;
     
     /// <summary>
     /// The TileMapNode responsible for rendering terrain tiles.
@@ -233,7 +233,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         return _tileMapNode;
     }
 
-    private AxialCoordinate? _hoveredLocation;
+    private AxialCoordinate _hoveredLocation;
     private TileType _activeTileType = TileType.Tundra;
 
     public MapContext Context { get; private set; } = null!;
