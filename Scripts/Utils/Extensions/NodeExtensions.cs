@@ -34,10 +34,6 @@ public static class NodeExtensions
                 var scaleY = (float)tileSize.Y / texture.GetHeight();
                 sprite.Scale = new Vector2(scaleX, scaleY);
             }
-            else
-            {
-                sprite.Scale = Vector2.One;
-            }
 
             sprite.Centered = true;
             sprite.Position = HexConversions.HexToWorldPosition(tileSize, location);
