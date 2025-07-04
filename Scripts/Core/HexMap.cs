@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
+using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core;
@@ -12,10 +13,8 @@ namespace TribesOfDust.Core;
 /// </summary>
 public partial class HexMap : Node2D
 {
-    private TileMapLayer _terrainLayer;
-    private TileMapLayer _overlayLayer;
-    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
-    
+    #region Properties
+
     /// <summary>
     /// The terrain layer that contains all terrain tiles.
     /// </summary>
@@ -25,6 +24,10 @@ public partial class HexMap : Node2D
     /// The single overlay layer for all overlay effects.
     /// </summary>
     public TileMapLayer OverlayLayer => _overlayLayer ??= GetOverlayLayer();
+
+    #endregion
+
+    #region Lifecycle
 
     public override void _Ready()
     {
@@ -39,29 +42,83 @@ public partial class HexMap : Node2D
         
         base._Ready();
     }
-
-    /// <summary>
-    /// Syncs the TileMap with the provided Map's tile data.
-    /// </summary>
-    /// <param name="map">The map containing tile data to sync</param>
-    public void SyncWithMap(Map map)
+    
+    public override void _ExitTree()
     {
-        // Clear existing tiles
-        TerrainLayer.Clear();
+        // Clean up event connections when the node is destroyed
+        DisconnectFromMap();
+        base._ExitTree();
+    }
+
+    #endregion
+
+    #region Map Synchronization
+    
+    /// <summary>
+    /// Connects the HexMap to automatically react to tile changes in the specified Map.
+    /// </summary>
+    /// <param name="map">The map to connect to</param>
+    public void ConnectToMap(Map map)
+    {
+        // Disconnect from previous map first
+        DisconnectFromMap();
+        
+        _connectedMap = map;
         
         // Add all tiles from the map
         foreach (var (coordinate, tile) in map.Tiles)
         {
             SetTile(coordinate, tile);
         }
+        
+        // Register event handlers for tile changes
+        map.Tiles.Added += OnTileAdded;
+        map.Tiles.Removed += OnTileRemoved;
     }
+    
+    /// <summary>
+    /// Disconnects the HexMap from the currently connected Map.
+    /// </summary>
+    public void DisconnectFromMap()
+    {
+        if (_connectedMap != null)
+        {
+            // Clear existing tiles
+            TerrainLayer.Clear();
+            OverlayLayer.Clear();
+        
+            _connectedMap.Tiles.Added -= OnTileAdded;
+            _connectedMap.Tiles.Removed -= OnTileRemoved;
+            _connectedMap = null;
+        }
+    }
+    
+    /// <summary>
+    /// Event handler for when a tile is added to the connected Map.
+    /// </summary>
+    private void OnTileAdded(IHexLayerView<Tile> layer, Tile tile, AxialCoordinate coordinate)
+    {
+        SetTile(coordinate, tile);
+    }
+    
+    /// <summary>
+    /// Event handler for when a tile is removed from the connected Map.
+    /// </summary>
+    private void OnTileRemoved(IHexLayerView<Tile> layer, Tile tile, AxialCoordinate coordinate)
+    {
+        RemoveTile(coordinate);
+    }
+
+    #endregion
+
+    #region Tile Management
 
     /// <summary>
     /// Sets a tile at the specified hex coordinate.
     /// </summary>
     /// <param name="hexCoordinate">The hex coordinate where to place the tile</param>
     /// <param name="tile">The tile to place</param>
-    public void SetTile(AxialCoordinate hexCoordinate, Tile tile)
+    public virtual void SetTile(AxialCoordinate hexCoordinate, Tile tile)
     {
         var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
         var tileTypeId = (int)tile.Configuration.Key;
@@ -74,7 +131,7 @@ public partial class HexMap : Node2D
     /// Removes a tile at the specified hex coordinate.
     /// </summary>
     /// <param name="hexCoordinate">The hex coordinate where to remove the tile</param>
-    public void RemoveTile(AxialCoordinate hexCoordinate)
+    public virtual void RemoveTile(AxialCoordinate hexCoordinate)
     {
         var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
         TerrainLayer.EraseCell(tileMapCoordinate);
@@ -95,6 +152,63 @@ public partial class HexMap : Node2D
             
         return (TileType)sourceId;
     }
+
+    #endregion
+
+    #region Overlay Management
+
+    /// <summary>
+    /// Sets an overlay tile at the specified hex coordinate with the given color.
+    /// This replaces any existing overlay at that coordinate.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate where to place the overlay tile</param>
+    /// <param name="color">The color to modulate the overlay tile</param>
+    public void SetOverlayTile(AxialCoordinate hexCoordinate, Color color)
+    {
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        
+        // Set the overlay tile (source ID 0, atlas coordinates 0,0)
+        OverlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
+        
+        // Store the color for this coordinate
+        var colorSet = new HashSet<Color> { color };
+        _overlayColors[hexCoordinate] = colorSet;
+        
+        // Set the modulation color for the entire layer
+        // Note: This affects all overlay tiles on this layer
+        OverlayLayer.Modulate = color;
+    }
+
+    /// <summary>
+    /// Removes an overlay tile at the specified hex coordinate.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
+    public void RemoveOverlayTile(AxialCoordinate hexCoordinate)
+    {
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        OverlayLayer.EraseCell(tileMapCoordinate);
+        _overlayColors.Remove(hexCoordinate);
+        
+        // Reset modulation if no tiles remain
+        if (_overlayColors.Count == 0)
+        {
+            OverlayLayer.Modulate = Godot.Colors.White;
+        }
+    }
+
+    /// <summary>
+    /// Clears all overlay colors and tiles.
+    /// </summary>
+    public void ClearAllOverlays()
+    {
+        _overlayColors.Clear();
+        OverlayLayer.Clear();
+        OverlayLayer.Modulate = Godot.Colors.White;
+    }
+
+    #endregion
+
+    #region Coordinate Conversion
 
     /// <summary>
     /// Converts a world position to a hex coordinate.
@@ -122,6 +236,19 @@ public partial class HexMap : Node2D
         var localPosition = HexConversions.HexToWorldPosition(tileSize, hexCoordinate);
         return ToGlobal(localPosition);
     }
+
+    /// <summary>
+    /// Converts hex coordinates to TileMap coordinates.
+    /// For hex grids, this is typically a 1:1 mapping.
+    /// </summary>
+    private static Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
+    {
+        return new Vector2I(hexCoordinate.Q, hexCoordinate.R);
+    }
+
+    #endregion
+
+    #region Private Helpers
 
     /// <summary>
     /// Gets or creates the terrain layer.
@@ -193,74 +320,14 @@ public partial class HexMap : Node2D
         return _overlayLayer;
     }
 
-    /// <summary>
-    /// Converts hex coordinates to TileMap coordinates.
-    /// For hex grids, this is typically a 1:1 mapping.
-    /// </summary>
-    private static Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
-    {
-        return new Vector2I(hexCoordinate.Q, hexCoordinate.R);
-    }
-
-    /// <summary>
-    /// Converts TileMap coordinates to hex coordinates.
-    /// </summary>
-    private static AxialCoordinate TileMapToHexCoordinate(Vector2I tileMapCoordinate)
-    {
-        return new AxialCoordinate(tileMapCoordinate.X, tileMapCoordinate.Y);
-    }
-
-    #region Overlay Management
-
-    /// <summary>
-    /// Sets an overlay tile at the specified hex coordinate with the given color.
-    /// This replaces any existing overlay at that coordinate.
-    /// </summary>
-    /// <param name="hexCoordinate">The hex coordinate where to place the overlay tile</param>
-    /// <param name="color">The color to modulate the overlay tile</param>
-    public void SetOverlayTile(AxialCoordinate hexCoordinate, Color color)
-    {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
-        
-        // Set the overlay tile (source ID 0, atlas coordinates 0,0)
-        OverlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
-        
-        // Store the color for this coordinate
-        var colorSet = new HashSet<Color> { color };
-        _overlayColors[hexCoordinate] = colorSet;
-        
-        // Set the modulation color for the entire layer
-        // Note: This affects all overlay tiles on this layer
-        OverlayLayer.Modulate = color;
-    }
-
-    /// <summary>
-    /// Removes an overlay tile at the specified hex coordinate.
-    /// </summary>
-    /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
-    public void RemoveOverlayTile(AxialCoordinate hexCoordinate)
-    {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
-        OverlayLayer.EraseCell(tileMapCoordinate);
-        _overlayColors.Remove(hexCoordinate);
-        
-        // Reset modulation if no tiles remain
-        if (_overlayColors.Count == 0)
-        {
-            OverlayLayer.Modulate = Godot.Colors.White;
-        }
-    }
-
-    /// <summary>
-    /// Clears all overlay colors and tiles.
-    /// </summary>
-    public void ClearAllOverlays()
-    {
-        _overlayColors.Clear();
-        OverlayLayer.Clear();
-        OverlayLayer.Modulate = Godot.Colors.White;
-    }
-
     #endregion
 
+    #region Private Fields
+
+    private TileMapLayer _terrainLayer;
+    private TileMapLayer _overlayLayer;
+    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
+    private Map? _connectedMap;
+
+    #endregion
 }
