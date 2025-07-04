@@ -121,7 +121,7 @@ public partial class HexMap : Node2D
     /// </summary>
     /// <param name="hexCoordinate">The hex coordinate where to place the tile</param>
     /// <param name="tile">The tile to place</param>
-    public void SetTile(AxialCoordinate hexCoordinate, Tile tile)
+    public virtual void SetTile(AxialCoordinate hexCoordinate, Tile tile)
     {
         var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
         var tileTypeId = (int)tile.Configuration.Key;
@@ -134,7 +134,7 @@ public partial class HexMap : Node2D
     /// Removes a tile at the specified hex coordinate.
     /// </summary>
     /// <param name="hexCoordinate">The hex coordinate where to remove the tile</param>
-    public void RemoveTile(AxialCoordinate hexCoordinate)
+    public virtual void RemoveTile(AxialCoordinate hexCoordinate)
     {
         var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
         TerrainLayer.EraseCell(tileMapCoordinate);
