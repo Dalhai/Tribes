@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using TribesOfDust.Core.Entities;
-using TribesOfDust.Hex;
+﻿using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex.Layers;
 
 namespace TribesOfDust.Gen;

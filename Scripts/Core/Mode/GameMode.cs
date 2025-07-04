@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Gen;
-using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils;
 

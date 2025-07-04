@@ -1,10 +1,8 @@
-using System;
 using System.Linq;
 using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
-using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core.Modes;
 

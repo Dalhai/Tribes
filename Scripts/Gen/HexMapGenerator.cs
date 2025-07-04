@@ -1,5 +1,4 @@
-﻿using System;
-using Godot;
+﻿using Godot;
 
 using TribesOfDust.Core;
 using TribesOfDust.Core.Entities;
