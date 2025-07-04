@@ -2,6 +2,7 @@
 using TribesOfDust.Core;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Utils;
 
@@ -11,7 +12,11 @@ public static class NodeExtensions
     /// Creates a sprite for entities. 
     /// Note: Tile entities are skipped as they should be handled by TileMapNode.
     /// </summary>
-    public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity)
+    /// <param name="node">The node to add the sprite to</param>
+    /// <param name="context">The map context</param>
+    /// <param name="entity">The entity to create a sprite for</param>
+    /// <param name="tileSet">The TileSet to use for size calculations</param>
+    public static void CreateSpriteForEntity(this Node2D node, MapContext context, IEntity<IConfiguration> entity, TileSet tileSet)
     {
         // Skip tiles - they should be handled by TileMapNode
         if (entity is Tile)
@@ -22,15 +27,15 @@ public static class NodeExtensions
             Sprite2D sprite = new();
 
             float widthScaleToExpected = entity.Configuration.Texture != null
-                ? HexConstants.DefaultWidth / entity.Configuration.Texture.GetWidth()
+                ? tileSet.GetTileWidth() / entity.Configuration.Texture.GetWidth()
                 : 1.0f;
             float heightScaleToExpected = entity.Configuration.Texture != null
-                ? HexConstants.DefaultHeight / entity.Configuration.Texture.GetHeight()
+                ? tileSet.GetTileHeight() / entity.Configuration.Texture.GetHeight()
                 : 1.0f;
 
             sprite.Scale = new Vector2(widthScaleToExpected, heightScaleToExpected);
             sprite.Centered = true;
-            sprite.Position = HexConversions.HexToUnit(location) * HexConstants.DefaultSize;
+            sprite.Position = tileSet.HexToWorldPosition(location);
             sprite.Texture = entity.Configuration.Texture;
             sprite.Modulate = entity.Owner?.Color ?? Colors.White;
 

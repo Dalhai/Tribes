@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core;
 
@@ -95,8 +96,8 @@ public partial class TileMapNode : Node2D
         // Convert world position to local position relative to this TileMap
         var localPosition = ToLocal(worldPosition);
         
-        // Convert to hex coordinate using the existing conversion system
-        return HexConversions.UnitToHex(localPosition / HexConstants.DefaultSize);
+        // Convert to hex coordinate using the TileSet-based conversion
+        return TerrainLayer.TileSet.WorldToHexCoordinate(localPosition);
     }
 
     /// <summary>
@@ -106,8 +107,8 @@ public partial class TileMapNode : Node2D
     /// <returns>The corresponding world position</returns>
     public Vector2 HexToWorldPosition(AxialCoordinate hexCoordinate)
     {
-        var unitPosition = HexConversions.HexToUnit(hexCoordinate) * HexConstants.DefaultSize;
-        return ToGlobal(unitPosition);
+        var localPosition = TerrainLayer.TileSet.HexToWorldPosition(hexCoordinate);
+        return ToGlobal(localPosition);
     }
 
     /// <summary>
@@ -132,7 +133,12 @@ public partial class TileMapNode : Node2D
         _terrainLayer = new TileMapLayer
         {
             Name = "TerrainLayer",
-            ZIndex = 1  // Same as tiles in the original implementation
+            ZIndex = 1,  // Same as tiles in the original implementation
+            // Set to vertical orientation and disable collisions/navigation as per issue requirements
+            YSortEnabled = false,
+            UseKinematicBodies = false,
+            CollisionEnabled = false,
+            NavigationEnabled = false
         };
         
         AddChild(_terrainLayer);

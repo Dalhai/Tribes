@@ -1,6 +1,7 @@
 using Godot;
 using TribesOfDust.Hex;
 using TribesOfDust.Utils;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core.Entities;
 
@@ -48,12 +49,16 @@ public partial class TileConfiguration : Resource, IConfiguration, IVariant<Tile
     /// <summary>
     /// Gets the scale in x-direction necessary to match the expected width.
     /// </summary>
-    public float WidthScaleToExpected => Texture != null ? HexConstants.DefaultWidth / Texture.GetWidth() : 1.0f;
+    /// <param name="tileSet">The TileSet to use for size calculations</param>
+    /// <returns>The scale factor for width</returns>
+    public float GetWidthScaleToExpected(TileSet tileSet) => Texture != null ? tileSet.GetTileWidth() / Texture.GetWidth() : 1.0f;
 
     /// <summary>
     /// Gets the scale in y-direction necessary to match the expected height.
     /// </summary>
-    public float HeightScaleToExpected => Texture != null ? HexConstants.DefaultHeight / Texture.GetHeight() : 1.0f;
+    /// <param name="tileSet">The TileSet to use for size calculations</param>
+    /// <returns>The scale factor for height</returns>
+    public float GetHeightScaleToExpected(TileSet tileSet) => Texture != null ? tileSet.GetTileHeight() / Texture.GetHeight() : 1.0f;
 
     #endregion
 }

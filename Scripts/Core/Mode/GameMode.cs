@@ -6,6 +6,7 @@ using TribesOfDust.Gen;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils;
+using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core.Modes;
 
@@ -48,8 +49,8 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(camp1);
         map.TryAddEntity(camp2);
 
-        this.CreateSpriteForEntity(Context, camp1);
-        this.CreateSpriteForEntity(Context, camp2);
+        this.CreateSpriteForEntity(Context, camp1, TileMapNode.TerrainLayer.TileSet);
+        this.CreateSpriteForEntity(Context, camp2, TileMapNode.TerrainLayer.TileSet);
 
         var fountainClass = repo.Buildings.GetAsset("Fountain");
         var fountain1 = new Building(fountainClass, new(1, -1));
@@ -58,8 +59,8 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         map.TryAddEntity(fountain1);
         map.TryAddEntity(fountain2);
 
-        this.CreateSpriteForEntity(Context, fountain1);
-        this.CreateSpriteForEntity(Context, fountain2);
+        this.CreateSpriteForEntity(Context, fountain1, TileMapNode.TerrainLayer.TileSet);
+        this.CreateSpriteForEntity(Context, fountain2, TileMapNode.TerrainLayer.TileSet);
 
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
@@ -74,9 +75,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit2);
             map.TryAddEntity(unit3);
 
-            this.CreateSpriteForEntity(Context, unit1);
-            this.CreateSpriteForEntity(Context, unit2);
-            this.CreateSpriteForEntity(Context, unit3);
+            this.CreateSpriteForEntity(Context, unit1, TileMapNode.TerrainLayer.TileSet);
+            this.CreateSpriteForEntity(Context, unit2, TileMapNode.TerrainLayer.TileSet);
+            this.CreateSpriteForEntity(Context, unit3, TileMapNode.TerrainLayer.TileSet);
         }
 
         if (camp2.Owner != null)
@@ -89,9 +90,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit2);
             map.TryAddEntity(unit3);
 
-            this.CreateSpriteForEntity(Context, unit1);
-            this.CreateSpriteForEntity(Context, unit2);
-            this.CreateSpriteForEntity(Context, unit3);
+            this.CreateSpriteForEntity(Context, unit1, TileMapNode.TerrainLayer.TileSet);
+            this.CreateSpriteForEntity(Context, unit2, TileMapNode.TerrainLayer.TileSet);
+            this.CreateSpriteForEntity(Context, unit3, TileMapNode.TerrainLayer.TileSet);
         }
 
         base._Ready();
@@ -102,7 +103,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         if (@event is InputEventMouseMotion)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+            var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
 
             bool hasUnit = Context.Map.Units.Contains(clickedLocation);
 
@@ -114,7 +115,7 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         else if (@event is InputEventMouseButton mouseButton)
         {
             var mousePosition = GetGlobalMousePosition();
-            var clickedLocation = HexConversions.UnitToHex(mousePosition / HexConstants.DefaultSize);
+            var clickedLocation = TileMapNode.WorldToHexCoordinate(mousePosition);
 
             // Select a unit
 
