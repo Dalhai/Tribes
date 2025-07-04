@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://7vr54ejh03cr"]
+
+[ext_resource type="Script" uid="uid://driw83f3fs6y6" path="res://Scripts/Core/Context.cs" id="1_tj848"]
+[ext_resource type="PackedScene" uid="uid://blovp872n3gmi" path="res://Interface/Page/MainPage.tscn" id="2_nelo1"]
+
+[node name="Context" type="Node2D"]
+process_priority = 1
+script = ExtResource("1_tj848")
+
+[node name="Scene" parent="." instance=ExtResource("2_nelo1")]
+position = Vector2(-185.838, 2.51984)

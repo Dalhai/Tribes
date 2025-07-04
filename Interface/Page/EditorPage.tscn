@@ -1,0 +1,35 @@
+[gd_scene load_steps=8 format=3 uid="uid://8pk0ym0vm0yx"]
+
+[ext_resource type="Script" uid="uid://d3c3cxrrnjwib" path="res://Scripts/Core/Mode/EditorMode.cs" id="1_g0a8x"]
+[ext_resource type="PackedScene" uid="uid://ds0rpwhoptn5" path="res://Interface/Menu/EditorMenu.tscn" id="3"]
+[ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_dqtih"]
+[ext_resource type="Texture2D" uid="uid://bm87vsdvrykt0" path="res://Assets/Textures/Interface/paper.png" id="4_pxyql"]
+[ext_resource type="Script" uid="uid://6lnyb60rm5jj" path="res://Scripts/Interface/Camera.cs" id="7_a23om"]
+[ext_resource type="Script" path="res://Scripts/Core/TileMapNode.cs" id="8_4br2m"]
+
+[sub_resource type="Resource" id="Resource_p5jp2"]
+metadata/__load_path__ = "res://Interface/Widgets/paper.gd"
+
+[node name="Scene" type="Node2D"]
+script = ExtResource("1_g0a8x")
+
+[node name="TileMapNode" type="Node2D" parent="."]
+script = ExtResource("8_4br2m")
+
+[node name="Canvas" type="Node2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Canvas"]
+
+[node name="Background" type="NinePatchRect" parent="Canvas/CanvasLayer"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 250.0
+theme = ExtResource("3_dqtih")
+texture = ExtResource("4_pxyql")
+script = SubResource("Resource_p5jp2")
+
+[node name="EditorMenu" parent="Canvas/CanvasLayer" instance=ExtResource("3")]
+
+[node name="Camera2D" type="Camera2D" parent="Canvas"]
+anchor_mode = 0
+script = ExtResource("7_a23om")

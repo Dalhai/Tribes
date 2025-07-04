@@ -1,0 +1,158 @@
+using System.Collections.Generic;
+using Godot;
+using TribesOfDust.Core.Entities;
+using TribesOfDust.Hex;
+
+namespace TribesOfDust.Core;
+
+/// <summary>
+/// A dedicated container node for efficiently rendering terrain tiles using TileMapLayer.
+/// Supports hex-based coordinate system and integrates with the existing Map data model.
+/// </summary>
+public partial class TileMapNode : Node2D
+{
+    private TileMapLayer? _terrainLayer;
+    
+    /// <summary>
+    /// The terrain layer that contains all terrain tiles.
+    /// </summary>
+    public TileMapLayer TerrainLayer => _terrainLayer ??= GetTerrainLayer();
+
+    public override void _Ready()
+    {
+        // Ensure we have a terrain layer
+        _terrainLayer = GetTerrainLayer();
+        
+        // Set up the TileMapLayer for hex layout
+        _terrainLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/TerrainTileset.tres");
+        
+        base._Ready();
+    }
+
+    /// <summary>
+    /// Syncs the TileMap with the provided Map's tile data.
+    /// </summary>
+    /// <param name="map">The map containing tile data to sync</param>
+    public void SyncWithMap(Map map)
+    {
+        // Clear existing tiles
+        TerrainLayer.Clear();
+        
+        // Add all tiles from the map
+        foreach (var (coordinate, tile) in map.Tiles)
+        {
+            SetTile(coordinate, tile);
+        }
+    }
+
+    /// <summary>
+    /// Sets a tile at the specified hex coordinate.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate where to place the tile</param>
+    /// <param name="tile">The tile to place</param>
+    public void SetTile(AxialCoordinate hexCoordinate, Tile tile)
+    {
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        var tileTypeId = (int)tile.Configuration.Key;
+        
+        // Set the tile using the TileType enum value as source ID
+        TerrainLayer.SetCell(tileMapCoordinate, tileTypeId, Vector2I.Zero);
+    }
+
+    /// <summary>
+    /// Removes a tile at the specified hex coordinate.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate where to remove the tile</param>
+    public void RemoveTile(AxialCoordinate hexCoordinate)
+    {
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        TerrainLayer.EraseCell(tileMapCoordinate);
+    }
+
+    /// <summary>
+    /// Gets the tile at the specified hex coordinate.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate to check</param>
+    /// <returns>The TileType if a tile exists, null otherwise</returns>
+    public TileType? GetTileType(AxialCoordinate hexCoordinate)
+    {
+        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        var sourceId = TerrainLayer.GetCellSourceId(tileMapCoordinate);
+        
+        if (sourceId == -1)
+            return null;
+            
+        return (TileType)sourceId;
+    }
+
+    /// <summary>
+    /// Converts a world position to a hex coordinate.
+    /// </summary>
+    /// <param name="worldPosition">The world position</param>
+    /// <returns>The corresponding hex coordinate</returns>
+    public AxialCoordinate WorldToHexCoordinate(Vector2 worldPosition)
+    {
+        // Convert world position to local position relative to this TileMap
+        var localPosition = ToLocal(worldPosition);
+        
+        // Convert to hex coordinate using the existing conversion system
+        return HexConversions.UnitToHex(localPosition / HexConstants.DefaultSize);
+    }
+
+    /// <summary>
+    /// Converts a hex coordinate to a world position.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate</param>
+    /// <returns>The corresponding world position</returns>
+    public Vector2 HexToWorldPosition(AxialCoordinate hexCoordinate)
+    {
+        var unitPosition = HexConversions.HexToUnit(hexCoordinate) * HexConstants.DefaultSize;
+        return ToGlobal(unitPosition);
+    }
+
+    /// <summary>
+    /// Gets or creates the terrain layer.
+    /// </summary>
+    private TileMapLayer GetTerrainLayer()
+    {
+        if (_terrainLayer != null)
+            return _terrainLayer;
+            
+        // Look for existing terrain layer
+        foreach (Node child in GetChildren())
+        {
+            if (child is TileMapLayer layer && child.Name == "TerrainLayer")
+            {
+                _terrainLayer = layer;
+                return _terrainLayer;
+            }
+        }
+        
+        // Create new terrain layer if none exists
+        _terrainLayer = new TileMapLayer
+        {
+            Name = "TerrainLayer",
+            ZIndex = 1  // Same as tiles in the original implementation
+        };
+        
+        AddChild(_terrainLayer);
+        return _terrainLayer;
+    }
+
+    /// <summary>
+    /// Converts hex coordinates to TileMap coordinates.
+    /// For hex grids, this is typically a 1:1 mapping.
+    /// </summary>
+    private static Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
+    {
+        return new Vector2I(hexCoordinate.Q, hexCoordinate.R);
+    }
+
+    /// <summary>
+    /// Converts TileMap coordinates to hex coordinates.
+    /// </summary>
+    private static AxialCoordinate TileMapToHexCoordinate(Vector2I tileMapCoordinate)
+    {
+        return new AxialCoordinate(tileMapCoordinate.X, tileMapCoordinate.Y);
+    }
+}

@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ds0rpwhoptn5"]
+
+[node name="EditorMenu" type="MarginContainer"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 245.0
+offset_bottom = -5.0
+size_flags_horizontal = 3

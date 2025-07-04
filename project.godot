@@ -16,7 +16,7 @@ config/features=PackedStringArray("4.4", "C#")
 
 [audio]
 
-buses/default_bus_layout="res://Assets/Music/bus_layout.tres"
+buses/default_bus_layout="res://Assets/music/bus_layout.tres"
 
 [debug]
 
@@ -40,7 +40,7 @@ debug=false
 [gui]
 
 theme/custom="res://Assets/Theme/ThemeMenu.tres"
-theme/custom_font="res://Assets/Fonts/LaneNarrow.ttf"
+theme/custom_font="res://Assets/fonts/LaneNarrow.ttf"
 theme/default_font_multichannel_signed_distance_field=true
 theme/default_font_generate_mipmaps=true
 

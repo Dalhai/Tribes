@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dwxj5d0nxy8j8"]
+
+[ext_resource type="Script" uid="uid://db3slmtrxje5" path="res://Script/Core/TileTypeCostTable.cs" id="1_qbsfy"]
+
+[resource]
+script = ExtResource("1_qbsfy")
+Tundra = 1.0
+Rocks = 3.0
+Dunes = 2.0
+Canyon = 1.5

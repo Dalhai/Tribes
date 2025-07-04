@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3 uid="uid://cobxnn0eb6q6a"]
+
+[ext_resource type="Script" uid="uid://buos1266jrmwc" path="res://Scripts/Core/Mode/GameMode.cs" id="1_yb8rm"]
+[ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/Textures/Interface/paper_mat.tres" id="2_bwukd"]
+[ext_resource type="Script" uid="uid://6lnyb60rm5jj" path="res://Scripts/Interface/Camera.cs" id="7_1sk2g"]
+[ext_resource type="Script" path="res://Scripts/Core/TileMapNode.cs" id="8_3dk2m"]
+
+[node name="Scene" type="Node2D"]
+script = ExtResource("1_yb8rm")
+HealthPath = NodePath("Canvas/CanvasLayer/InfoPanel/Labels/HealthLabel")
+WaterPath = NodePath("Canvas/CanvasLayer/InfoPanel/Labels/WaterLabel")
+
+[node name="TileMapNode" type="Node2D" parent="."]
+script = ExtResource("8_3dk2m")
+
+[node name="Canvas" type="Node2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Canvas"]
+
+[node name="InfoPanel" type="Panel" parent="Canvas/CanvasLayer"]
+material = ExtResource("2_bwukd")
+custom_minimum_size = Vector2(200, 0)
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Labels" type="VBoxContainer" parent="Canvas/CanvasLayer/InfoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HealthLabel" type="Label" parent="Canvas/CanvasLayer/InfoPanel/Labels"]
+layout_mode = 2
+text = "Health"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaterLabel" type="Label" parent="Canvas/CanvasLayer/InfoPanel/Labels"]
+layout_mode = 2
+text = "Water"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="Canvas"]
+anchor_mode = 0
+script = ExtResource("7_1sk2g")
