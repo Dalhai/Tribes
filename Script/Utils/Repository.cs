@@ -177,8 +177,10 @@ namespace TribesOfDust.Utils
 
         public bool Contains(TAsset asset) => Contains(asset.Key, asset);
         public bool Contains(TVariation variation, TAsset asset) => _assets.ContainsKey(variation) && _assets[variation].Contains(asset);
-        public bool Contains(TVariation variation, int index) =>
-            _assets.ContainsKey(variation) && index >= 0 && _assets[variation].Count > index;
+        public bool Contains(TVariation variation, int index)
+        {
+            return _assets.TryGetValue(variation, out var list) && index >= 0 && index < list.Count;
+        }
 
         public int Count => _assets.Sum(list => list.Value.Count);
         public int CountVariations(TVariation variation) => _assets.ContainsKey(variation) ? _assets[variation].Count : 0;
