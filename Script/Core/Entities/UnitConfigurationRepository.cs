@@ -9,7 +9,7 @@ public class UnitConfigurationRepository : Repository<string, UnitConfiguration>
     /// <summary>
     /// The default resource path used for unit class assets.
     /// </summary>
-    private static readonly string DefaultPath = "res://assets/Units";
+    private static readonly string DefaultPath = "res://Assets/Units";
     
     /// <summary>
     /// Loads the default assets of the repository.

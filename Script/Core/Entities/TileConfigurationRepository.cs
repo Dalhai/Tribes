@@ -10,7 +10,7 @@ public class TileConfigurationRepository : Repository<TileType, TileConfiguratio
     /// <summary>
     /// The default resource path used for tile assets.
     /// </summary>
-    private static readonly string DefaultPath = "res://assets/Tiles";
+    private static readonly string DefaultPath = "res://Assets/Tiles";
 
     /// <summary>
     /// Loads the default assets of the repository.

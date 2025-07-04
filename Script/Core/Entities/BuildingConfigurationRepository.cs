@@ -9,7 +9,7 @@ public class BuildingConfigurationRepository : Repository<string, BuildingConfig
     /// <summary>
     /// The default resource path used for unit class assets.
     /// </summary>
-    private static readonly string DefaultPath = "res://assets/Buildings";
+    private static readonly string DefaultPath = "res://Assets/Buildings";
     
     /// <summary>
     /// Loads the default assets of the repository.
