@@ -1,10 +1,10 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" load_steps=11 format=3 uid="uid://q0eos2vjkg8d"]
 
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/open.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/blocked_n.png" id="2"]
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/tundra_1.png" id="3"]
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/rocks_1.png" id="4"]
-[ext_resource type="Texture2D" path="res://assets/textures/terrain/dunes_1.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://cklvq65ffjy8s" path="res://Assets/Textures/Terrain/open.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://cvrl1avpwt0ne" path="res://Assets/Textures/Terrain/blocked_n.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dh2274cebmqld" path="res://Assets/Textures/Terrain/tundra_1.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bmkg8t4rs61qj" path="res://Assets/Textures/Terrain/rocks_1.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://31w3dxhfqn0l" path="res://Assets/Textures/Terrain/dunes_1.png" id="5"]
 
 [sub_resource type="TileSetAtlasSource" id="tile_open"]
 texture = ExtResource("1")

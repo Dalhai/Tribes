@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d3c3cxrrnjwib" path="res://Script/Core/Mode/EditorMode.cs" id="1_g0a8x"]
 [ext_resource type="PackedScene" uid="uid://ds0rpwhoptn5" path="res://Interface/Menu/editor_menu.tscn" id="3"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_dqtih"]
-[ext_resource type="Texture2D" uid="uid://bkn4i405xwl56" path="res://Assets/Textures/Interface/paper.png" id="4_pxyql"]
+[ext_resource type="Texture2D" uid="uid://bm87vsdvrykt0" path="res://Assets/Textures/Interface/paper.png" id="4_pxyql"]
 [ext_resource type="Script" uid="uid://6lnyb60rm5jj" path="res://Script/Interface/Camera.cs" id="7_a23om"]
 
 [sub_resource type="Resource" id="Resource_p5jp2"]

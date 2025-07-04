@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=4 format=3 uid="uid://bh1e8mm5sikha"]
 
 [ext_resource type="Resource" uid="uid://blg1pbtyelmak" path="res://Assets/Units/MovementCostBeduin.tres" id="1_k8vlt"]
-[ext_resource type="Texture2D" uid="uid://cy1u4tl7gtldv" path="res://Assets/Textures/Pirates/weapon_pirate_sword.png" id="2_c5852"]
+[ext_resource type="Texture2D" uid="uid://beh1wxnrctakt" path="res://Assets/Textures/Pirates/weapon_pirate_sword.png" id="2_c5852"]
 [ext_resource type="Script" uid="uid://bgdduo4eidq0v" path="res://Script/Core/Entities/UnitConfiguration.cs" id="2_nkp2y"]
 
 [resource]
