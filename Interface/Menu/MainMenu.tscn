@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ddobccwufg0w0"]
 
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="1_brs0p"]
-[ext_resource type="PackedScene" uid="uid://8244mvkeoeu6" path="res://Interface/Widgets/hover_button.tscn" id="2_tqv4a"]
+[ext_resource type="PackedScene" uid="uid://8244mvkeoeu6" path="res://Interface/Widgets/HoverButton.tscn" id="2_tqv4a"]
 
 [node name="MainMenu" type="VBoxContainer"]
 offset_right = 225.0

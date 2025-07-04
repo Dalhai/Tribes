@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://blovp872n3gmi"]
 
-[ext_resource type="Script" uid="uid://cibfwkksm1eys" path="res://Script/Core/Mode/MainMode.cs" id="1_i0mqw"]
+[ext_resource type="Script" uid="uid://cibfwkksm1eys" path="res://Scripts/Core/Mode/MainMode.cs" id="1_i0mqw"]
 [ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/Textures/Interface/paper_mat.tres" id="2_3orge"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_10b7i"]
 [ext_resource type="Texture2D" uid="uid://tgs7t0u04hx1" path="res://Assets/Textures/Interface/main_menu_figures_1.png" id="6_cm0p5"]
 [ext_resource type="FontFile" uid="uid://we6yna47dhuo" path="res://Assets/Fonts/GreatVibes.otf" id="7_0jxo3"]
-[ext_resource type="PackedScene" uid="uid://ddobccwufg0w0" path="res://Interface/Menu/main_menu.tscn" id="8_s4jcs"]
+[ext_resource type="PackedScene" uid="uid://ddobccwufg0w0" path="res://Interface/Menu/MainMenu.tscn" id="8_s4jcs"]
 
 [node name="Scene" type="Node2D"]
 script = ExtResource("1_i0mqw")

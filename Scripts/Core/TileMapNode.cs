@@ -24,7 +24,7 @@ public partial class TileMapNode : Node2D
         _terrainLayer = GetTerrainLayer();
         
         // Set up the TileMapLayer for hex layout
-        _terrainLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/terrain_tileset.tres");
+        _terrainLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/TerrainTileset.tres");
         
         base._Ready();
     }

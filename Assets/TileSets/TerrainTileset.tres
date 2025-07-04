@@ -8,18 +8,23 @@
 
 [sub_resource type="TileSetAtlasSource" id="tile_open"]
 texture = ExtResource("1")
+texture_region_size = Vector2i(516, 448)
 
 [sub_resource type="TileSetAtlasSource" id="tile_blocked"]
 texture = ExtResource("2")
+texture_region_size = Vector2i(516, 448)
 
 [sub_resource type="TileSetAtlasSource" id="tile_tundra"]
 texture = ExtResource("3")
+texture_region_size = Vector2i(516, 448)
 
 [sub_resource type="TileSetAtlasSource" id="tile_rocks"]
 texture = ExtResource("4")
+texture_region_size = Vector2i(516, 448)
 
 [sub_resource type="TileSetAtlasSource" id="tile_dunes"]
 texture = ExtResource("5")
+texture_region_size = Vector2i(516, 448)
 
 [resource]
 tile_shape = 3
