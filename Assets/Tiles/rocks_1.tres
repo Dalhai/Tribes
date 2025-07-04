@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://dh6b1qx1sr5nc"]
 
 [ext_resource type="Script" uid="uid://bfqbvrel2debe" path="res://Scripts/Core/Entities/TileConfiguration.cs" id="1"]
-[ext_resource type="Texture2D" uid="uid://bmkg8t4rs61qj" path="res://Assets/Textures/Terrain/rocks_1.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://c6pajf55u78m8" path="res://Assets/textures/terrain/rocks_1.png" id="2"]
 
 [resource]
 script = ExtResource("1")

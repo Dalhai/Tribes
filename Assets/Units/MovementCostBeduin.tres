@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://blg1pbtyelmak"]
 
-[ext_resource type="Script" uid="uid://db3slmtrxje5" path="res://Script/Core/TileTypeCostTable.cs" id="1_01wju"]
+[ext_resource type="Script" uid="uid://db3slmtrxje5" path="res://Scripts/Core/TileTypeCostTable.cs" id="1_01wju"]
 
 [resource]
 script = ExtResource("1_01wju")

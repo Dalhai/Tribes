@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://33mbdqerejba" path="res://Scripts/Core/HexMap.cs" id="2_veqoq"]
 [ext_resource type="PackedScene" uid="uid://ds0rpwhoptn5" path="res://Interface/Menu/EditorMenu.tscn" id="3"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_dqtih"]
-[ext_resource type="Texture2D" uid="uid://dd7u7r4bro2xg" path="res://Assets/Textures/Interface/paper.png" id="4_pxyql"]
+[ext_resource type="Texture2D" uid="uid://dd7u7r4bro2xg" path="res://Assets/textures/Interface/paper.png" id="4_pxyql"]
 [ext_resource type="Script" uid="uid://6lnyb60rm5jj" path="res://Scripts/Interface/Camera.cs" id="7_a23om"]
 
 [node name="Scene" type="Node2D"]

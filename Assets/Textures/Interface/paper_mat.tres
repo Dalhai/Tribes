@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c3ut8catgyvoc"]
 
-[ext_resource type="Shader" uid="uid://d4lw6u6qjtxfb" path="res://Assets/Textures/Interface/paper.tres" id="1_yajtv"]
+[ext_resource type="Shader" uid="uid://d4lw6u6qjtxfb" path="res://Assets/textures/Interface/paper.tres" id="1_yajtv"]
 
 [resource]
 shader = ExtResource("1_yajtv")
