@@ -118,7 +118,7 @@ public partial class HexMap : Node2D
     /// <param name="tile">The tile to place</param>
     public virtual void SetTile(AxialCoordinate hexCoordinate, Tile tile)
     {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         var tileTypeId = (int)tile.Configuration.Key;
         
         // Set the tile using the TileType enum value as source ID
@@ -131,7 +131,7 @@ public partial class HexMap : Node2D
     /// <param name="hexCoordinate">The hex coordinate where to remove the tile</param>
     public virtual void RemoveTile(AxialCoordinate hexCoordinate)
     {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         TerrainLayer.EraseCell(tileMapCoordinate);
     }
 
@@ -142,7 +142,7 @@ public partial class HexMap : Node2D
     /// <returns>The TileType if a tile exists, Unknown otherwise</returns>
     public TileType GetTileType(AxialCoordinate hexCoordinate)
     {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         var sourceId = TerrainLayer.GetCellSourceId(tileMapCoordinate);
         
         if (sourceId == -1)
@@ -163,7 +163,7 @@ public partial class HexMap : Node2D
     /// <param name="color">The color to modulate the overlay tile</param>
     public void SetOverlayTile(AxialCoordinate hexCoordinate, Color color)
     {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         
         // Set the overlay tile (source ID 0, atlas coordinates 0,0)
         OverlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
@@ -183,7 +183,7 @@ public partial class HexMap : Node2D
     /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
     public void RemoveOverlayTile(AxialCoordinate hexCoordinate)
     {
-        var tileMapCoordinate = HexToTileMapCoordinate(hexCoordinate);
+        var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         OverlayLayer.EraseCell(tileMapCoordinate);
         _overlayColors.Remove(hexCoordinate);
         
@@ -220,7 +220,7 @@ public partial class HexMap : Node2D
         var tileMapCoord = TerrainLayer.LocalToMap(localPosition);
         
         // Convert tile map coordinates to our hex coordinates
-        return TileMapToHexCoordinate(tileMapCoord);
+        return OffsetCoordinate.From(tileMapCoord).ToAxialCoordinate();
     }
 
     /// <summary>
@@ -231,41 +231,13 @@ public partial class HexMap : Node2D
     public Vector2 HexToWorldPosition(AxialCoordinate hexCoordinate)
     {
         // Convert hex coordinate to tile map coordinates
-        var tileMapCoord = HexToTileMapCoordinate(hexCoordinate);
+        var tileMapCoord = hexCoordinate.ToOffsetCoordinate();
         
         // Use Godot's TileMapLayer to convert tile map coordinates to world position
         var localPosition = TerrainLayer.MapToLocal(tileMapCoord);
         var worldPosition = TerrainLayer.ToGlobal(localPosition);
         
         return worldPosition;
-    }
-
-    /// <summary>
-    /// Converts hex coordinates to TileMap coordinates.
-    /// Converts from axial coordinates to offset coordinates based on Godot's hex tile system.
-    /// </summary>
-    private Vector2I HexToTileMapCoordinate(AxialCoordinate hexCoordinate)
-    {
-        // Convert axial coordinates to offset coordinates for horizontal offset axis
-        // Formula: col = q + (r - (r&1)) / 2, row = r
-        var col = hexCoordinate.Q + (hexCoordinate.R - (hexCoordinate.R & 1)) / 2;
-        var row = hexCoordinate.R;
-        
-        return new Vector2I(col, row);
-    }
-
-    /// <summary>
-    /// Converts TileMap coordinates to hex coordinates.
-    /// Converts from offset coordinates to axial coordinates based on Godot's hex tile system.
-    /// </summary>
-    private AxialCoordinate TileMapToHexCoordinate(Vector2I tileMapCoordinate)
-    {
-        // Convert offset coordinates to axial coordinates for horizontal offset axis
-        // Formula: q = col - (row - (row&1)) / 2, r = row
-        var q = tileMapCoordinate.X - (tileMapCoordinate.Y - (tileMapCoordinate.Y & 1)) / 2;
-        var r = tileMapCoordinate.Y;
-        
-        return new AxialCoordinate(q, r);
     }
 
     #endregion
@@ -346,10 +318,10 @@ public partial class HexMap : Node2D
 
     #region Private Fields
 
-    private TileMapLayer _terrainLayer = null!;
-    private TileMapLayer _overlayLayer = null!;
+    private          TileMapLayer?                               _terrainLayer;
+    private          TileMapLayer?                               _overlayLayer;
     private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
-    private Map? _connectedMap;
+    private          Map?                                        _connectedMap;
 
     #endregion
 }

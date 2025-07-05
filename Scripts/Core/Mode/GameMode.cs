@@ -78,7 +78,6 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         var camp2Sprite = this.CreateSpriteForEntity(camp2, _hexMap);
         if (camp2Sprite != null) _sprites.Add(camp2.Identity, camp2Sprite);
 
-        // TODO: The following placement of the fountain actually places it at AxialCoordinate.Zero.S.SW, this is a bug.
         var fountainClass = repo.Buildings.GetAsset("Fountain");
         var fountain1 = new Building(fountainClass, AxialCoordinate.Zero.SW);
         // var fountain2 = new Building(fountainClass, new(5, 1));

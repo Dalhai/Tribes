@@ -93,7 +93,6 @@ public static class NodeExtensions
             }
 
             sprite.Centered = true;
-            // Use HexMap's coordinate conversion for consistent positioning with tiles
             sprite.Position = hexMap.HexToWorldPosition(location);
             sprite.Texture = texture;
             sprite.Modulate = entity.Owner?.Color ?? Colors.White;
