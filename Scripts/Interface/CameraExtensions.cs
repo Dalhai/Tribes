@@ -53,8 +53,7 @@ public static class CameraExtensions
         if (map.Tiles.Count == 0)
             return;
 
-        var tileSize = hexMap.TerrainLayer.TileSet.GetTileSize();
-        var extents = map.GetMapExtents(tileSize);
+        var extents = hexMap.GetMapExtents(map);
         
         var paddedExtents = new Rect2(
             extents.Position - extents.Size * 0.1f,

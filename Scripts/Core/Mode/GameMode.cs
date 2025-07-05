@@ -32,8 +32,6 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         var map = Context.Map;
         var repo = Context.Repos;
         
-        // The map is already loaded with default content from MapContext
-        // No need to generate fake tiles anymore
         
         // Initialize the HexMap and sync tiles first
         _hexMap = GetHexMap();

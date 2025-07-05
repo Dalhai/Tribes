@@ -4,10 +4,10 @@ using TribesOfDust.Hex;
 
 namespace TribesOfDust.Core;
 
-public static class MapExtensions
+public static class HexMapExtensions
 {
     /// <summary>
-    /// Gets the extents of the map using the specified tile size for calculations.
+    /// Gets the extents of the map using the HexMap's TileMapLayer for accurate calculations.
     /// </summary>
     ///
     /// <remarks>
@@ -17,16 +17,20 @@ public static class MapExtensions
     /// extents.
     /// </remarks>
     /// 
+    /// <param name="hexMap">The HexMap to use for coordinate conversion</param>
     /// <param name="map">The map to get extents for</param>
-    /// <param name="tileSize">The tile size to use for position calculations</param>
     /// <returns>The rectangular area the map covers.</returns>
-    public static Rect2 GetMapExtents(this Map map, Vector2I tileSize)
+    public static Rect2 GetMapExtents(this HexMap hexMap, Map map)
     {
+        if (map.Tiles.Count == 0)
+            return new Rect2();
+
         Vector2 minimum = Vector2.Inf;
         Vector2 maximum = -Vector2.Inf;
+        
         foreach (var tile in map.Tiles)
         {
-            var worldPosition = HexConversions.HexToWorldPosition(tileSize, tile.Key);
+            var worldPosition = hexMap.HexToWorldPosition(tile.Key);
 
             minimum.X = Math.Min(minimum.X, worldPosition.X);
             maximum.X = Math.Max(maximum.X, worldPosition.X);
@@ -37,4 +41,3 @@ public static class MapExtensions
         return new(minimum, maximum - minimum);
     }
 }
-
