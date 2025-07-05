@@ -36,16 +36,17 @@ namespace TribesOfDust.Utils
         /// <summary>
         /// Recrusively load all assets at the specified resource path.
         /// </summary>
-        ///
+        /// 
         /// <exception cref="GodotException">
         /// Thrown when the directory can not be opened.
         /// </exception>
-        ///
+        /// 
         /// <param name="resourcePath">The path from which to load assets.</param>
-        ///
+        /// <param name="resourceExtension">The extension to look for.</param>
+        /// 
         /// <returns>A list of all assets that have been loaded, if there are any.</returns>
         /// <returns>An empty list if there were no assets at the specified path.</returns>
-        protected List<TAsset> LoadAll(string resourcePath)
+        protected List<TAsset> LoadAll(string resourcePath, string resourceExtension = ".tres")
         {
             var results = new List<TAsset>();
             var dir = DirAccess.Open(resourcePath);
@@ -60,7 +61,7 @@ namespace TribesOfDust.Utils
             while (!string.IsNullOrEmpty(name))
             {
                 // Only try to load .tres files (Godot resource files)
-                if (name.EndsWith(".tres"))
+                if (name.EndsWith(resourceExtension))
                 {
                     string path = $"{resourcePath}/{name}";
                     if (TryLoad(path, out TAsset? asset) && asset is not null)

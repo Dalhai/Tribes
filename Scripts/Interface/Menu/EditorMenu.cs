@@ -25,7 +25,7 @@ public partial class EditorMenu : MarginContainer
         _tundraButton = GetNode<Button>("MenuContainer/TilesContainer/Tundra/Button");
         _rocksButton  = GetNode<Button>("MenuContainer/TilesContainer/Rocks/Button");
         _dunesButton  = GetNode<Button>("MenuContainer/TilesContainer/Dunes/Button");
-        _canyonButton = GetNode<Button>("MenuContainer/TilesContainer/Canyon/Button");
+        _canyonButton = GetNode<Button>("MenuContainer/TilesContainer/Canyons/Button");
         _openButton   = GetNode<Button>("MenuContainer/TilesContainer/Open/Button");
         _exitButton   = GetNode<Button>("MenuContainer/Exit/Button");
 

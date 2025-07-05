@@ -56,28 +56,6 @@ namespace TribesOfDust.Hex
             return HexRound(q, r);
         }
 
-        /// <summary>
-        /// Converts hex coordinates to world position using the specified tile size.
-        /// </summary>
-        /// <param name="tileSize">The tile size to use for calculations</param>
-        /// <param name="hexCoordinate">The hex coordinate to convert</param>
-        /// <returns>The world position</returns>
-        public static Vector2 HexToWorldPosition(Vector2I tileSize, AxialCoordinate hexCoordinate)
-        {
-            return HexToUnit(hexCoordinate) * tileSize;
-        }
-        
-        /// <summary>
-        /// Converts world position to hex coordinates using the specified tile size.
-        /// </summary>
-        /// <param name="tileSize">The tile size to use for calculations</param>
-        /// <param name="worldPosition">The world position to convert</param>
-        /// <returns>The hex coordinate</returns>
-        public static AxialCoordinate WorldToHexCoordinate(Vector2I tileSize, Vector2 worldPosition)
-        {
-            return UnitToHex(worldPosition   / tileSize);
-        }
-
         private static AxialCoordinate HexRound(float q, float r)
         {
             // Q: Left to right
