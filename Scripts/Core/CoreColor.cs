@@ -119,7 +119,7 @@ public static class CoreColorExtensions
             CoreColor.Turquoise => Colors.Turquoise,
             CoreColor.Silver => Colors.Silver,
             
-            _ => Colors.White
+            _ => throw new ArgumentOutOfRangeException(nameof(coreColor), coreColor, "Unhandled CoreColor value.")
         };
     }
 }
