@@ -12,6 +12,7 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
     #region Defaults
     
     private static readonly string DefaultPath = "res://Assets/Maps";
+    private static readonly string DefaultExtension = ".json";
     
     #endregion
     #region Loading
@@ -21,7 +22,7 @@ public class MapRepository(TileConfigurationRepository tileConfigurationReposito
     /// </summary>
     ///
     /// <returns>A list of loaded maps.</returns>
-    protected override List<Map> LoadAll() => LoadAll(DefaultPath);
+    protected override List<Map> LoadAll() => LoadAll(DefaultPath, DefaultExtension);
 
     protected override bool TryLoad(string resourcePath, out Map? asset)
     {

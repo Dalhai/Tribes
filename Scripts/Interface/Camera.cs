@@ -47,6 +47,8 @@ public partial class Camera : Camera2D
             ZoomStable(screenCenter, -ZoomSpeed * (float)delta);
         if (Input.IsActionJustReleased("Camera.Zoom.In"))
             ZoomStable(mousePosition, ZoomSpeed * (float)delta);
+        
+        QueueRedraw();
     }
     
     #endregion
@@ -60,32 +62,6 @@ public partial class Camera : Camera2D
     public void MoveTo(Vector2 worldPosition)
     {
         Position = worldPosition;
-        ForceUpdateScroll();
-    }
-
-    /// <summary>
-    /// Set the camera zoom so that the center stays on the current position, 
-    /// but the camera zoom fully covers the provided extents.
-    /// </summary>
-    /// <param name="extents">The rectangular area that should be fully visible</param>
-    public void ZoomToFitExtents(Rect2 extents)
-    {
-        if (extents.Size.X <= 0 || extents.Size.Y <= 0)
-            return;
-
-        var viewportSize = GetViewportRect().Size;
-        
-        // Calculate zoom required to fit extents
-        var zoomX = viewportSize.X / extents.Size.X;
-        var zoomY = viewportSize.Y / extents.Size.Y;
-        
-        // Use the smaller zoom to ensure the entire extents fit
-        var targetZoom = Math.Min(zoomX, zoomY);
-        
-        // Apply zoom limits
-        targetZoom = Math.Clamp(targetZoom, 0.1f, ZoomMax);
-        
-        Zoom = new Vector2(targetZoom, targetZoom);
         ForceUpdateScroll();
     }
 
@@ -116,5 +92,55 @@ public partial class Camera : Camera2D
         ForceUpdateScroll();
     }
 
+    private Rect2 _lastExtents;
+
+    /// <summary>
+    /// Set the camera zoom so that the center stays on the current position, 
+    /// but the camera zoom fully covers the provided extents.
+    /// </summary>
+    /// <param name="extents">The rectangular area that should be fully visible</param>
+    public void ZoomToFitExtents(Rect2 extents)
+    {
+        if (extents.Size.X <= 0 || extents.Size.Y <= 0)
+            return;
+
+        var viewportSize = GetViewportRect().Size;
+
+        // Calculate zoom required to fit extents
+        var zoomX = viewportSize.X / extents.Size.X;
+        var zoomY = viewportSize.Y / extents.Size.Y;
+
+        // Use the smaller zoom to ensure the entire extents fit
+        var targetZoom = Math.Min(zoomX, zoomY);
+
+        // Apply zoom limits
+        targetZoom = Math.Clamp(targetZoom, 0.1f, ZoomMax);
+
+        Zoom     = new Vector2(targetZoom, targetZoom);
+        Position = extents.Position;
+
+        _lastExtents = extents; // Store the extents for drawing
+
+        ForceUpdateScroll();
+    }
+
+    public override void _Draw()
+    {
+        if (_lastExtents.Size == Vector2.Zero)
+            return;
+        
+        var extentPos = _lastExtents.Position;
+        var extentFarPos = extentPos + _lastExtents.Size;
+        
+
+        // Convert world space extents to local space
+        var localExtents = new Rect2(
+            ToLocal(extentPos),
+            ToLocal(extentFarPos) - ToLocal(extentPos)
+        );
+
+        // Draw the rectangle
+        DrawRect(localExtents, Colors.Green, false);
+    }
     #endregion
 }
