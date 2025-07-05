@@ -21,3 +21,8 @@ data_*/
 # Ignore old project files
 *.old
 *.**~godot.zip
+
+
+*.afdesign~lock
+
+Assets/Maps/default.json

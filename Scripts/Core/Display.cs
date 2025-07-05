@@ -14,26 +14,11 @@ public partial class Display : RefCounted
     public Display(IHexLayerView<Tile> tiles)
     {
         this.tiles = tiles;
-
-        // Setup event handlers.
-        _onOverlayTileAdded = (overlay, color, coordinate) =>
-        {
-            if (tiles.Get(coordinate) is { } tile)
-                AddOverlayColor(tile, color);
-        };
-
-        _onOverlayTileRemoved = (overlay, color, coordinate) =>
-        {
-            if (tiles.Get(coordinate) is { } tile)
-                RemoveOverlayColor(tile, color);
-        };
     }
 
     public override string ToString() => new StringBuilder()
         .AppendEnumerable(nameof(_overlays).Remove('_').Capitalize(), _overlays)
         .ToString();
-
-
 
     /// <summary>
     /// Optional HexMap for handling overlay tiles on TileMapLayers.
@@ -63,8 +48,8 @@ public partial class Display : RefCounted
                 AddOverlayColor(tile, color);
         }
 
-        overlay.Added += _onOverlayTileAdded;
-        overlay.Removed += _onOverlayTileRemoved;
+        overlay.Added   += OnOverlayTileAdded;
+        overlay.Removed += OnOverlayTileRemoved;
 
         _overlays.Add(overlay);
     }
@@ -88,10 +73,16 @@ public partial class Display : RefCounted
                 RemoveOverlayColor(tile, color);
         }
 
-        overlay.Added -= _onOverlayTileAdded;
-        overlay.Removed -= _onOverlayTileRemoved;
+        overlay.Added   -= OnOverlayTileAdded;
+        overlay.Removed -= OnOverlayTileRemoved;
 
         _overlays.Remove(overlay);
+    }
+    
+    void OnOverlayTileAdded(IHexLayerView<Color> _, Color color, AxialCoordinate coordinate)
+    {
+        if (tiles.Get(coordinate) is { } tile)
+            AddOverlayColor(tile, color);
     }
 
     private void AddOverlayColor(IIdentifiable identifiable, Color color)
@@ -106,7 +97,7 @@ public partial class Display : RefCounted
         
         // Calculate aggregated color (mix colors evenly)
         var aggregatedColor = colors.Count == 0
-            ? Godot.Colors.White
+            ? Colors.White
             : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
 
         // Update HexMap if available and this is a tile
@@ -114,6 +105,12 @@ public partial class Display : RefCounted
         {
             HexMap.SetOverlayTile(tile.Location, aggregatedColor);
         }
+    }
+
+    void OnOverlayTileRemoved(IHexLayerView<Color> _, Color color, AxialCoordinate coordinate)
+    {
+        if (tiles.Get(coordinate) is { } tile)
+            RemoveOverlayColor(tile, color);
     }
 
     private void RemoveOverlayColor(IIdentifiable identifiable, Color color)
@@ -151,7 +148,5 @@ public partial class Display : RefCounted
 
     private readonly IHexLayerView<Tile> tiles;
     private readonly Dictionary<ulong, HashSet<Color>> _colors = new();
-    private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
-    private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;
     private readonly HashSet<IHexLayerView<Color>> _overlays = new();
 }

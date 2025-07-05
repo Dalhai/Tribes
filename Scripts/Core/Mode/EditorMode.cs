@@ -14,8 +14,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     [Export] public NodePath EditorMenuPath { get; set; } = "Canvas/CanvasLayer/EditorMenu";
     
     public static EditorMode? Instance { get; private set; }
-    
-    private HexMap _hexMap = null!;
+
+    private HexMap?     _hexMap;
     private EditorMenu? _editorMenu;
     
     /// <summary>
@@ -45,7 +45,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         // Register overlays with context   
         Context.Display.AddOverlay(_hoveredOverlay);
         Context.Display.AddOverlay(_activeTypeOverlay);
-        Context.Display.AddOverlay(_neighborhoodOverlay);
 
         Context.Map.Tiles.Added += (_, _, _) => UpdateTypeOverlay();
         Context.Map.Tiles.Removed += (_, _, _) => UpdateTypeOverlay();
@@ -302,11 +301,11 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
         switch (entity)
         {
-            case Building building:
+            case Building:
                 sprite.Scale *= 0.8f;
                 sprite.ZIndex = 10;
                 break;
-            case Unit unit:
+            case Unit:
                 sprite.Scale *= 0.8f;
                 sprite.ZIndex = 10;
                 break;
@@ -351,5 +350,4 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     public MapContext Context { get; private set; } = null!;
     private readonly IHexLayer<Color> _hoveredOverlay = new HexLayer<Color>();
     private readonly IHexLayer<Color> _activeTypeOverlay = new HexLayer<Color>();
-    private readonly IHexLayer<Color> _neighborhoodOverlay = new HexLayer<Color>();
 }
