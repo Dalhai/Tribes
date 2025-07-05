@@ -24,5 +24,6 @@ data_*/
 
 
 *.afdesign~lock
+*.afdesign~lock~
 
 Assets/Maps/default.json

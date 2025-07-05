@@ -34,7 +34,7 @@ public partial class MapContext : RefCounted
         
         // Initialize sub contexts.
         Map = Repos.Maps.HasVariations("Default") ? Repos.Maps.GetAsset("Default") : new("Default");
-        Display = new(Map.Tiles);
+        Display = new();
     }
 
     #endregion
