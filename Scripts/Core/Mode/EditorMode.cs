@@ -48,6 +48,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         Context.Display.AddOverlay(_neighborhoodOverlay);
 
         Context.Map.Tiles.Added += (_, _, _) => UpdateTypeOverlay();
+        Context.Map.Tiles.Removed += (_, _, _) => UpdateTypeOverlay();
 
         // Initialize render state
         UpdateActiveType();
@@ -143,23 +144,24 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
                 var clickedTile = Context.Map.Tiles.Get(clickedLocation);
 
-                // Remove the existing tile
                 if (clickedTile is { } tile)
                 {
+                    // Remove the existing tile
                     Context.Map.TryRemoveEntity(tile);
-                }
 
-                // Create a new tile with the open tile type and register it with the context
-                if (clickedTile is null || clickedTile.Configuration.Key != TileType.Open)
-                {
-                    var tiles = Context.Repos.Tiles;
-                    if (tiles.HasVariations(_activeTileType))
+                    // If it was not an Open tile, replace it with an Open tile
+                    if (tile.Configuration.Key != TileType.Open)
                     {
-                        var config  = tiles.GetAsset(_activeTileType);
-                        var newTile = new Tile(config, clickedLocation);
-                        Context.Map.TryAddEntity(newTile);
+                        var tiles = Context.Repos.Tiles;
+                        if (tiles.HasVariations(TileType.Open))
+                        {
+                            var config = tiles.GetAsset(TileType.Open);
+                            var newTile = new Tile(config, clickedLocation);
+                            Context.Map.TryAddEntity(newTile);
+                        }
                     }
                 }
+                // Do nothing if there's no tile at the clicked location
             }
         }
 
