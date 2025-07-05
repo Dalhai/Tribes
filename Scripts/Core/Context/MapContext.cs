@@ -35,9 +35,14 @@ public partial class MapContext : RefCounted
         // Initialize sub contexts.
         // Try to load the default map from repository, fall back to empty map if not found
         Map? defaultMap = null;
-        if (Repos.Maps.HasVariations("default"))
+        if (Repos.Maps.HasVariations("Default"))
         {
-            defaultMap = Repos.Maps.GetAsset("default");
+            defaultMap = Repos.Maps.GetAsset("Default");
+            GD.Print($"Loaded default map '{defaultMap.Name}' with {defaultMap.Tiles.Count} tiles");
+        }
+        else
+        {
+            GD.Print("No default map found in repository, creating empty map");
         }
         
         Map = defaultMap ?? new("Default");

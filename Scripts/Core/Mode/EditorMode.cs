@@ -57,7 +57,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         SetupEditorMenu();
 
         // Position camera to fit the map
-        if (GetViewport().GetCamera2D() is Camera camera)
+        var camera = GetNode<Camera>("Canvas/Camera2D");
+        if (camera != null)
         {
             camera.FitToMap(Context.Map, _hexMap);
         }

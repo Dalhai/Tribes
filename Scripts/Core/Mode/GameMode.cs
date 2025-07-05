@@ -75,7 +75,8 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         // if (fountain2Sprite != null) _sprites.Add(fountain2.Identity, fountain2Sprite);
 
         // Position camera to fit the map
-        if (GetViewport().GetCamera2D() is Camera camera)
+        var camera = GetNode<Camera>("Canvas/Camera2D");
+        if (camera != null)
         {
             camera.FitToMap(Context.Map, _hexMap);
         }

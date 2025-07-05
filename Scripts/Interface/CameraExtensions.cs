@@ -51,13 +51,18 @@ public static class CameraExtensions
     public static void FitToMap(this Camera camera, Map map, HexMap hexMap)
     {
         if (map.Tiles.Count == 0)
+        {
+            GD.Print("FitToMap: Map has no tiles, skipping camera positioning");
             return;
+        }
 
         // Get tile size from the HexMap's terrain layer
         var tileSize = hexMap.TerrainLayer.TileSet.GetTileSize();
         
         // Get map extents using the existing extension method
         var extents = map.GetMapExtents(tileSize);
+        
+        GD.Print($"FitToMap: Map extents - Position: {extents.Position}, Size: {extents.Size}");
         
         // Move camera to center of map extents
         var center = extents.Position + extents.Size / 2;
@@ -70,5 +75,7 @@ public static class CameraExtensions
         );
         
         camera.ZoomToFitExtents(paddedExtents);
+        
+        GD.Print($"FitToMap: Camera positioned at {center} with extents {paddedExtents}");
     }
 }
