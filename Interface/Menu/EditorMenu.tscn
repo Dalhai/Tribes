@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://ds0rpwhoptn5"]
+[gd_scene load_steps=2 format=3 uid="uid://ds0rpwhoptn5"]
+
+[ext_resource type="Script" path="res://Scripts/Interface/Menu/EditorMenu.cs" id="1_menu_script"]
 
 [node name="EditorMenu" type="MarginContainer"]
 anchors_preset = 9
@@ -8,3 +10,43 @@ offset_top = 5.0
 offset_right = 245.0
 offset_bottom = -5.0
 size_flags_horizontal = 3
+script = ExtResource("1_menu_script")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TileCountsContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TundraLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+layout_mode = 2
+text = "0 Tundra"
+mouse_filter = 1
+
+[node name="RocksLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+layout_mode = 2
+text = "0 Rocks"
+mouse_filter = 1
+
+[node name="DunesLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+layout_mode = 2
+text = "0 Dunes"
+mouse_filter = 1
+
+[node name="CanyonLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+layout_mode = 2
+text = "0 Canyon"
+mouse_filter = 1
+
+[node name="OpenLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+layout_mode = 2
+text = "0 Open"
+mouse_filter = 1
+
+[node name="Spacer" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ExitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Exit"
