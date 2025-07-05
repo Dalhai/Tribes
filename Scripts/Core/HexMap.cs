@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
@@ -330,24 +331,41 @@ public partial class HexMap : Node2D
 
     /// <summary>
     /// Brings the specified overlay layer to the top of the z-stack.
+    /// Shifts other layers down to maintain the 32 Z-value constraint.
     /// </summary>
     /// <param name="coreColor">The core color layer to bring to top</param>
     private void BringOverlayLayerToTop(CoreColor coreColor)
     {
-        if (!_overlayLayers.TryGetValue(coreColor, out var layer))
+        if (!_overlayLayers.TryGetValue(coreColor, out var targetLayer))
             return;
 
-        // Find the current highest Z-index among overlay layers
-        var maxZIndex = GetBaseOverlayZIndex();
-        foreach (var overlayLayer in _overlayLayers.Values)
+        var baseZIndex = GetBaseOverlayZIndex();
+        var maxZIndex = baseZIndex + 31; // Maximum allowed Z-index
+        
+        // Set the target layer to the maximum Z-index
+        targetLayer.ZIndex = maxZIndex;
+        
+        // Collect and sort other layers by their current Z-index (descending)
+        var otherLayers = _overlayLayers.Values
+            .Where(l => l != targetLayer)
+            .OrderByDescending(l => l.ZIndex)
+            .ToList();
+        
+        // Reassign Z-indices to other layers, starting from maxZIndex - 1 and going down
+        var currentZIndex = maxZIndex - 1;
+        foreach (var otherLayer in otherLayers)
         {
-            if (overlayLayer != layer && overlayLayer.ZIndex > maxZIndex)
-                maxZIndex = overlayLayer.ZIndex;
+            if (currentZIndex >= baseZIndex)
+            {
+                otherLayer.ZIndex = currentZIndex;
+                currentZIndex--;
+            }
+            else
+            {
+                // If we run out of Z-indices, assign the minimum
+                otherLayer.ZIndex = baseZIndex;
+            }
         }
-
-        // Set this layer's Z-index to be on top, but keep within the 32 Z-value range
-        var newZIndex = Math.Min(maxZIndex + 1, GetBaseOverlayZIndex() + 31);
-        layer.ZIndex = newZIndex;
     }
 
     /// <summary>
