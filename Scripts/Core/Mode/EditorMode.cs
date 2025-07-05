@@ -117,8 +117,13 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 }
                 
                 // Create a new tile with the selected tile type and register it with the context
-                var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType), clickedLocation);
-                Context.Map.TryAddEntity(newTile);
+                var tiles = Context.Repos.Tiles;
+                if (tiles.HasVariations(_activeTileType))
+                {
+                    var config  = tiles.GetAsset(_activeTileType);
+                    var newTile = new Tile(config, clickedLocation);
+                    Context.Map.TryAddEntity(newTile);
+                }
             }
 
             // Remove open tiles on right mouse click.
@@ -139,8 +144,13 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 // Create a new tile with the open tile type and register it with the context
                 if (clickedTile is null || clickedTile.Configuration.Key != TileType.Open)
                 {
-                    var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open), clickedLocation);
-                    Context.Map.TryAddEntity(newTile);
+                    var tiles = Context.Repos.Tiles;
+                    if (tiles.HasVariations(_activeTileType))
+                    {
+                        var config  = tiles.GetAsset(_activeTileType);
+                        var newTile = new Tile(config, clickedLocation);
+                        Context.Map.TryAddEntity(newTile);
+                    }
                 }
             }
         }
@@ -161,9 +171,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             Context.Map.Tiles.Added += OnTileAdded;
             Context.Map.Tiles.Removed += OnTileRemoved;
             
-            // Initial update of tile counts and active highlight
+            // Initial update of tile counts
             UpdateMenu();
-            UpdateMenuActiveHighlight();
         }
     }
     
@@ -215,11 +224,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         }
     }
     
-    private void UpdateMenuActiveHighlight()
-    {
-        _editorMenu?.UpdateActiveHighlight(_activeTileType);
-    }
-    
     public TileType GetActiveTileType()
     {
         return _activeTileType;
@@ -233,7 +237,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         if (_activeTileType != previousTileType)
         {
             UpdateTypeOverlay();
-            UpdateMenuActiveHighlight();
         }
     }
     
@@ -255,7 +258,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         if (_activeTileType != previousTileType)
         {
             UpdateTypeOverlay();
-            UpdateMenuActiveHighlight();
         }
     }
 

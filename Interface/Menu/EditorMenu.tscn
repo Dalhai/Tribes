@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ds0rpwhoptn5"]
+[gd_scene load_steps=4 format=3 uid="uid://ds0rpwhoptn5"]
 
-[ext_resource type="Script" path="res://Scripts/Interface/Menu/EditorMenu.cs" id="1_menu_script"]
+[ext_resource type="Script" uid="uid://dx2fl7vgof78g" path="res://Scripts/Interface/Menu/EditorMenu.cs" id="1_menu_script"]
+[ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="2_d6qb6"]
+[ext_resource type="PackedScene" uid="uid://8244mvkeoeu6" path="res://Interface/Widgets/HoverButton.tscn" id="3_72hlu"]
 
 [node name="EditorMenu" type="MarginContainer"]
 anchors_preset = 9
@@ -13,52 +15,58 @@ size_flags_horizontal = 3
 script = ExtResource("1_menu_script")
 
 [node name="MenuContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
-add_theme_constant_override("separation", 5)
-
-[node name="LabelsContainer" type="VBoxContainer" parent="MenuContainer"]
-layout_mode = 2
-add_theme_constant_override("separation", 8)
-
-[node name="TundraButton" type="Button" parent="MenuContainer/LabelsContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 32)
-text = "0 Tundra"
-flat = true
-alignment = 0
-
-[node name="RocksButton" type="Button" parent="MenuContainer/LabelsContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 32)
-text = "0 Rocks"
-flat = true
-alignment = 0
 
-[node name="DunesButton" type="Button" parent="MenuContainer/LabelsContainer"]
+[node name="TilesContainer" type="VBoxContainer" parent="MenuContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 32)
+size_flags_vertical = 3
+theme = ExtResource("2_d6qb6")
+
+[node name="Tundra" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
+layout_mode = 2
+
+[node name="Button" parent="MenuContainer/TilesContainer/Tundra" index="0"]
+text = "0 Tundras"
+
+[node name="Dunes" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
+layout_mode = 2
+
+[node name="Button" parent="MenuContainer/TilesContainer/Dunes" index="0"]
 text = "0 Dunes"
-flat = true
-alignment = 0
 
-[node name="CanyonButton" type="Button" parent="MenuContainer/LabelsContainer"]
+[node name="Rocks" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 32)
-text = "0 Canyon"
-flat = true
-alignment = 0
 
-[node name="OpenButton" type="Button" parent="MenuContainer/LabelsContainer"]
+[node name="Button" parent="MenuContainer/TilesContainer/Rocks" index="0"]
+text = "0 Rocks"
+
+[node name="Canyons" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 32)
+
+[node name="Button" parent="MenuContainer/TilesContainer/Canyons" index="0"]
+text = "0 Canyons"
+
+[node name="Open" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
+layout_mode = 2
+
+[node name="Button" parent="MenuContainer/TilesContainer/Open" index="0"]
 text = "0 Open"
-flat = true
-alignment = 0
 
 [node name="Spacer" type="Control" parent="MenuContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ExitButton" type="Button" parent="MenuContainer"]
+[node name="Exit" parent="MenuContainer" instance=ExtResource("3_72hlu")]
 layout_mode = 2
+size_flags_stretch_ratio = 0.2
+
+[node name="Button" parent="MenuContainer/Exit" index="0"]
 text = "Exit"
+
+[editable path="MenuContainer/TilesContainer/Tundra"]
+[editable path="MenuContainer/TilesContainer/Dunes"]
+[editable path="MenuContainer/TilesContainer/Rocks"]
+[editable path="MenuContainer/TilesContainer/Canyons"]
+[editable path="MenuContainer/TilesContainer/Open"]
+[editable path="MenuContainer/Exit"]

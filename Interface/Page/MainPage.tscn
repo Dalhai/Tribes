@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://cibfwkksm1eys" path="res://Scripts/Core/Mode/MainMode.cs" id="1_i0mqw"]
 [ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/textures/Interface/paper_mat.tres" id="2_3orge"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_10b7i"]
-[ext_resource type="Texture2D" uid="uid://dm7qjhjst6erk" path="res://Assets/textures/Interface/main_menu_figures_1.png" id="6_cm0p5"]
-[ext_resource type="FontFile" uid="uid://dic2gblp6i02n" path="res://Assets/fonts/GreatVibes.otf" id="7_0jxo3"]
+[ext_resource type="Texture2D" uid="uid://dj75j540b3xy6" path="res://Assets/textures/Interface/main_menu_figures_1.png" id="6_cm0p5"]
+[ext_resource type="FontFile" uid="uid://bdweby6ksu3gc" path="res://Assets/fonts/GreatVibes.otf" id="7_0jxo3"]
 [ext_resource type="PackedScene" uid="uid://ddobccwufg0w0" path="res://Interface/Menu/MainMenu.tscn" id="8_s4jcs"]
 
 [node name="Scene" type="Node2D"]
