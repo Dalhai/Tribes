@@ -172,9 +172,12 @@ public partial class HexMap : Node2D
         var colorSet = new HashSet<Color> { color };
         _overlayColors[hexCoordinate] = colorSet;
         
-        // Set the modulation color for the entire layer
-        // Note: This affects all overlay tiles on this layer
-        OverlayLayer.Modulate = color;
+        // Set the modulation color for this specific cell only
+        var tileData = OverlayLayer.GetCellTileData(tileMapCoordinate);
+        if (tileData != null)
+        {
+            tileData.Modulate = color;
+        }
     }
 
     /// <summary>
@@ -186,12 +189,6 @@ public partial class HexMap : Node2D
         var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         OverlayLayer.EraseCell(tileMapCoordinate);
         _overlayColors.Remove(hexCoordinate);
-        
-        // Reset modulation if no tiles remain
-        if (_overlayColors.Count == 0)
-        {
-            OverlayLayer.Modulate = Colors.White;
-        }
     }
 
     /// <summary>
@@ -201,7 +198,6 @@ public partial class HexMap : Node2D
     {
         _overlayColors.Clear();
         OverlayLayer.Clear();
-        OverlayLayer.Modulate = Colors.White;
     }
 
     #endregion

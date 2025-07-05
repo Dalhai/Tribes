@@ -15,10 +15,6 @@ namespace TribesOfDust.Core;
 /// </summary>
 public partial class Display : RefCounted
 {
-    public Display()
-    {
-    }
-
     public override string ToString() => new StringBuilder()
         .AppendEnumerable(nameof(_overlays).Remove('_').Capitalize(), _overlays)
         .ToString();
