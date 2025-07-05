@@ -1,14 +1,34 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b8k2xfg3h0c7m"]
 
-[ext_resource type="Texture2D" uid="uid://c3tt4y70xyhac" path="res://Assets/textures/terrain/open.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://lp18rq1a3kle" path="res://Assets/TileSets/Overlay.png" id="1_np6xx"]
 
-[sub_resource type="TileSetAtlasSource" id="overlay_tile"]
-texture = ExtResource("1")
-texture_region_size = Vector2i(516, 448)
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_48icg"]
+resource_name = "Overlay"
+texture = ExtResource("1_np6xx")
+texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
+0:0/0/modulate = Color(0, 0, 0, 0.196078)
+1:0/0 = 0
+1:0/0/modulate = Color(0.1, 0.1, 0.1, 0.196078)
+2:0/0 = 0
+2:0/0/modulate = Color(0.2, 0.2, 0.2, 0.196078)
+6:0/0 = 0
+6:0/0/modulate = Color(0.6, 0.6, 0.6, 0.196078)
+5:0/0 = 0
+5:0/0/modulate = Color(0.5, 0.5, 0.5, 0.196078)
+4:0/0 = 0
+4:0/0/modulate = Color(0.4, 0.4, 0.4, 0.196078)
+3:0/0 = 0
+3:0/0/modulate = Color(0.3, 0.3, 0.3, 0.196078)
+7:0/0 = 0
+7:0/0/modulate = Color(0.7, 0.7, 0.7, 0.196078)
+8:0/0 = 0
+8:0/0/modulate = Color(0.8, 0.8, 0.8, 0.196078)
+9:0/0 = 0
+9:0/0/modulate = Color(0.9, 0.9, 0.9, 0.196078)
 
 [resource]
 tile_shape = 3
 tile_offset_axis = 1
-tile_size = Vector2i(512, 448)
-sources/0 = SubResource("overlay_tile")
+tile_size = Vector2i(128, 128)
+sources/0 = SubResource("TileSetAtlasSource_48icg")

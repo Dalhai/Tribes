@@ -9,31 +9,15 @@ using TribesOfDust.Utils.Extensions;
 
 namespace TribesOfDust.Core;
 
+/// <summary>
+/// Manages visual display and overlay rendering for the game.
+/// Handles overlay registration, color tracking, and synchronization with HexMap rendering.
+/// </summary>
 public partial class Display : RefCounted
 {
-    public Display(IHexLayerView<Tile> tiles)
-    {
-        this.tiles = tiles;
-
-        // Setup event handlers.
-        _onOverlayTileAdded = (overlay, color, coordinate) =>
-        {
-            if (tiles.Get(coordinate) is { } tile)
-                AddOverlayColor(tile, color);
-        };
-
-        _onOverlayTileRemoved = (overlay, color, coordinate) =>
-        {
-            if (tiles.Get(coordinate) is { } tile)
-                RemoveOverlayColor(tile, color);
-        };
-    }
-
     public override string ToString() => new StringBuilder()
         .AppendEnumerable(nameof(_overlays).Remove('_').Capitalize(), _overlays)
         .ToString();
-
-
 
     /// <summary>
     /// Optional HexMap for handling overlay tiles on TileMapLayers.
@@ -51,6 +35,7 @@ public partial class Display : RefCounted
     /// times. You should, however, remember to unregister overlays once you don't need 
     /// them anymore.
     /// </summary>
+    /// <param name="overlay">The overlay layer to add</param>
     public void AddOverlay(IHexLayerView<Color> overlay)
     {
         if (_overlays.Contains(overlay))
@@ -59,23 +44,23 @@ public partial class Display : RefCounted
         // Add existing overlay tiles
         foreach (var (coordinate, color) in overlay)
         {
-            if (tiles.Get(coordinate) is { } tile)
-                AddOverlayColor(tile, color);
+            AddOverlayColor(coordinate, color);
         }
 
-        overlay.Added += _onOverlayTileAdded;
-        overlay.Removed += _onOverlayTileRemoved;
+        overlay.Added   += OnOverlayTileAdded;
+        overlay.Removed += OnOverlayTileRemoved;
 
         _overlays.Add(overlay);
     }
 
     /// <summary>
-    /// Removes an overlay to the game overlays.
+    /// Removes an overlay from the game overlays.
     /// 
     /// After unregistering the overlay, updates to it are not tracked anymore.
     /// You can reregister the overlay at any time though, no need to create a
     /// completely new one.
     /// </summary>
+    /// <param name="overlay">The overlay layer to remove</param>
     public void RemoveOverlay(IHexLayerView<Color> overlay)
     {
         if (!_overlays.Contains(overlay))
@@ -84,53 +69,86 @@ public partial class Display : RefCounted
         // Remove overlay tiles
         foreach (var (coordinate, color) in overlay)
         {
-            if (tiles.Get(coordinate) is { } tile)
-                RemoveOverlayColor(tile, color);
+            RemoveOverlayColor(coordinate, color);
         }
 
-        overlay.Added -= _onOverlayTileAdded;
-        overlay.Removed -= _onOverlayTileRemoved;
+        overlay.Added   -= OnOverlayTileAdded;
+        overlay.Removed -= OnOverlayTileRemoved;
 
         _overlays.Remove(overlay);
     }
-
-    private void AddOverlayColor(IIdentifiable identifiable, Color color)
+    
+    /// <summary>
+    /// Handles when an overlay tile is added to a layer.
+    /// </summary>
+    /// <param name="_">The overlay layer (unused)</param>
+    /// <param name="color">The color of the overlay</param>
+    /// <param name="coordinate">The coordinate where the overlay was added</param>
+    void OnOverlayTileAdded(IHexLayerView<Color> _, Color color, AxialCoordinate coordinate)
     {
-        if (!_colors.TryGetValue(identifiable.Identity, out var colors))
+        AddOverlayColor(coordinate, color);
+    }
+
+    /// <summary>
+    /// Adds an overlay color at the specified coordinate.
+    /// Updates the HexMap rendering if available.
+    /// </summary>
+    /// <param name="coordinate">The coordinate to add the overlay color at</param>
+    /// <param name="color">The color to add</param>
+    private void AddOverlayColor(AxialCoordinate coordinate, Color color)
+    {
+        if (!_colors.TryGetValue(coordinate, out var colors))
         {
             colors = new();
-            _colors.Add(identifiable.Identity, colors);
+            _colors.Add(coordinate, colors);
         }
             
         colors.Add(color);
         
         // Calculate aggregated color (mix colors evenly)
         var aggregatedColor = colors.Count == 0
-            ? Godot.Colors.White
+            ? Colors.White
             : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
 
-        // Update HexMap if available and this is a tile
-        if (HexMap != null && identifiable is Tile tile)
+        // Update HexMap if available
+        if (HexMap != null)
         {
-            HexMap.SetOverlayTile(tile.Location, aggregatedColor);
+            HexMap.SetOverlayTile(coordinate, aggregatedColor);
         }
     }
 
-    private void RemoveOverlayColor(IIdentifiable identifiable, Color color)
+    /// <summary>
+    /// Handles when an overlay tile is removed from a layer.
+    /// </summary>
+    /// <param name="_">The overlay layer (unused)</param>
+    /// <param name="color">The color of the overlay</param>
+    /// <param name="coordinate">The coordinate where the overlay was removed</param>
+    void OnOverlayTileRemoved(IHexLayerView<Color> _, Color color, AxialCoordinate coordinate)
     {
-        if (_colors.TryGetValue(identifiable.Identity, out var colors))
+        RemoveOverlayColor(coordinate, color);
+    }
+
+    /// <summary>
+    /// Removes an overlay color from the specified coordinate.
+    /// Updates the HexMap rendering if available.
+    /// </summary>
+    /// <param name="coordinate">The coordinate to remove the overlay color from</param>
+    /// <param name="color">The color to remove</param>
+    private void RemoveOverlayColor(AxialCoordinate coordinate, Color color)
+    {
+        if (_colors.TryGetValue(coordinate, out var colors))
         {
             colors.Remove(color);
             
             if (colors.Count == 0)
             {
                 // Remove from dictionary if no colors remain
-                _colors.Remove(identifiable.Identity);
+                _colors.Remove(coordinate);
                 
-                // Remove from HexMap if available and this is a tile
-                if (HexMap != null && identifiable is Tile tile)
+                // Remove from HexMap if available
+                if (HexMap != null)
                 {
-                    HexMap.RemoveOverlayTile(tile.Location);
+                    HexMap.RemoveOverlayTile(coordinate);
                 }
             }
             else
@@ -138,10 +156,10 @@ public partial class Display : RefCounted
                 // Calculate aggregated color (mix colors evenly)
                 var aggregatedColor = colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
                 
-                // Update HexMap if available and this is a tile
-                if (HexMap != null && identifiable is Tile tile)
+                // Update HexMap if available
+                if (HexMap != null)
                 {
-                    HexMap.SetOverlayTile(tile.Location, aggregatedColor);
+                    HexMap.SetOverlayTile(coordinate, aggregatedColor);
                 }
             }
         }
@@ -149,9 +167,17 @@ public partial class Display : RefCounted
 
     #endregion
 
-    private readonly IHexLayerView<Tile> tiles;
-    private readonly Dictionary<ulong, HashSet<Color>> _colors = new();
-    private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileAdded;
-    private readonly Action<IHexLayerView<Color>, Color, AxialCoordinate> _onOverlayTileRemoved;
+    #region Private Fields
+    
+    /// <summary>
+    /// Dictionary tracking overlay colors by coordinate.
+    /// </summary>
+    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _colors = new();
+    
+    /// <summary>
+    /// Set of registered overlay layers.
+    /// </summary>
     private readonly HashSet<IHexLayerView<Color>> _overlays = new();
+    
+    #endregion
 }

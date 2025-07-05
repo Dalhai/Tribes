@@ -29,18 +29,12 @@ public partial class HexMap : Node2D
 
     public override void _Ready()
     {
-        // Ensure we have a terrain layer
         _terrainLayer = GetTerrainLayer();
-        
-        // Set up the TileMapLayer for hex layout
-        _terrainLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/TerrainTileset.tres");
-        
-        // Ensure we have an overlay layer
         _overlayLayer = GetOverlayLayer();
-        
+
         base._Ready();
     }
-    
+
     public override void _ExitTree()
     {
         // Clean up event connections when the node is destroyed
@@ -51,7 +45,7 @@ public partial class HexMap : Node2D
     #endregion
 
     #region Map Synchronization
-    
+
     /// <summary>
     /// Connects the HexMap to automatically react to tile changes in the specified Map.
     /// </summary>
@@ -60,20 +54,20 @@ public partial class HexMap : Node2D
     {
         // Disconnect from previous map first
         DisconnectFromMap();
-        
+
         _connectedMap = map;
-        
+
         // Add all tiles from the map
         foreach (var (coordinate, tile) in map.Tiles)
         {
             SetTile(coordinate, tile);
         }
-        
+
         // Register event handlers for tile changes
-        map.Tiles.Added += OnTileAdded;
+        map.Tiles.Added   += OnTileAdded;
         map.Tiles.Removed += OnTileRemoved;
     }
-    
+
     /// <summary>
     /// Disconnects the HexMap from the currently connected Map.
     /// </summary>
@@ -84,13 +78,13 @@ public partial class HexMap : Node2D
             // Clear existing tiles
             TerrainLayer.Clear();
             OverlayLayer.Clear();
-        
-            _connectedMap.Tiles.Added -= OnTileAdded;
+
+            _connectedMap.Tiles.Added   -= OnTileAdded;
             _connectedMap.Tiles.Removed -= OnTileRemoved;
-            _connectedMap = null;
+            _connectedMap               =  null;
         }
     }
-    
+
     /// <summary>
     /// Event handler for when a tile is added to the connected Map.
     /// </summary>
@@ -98,7 +92,7 @@ public partial class HexMap : Node2D
     {
         SetTile(coordinate, tile);
     }
-    
+
     /// <summary>
     /// Event handler for when a tile is removed from the connected Map.
     /// </summary>
@@ -119,10 +113,10 @@ public partial class HexMap : Node2D
     public virtual void SetTile(AxialCoordinate hexCoordinate, Tile tile)
     {
         var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
-        var tileTypeId = (int)tile.Configuration.Key;
+        var tileType          = tile.Configuration.Key;
         
         // Set the tile using the TileType enum value as source ID
-        TerrainLayer.SetCell(tileMapCoordinate, tileTypeId, Vector2I.Zero);
+        TerrainLayer.SetCell(tileMapCoordinate, 0, tile.Configuration.AtlasCoordinate);
     }
 
     /// <summary>
@@ -133,22 +127,6 @@ public partial class HexMap : Node2D
     {
         var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         TerrainLayer.EraseCell(tileMapCoordinate);
-    }
-
-    /// <summary>
-    /// Gets the tile at the specified hex coordinate.
-    /// </summary>
-    /// <param name="hexCoordinate">The hex coordinate to check</param>
-    /// <returns>The TileType if a tile exists, Unknown otherwise</returns>
-    public TileType GetTileType(AxialCoordinate hexCoordinate)
-    {
-        var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
-        var sourceId = TerrainLayer.GetCellSourceId(tileMapCoordinate);
-        
-        if (sourceId == -1)
-            return TileType.Unknown;
-            
-        return (TileType)sourceId;
     }
 
     #endregion
@@ -164,17 +142,16 @@ public partial class HexMap : Node2D
     public void SetOverlayTile(AxialCoordinate hexCoordinate, Color color)
     {
         var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
-        
+
         // Set the overlay tile (source ID 0, atlas coordinates 0,0)
-        OverlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
-        
-        // Store the color for this coordinate
-        var colorSet = new HashSet<Color> { color };
-        _overlayColors[hexCoordinate] = colorSet;
-        
-        // Set the modulation color for the entire layer
-        // Note: This affects all overlay tiles on this layer
-        OverlayLayer.Modulate = color;
+        OverlayLayer.SetCell(tileMapCoordinate, 0, new(5, 0));
+
+        // Set the modulation color for this specific cell only
+        var tileData = OverlayLayer.GetCellTileData(tileMapCoordinate);
+        if (tileData != null)
+        {
+            tileData.Modulate *= color;
+        }
     }
 
     /// <summary>
@@ -185,23 +162,6 @@ public partial class HexMap : Node2D
     {
         var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         OverlayLayer.EraseCell(tileMapCoordinate);
-        _overlayColors.Remove(hexCoordinate);
-        
-        // Reset modulation if no tiles remain
-        if (_overlayColors.Count == 0)
-        {
-            OverlayLayer.Modulate = Colors.White;
-        }
-    }
-
-    /// <summary>
-    /// Clears all overlay colors and tiles.
-    /// </summary>
-    public void ClearAllOverlays()
-    {
-        _overlayColors.Clear();
-        OverlayLayer.Clear();
-        OverlayLayer.Modulate = Colors.White;
     }
 
     #endregion
@@ -217,8 +177,8 @@ public partial class HexMap : Node2D
     {
         // Use Godot's TileMapLayer to convert world position to tile map coordinates
         var localPosition = TerrainLayer.ToLocal(worldPosition);
-        var tileMapCoord = TerrainLayer.LocalToMap(localPosition);
-        
+        var tileMapCoord  = TerrainLayer.LocalToMap(localPosition);
+
         // Convert tile map coordinates to our hex coordinates
         return OffsetCoordinate.From(tileMapCoord).ToAxialCoordinate();
     }
@@ -232,11 +192,11 @@ public partial class HexMap : Node2D
     {
         // Convert hex coordinate to tile map coordinates
         var tileMapCoord = hexCoordinate.ToOffsetCoordinate();
-        
+
         // Use Godot's TileMapLayer to convert tile map coordinates to world position
         var localPosition = TerrainLayer.MapToLocal(tileMapCoord);
         var worldPosition = TerrainLayer.ToGlobal(localPosition);
-        
+
         return worldPosition;
     }
 
@@ -251,29 +211,20 @@ public partial class HexMap : Node2D
     {
         if (_terrainLayer != null)
             return _terrainLayer;
-            
-        // Look for existing terrain layer
-        foreach (Node child in GetChildren())
-        {
-            if (child is TileMapLayer layer && child.Name == "TerrainLayer")
-            {
-                _terrainLayer = layer;
-                return _terrainLayer;
-            }
-        }
-        
+
         // Create new terrain layer if none exists
         _terrainLayer = new TileMapLayer
         {
-            Name = "TerrainLayer",
-            ZIndex = 1,  // Same as tiles in the original implementation
-            // Set to vertical orientation and disable collisions/navigation as per issue requirements
-            YSortEnabled = false,
+            Name   = "TerrainLayer",
+            ZIndex = 1, // Same as tiles in the original implementation
+            YSortEnabled       = false,
             UseKinematicBodies = false,
-            CollisionEnabled = false,
-            NavigationEnabled = false
+            CollisionEnabled   = false,
+            NavigationEnabled  = false
         };
-        
+
+        _terrainLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/TerrainTileset.tres");
+
         AddChild(_terrainLayer);
         return _terrainLayer;
     }
@@ -285,32 +236,18 @@ public partial class HexMap : Node2D
     {
         if (_overlayLayer != null)
             return _overlayLayer;
-            
-        // Look for existing overlay layer
-        foreach (Node child in GetChildren())
-        {
-            if (child is TileMapLayer layer && child.Name == "OverlayLayer")
-            {
-                _overlayLayer = layer;
-                // Ensure existing overlay layer has the correct transparency
-                _overlayLayer.SelfModulate = new Color(1, 1, 1, 0.25f);  // 25% opacity
-                return _overlayLayer;
-            }
-        }
-        
+
         // Create new overlay layer if none exists
         _overlayLayer = new TileMapLayer
         {
-            Name = "OverlayLayer",
-            ZIndex = 10,  // Above terrain layer
-            YSortEnabled = false,
+            Name               = "OverlayLayer",
+            ZIndex             = 10, // Above terrain layer
+            YSortEnabled       = false,
             UseKinematicBodies = false,
-            CollisionEnabled = false,
-            NavigationEnabled = false,
-            SelfModulate = new Color(1, 1, 1, 0.25f)  // 25% opacity
+            CollisionEnabled   = false,
+            NavigationEnabled  = false
         };
 
-        // Set the overlay tileset
         _overlayLayer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/OverlayTileset.tres");
 
         AddChild(_overlayLayer);
@@ -321,10 +258,9 @@ public partial class HexMap : Node2D
 
     #region Private Fields
 
-    private          TileMapLayer?                               _terrainLayer;
-    private          TileMapLayer?                               _overlayLayer;
-    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
-    private          Map?                                        _connectedMap;
+    private TileMapLayer? _terrainLayer;
+    private TileMapLayer? _overlayLayer;
+    private Map?          _connectedMap;
 
     #endregion
 }

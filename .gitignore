@@ -6,6 +6,7 @@
 # IDE-specified ignores
 *.suo
 *.one
+*.DotSettings.user
 
 # Godot-specific ignores
 .import/
@@ -21,3 +22,9 @@ data_*/
 # Ignore old project files
 *.old
 *.**~godot.zip
+
+
+*.afdesign~lock
+*.afdesign~lock~
+
+Assets/Maps/default.json

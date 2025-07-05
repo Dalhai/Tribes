@@ -1,43 +1,30 @@
-[gd_resource type="TileSet" load_steps=11 format=3 uid="uid://q0eos2vjkg8d"]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://q0eos2vjkg8d"]
 
-[ext_resource type="Texture2D" uid="uid://c3tt4y70xyhac" path="res://Assets/textures/terrain/open.png" id="1"]
-[ext_resource type="Texture2D" uid="uid://dlpv1icmgv54k" path="res://Assets/textures/terrain/blocked_n.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://cx7ndwmvruwsj" path="res://Assets/textures/terrain/tundra_1.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://c6pajf55u78m8" path="res://Assets/textures/terrain/rocks_1.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://uplgj11vjoek" path="res://Assets/textures/terrain/dunes_1.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://dtykambhvrxjm" path="res://Assets/TileSets/Terrain.png" id="1_n82pq"]
 
-[sub_resource type="TileSetAtlasSource" id="tile_open"]
-texture = ExtResource("1")
-texture_region_size = Vector2i(516, 448)
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4k3rd"]
+resource_name = "Base"
+texture = ExtResource("1_n82pq")
+texture_region_size = Vector2i(128, 128)
+1:0/0 = 0
+2:0/0 = 0
 0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="tile_blocked"]
-texture = ExtResource("2")
-texture_region_size = Vector2i(516, 448)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="tile_tundra"]
-texture = ExtResource("3")
-texture_region_size = Vector2i(516, 448)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="tile_rocks"]
-texture = ExtResource("4")
-texture_region_size = Vector2i(516, 448)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="tile_dunes"]
-texture = ExtResource("5")
-texture_region_size = Vector2i(516, 448)
-0:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+5:9/0 = 0
+0:8/0 = 0
 
 [resource]
 tile_shape = 3
 tile_offset_axis = 1
-tile_size = Vector2i(512, 448)
-sources/1 = SubResource("tile_open")
-sources/2 = SubResource("tile_blocked")
-sources/3 = SubResource("tile_tundra")
-sources/4 = SubResource("tile_rocks")
-sources/5 = SubResource("tile_dunes")
-sources/6 = SubResource("tile_blocked")
+tile_size = Vector2i(128, 128)
+sources/0 = SubResource("TileSetAtlasSource_4k3rd")

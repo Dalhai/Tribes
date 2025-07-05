@@ -1,13 +1,13 @@
-﻿
-using Godot;
+﻿using Godot;
+using Godot.Collections;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Entities;
 
-public partial class UnitConfiguration : Resource, IConfiguration, IVariant<string>
+public partial class UnitConfiguration : Resource, IVariant<string>
 {
     public override string ToString() => $"Unit: {Key}";
-    
+
     #region Exports
 
     /// <summary>
@@ -15,12 +15,6 @@ public partial class UnitConfiguration : Resource, IConfiguration, IVariant<stri
     /// </summary>
     [Export]
     public string Key { get; set; } = "Unit";
-
-    /// <summary>
-    /// The texture associated with the unit.
-    /// </summary>
-    [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D Texture { get; set; } = null!;
 
     /// <summary>
     /// The movement costs for this unit.

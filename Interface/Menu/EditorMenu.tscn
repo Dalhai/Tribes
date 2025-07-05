@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dx2fl7vgof78g" path="res://Scripts/Interface/Menu/EditorMenu.cs" id="1_menu_script"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="2_d6qb6"]
-[ext_resource type="PackedScene" uid="uid://8244mvkeoeu6" path="res://Interface/Widgets/HoverButton.tscn" id="3_72hlu"]
+[ext_resource type="Texture2D" uid="uid://bw22nx8br0xk6" path="res://Assets/Interface/widgets/menu_button.png" id="4_e575c"]
 
 [node name="EditorMenu" type="MarginContainer"]
 anchors_preset = 9
@@ -23,50 +23,133 @@ layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_d6qb6")
 
-[node name="Tundra" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
+[node name="Tundra" type="TextureRect" parent="MenuContainer/TilesContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("4_e575c")
+expand_mode = 2
 
-[node name="Button" parent="MenuContainer/TilesContainer/Tundra" index="0"]
+[node name="Button" type="Button" parent="MenuContainer/TilesContainer/Tundra"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "0 Tundras"
+flat = true
+alignment = 0
 
-[node name="Dunes" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
+[node name="Dunes" type="TextureRect" parent="MenuContainer/TilesContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("4_e575c")
+expand_mode = 2
 
-[node name="Button" parent="MenuContainer/TilesContainer/Dunes" index="0"]
+[node name="Button" type="Button" parent="MenuContainer/TilesContainer/Dunes"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "0 Dunes"
+flat = true
+alignment = 0
 
-[node name="Rocks" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
+[node name="Rocks" type="TextureRect" parent="MenuContainer/TilesContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("4_e575c")
+expand_mode = 2
 
-[node name="Button" parent="MenuContainer/TilesContainer/Rocks" index="0"]
+[node name="Button" type="Button" parent="MenuContainer/TilesContainer/Rocks"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "0 Rocks"
+flat = true
+alignment = 0
 
-[node name="Canyons" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
+[node name="Canyons" type="TextureRect" parent="MenuContainer/TilesContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("4_e575c")
+expand_mode = 2
 
-[node name="Button" parent="MenuContainer/TilesContainer/Canyons" index="0"]
+[node name="Button" type="Button" parent="MenuContainer/TilesContainer/Canyons"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "0 Canyons"
+flat = true
+alignment = 0
 
-[node name="Open" parent="MenuContainer/TilesContainer" instance=ExtResource("3_72hlu")]
+[node name="Open" type="TextureRect" parent="MenuContainer/TilesContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("4_e575c")
+expand_mode = 2
 
-[node name="Button" parent="MenuContainer/TilesContainer/Open" index="0"]
+[node name="Button" type="Button" parent="MenuContainer/TilesContainer/Open"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "0 Open"
+flat = true
+alignment = 0
 
 [node name="Spacer" type="Control" parent="MenuContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Exit" parent="MenuContainer" instance=ExtResource("3_72hlu")]
+[node name="Exit" type="TextureRect" parent="MenuContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
+mouse_filter = 0
+texture = ExtResource("4_e575c")
+expand_mode = 2
 
-[node name="Button" parent="MenuContainer/Exit" index="0"]
+[node name="Button" type="Button" parent="MenuContainer/Exit"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "Exit"
-
-[editable path="MenuContainer/TilesContainer/Tundra"]
-[editable path="MenuContainer/TilesContainer/Dunes"]
-[editable path="MenuContainer/TilesContainer/Rocks"]
-[editable path="MenuContainer/TilesContainer/Canyons"]
-[editable path="MenuContainer/TilesContainer/Open"]
-[editable path="MenuContainer/Exit"]
+flat = true
+alignment = 0

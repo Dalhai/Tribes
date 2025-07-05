@@ -6,23 +6,46 @@ using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 using TribesOfDust.Interface;
 using TribesOfDust.Interface.Menu;
+using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Modes;
 
+/// <summary>
+/// Editor mode for creating and modifying game maps.
+/// Provides tile placement/removal, overlay visualization, and integration with the editor menu.
+/// </summary>
 public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
+    #region Properties
+
+    /// <summary>
+    /// Path to the editor menu node in the scene tree.
+    /// </summary>
     [Export] public NodePath EditorMenuPath { get; set; } = "Canvas/CanvasLayer/EditorMenu";
     
+    /// <summary>
+    /// Singleton instance of the EditorMode.
+    /// </summary>
     public static EditorMode? Instance { get; private set; }
-    
-    private HexMap _hexMap = null!;
-    private EditorMenu? _editorMenu;
-    
+
     /// <summary>
     /// The HexMap responsible for rendering terrain tiles.
     /// </summary>
     public HexMap HexMap => _hexMap ??= GetHexMap();
-        
+
+    /// <summary>
+    /// The map context containing the map data and display settings.
+    /// </summary>
+    public MapContext Context { get; private set; } = null!;
+
+    #endregion
+
+    #region Godot Lifecycle
+
+    /// <summary>
+    /// Initializes the editor mode when the node enters the scene tree.
+    /// Sets up the map context, HexMap, overlays, and editor menu integration.
+    /// </summary>
     public override void _Ready()
     {
         Context = new MapContext(Core.Context.Instance);
@@ -37,17 +60,17 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         _hexMap.ConnectToMap(Context.Map);
         
         // Register non-tile entities (buildings, units) with sprite rendering
-        foreach (var (coordinate, building) in Context.Map.Buildings)
-            CreateSpriteForNonTileEntity(coordinate, building);
-        foreach (var (coordinate, unit) in Context.Map.Units)
-            CreateSpriteForNonTileEntity(coordinate, unit);
+        foreach (var (_, building) in Context.Map.Buildings)
+            this.CreateSpriteForEntity(building, _hexMap);
+        foreach (var (_, unit) in Context.Map.Units)
+            this.CreateSpriteForEntity(unit, _hexMap);
 
         // Register overlays with context   
         Context.Display.AddOverlay(_hoveredOverlay);
         Context.Display.AddOverlay(_activeTypeOverlay);
-        Context.Display.AddOverlay(_neighborhoodOverlay);
 
         Context.Map.Tiles.Added += (_, _, _) => UpdateTypeOverlay();
+        Context.Map.Tiles.Removed += (_, _, _) => UpdateTypeOverlay();
 
         // Initialize render state
         UpdateActiveType();
@@ -66,12 +89,18 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         base._Ready();
     }
 
+    /// <summary>
+    /// Sets the singleton instance when entering the scene tree.
+    /// </summary>
     public override void _EnterTree()
     {
         Instance = this;
         base._EnterTree();
     }
 
+    /// <summary>
+    /// Cleans up resources and saves the map when exiting the scene tree.
+    /// </summary>
     public override void _ExitTree()
     {
         Instance = null;
@@ -87,6 +116,15 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         base._ExitTree();
     }
 
+    #endregion
+
+    #region Input Handling
+
+    /// <summary>
+    /// Handles input events for tile placement, removal, and overlay updates.
+    /// Processes mouse movements for hover effects and mouse clicks for tile editing.
+    /// </summary>
+    /// <param name="inputEvent">The input event to process</param>
     public override void _Input(InputEvent inputEvent)
     {
         // Update the active tile and color it accordingly.
@@ -115,23 +153,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
             if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Left })
             {
-                var mousePosition = GetGlobalMousePosition();
-                var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
-                
-                // Remove the existing tile from the map data
-                if (Context.Map.Tiles.Get(clickedLocation) is { } existingTile)
-                {
-                    Context.Map.TryRemoveEntity(existingTile);
-                }
-                
-                // Create a new tile with the selected tile type and register it with the context
-                var tiles = Context.Repos.Tiles;
-                if (tiles.HasVariations(_activeTileType))
-                {
-                    var config  = tiles.GetAsset(_activeTileType);
-                    var newTile = new Tile(config, clickedLocation);
-                    Context.Map.TryAddEntity(newTile);
-                }
+                HandleLeftClick();
             }
 
             // Remove open tiles on right mouse click.
@@ -139,35 +161,97 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
 
             else if (mouseButton is { Pressed: true, ButtonIndex: MouseButton.Right })
             {
-                var mousePosition = GetGlobalMousePosition();
-                var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
-                var clickedTile = Context.Map.Tiles.Get(clickedLocation);
-
-                // Remove the existing tile
-                if (clickedTile is { } tile)
-                {
-                    Context.Map.TryRemoveEntity(tile);
-                }
-
-                // Create a new tile with the open tile type and register it with the context
-                if (clickedTile is null || clickedTile.Configuration.Key != TileType.Open)
-                {
-                    var tiles = Context.Repos.Tiles;
-                    if (tiles.HasVariations(_activeTileType))
-                    {
-                        var config  = tiles.GetAsset(_activeTileType);
-                        var newTile = new Tile(config, clickedLocation);
-                        Context.Map.TryAddEntity(newTile);
-                    }
-                }
+                HandleRightClick();
             }
         }
 
         UpdateActiveType();
     }
 
+    /// <summary>
+    /// Handles left mouse click for tile placement.
+    /// Places the currently selected tile type at the clicked location.
+    /// </summary>
+    private void HandleLeftClick()
+    {
+        var mousePosition = GetGlobalMousePosition();
+        var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
+        
+        // Remove the existing tile from the map data
+        if (Context.Map.Tiles.Get(clickedLocation) is { } existingTile)
+        {
+            Context.Map.TryRemoveEntity(existingTile);
+        }
+        
+        // Create a new tile with the selected tile type and register it with the context
+        var tiles = Context.Repos.Tiles;
+        if (tiles.HasVariations(_activeTileType))
+        {
+            var config  = tiles.GetAsset(_activeTileType);
+            var newTile = new Tile(config, clickedLocation);
+            Context.Map.TryAddEntity(newTile);
+        }
+    }
+
+    /// <summary>
+    /// Handles right mouse click for tile removal.
+    /// Removes tiles or replaces non-Open tiles with Open tiles.
+    /// </summary>
+    private void HandleRightClick()
+    {
+        var mousePosition = GetGlobalMousePosition();
+        var clickedLocation = HexMap.WorldToHexCoordinate(mousePosition);
+        var clickedTile = Context.Map.Tiles.Get(clickedLocation);
+
+        if (clickedTile is { } tile)
+        {
+            // Remove the existing tile
+            Context.Map.TryRemoveEntity(tile);
+
+            // If it was not an Open tile, replace it with an Open tile
+            if (tile.Configuration.Key != TileType.Open)
+            {
+                var tiles = Context.Repos.Tiles;
+                if (tiles.HasVariations(TileType.Open))
+                {
+                    var config = tiles.GetAsset(TileType.Open);
+                    var newTile = new Tile(config, clickedLocation);
+                    Context.Map.TryAddEntity(newTile);
+                }
+            }
+        }
+        // Do nothing if there's no tile at the clicked location
+    }
+
+    /// <summary>
+    /// Updates the active tile type based on keyboard input (1-4 keys).
+    /// </summary>
+    private void UpdateActiveType()
+    {
+        TileType previousTileType = _activeTileType;
+
+        if (Input.IsKeyPressed(Key.Key1))
+            _activeTileType = TileType.Tundra;
+        else if (Input.IsKeyPressed(Key.Key2))
+            _activeTileType = TileType.Rocks;
+        else if (Input.IsKeyPressed(Key.Key3))
+            _activeTileType = TileType.Dunes;
+        else if (Input.IsKeyPressed(Key.Key4))
+            _activeTileType = TileType.Canyon;
+
+        if (_activeTileType != previousTileType)
+        {
+            UpdateTypeOverlay();
+        }
+    }
+
+    #endregion
+
     #region Editor Menu Integration
     
+    /// <summary>
+    /// Sets up the editor menu and connects event handlers for tile count updates.
+    /// </summary>
     private void SetupEditorMenu()
     {
         // Find the editor menu in the scene tree using exported path
@@ -184,16 +268,32 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         }
     }
     
+    /// <summary>
+    /// Handles tile addition events from the map to update the editor menu.
+    /// </summary>
+    /// <param name="layer">The tile layer (unused)</param>
+    /// <param name="tile">The tile that was added</param>
+    /// <param name="coordinate">The coordinate where the tile was added</param>
     private void OnTileAdded(IHexLayerView<Tile> layer, Tile tile, AxialCoordinate coordinate)
     {
         UpdateTileCount(tile.Configuration.Key);
     }
     
+    /// <summary>
+    /// Handles tile removal events from the map to update the editor menu.
+    /// </summary>
+    /// <param name="layer">The tile layer (unused)</param>
+    /// <param name="tile">The tile that was removed</param>
+    /// <param name="coordinate">The coordinate where the tile was removed</param>
     private void OnTileRemoved(IHexLayerView<Tile> layer, Tile tile, AxialCoordinate coordinate)
     {
         UpdateTileCount(tile.Configuration.Key);
     }
     
+    /// <summary>
+    /// Updates the tile count display for a specific tile type in the editor menu.
+    /// </summary>
+    /// <param name="tileType">The tile type to update the count for</param>
     private void UpdateTileCount(TileType tileType)
     {
         if (_editorMenu == null) return;
@@ -202,6 +302,10 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         _editorMenu.UpdateTileCount(tileType, count);
     }
     
+    /// <summary>
+    /// Updates all tile counts in the editor menu.
+    /// Called during initialization to set initial state.
+    /// </summary>
     private void UpdateMenu()
     {
         if (_editorMenu == null) return;
@@ -232,11 +336,19 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         }
     }
     
+    /// <summary>
+    /// Gets the currently active tile type.
+    /// </summary>
+    /// <returns>The currently selected tile type</returns>
     public TileType GetActiveTileType()
     {
         return _activeTileType;
     }
     
+    /// <summary>
+    /// Sets the active tile type and updates overlays if it changed.
+    /// </summary>
+    /// <param name="tileType">The tile type to set as active</param>
     public void SetActiveTileType(TileType tileType)
     {
         var previousTileType = _activeTileType;
@@ -250,25 +362,11 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     
     #endregion
 
-    private void UpdateActiveType()
-    {
-        TileType previousTileType = _activeTileType;
+    #region Overlay Management
 
-        if (Input.IsKeyPressed(Key.Key1))
-            _activeTileType = TileType.Tundra;
-        else if (Input.IsKeyPressed(Key.Key2))
-            _activeTileType = TileType.Rocks;
-        else if (Input.IsKeyPressed(Key.Key3))
-            _activeTileType = TileType.Dunes;
-        else if (Input.IsKeyPressed(Key.Key4))
-            _activeTileType = TileType.Canyon;
-
-        if (_activeTileType != previousTileType)
-        {
-            UpdateTypeOverlay();
-        }
-    }
-
+    /// <summary>
+    /// Updates the type overlay to highlight all tiles of the currently active type.
+    /// </summary>
     private void UpdateTypeOverlay()
     {
         _activeTypeOverlay.Clear();
@@ -280,44 +378,14 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             _activeTypeOverlay.TryAdd(tile.Key, Colors.LightBlue);
     }
 
-    /// <summary>
-    /// Creates a sprite for non-tile entities (buildings, units).
-    /// Tiles are handled by the HexMap.
-    /// </summary>
-    private void CreateSpriteForNonTileEntity(AxialCoordinate coordinate, IEntity<IConfiguration> entity)
-    {
-        // Skip tiles - they are handled by HexMap
-        if (entity is Tile)
-            return;
+    #endregion
 
-        Sprite2D sprite = new();
-
-        sprite.Scale = Vector2.One;
-        sprite.Centered = true;
-        sprite.Position = HexMap.HexToWorldPosition(coordinate);
-        sprite.Texture = entity.Configuration.Texture;
-        sprite.Modulate = entity.Owner?.Color ?? Colors.White;
-
-        switch (entity)
-        {
-            case Building building:
-                sprite.Scale *= 0.8f;
-                sprite.ZIndex = 10;
-                break;
-            case Unit unit:
-                sprite.Scale *= 0.8f;
-                sprite.ZIndex = 10;
-                break;
-        }
-
-        // Note: In EditorMode, we don't need to track sprites in a dictionary
-        // since we don't use them for selection like in GameMode
-        AddChild(sprite);
-    }
+    #region Utility Methods
 
     /// <summary>
     /// Gets or creates the HexMap for this editor.
     /// </summary>
+    /// <returns>The HexMap instance for this editor</returns>
     private HexMap GetHexMap()
     {
         if (_hexMap != null)
@@ -343,11 +411,39 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         return _hexMap;
     }
 
+    #endregion
+
+    #region Private Fields
+
+    /// <summary>
+    /// The HexMap instance used for tile rendering.
+    /// </summary>
+    private HexMap? _hexMap;
+    
+    /// <summary>
+    /// The editor menu for UI interaction.
+    /// </summary>
+    private EditorMenu? _editorMenu;
+
+    /// <summary>
+    /// The currently hovered coordinate for highlighting.
+    /// </summary>
     private AxialCoordinate _hoveredLocation = AxialCoordinate.Zero;
+    
+    /// <summary>
+    /// The currently active/selected tile type for placement.
+    /// </summary>
     private TileType _activeTileType = TileType.Tundra;
 
-    public MapContext Context { get; private set; } = null!;
+    /// <summary>
+    /// Overlay layer for highlighting the currently hovered tile.
+    /// </summary>
     private readonly IHexLayer<Color> _hoveredOverlay = new HexLayer<Color>();
+    
+    /// <summary>
+    /// Overlay layer for highlighting all tiles of the active type.
+    /// </summary>
     private readonly IHexLayer<Color> _activeTypeOverlay = new HexLayer<Color>();
-    private readonly IHexLayer<Color> _neighborhoodOverlay = new HexLayer<Color>();
+
+    #endregion
 }

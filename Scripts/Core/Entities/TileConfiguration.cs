@@ -1,10 +1,11 @@
 using Godot;
+using Godot.Collections;
 using TribesOfDust.Hex;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Entities;
 
-public partial class TileConfiguration : Resource, IConfiguration, IVariant<TileType>
+public partial class TileConfiguration : Resource, IVariant<TileType>
 {
     public override string ToString() => $"Terrain: {Key}";
 
@@ -17,10 +18,16 @@ public partial class TileConfiguration : Resource, IConfiguration, IVariant<Tile
     public TileType Key { get; set; }
 
     /// <summary>
-    /// The texture associated with the tile.
+    /// The tile set this tile uses.
     /// </summary>
-    [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D Texture { get; set; } = null!;
+    [Export(PropertyHint.ResourceType, "TileSet")]
+    public TileSet TileSet { get; set; } = null!;
+
+    /// <summary>
+    /// The coordinate of the tile variation in the tile atlas.
+    /// </summary>
+    [Export]
+    public Vector2I AtlasCoordinate { get; set; }
 
     /// <summary>
     /// The direction of the tile.

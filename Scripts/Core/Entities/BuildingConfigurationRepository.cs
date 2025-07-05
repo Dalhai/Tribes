@@ -38,11 +38,6 @@ public class BuildingConfigurationRepository : Repository<string, BuildingConfig
         var resource = GD.Load(resourcePath);
         asset = resource as BuildingConfiguration;
 
-        if (asset is { Texture: not null })
-        {
-            return true;
-        }
-
-        return false;
+        return asset is not null;
     }
 }
