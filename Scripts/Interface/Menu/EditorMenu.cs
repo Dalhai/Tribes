@@ -9,11 +9,11 @@ namespace TribesOfDust.Interface.Menu;
 public partial class EditorMenu : MarginContainer
 {
     // Node references
-    private Label _tundraLabel = null!;
-    private Label _rocksLabel = null!;
-    private Label _dunesLabel = null!;
-    private Label _canyonLabel = null!;
-    private Label _openLabel = null!;
+    private Button _tundraButton = null!;
+    private Button _rocksButton = null!;
+    private Button _dunesButton = null!;
+    private Button _canyonButton = null!;
+    private Button _openButton = null!;
     private Button _exitButton = null!;
     
     // Color constants for highlighting
@@ -21,32 +21,32 @@ public partial class EditorMenu : MarginContainer
     private static readonly Color HoverColor = Colors.LightBlue;
     private static readonly Color NormalColor = Colors.White;
     
-    // Dictionary for easier label access
-    private Dictionary<TileType, Label> _tileLabels = new();
+    // Dictionary for easier button access
+    private Dictionary<TileType, Button> _tileButtons = new();
     
     public override void _Ready()
     {
         // Get node references
-        _tundraLabel = GetNode<Label>("VBoxContainer/TileCountsContainer/TundraLabel");
-        _rocksLabel = GetNode<Label>("VBoxContainer/TileCountsContainer/RocksLabel");
-        _dunesLabel = GetNode<Label>("VBoxContainer/TileCountsContainer/DunesLabel");
-        _canyonLabel = GetNode<Label>("VBoxContainer/TileCountsContainer/CanyonLabel");
-        _openLabel = GetNode<Label>("VBoxContainer/TileCountsContainer/OpenLabel");
-        _exitButton = GetNode<Button>("VBoxContainer/ExitButton");
+        _tundraButton = GetNode<Button>("MenuContainer/LabelsContainer/TundraButton");
+        _rocksButton = GetNode<Button>("MenuContainer/LabelsContainer/RocksButton");
+        _dunesButton = GetNode<Button>("MenuContainer/LabelsContainer/DunesButton");
+        _canyonButton = GetNode<Button>("MenuContainer/LabelsContainer/CanyonButton");
+        _openButton = GetNode<Button>("MenuContainer/LabelsContainer/OpenButton");
+        _exitButton = GetNode<Button>("MenuContainer/ExitButton");
         
         // Set up dictionary for easier access
-        _tileLabels[TileType.Tundra] = _tundraLabel;
-        _tileLabels[TileType.Rocks] = _rocksLabel;
-        _tileLabels[TileType.Dunes] = _dunesLabel;
-        _tileLabels[TileType.Canyon] = _canyonLabel;
-        _tileLabels[TileType.Open] = _openLabel;
+        _tileButtons[TileType.Tundra] = _tundraButton;
+        _tileButtons[TileType.Rocks] = _rocksButton;
+        _tileButtons[TileType.Dunes] = _dunesButton;
+        _tileButtons[TileType.Canyon] = _canyonButton;
+        _tileButtons[TileType.Open] = _openButton;
         
-        // Set up click handlers for tile labels
-        SetupLabelInteractions(_tundraLabel, TileType.Tundra);
-        SetupLabelInteractions(_rocksLabel, TileType.Rocks);
-        SetupLabelInteractions(_dunesLabel, TileType.Dunes);
-        SetupLabelInteractions(_canyonLabel, TileType.Canyon);
-        SetupLabelInteractions(_openLabel, TileType.Open);
+        // Set up click handlers for tile buttons
+        SetupButtonInteractions(_tundraButton, TileType.Tundra);
+        SetupButtonInteractions(_rocksButton, TileType.Rocks);
+        SetupButtonInteractions(_dunesButton, TileType.Dunes);
+        SetupButtonInteractions(_canyonButton, TileType.Canyon);
+        SetupButtonInteractions(_openButton, TileType.Open);
         
         // Set up exit button
         _exitButton.Pressed += OnExitPressed;
@@ -54,43 +54,35 @@ public partial class EditorMenu : MarginContainer
         base._Ready();
     }
     
-    private void SetupLabelInteractions(Label label, TileType tileType)
+    private void SetupButtonInteractions(Button button, TileType tileType)
     {
-        // Enable mouse input
-        label.MouseFilter = Control.MouseFilterEnum.Pass;
-        
         // Set up mouse enter/exit for hover effects
-        label.MouseEntered += () => OnLabelMouseEntered(label, tileType);
-        label.MouseExited += () => OnLabelMouseExited(label, tileType);
+        button.MouseEntered += () => OnButtonMouseEntered(button, tileType);
+        button.MouseExited += () => OnButtonMouseExited(button, tileType);
         
         // Set up click handling
-        label.GuiInput += (InputEvent @event) => OnLabelInput(@event, tileType);
+        button.Pressed += () => OnButtonPressed(tileType);
     }
     
-    private void OnLabelMouseEntered(Label label, TileType tileType)
+    private void OnButtonMouseEntered(Button button, TileType tileType)
     {
         if (EditorMode.Instance?.GetActiveTileType() != tileType)
         {
-            label.Modulate = HoverColor;
+            button.Modulate = HoverColor;
         }
     }
     
-    private void OnLabelMouseExited(Label label, TileType tileType)
+    private void OnButtonMouseExited(Button button, TileType tileType)
     {
         if (EditorMode.Instance?.GetActiveTileType() != tileType)
         {
-            label.Modulate = NormalColor;
+            button.Modulate = NormalColor;
         }
     }
     
-    private void OnLabelInput(InputEvent @event, TileType tileType)
+    private void OnButtonPressed(TileType tileType)
     {
-        if (@event is InputEventMouseButton mouseButton && 
-            mouseButton.Pressed && 
-            mouseButton.ButtonIndex == MouseButton.Left)
-        {
-            EditorMode.Instance?.SetActiveTileType(tileType);
-        }
+        EditorMode.Instance?.SetActiveTileType(tileType);
     }
     
     private void OnExitPressed()
@@ -100,18 +92,18 @@ public partial class EditorMenu : MarginContainer
     
     public void UpdateTileCount(TileType tileType, int count)
     {
-        if (_tileLabels.TryGetValue(tileType, out var label))
+        if (_tileButtons.TryGetValue(tileType, out var button))
         {
-            label.Text = $"{count} {GetTileTypeName(tileType)}";
+            button.Text = $"{count} {GetTileTypeName(tileType)}";
         }
     }
     
     public void UpdateActiveHighlight(TileType activeTileType)
     {
-        // Reset all labels to normal color
-        foreach (var (tileType, label) in _tileLabels)
+        // Reset all buttons to normal color
+        foreach (var (tileType, button) in _tileButtons)
         {
-            label.Modulate = tileType == activeTileType ? ActiveColor : NormalColor;
+            button.Modulate = tileType == activeTileType ? ActiveColor : NormalColor;
         }
     }
     

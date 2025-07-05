@@ -12,41 +12,47 @@ offset_bottom = -5.0
 size_flags_horizontal = 3
 script = ExtResource("1_menu_script")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MenuContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="TileCountsContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="LabelsContainer" type="VBoxContainer" parent="MenuContainer"]
 layout_mode = 2
+add_theme_constant_override("separation", 8)
 
-[node name="TundraLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+[node name="TundraButton" type="Button" parent="MenuContainer/LabelsContainer"]
 layout_mode = 2
 text = "0 Tundra"
-mouse_filter = 1
+flat = true
+alignment = 0
 
-[node name="RocksLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+[node name="RocksButton" type="Button" parent="MenuContainer/LabelsContainer"]
 layout_mode = 2
 text = "0 Rocks"
-mouse_filter = 1
+flat = true
+alignment = 0
 
-[node name="DunesLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+[node name="DunesButton" type="Button" parent="MenuContainer/LabelsContainer"]
 layout_mode = 2
 text = "0 Dunes"
-mouse_filter = 1
+flat = true
+alignment = 0
 
-[node name="CanyonLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+[node name="CanyonButton" type="Button" parent="MenuContainer/LabelsContainer"]
 layout_mode = 2
 text = "0 Canyon"
-mouse_filter = 1
+flat = true
+alignment = 0
 
-[node name="OpenLabel" type="Label" parent="VBoxContainer/TileCountsContainer"]
+[node name="OpenButton" type="Button" parent="MenuContainer/LabelsContainer"]
 layout_mode = 2
 text = "0 Open"
-mouse_filter = 1
+flat = true
+alignment = 0
 
-[node name="Spacer" type="Control" parent="VBoxContainer"]
+[node name="Spacer" type="Control" parent="MenuContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ExitButton" type="Button" parent="VBoxContainer"]
+[node name="ExitButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
 text = "Exit"

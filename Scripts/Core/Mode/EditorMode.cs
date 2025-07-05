@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using TribesOfDust.Core.Entities;
@@ -9,6 +10,8 @@ namespace TribesOfDust.Core.Modes;
 
 public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
+    [Export] public NodePath EditorMenuPath { get; set; } = "Canvas/CanvasLayer/EditorMenu";
+    
     public static EditorMode? Instance { get; private set; }
     
     private HexMap _hexMap = null!;
@@ -149,8 +152,8 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     
     private void SetupEditorMenu()
     {
-        // Find the editor menu in the scene tree
-        _editorMenu = GetNode<EditorMenu>("../Canvas/CanvasLayer/EditorMenu");
+        // Find the editor menu in the scene tree using exported path
+        _editorMenu = GetNode<EditorMenu>(EditorMenuPath);
         
         if (_editorMenu != null)
         {
@@ -159,7 +162,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             Context.Map.Tiles.Removed += OnTileRemoved;
             
             // Initial update of tile counts and active highlight
-            UpdateAllTileCounts();
+            UpdateMenu();
             UpdateMenuActiveHighlight();
         }
     }
@@ -182,11 +185,11 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         _editorMenu.UpdateTileCount(tileType, count);
     }
     
-    private void UpdateAllTileCounts()
+    private void UpdateMenu()
     {
         if (_editorMenu == null) return;
         
-        var tileCounts = new System.Collections.Generic.Dictionary<TileType, int>();
+        var tileCounts = new Dictionary<TileType, int>();
         
         // Initialize all counts to 0
         tileCounts[TileType.Tundra] = 0;
