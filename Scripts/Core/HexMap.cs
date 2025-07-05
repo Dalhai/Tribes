@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Hex;
@@ -311,7 +312,7 @@ public partial class HexMap : Node2D
         var layer = new TileMapLayer
         {
             Name = $"OverlayLayer_{coreColor}",
-            ZIndex = GetBaseOverlayZIndex() + (int)coreColor, // Ensure unique Z-index
+            ZIndex = GetBaseOverlayZIndex() + (int)coreColor, // Use core color index as base Z-index
             YSortEnabled = false,
             UseKinematicBodies = false,
             CollisionEnabled = false,
@@ -340,12 +341,13 @@ public partial class HexMap : Node2D
         var maxZIndex = GetBaseOverlayZIndex();
         foreach (var overlayLayer in _overlayLayers.Values)
         {
-            if (overlayLayer.ZIndex > maxZIndex)
+            if (overlayLayer != layer && overlayLayer.ZIndex > maxZIndex)
                 maxZIndex = overlayLayer.ZIndex;
         }
 
-        // Set this layer's Z-index to be on top
-        layer.ZIndex = maxZIndex + 1;
+        // Set this layer's Z-index to be on top, but keep within the 32 Z-value range
+        var newZIndex = Math.Min(maxZIndex + 1, GetBaseOverlayZIndex() + 31);
+        layer.ZIndex = newZIndex;
     }
 
     /// <summary>
