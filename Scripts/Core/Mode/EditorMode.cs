@@ -1,16 +1,21 @@
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
+using TribesOfDust.Interface.Menu;
 
 namespace TribesOfDust.Core.Modes;
 
 public partial class EditorMode : Node2D, IUnique<EditorMode>
 {
+    [Export] public NodePath EditorMenuPath { get; set; } = "Canvas/CanvasLayer/EditorMenu";
+    
     public static EditorMode? Instance { get; private set; }
     
     private HexMap _hexMap = null!;
+    private EditorMenu? _editorMenu;
     
     /// <summary>
     /// The HexMap responsible for rendering terrain tiles.
@@ -46,6 +51,9 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         // Initialize render state
         UpdateActiveType();
         UpdateTypeOverlay();
+        
+        // Set up editor menu
+        SetupEditorMenu();
 
         base._Ready();
     }
@@ -59,6 +67,14 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     public override void _ExitTree()
     {
         Instance = null;
+        
+        // Clean up event subscriptions
+        if (_editorMenu != null)
+        {
+            Context.Map.Tiles.Added -= OnTileAdded;
+            Context.Map.Tiles.Removed -= OnTileRemoved;
+        }
+        
         Context.Repos.Maps.TrySave(Context.Map);
         base._ExitTree();
     }
@@ -101,8 +117,13 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 }
                 
                 // Create a new tile with the selected tile type and register it with the context
-                var newTile = new Tile(Context.Repos.Tiles.GetAsset(_activeTileType), clickedLocation);
-                Context.Map.TryAddEntity(newTile);
+                var tiles = Context.Repos.Tiles;
+                if (tiles.HasVariations(_activeTileType))
+                {
+                    var config  = tiles.GetAsset(_activeTileType);
+                    var newTile = new Tile(config, clickedLocation);
+                    Context.Map.TryAddEntity(newTile);
+                }
             }
 
             // Remove open tiles on right mouse click.
@@ -123,14 +144,103 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
                 // Create a new tile with the open tile type and register it with the context
                 if (clickedTile is null || clickedTile.Configuration.Key != TileType.Open)
                 {
-                    var newTile = new Tile(Context.Repos.Tiles.GetAsset(TileType.Open), clickedLocation);
-                    Context.Map.TryAddEntity(newTile);
+                    var tiles = Context.Repos.Tiles;
+                    if (tiles.HasVariations(_activeTileType))
+                    {
+                        var config  = tiles.GetAsset(_activeTileType);
+                        var newTile = new Tile(config, clickedLocation);
+                        Context.Map.TryAddEntity(newTile);
+                    }
                 }
             }
         }
 
         UpdateActiveType();
     }
+
+    #region Editor Menu Integration
+    
+    private void SetupEditorMenu()
+    {
+        // Find the editor menu in the scene tree using exported path
+        _editorMenu = GetNode<EditorMenu>(EditorMenuPath);
+        
+        if (_editorMenu != null)
+        {
+            // Register for map events to update tile counts
+            Context.Map.Tiles.Added += OnTileAdded;
+            Context.Map.Tiles.Removed += OnTileRemoved;
+            
+            // Initial update of tile counts
+            UpdateMenu();
+        }
+    }
+    
+    private void OnTileAdded(IHexLayerView<Tile> layer, Tile tile, AxialCoordinate coordinate)
+    {
+        UpdateTileCount(tile.Configuration.Key);
+    }
+    
+    private void OnTileRemoved(IHexLayerView<Tile> layer, Tile tile, AxialCoordinate coordinate)
+    {
+        UpdateTileCount(tile.Configuration.Key);
+    }
+    
+    private void UpdateTileCount(TileType tileType)
+    {
+        if (_editorMenu == null) return;
+        
+        var count = Context.Map.Tiles.Count(tile => tile.Value.Configuration.Key == tileType);
+        _editorMenu.UpdateTileCount(tileType, count);
+    }
+    
+    private void UpdateMenu()
+    {
+        if (_editorMenu == null) return;
+        
+        var tileCounts = new Dictionary<TileType, int>();
+        
+        // Initialize all counts to 0
+        tileCounts[TileType.Tundra] = 0;
+        tileCounts[TileType.Rocks] = 0;
+        tileCounts[TileType.Dunes] = 0;
+        tileCounts[TileType.Canyon] = 0;
+        tileCounts[TileType.Open] = 0;
+        
+        // Count actual tiles
+        foreach (var tile in Context.Map.Tiles)
+        {
+            var tileType = tile.Value.Configuration.Key;
+            if (tileCounts.ContainsKey(tileType))
+            {
+                tileCounts[tileType]++;
+            }
+        }
+        
+        // Update menu
+        foreach (var (tileType, count) in tileCounts)
+        {
+            _editorMenu.UpdateTileCount(tileType, count);
+        }
+    }
+    
+    public TileType GetActiveTileType()
+    {
+        return _activeTileType;
+    }
+    
+    public void SetActiveTileType(TileType tileType)
+    {
+        var previousTileType = _activeTileType;
+        _activeTileType = tileType;
+        
+        if (_activeTileType != previousTileType)
+        {
+            UpdateTypeOverlay();
+        }
+    }
+    
+    #endregion
 
     private void UpdateActiveType()
     {
@@ -146,7 +256,9 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             _activeTileType = TileType.Canyon;
 
         if (_activeTileType != previousTileType)
+        {
             UpdateTypeOverlay();
+        }
     }
 
     private void UpdateTypeOverlay()

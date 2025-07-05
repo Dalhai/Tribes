@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://8pk0ym0vm0yx"]
+[gd_scene load_steps=6 format=3 uid="uid://8pk0ym0vm0yx"]
 
 [ext_resource type="Script" uid="uid://d3c3cxrrnjwib" path="res://Scripts/Core/Mode/EditorMode.cs" id="1_g0a8x"]
 [ext_resource type="Script" uid="uid://33mbdqerejba" path="res://Scripts/Core/HexMap.cs" id="2_veqoq"]
 [ext_resource type="PackedScene" uid="uid://ds0rpwhoptn5" path="res://Interface/Menu/EditorMenu.tscn" id="3"]
-[ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_dqtih"]
-[ext_resource type="Texture2D" uid="uid://dd7u7r4bro2xg" path="res://Assets/textures/Interface/paper.png" id="4_pxyql"]
+[ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/textures/Interface/paper_mat.tres" id="3_4mgyw"]
 [ext_resource type="Script" uid="uid://6lnyb60rm5jj" path="res://Scripts/Interface/Camera.cs" id="7_a23om"]
 
 [node name="Scene" type="Node2D"]
@@ -17,14 +16,22 @@ script = ExtResource("2_veqoq")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Canvas"]
 
-[node name="Background" type="NinePatchRect" parent="Canvas/CanvasLayer"]
-anchors_preset = 9
+[node name="PanelContainer" type="PanelContainer" parent="Canvas/CanvasLayer"]
+material = ExtResource("3_4mgyw")
+anchors_preset = -1
+anchor_right = 0.2
 anchor_bottom = 1.0
-offset_right = 250.0
-theme = ExtResource("3_dqtih")
-texture = ExtResource("4_pxyql")
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="EditorMenu" parent="Canvas/CanvasLayer" instance=ExtResource("3")]
+anchors_preset = -1
+anchor_right = 0.2
+offset_top = 0.0
+offset_right = -5.0
+offset_bottom = 0.0
+grow_vertical = 2
 
 [node name="Camera2D" type="Camera2D" parent="Canvas"]
 anchor_mode = 0
