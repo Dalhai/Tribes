@@ -36,15 +36,15 @@ public partial class Display : RefCounted
     /// them anymore.
     /// </summary>
     /// <param name="overlay">The overlay layer to add</param>
-    public void AddOverlay(IHexLayerView<Color> overlay)
+    public void AddOverlay(IHexLayerView<CoreColor> overlay)
     {
         if (_overlays.Contains(overlay))
             return;
 
         // Add existing overlay tiles
-        foreach (var (coordinate, color) in overlay)
+        foreach (var (coordinate, coreColor) in overlay)
         {
-            AddOverlayColor(coordinate, color);
+            AddOverlayColor(coordinate, coreColor);
         }
 
         overlay.Added   += OnOverlayTileAdded;
@@ -61,15 +61,15 @@ public partial class Display : RefCounted
     /// completely new one.
     /// </summary>
     /// <param name="overlay">The overlay layer to remove</param>
-    public void RemoveOverlay(IHexLayerView<Color> overlay)
+    public void RemoveOverlay(IHexLayerView<CoreColor> overlay)
     {
         if (!_overlays.Contains(overlay))
             return;
 
         // Remove overlay tiles
-        foreach (var (coordinate, color) in overlay)
+        foreach (var (coordinate, coreColor) in overlay)
         {
-            RemoveOverlayColor(coordinate, color);
+            RemoveOverlayColor(coordinate, coreColor);
         }
 
         overlay.Added   -= OnOverlayTileAdded;
@@ -82,11 +82,11 @@ public partial class Display : RefCounted
     /// Handles when an overlay tile is added to a layer.
     /// </summary>
     /// <param name="_">The overlay layer (unused)</param>
-    /// <param name="color">The color of the overlay</param>
+    /// <param name="coreColor">The core color of the overlay</param>
     /// <param name="coordinate">The coordinate where the overlay was added</param>
-    void OnOverlayTileAdded(IHexLayerView<Color> _, Color color, AxialCoordinate coordinate)
+    void OnOverlayTileAdded(IHexLayerView<CoreColor> _, CoreColor coreColor, AxialCoordinate coordinate)
     {
-        AddOverlayColor(coordinate, color);
+        AddOverlayColor(coordinate, coreColor);
     }
 
     /// <summary>
@@ -94,8 +94,8 @@ public partial class Display : RefCounted
     /// Updates the HexMap rendering if available.
     /// </summary>
     /// <param name="coordinate">The coordinate to add the overlay color at</param>
-    /// <param name="color">The color to add</param>
-    private void AddOverlayColor(AxialCoordinate coordinate, Color color)
+    /// <param name="coreColor">The core color to add</param>
+    private void AddOverlayColor(AxialCoordinate coordinate, CoreColor coreColor)
     {
         if (!_colors.TryGetValue(coordinate, out var colors))
         {
@@ -103,17 +103,12 @@ public partial class Display : RefCounted
             _colors.Add(coordinate, colors);
         }
             
-        colors.Add(color);
-        
-        // Calculate aggregated color (mix colors evenly)
-        var aggregatedColor = colors.Count == 0
-            ? Colors.White
-            : colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
+        colors.Add(coreColor);
 
-        // Update HexMap if available
+        // Update HexMap if available - use the new CoreColor overlay system
         if (HexMap != null)
         {
-            HexMap.SetOverlayTile(coordinate, aggregatedColor);
+            HexMap.SetOverlayTile(coordinate, coreColor);
         }
     }
 
@@ -121,11 +116,11 @@ public partial class Display : RefCounted
     /// Handles when an overlay tile is removed from a layer.
     /// </summary>
     /// <param name="_">The overlay layer (unused)</param>
-    /// <param name="color">The color of the overlay</param>
+    /// <param name="coreColor">The core color of the overlay</param>
     /// <param name="coordinate">The coordinate where the overlay was removed</param>
-    void OnOverlayTileRemoved(IHexLayerView<Color> _, Color color, AxialCoordinate coordinate)
+    void OnOverlayTileRemoved(IHexLayerView<CoreColor> _, CoreColor coreColor, AxialCoordinate coordinate)
     {
-        RemoveOverlayColor(coordinate, color);
+        RemoveOverlayColor(coordinate, coreColor);
     }
 
     /// <summary>
@@ -133,34 +128,23 @@ public partial class Display : RefCounted
     /// Updates the HexMap rendering if available.
     /// </summary>
     /// <param name="coordinate">The coordinate to remove the overlay color from</param>
-    /// <param name="color">The color to remove</param>
-    private void RemoveOverlayColor(AxialCoordinate coordinate, Color color)
+    /// <param name="coreColor">The core color to remove</param>
+    private void RemoveOverlayColor(AxialCoordinate coordinate, CoreColor coreColor)
     {
         if (_colors.TryGetValue(coordinate, out var colors))
         {
-            colors.Remove(color);
+            colors.Remove(coreColor);
             
             if (colors.Count == 0)
             {
                 // Remove from dictionary if no colors remain
                 _colors.Remove(coordinate);
-                
-                // Remove from HexMap if available
-                if (HexMap != null)
-                {
-                    HexMap.RemoveOverlayTile(coordinate);
-                }
             }
-            else
+            
+            // Update HexMap if available - remove from the specific core color layer
+            if (HexMap != null)
             {
-                // Calculate aggregated color (mix colors evenly)
-                var aggregatedColor = colors.Select(c => c * 1f / colors.Count).Aggregate((f, c) => f + c);
-                
-                // Update HexMap if available
-                if (HexMap != null)
-                {
-                    HexMap.SetOverlayTile(coordinate, aggregatedColor);
-                }
+                HexMap.RemoveOverlayTile(coordinate, coreColor);
             }
         }
     }
@@ -172,12 +156,12 @@ public partial class Display : RefCounted
     /// <summary>
     /// Dictionary tracking overlay colors by coordinate.
     /// </summary>
-    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _colors = new();
+    private readonly Dictionary<AxialCoordinate, HashSet<CoreColor>> _colors = new();
     
     /// <summary>
     /// Set of registered overlay layers.
     /// </summary>
-    private readonly HashSet<IHexLayerView<Color>> _overlays = new();
+    private readonly HashSet<IHexLayerView<CoreColor>> _overlays = new();
     
     #endregion
 }

@@ -139,7 +139,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
             {
                 _hoveredLocation = hoveredLocation;
                 _hoveredOverlay.Clear();
-                _hoveredOverlay.TryAdd(hoveredLocation, Colors.Aqua);
+                _hoveredOverlay.TryAdd(hoveredLocation, CoreColor.Cyan);
             }
         }
 
@@ -375,7 +375,7 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         var overlay = tiles.Where(tile => tile.Value.Configuration.Key == _activeTileType);
 
         foreach (var tile in overlay)
-            _activeTypeOverlay.TryAdd(tile.Key, Colors.LightBlue);
+            _activeTypeOverlay.TryAdd(tile.Key, CoreColor.SkyBlue);
     }
 
     #endregion
@@ -438,12 +438,12 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     /// <summary>
     /// Overlay layer for highlighting the currently hovered tile.
     /// </summary>
-    private readonly IHexLayer<Color> _hoveredOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<CoreColor> _hoveredOverlay = new HexLayer<CoreColor>();
     
     /// <summary>
     /// Overlay layer for highlighting all tiles of the active type.
     /// </summary>
-    private readonly IHexLayer<Color> _activeTypeOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<CoreColor> _activeTypeOverlay = new HexLayer<CoreColor>();
 
     #endregion
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
@@ -22,6 +23,11 @@ public partial class HexMap : Node2D
     /// The single overlay layer for all overlay effects.
     /// </summary>
     public TileMapLayer OverlayLayer => _overlayLayer ??= GetOverlayLayer();
+
+    /// <summary>
+    /// Dictionary of overlay layers, one per core color.
+    /// </summary>
+    public IReadOnlyDictionary<CoreColor, TileMapLayer> OverlayLayers => _overlayLayers;
 
     #endregion
 
@@ -78,6 +84,12 @@ public partial class HexMap : Node2D
             // Clear existing tiles
             TerrainLayer.Clear();
             OverlayLayer.Clear();
+            
+            // Clear all overlay layers
+            foreach (var overlayLayer in _overlayLayers.Values)
+            {
+                overlayLayer.Clear();
+            }
 
             _connectedMap.Tiles.Added   -= OnTileAdded;
             _connectedMap.Tiles.Removed -= OnTileRemoved;
@@ -155,6 +167,24 @@ public partial class HexMap : Node2D
     }
 
     /// <summary>
+    /// Sets an overlay tile at the specified hex coordinate with the given core color.
+    /// This places the overlay on the appropriate color-specific layer.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate where to place the overlay tile</param>
+    /// <param name="coreColor">The core color for the overlay</param>
+    public void SetOverlayTile(AxialCoordinate hexCoordinate, CoreColor coreColor)
+    {
+        var layer = GetOrCreateOverlayLayer(coreColor);
+        var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
+
+        // Set the overlay tile (atlas coordinates 5,0 as mentioned in requirements)
+        layer.SetCell(tileMapCoordinate, 0, new(5, 0));
+        
+        // Bring this layer to the top by updating Z-index
+        BringOverlayLayerToTop(coreColor);
+    }
+
+    /// <summary>
     /// Removes an overlay tile at the specified hex coordinate.
     /// </summary>
     /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
@@ -162,6 +192,20 @@ public partial class HexMap : Node2D
     {
         var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         OverlayLayer.EraseCell(tileMapCoordinate);
+    }
+
+    /// <summary>
+    /// Removes an overlay tile at the specified hex coordinate for the given core color.
+    /// </summary>
+    /// <param name="hexCoordinate">The hex coordinate where to remove the overlay tile</param>
+    /// <param name="coreColor">The core color layer to remove from</param>
+    public void RemoveOverlayTile(AxialCoordinate hexCoordinate, CoreColor coreColor)
+    {
+        if (_overlayLayers.TryGetValue(coreColor, out var layer))
+        {
+            var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
+            layer.EraseCell(tileMapCoordinate);
+        }
     }
 
     #endregion
@@ -254,13 +298,92 @@ public partial class HexMap : Node2D
         return _overlayLayer;
     }
 
+    /// <summary>
+    /// Gets or creates an overlay layer for the specified core color.
+    /// </summary>
+    /// <param name="coreColor">The core color for the overlay layer</param>
+    /// <returns>The overlay layer for the specified core color</returns>
+    private TileMapLayer GetOrCreateOverlayLayer(CoreColor coreColor)
+    {
+        if (_overlayLayers.TryGetValue(coreColor, out var existingLayer))
+            return existingLayer;
+
+        // Create new overlay layer for this color
+        var layer = new TileMapLayer
+        {
+            Name = $"OverlayLayer_{coreColor}",
+            ZIndex = GetBaseOverlayZIndex() + (int)coreColor, // Use core color index as base Z-index
+            YSortEnabled = false,
+            UseKinematicBodies = false,
+            CollisionEnabled = false,
+            NavigationEnabled = false,
+            Modulate = coreColor.ToColor() // Modulate the entire layer with the core color
+        };
+
+        layer.TileSet = GD.Load<TileSet>("res://Assets/TileSets/OverlayTileset.tres");
+
+        AddChild(layer);
+        _overlayLayers[coreColor] = layer;
+        
+        return layer;
+    }
+
+    /// <summary>
+    /// Brings the specified overlay layer to the top of the z-stack.
+    /// Shifts other layers down to maintain the 32 Z-value constraint.
+    /// </summary>
+    /// <param name="coreColor">The core color layer to bring to top</param>
+    private void BringOverlayLayerToTop(CoreColor coreColor)
+    {
+        if (!_overlayLayers.TryGetValue(coreColor, out var targetLayer))
+            return;
+
+        var baseZIndex = GetBaseOverlayZIndex();
+        var maxZIndex = baseZIndex + 31; // Maximum allowed Z-index
+        
+        // Set the target layer to the maximum Z-index
+        targetLayer.ZIndex = maxZIndex;
+        
+        // Collect and sort other layers by their current Z-index (descending)
+        var otherLayers = _overlayLayers.Values
+            .Where(l => l != targetLayer)
+            .OrderByDescending(l => l.ZIndex)
+            .ToList();
+        
+        // Reassign Z-indices to other layers, starting from maxZIndex - 1 and going down
+        var currentZIndex = maxZIndex - 1;
+        foreach (var otherLayer in otherLayers)
+        {
+            if (currentZIndex >= baseZIndex)
+            {
+                otherLayer.ZIndex = currentZIndex;
+                currentZIndex--;
+            }
+            else
+            {
+                // If we run out of Z-indices, assign the minimum
+                otherLayer.ZIndex = baseZIndex;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the base Z-index for overlay layers.
+    /// </summary>
+    /// <returns>The base Z-index (10, above terrain layer)</returns>
+    private int GetBaseOverlayZIndex()
+    {
+        return 10; // Above terrain layer
+    }
+
     #endregion
 
     #region Private Fields
 
     private TileMapLayer? _terrainLayer;
     private TileMapLayer? _overlayLayer;
-    private Map?          _connectedMap;
+    private readonly Dictionary<CoreColor, TileMapLayer> _overlayLayers = new();
+    private Map? _connectedMap;
 
     #endregion
 }
