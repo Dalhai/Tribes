@@ -135,8 +135,8 @@ public partial class GameMode : Node2D, IUnique<GameMode>
 
             _selectionOverlay.Clear();
             _selectionOverlay.TryAdd(hoveredLocation, hasUnit
-                ? Colors.Blue.Lightened(0.9f)
-                : Colors.Red.Lightened(0.9f));
+                ? CoreColor.SkyBlue
+                : CoreColor.Pink);
         }
         else if (@event is InputEventMouseButton mouseButton)
         {
@@ -180,8 +180,8 @@ public partial class GameMode : Node2D, IUnique<GameMode>
     public MapContext Context { get; private set; } = null!;
     private readonly Player _player1 = new("Player 1", Colors.Red);
     private readonly Player _player2 = new("Player 2", Colors.Blue);
-    private readonly IHexLayer<Color> _selectionOverlay = new HexLayer<Color>();
-    private readonly IHexLayer<Color> _movementOverlay = new HexLayer<Color>();
+    private readonly IHexLayer<CoreColor> _selectionOverlay = new HexLayer<CoreColor>();
+    private readonly IHexLayer<CoreColor> _movementOverlay = new HexLayer<CoreColor>();
     
     /// <summary>
     /// Dictionary of sprites for non-tile entities (buildings, units) used for selection and visual effects.
