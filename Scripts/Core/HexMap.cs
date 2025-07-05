@@ -216,7 +216,8 @@ public partial class HexMap : Node2D
     public AxialCoordinate WorldToHexCoordinate(Vector2 worldPosition)
     {
         // Use Godot's TileMapLayer to convert world position to tile map coordinates
-        var tileMapCoord = TerrainLayer.LocalToMap(worldPosition);
+        var localPosition = TerrainLayer.ToLocal(worldPosition);
+        var tileMapCoord = TerrainLayer.LocalToMap(localPosition);
         
         // Convert tile map coordinates to our hex coordinates
         return TileMapToHexCoordinate(tileMapCoord);
@@ -233,7 +234,10 @@ public partial class HexMap : Node2D
         var tileMapCoord = HexToTileMapCoordinate(hexCoordinate);
         
         // Use Godot's TileMapLayer to convert tile map coordinates to world position
-        return TerrainLayer.MapToLocal(tileMapCoord);
+        var localPosition = TerrainLayer.MapToLocal(tileMapCoord);
+        var worldPosition = TerrainLayer.ToGlobal(localPosition);
+        
+        return worldPosition;
     }
 
     /// <summary>
