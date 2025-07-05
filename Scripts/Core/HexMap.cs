@@ -292,6 +292,8 @@ public partial class HexMap : Node2D
             if (child is TileMapLayer layer && child.Name == "OverlayLayer")
             {
                 _overlayLayer = layer;
+                // Ensure existing overlay layer has the correct transparency
+                _overlayLayer.SelfModulate = new Color(1, 1, 1, 0.25f);  // 25% opacity
                 return _overlayLayer;
             }
         }
@@ -304,7 +306,8 @@ public partial class HexMap : Node2D
             YSortEnabled = false,
             UseKinematicBodies = false,
             CollisionEnabled = false,
-            NavigationEnabled = false
+            NavigationEnabled = false,
+            SelfModulate = new Color(1, 1, 1, 0.25f)  // 25% opacity
         };
 
         // Set the overlay tileset
