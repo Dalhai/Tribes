@@ -6,6 +6,7 @@
 # IDE-specified ignores
 *.suo
 *.one
+*.DotSettings.user
 
 # Godot-specific ignores
 .import/

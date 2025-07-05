@@ -168,10 +168,6 @@ public partial class HexMap : Node2D
         // Set the overlay tile (source ID 0, atlas coordinates 0,0)
         OverlayLayer.SetCell(tileMapCoordinate, 0, Vector2I.Zero);
         
-        // Store the color for this coordinate
-        var colorSet = new HashSet<Color> { color };
-        _overlayColors[hexCoordinate] = colorSet;
-        
         // Set the modulation color for this specific cell only
         var tileData = OverlayLayer.GetCellTileData(tileMapCoordinate);
         if (tileData != null)
@@ -188,16 +184,6 @@ public partial class HexMap : Node2D
     {
         var tileMapCoordinate = hexCoordinate.ToOffsetCoordinate();
         OverlayLayer.EraseCell(tileMapCoordinate);
-        _overlayColors.Remove(hexCoordinate);
-    }
-
-    /// <summary>
-    /// Clears all overlay colors and tiles.
-    /// </summary>
-    public void ClearAllOverlays()
-    {
-        _overlayColors.Clear();
-        OverlayLayer.Clear();
     }
 
     #endregion
@@ -319,7 +305,6 @@ public partial class HexMap : Node2D
 
     private          TileMapLayer?                               _terrainLayer;
     private          TileMapLayer?                               _overlayLayer;
-    private readonly Dictionary<AxialCoordinate, HashSet<Color>> _overlayColors = new();
     private          Map?                                        _connectedMap;
 
     #endregion
