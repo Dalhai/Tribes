@@ -42,6 +42,8 @@ namespace TribesOfDust.Hex
         #region Factory
 
         public static CubeCoordinate From(int q, int r) => new (q, -(q + r), r);
+
+        public static CubeCoordinate From(OffsetCoordinate coordinate) => coordinate.ToCubeCoordinate();
         public static CubeCoordinate From(AxialCoordinate coordinate) => coordinate.ToCubeCoordinate();
         public static CubeCoordinate From(Vector3 vector)
         {
@@ -64,7 +66,12 @@ namespace TribesOfDust.Hex
         /// <summary>
         /// Converts the <see cref="CubeCoordinate"/> to the matching <see cref="AxialCoordinate"/>.
         /// </summary>
-        public AxialCoordinate ToAxialCoordinate() => new(X, Z);
+        public AxialCoordinate ToAxialCoordinate() => AxialCoordinate.From(this);
+        
+        /// <summary>
+        /// Converts the <see cref="CubeCoordinate"/> to the matching <see cref="OffsetCoordinate"/>.
+        /// </summary>
+        public OffsetCoordinate ToOffsetCoordinate() => OffsetCoordinate.From(this);
 
         #endregion
         #region Operators
@@ -121,13 +128,13 @@ namespace TribesOfDust.Hex
         #endregion
         #region Factory
 
-        public static AxialCoordinate From(CubeCoordinate coordinate) => coordinate.ToAxialCoordinate();
-        public static AxialCoordinate From(Vector2 vector)
+        public static AxialCoordinate From(CubeCoordinate coordinate) => new(coordinate.X, coordinate.Z);
+        public static AxialCoordinate From(OffsetCoordinate coordinate)
         {
-            var rounded = vector.Round();
-            var q = (int) rounded.X;
-            var r = (int) rounded.Y;
-
+            var parity = coordinate.X & 0x1;
+            var q      = coordinate.X;
+            var r = coordinate.Y - (q - parity) / 2;
+            
             return new (q, r);
         }
 
@@ -143,6 +150,11 @@ namespace TribesOfDust.Hex
         /// Converts the <see cref="AxialCoordinate"/> to the matching <see cref="CubeCoordinate"/>.
         /// </summary>
         public CubeCoordinate ToCubeCoordinate() => CubeCoordinate.From(Q, R);
+        
+        /// <summary>
+        /// Converts the <see cref="AxialCoordinate"/> to the matching <see cref="OffsetCoordinate"/>.
+        /// </summary>
+        public OffsetCoordinate ToOffsetCoordinate() => OffsetCoordinate.From(this);
 
         #endregion
         #region Operators
@@ -160,5 +172,41 @@ namespace TribesOfDust.Hex
         }
 
         public override string ToString() => $"({Q}, {R})";
+    }
+
+    public record OffsetCoordinate(int X, int Y)
+    {
+        #region Factory
+
+        public static OffsetCoordinate From(Vector2I coordinate)       => new (coordinate.X, coordinate.Y);
+        public static OffsetCoordinate From(CubeCoordinate coordinate) => From(coordinate.ToAxialCoordinate());
+        public static OffsetCoordinate From(AxialCoordinate coordinate)
+        {
+            var parity = coordinate.Q & 0x1;
+            var col    = coordinate.Q;
+            var row    = coordinate.R + (col - parity) / 2;
+
+            return new(col, row);
+        }
+        
+        #endregion
+        #region Conversions
+        
+        /// <summary>
+        /// Converts an <see cref="OffsetCoordinate"/> to a <see cref="Vector2I"/>.
+        /// </summary>
+        public static implicit operator Vector2I(OffsetCoordinate coordinate) => new (coordinate.X, coordinate.Y);
+
+        /// <summary>
+        /// Converts the <see cref="OffsetCoordinate"/> to the matching <see cref="AxialCoordinate"/>.
+        /// </summary>
+        public AxialCoordinate ToAxialCoordinate() => AxialCoordinate.From(this);
+        
+        /// <summary>
+        /// Converts the <see cref="OffsetCoordinate"/> to the matching <see cref="CubeCoordinate"/>.
+        /// </summary>
+        public CubeCoordinate  ToCubeCoordinate()  => CubeCoordinate.From(this);
+
+        #endregion
     }
 }

@@ -9,24 +9,15 @@ namespace TribesOfDust.Utils.Extensions;
 public static class TileSetExtensions
 {
     /// <summary>
-    /// Gets the tile size from the first source in the TileSet.
+    /// Gets the tile size from the TileSet.
     /// </summary>
     /// <param name="tileSet">The TileSet to get size from</param>
     /// <returns>The tile size as Vector2i</returns>
     public static Vector2I GetTileSize(this TileSet tileSet)
     {
-        if (tileSet.GetSourceCount() == 0)
-            return HexConstants.ExpectedTileSize; // Fallback to expected size
-            
-        var sourceId = tileSet.GetSourceId(0);
-        var source = tileSet.GetSource(sourceId);
-        
-        if (source is TileSetAtlasSource atlasSource)
-        {
-            return atlasSource.TextureRegionSize;
-        }
-        
-        return HexConstants.ExpectedTileSize; // Fallback to expected size
+        // Return the actual tile size from the TileSet, not the texture region size
+        // This is important for hex coordinate calculations
+        return tileSet.TileSize;
     }
     
     /// <summary>

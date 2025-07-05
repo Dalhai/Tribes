@@ -3,6 +3,7 @@ using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Gen;
+using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 using TribesOfDust.Utils;
 
@@ -16,17 +17,8 @@ struct FakeGenerator : IHexLayerGenerator<Tile>
     {
         var config = Repository.GetAsset();
         
-        GD.Print($"tile1: {AxialCoordinate.Zero}");
         var tile1 = new Tile(config, AxialCoordinate.Zero);
         layer.TryAdd(tile1.Location, tile1);
-
-        GD.Print($"tile2: {AxialCoordinate.Zero.NW}");
-        var tile2 = new Tile(config, AxialCoordinate.Zero.NW);
-        layer.TryAdd(tile2.Location, tile2);
-
-        GD.Print($"tile3: {AxialCoordinate.Zero.SE}");
-        var tile3 = new Tile(config, AxialCoordinate.Zero.SE);
-        layer.TryAdd(tile3.Location, tile3);
         
         return true;
     }
@@ -61,44 +53,44 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         FakeGenerator fake = new() { Repository = repo.Tiles };
         map.Generate(fake);
 
-        // Initialize the HexMap and sync tiles
+        // Initialize the HexMap and sync tiles first
         _hexMap = GetHexMap();
         _hexMap.ConnectToMap(Context.Map);
         
+        // Verify coordinate conversions work properly
+        GD.Print("Hex coordinate system initialized with TileSet size: " + _hexMap.TerrainLayer.TileSet.GetTileSize());
+        
         // Connect HexMap to Display for overlay support
         Context.Display.HexMap = _hexMap;
-        
-        // Get tile size for sprite positioning and scaling
-        var tileSize = _hexMap.TerrainLayer.TileSet.GetTileSize();
-        
+
         // Register buildings
         var campClass = repo.Buildings.GetAsset("Camp");
-        var camp1 = new Building(campClass, new(0, 0), _player1);
+        var camp1 = new Building(campClass, new(7, -4), _player1);
         var camp2 = new Building(campClass, new(5, 4), _player2);
 
         map.TryAddEntity(camp1);
         map.TryAddEntity(camp2);
 
-        // Create sprites for camp buildings
-        var camp1Sprite = this.CreateSpriteForEntity(camp1, tileSize);
+        // Create sprites for camp buildings using HexMap coordinate system
+        var camp1Sprite = this.CreateSpriteForEntity(camp1, _hexMap);
         if (camp1Sprite != null) _sprites.Add(camp1.Identity, camp1Sprite);
         
-        var camp2Sprite = this.CreateSpriteForEntity(camp2, tileSize);
+        var camp2Sprite = this.CreateSpriteForEntity(camp2, _hexMap);
         if (camp2Sprite != null) _sprites.Add(camp2.Identity, camp2Sprite);
 
         var fountainClass = repo.Buildings.GetAsset("Fountain");
-        var fountain1 = new Building(fountainClass, new(1, -3));
-        var fountain2 = new Building(fountainClass, new(5, 1));
+        var fountain1 = new Building(fountainClass, AxialCoordinate.Zero.SW);
+        // var fountain2 = new Building(fountainClass, new(5, 1));
 
         map.TryAddEntity(fountain1);
-        map.TryAddEntity(fountain2);
+        // map.TryAddEntity(fountain2);
 
-        // Create sprites for fountain buildings
-        var fountain1Sprite = this.CreateSpriteForEntity(fountain1, tileSize);
+        // Create sprites for fountain buildings using HexMap coordinate system
+        var fountain1Sprite = this.CreateSpriteForEntity(fountain1, _hexMap);
         if (fountain1Sprite != null) _sprites.Add(fountain1.Identity, fountain1Sprite);
         
-        var fountain2Sprite = this.CreateSpriteForEntity(fountain2, tileSize);
-        if (fountain2Sprite != null) _sprites.Add(fountain2.Identity, fountain2Sprite);
+        // var fountain2Sprite = this.CreateSpriteForEntity(fountain2, _hexMap);
+        // if (fountain2Sprite != null) _sprites.Add(fountain2.Identity, fountain2Sprite);
 
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();
@@ -113,14 +105,14 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit2);
             map.TryAddEntity(unit3);
 
-            // Create sprites for units
-            var unit1Sprite = this.CreateSpriteForEntity(unit1, tileSize);
+            // Create sprites for units using HexMap coordinate system
+            var unit1Sprite = this.CreateSpriteForEntity(unit1, _hexMap);
             if (unit1Sprite != null) _sprites.Add(unit1.Identity, unit1Sprite);
             
-            var unit2Sprite = this.CreateSpriteForEntity(unit2, tileSize);
+            var unit2Sprite = this.CreateSpriteForEntity(unit2, _hexMap);
             if (unit2Sprite != null) _sprites.Add(unit2.Identity, unit2Sprite);
             
-            var unit3Sprite = this.CreateSpriteForEntity(unit3, tileSize);
+            var unit3Sprite = this.CreateSpriteForEntity(unit3, _hexMap);
             if (unit3Sprite != null) _sprites.Add(unit3.Identity, unit3Sprite);
         }
 
@@ -134,14 +126,14 @@ public partial class GameMode : Node2D, IUnique<GameMode>
             map.TryAddEntity(unit2);
             map.TryAddEntity(unit3);
 
-            // Create sprites for units
-            var unit1Sprite = this.CreateSpriteForEntity(unit1, tileSize);
+            // Create sprites for units using HexMap coordinate system
+            var unit1Sprite = this.CreateSpriteForEntity(unit1, _hexMap);
             if (unit1Sprite != null) _sprites.Add(unit1.Identity, unit1Sprite);
             
-            var unit2Sprite = this.CreateSpriteForEntity(unit2, tileSize);
+            var unit2Sprite = this.CreateSpriteForEntity(unit2, _hexMap);
             if (unit2Sprite != null) _sprites.Add(unit2.Identity, unit2Sprite);
             
-            var unit3Sprite = this.CreateSpriteForEntity(unit3, tileSize);
+            var unit3Sprite = this.CreateSpriteForEntity(unit3, _hexMap);
             if (unit3Sprite != null) _sprites.Add(unit3.Identity, unit3Sprite);
         }
 
