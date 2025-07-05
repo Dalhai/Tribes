@@ -2,27 +2,12 @@ using System.Collections.Generic;
 using Godot;
 using TribesOfDust.Core.Controllers;
 using TribesOfDust.Core.Entities;
-using TribesOfDust.Gen;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
+using TribesOfDust.Interface;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Modes;
-
-struct FakeGenerator : IHexLayerGenerator<Tile>
-{
-    public TileConfigurationRepository Repository { get; init; }
-    
-    public bool Generate(IHexLayer<Tile> layer)
-    {
-        var config = Repository.GetAsset();
-        
-        var tile1 = new Tile(config, AxialCoordinate.Zero);
-        layer.TryAdd(tile1.Location, tile1);
-        
-        return true;
-    }
-}
 
 public partial class GameMode : Node2D, IUnique<GameMode>
 {
@@ -47,12 +32,9 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         var map = Context.Map;
         var repo = Context.Repos;
         
-        // Generate tiles
-        // HexMapGenerator generator = new(new(-100, -100), new(100, 100), Context.Repos.Tiles);
-        // map.Generate(generator);
-        FakeGenerator fake = new() { Repository = repo.Tiles };
-        map.Generate(fake);
-
+        // The map is already loaded with default content from MapContext
+        // No need to generate fake tiles anymore
+        
         // Initialize the HexMap and sync tiles first
         _hexMap = GetHexMap();
         _hexMap.ConnectToMap(Context.Map);
@@ -91,6 +73,12 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         
         // var fountain2Sprite = this.CreateSpriteForEntity(fountain2, _hexMap);
         // if (fountain2Sprite != null) _sprites.Add(fountain2.Identity, fountain2Sprite);
+
+        // Position camera to fit the map
+        if (GetViewport().GetCamera2D() is Camera camera)
+        {
+            camera.FitToMap(Context.Map, _hexMap);
+        }
 
         // Register units
         UnitConfiguration GetUnitConfiguration() => Context.Repos.Units.GetAsset();

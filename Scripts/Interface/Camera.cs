@@ -51,6 +51,46 @@ public partial class Camera : Camera2D
     
     #endregion
 
+    #region Camera Control
+
+    /// <summary>
+    /// Move the camera to a specific world position instantly.
+    /// </summary>
+    /// <param name="worldPosition">The world position to move to</param>
+    public void MoveTo(Vector2 worldPosition)
+    {
+        Position = worldPosition;
+        ForceUpdateScroll();
+    }
+
+    /// <summary>
+    /// Set the camera zoom so that the center stays on the current position, 
+    /// but the camera zoom fully covers the provided extents.
+    /// </summary>
+    /// <param name="extents">The rectangular area that should be fully visible</param>
+    public void ZoomToFitExtents(Rect2 extents)
+    {
+        if (extents.Size.X <= 0 || extents.Size.Y <= 0)
+            return;
+
+        var viewportSize = GetViewportRect().Size;
+        
+        // Calculate zoom required to fit extents
+        var zoomX = viewportSize.X / extents.Size.X;
+        var zoomY = viewportSize.Y / extents.Size.Y;
+        
+        // Use the smaller zoom to ensure the entire extents fit
+        var targetZoom = Math.Min(zoomX, zoomY);
+        
+        // Apply zoom limits
+        targetZoom = Math.Clamp(targetZoom, 0.1f, ZoomMax);
+        
+        Zoom = new Vector2(targetZoom, targetZoom);
+        ForceUpdateScroll();
+    }
+
+    #endregion
+
     #region Zooming
 
     private void ZoomStable(Vector2 anchor, float amount)

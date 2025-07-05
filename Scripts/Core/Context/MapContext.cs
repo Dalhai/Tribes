@@ -33,7 +33,14 @@ public partial class MapContext : RefCounted
         Repos.Maps.Load();
         
         // Initialize sub contexts.
-        Map     = new("Default");
+        // Try to load the default map from repository, fall back to empty map if not found
+        Map? defaultMap = null;
+        if (Repos.Maps.HasVariations("default"))
+        {
+            defaultMap = Repos.Maps.GetAsset("default");
+        }
+        
+        Map = defaultMap ?? new("Default");
         Display = new(Map.Tiles);
     }
 

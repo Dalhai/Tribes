@@ -4,6 +4,7 @@ using Godot;
 using TribesOfDust.Core.Entities;
 using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
+using TribesOfDust.Interface;
 using TribesOfDust.Interface.Menu;
 
 namespace TribesOfDust.Core.Modes;
@@ -54,6 +55,12 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         
         // Set up editor menu
         SetupEditorMenu();
+
+        // Position camera to fit the map
+        if (GetViewport().GetCamera2D() is Camera camera)
+        {
+            camera.FitToMap(Context.Map, _hexMap);
+        }
 
         base._Ready();
     }
