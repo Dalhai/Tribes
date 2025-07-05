@@ -6,6 +6,7 @@ using TribesOfDust.Hex;
 using TribesOfDust.Hex.Layers;
 using TribesOfDust.Interface;
 using TribesOfDust.Interface.Menu;
+using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Modes;
 
@@ -59,10 +60,10 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
         _hexMap.ConnectToMap(Context.Map);
         
         // Register non-tile entities (buildings, units) with sprite rendering
-        foreach (var (coordinate, building) in Context.Map.Buildings)
-            CreateSpriteForNonTileEntity(coordinate, building);
-        foreach (var (coordinate, unit) in Context.Map.Units)
-            CreateSpriteForNonTileEntity(coordinate, unit);
+        foreach (var (_, building) in Context.Map.Buildings)
+            this.CreateSpriteForEntity(building, _hexMap);
+        foreach (var (_, unit) in Context.Map.Units)
+            this.CreateSpriteForEntity(unit, _hexMap);
 
         // Register overlays with context   
         Context.Display.AddOverlay(_hoveredOverlay);
@@ -380,43 +381,6 @@ public partial class EditorMode : Node2D, IUnique<EditorMode>
     #endregion
 
     #region Utility Methods
-
-    /// <summary>
-    /// Creates a sprite for non-tile entities (buildings, units).
-    /// Tiles are handled by the HexMap.
-    /// </summary>
-    /// <param name="coordinate">The coordinate where the entity is located</param>
-    /// <param name="entity">The entity to create a sprite for</param>
-    private void CreateSpriteForNonTileEntity(AxialCoordinate coordinate, IEntity<IConfiguration> entity)
-    {
-        // Skip tiles - they are handled by HexMap
-        if (entity is Tile)
-            return;
-
-        Sprite2D sprite = new();
-
-        sprite.Scale = Vector2.One;
-        sprite.Centered = true;
-        sprite.Position = HexMap.HexToWorldPosition(coordinate);
-        sprite.Texture = entity.Configuration.Texture;
-        sprite.Modulate = entity.Owner?.Color ?? Colors.White;
-
-        switch (entity)
-        {
-            case Building:
-                sprite.Scale *= 0.8f;
-                sprite.ZIndex = 10;
-                break;
-            case Unit:
-                sprite.Scale *= 0.8f;
-                sprite.ZIndex = 10;
-                break;
-        }
-
-        // Note: In EditorMode, we don't need to track sprites in a dictionary
-        // since we don't use them for selection like in GameMode
-        AddChild(sprite);
-    }
 
     /// <summary>
     /// Gets or creates the HexMap for this editor.

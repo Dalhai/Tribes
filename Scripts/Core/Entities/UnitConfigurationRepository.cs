@@ -38,11 +38,6 @@ public class UnitConfigurationRepository : Repository<string, UnitConfiguration>
         var resource = GD.Load(resourcePath);
         asset = resource as UnitConfiguration;
 
-        if (asset is { Texture: not null })
-        {
-            return true;
-        }
-
-        return false;
+        return asset is not null;
     }
 }

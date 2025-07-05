@@ -39,25 +39,6 @@ public class TileConfigurationRepository : Repository<TileType, TileConfiguratio
         var resource = GD.Load(resourcePath);
         asset = resource as TileConfiguration;
 
-        if (asset is { Texture: not null })
-        {
-            float width = asset.Texture.GetWidth();
-            float height = asset.Texture.GetHeight();
-            float ratio = width / height;
-
-            if (!Mathf.IsEqualApprox(ratio, HexConstants.ExpectedTileRatio))
-            {
-                GD.PushWarning
-                (
-                    $"Tile: {asset.ResourcePath} has invalid ratio:\n" +
-                    $"Expected Ratio: {HexConstants.ExpectedTileRatio}\n" +
-                    $"Actual Ratio: {ratio}"
-                );
-            }
-
-            return true;
-        }
-
-        return false;
+        return asset is not null;
     }
 }

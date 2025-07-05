@@ -1,11 +1,12 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://d3o0lfc4evcwn"]
 
 [ext_resource type="Script" uid="uid://bfqbvrel2debe" path="res://Scripts/Core/Entities/TileConfiguration.cs" id="1"]
-[ext_resource type="Texture2D" uid="uid://c3tt4y70xyhac" path="res://Assets/textures/terrain/open.png" id="2"]
+[ext_resource type="TileSet" uid="uid://q0eos2vjkg8d" path="res://Assets/TileSets/TerrainTileset.tres" id="1_bd7qp"]
 
 [resource]
 script = ExtResource("1")
 Key = 1
-Texture = ExtResource("2")
+TileSet = ExtResource("1_bd7qp")
+AtlasCoordinate = Vector2i(0, 8)
 Direction = 0
 Connections = 63

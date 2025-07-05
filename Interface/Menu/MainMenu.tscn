@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ddobccwufg0w0"]
 
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="1_brs0p"]
-[ext_resource type="PackedScene" uid="uid://8244mvkeoeu6" path="res://Interface/Widgets/HoverButton.tscn" id="2_tqv4a"]
+[ext_resource type="Texture2D" uid="uid://bw22nx8br0xk6" path="res://Assets/Interface/widgets/menu_button.png" id="3_tqswe"]
 
 [node name="MainMenu" type="VBoxContainer"]
 offset_right = 225.0
@@ -9,31 +9,86 @@ offset_bottom = 206.0
 theme = ExtResource("1_brs0p")
 theme_override_constants/separation = 0
 
-[node name="Play" parent="." instance=ExtResource("2_tqv4a")]
+[node name="Play" type="TextureRect" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("3_tqswe")
+expand_mode = 2
 
-[node name="Button" parent="Play" index="0"]
+[node name="Button" type="Button" parent="Play"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "Play"
+flat = true
+alignment = 0
 
-[node name="Editor" parent="." instance=ExtResource("2_tqv4a")]
+[node name="Editor" type="TextureRect" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("3_tqswe")
+expand_mode = 2
 
-[node name="Button" parent="Editor" index="0"]
+[node name="Button" type="Button" parent="Editor"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "Editor"
+flat = true
+alignment = 0
 
-[node name="Settings" parent="." instance=ExtResource("2_tqv4a")]
+[node name="Settings" type="TextureRect" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("3_tqswe")
+expand_mode = 2
 
-[node name="Button" parent="Settings" index="0"]
+[node name="Button" type="Button" parent="Settings"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "Settings"
+flat = true
+alignment = 0
 
-[node name="Quit" parent="." instance=ExtResource("2_tqv4a")]
+[node name="Quit" type="TextureRect" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("3_tqswe")
+expand_mode = 2
 
-[node name="Button" parent="Quit" index="0"]
+[node name="Button" type="Button" parent="Quit"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.134
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0339966
+grow_horizontal = 2
+grow_vertical = 2
 text = "Quit"
-
-[editable path="Play"]
-[editable path="Editor"]
-[editable path="Settings"]
-[editable path="Quit"]
+flat = true
+alignment = 0

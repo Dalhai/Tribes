@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://blovp872n3gmi"]
+[gd_scene load_steps=8 format=3 uid="uid://blovp872n3gmi"]
 
 [ext_resource type="Script" uid="uid://cibfwkksm1eys" path="res://Scripts/Core/Mode/MainMode.cs" id="1_i0mqw"]
-[ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/textures/Interface/paper_mat.tres" id="2_3orge"]
+[ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/Interface/paper_mat.tres" id="2_3orge"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_10b7i"]
-[ext_resource type="Texture2D" uid="uid://dj75j540b3xy6" path="res://Assets/textures/Interface/main_menu_figures_1.png" id="6_cm0p5"]
-[ext_resource type="FontFile" uid="uid://bdweby6ksu3gc" path="res://Assets/fonts/GreatVibes.otf" id="7_0jxo3"]
+[ext_resource type="Texture2D" uid="uid://dj75j540b3xy6" path="res://Assets/Interface/main_menu_figures_1.png" id="6_cm0p5"]
+[ext_resource type="FontFile" uid="uid://bdweby6ksu3gc" path="res://Assets/Fonts/GreatVibes.otf" id="7_0jxo3"]
+[ext_resource type="Texture2D" uid="uid://bw22nx8br0xk6" path="res://Assets/Interface/widgets/menu_button.png" id="7_2i5gr"]
 [ext_resource type="PackedScene" uid="uid://ddobccwufg0w0" path="res://Interface/Menu/MainMenu.tscn" id="8_s4jcs"]
 
 [node name="Scene" type="Node2D"]
@@ -63,6 +64,18 @@ offset_right = 316.176
 offset_bottom = -16.0
 grow_vertical = 2
 theme_override_constants/separation = 1
+
+[node name="Play" parent="CanvasLayer/Paper/MainMenu" index="0"]
+texture = ExtResource("7_2i5gr")
+
+[node name="Editor" parent="CanvasLayer/Paper/MainMenu" index="1"]
+texture = ExtResource("7_2i5gr")
+
+[node name="Settings" parent="CanvasLayer/Paper/MainMenu" index="2"]
+texture = ExtResource("7_2i5gr")
+
+[node name="Quit" parent="CanvasLayer/Paper/MainMenu" index="3"]
+texture = ExtResource("7_2i5gr")
 
 [connection signal="pressed" from="CanvasLayer/Paper/MainMenu/Play/Button" to="." method="OnPlayPressed"]
 [connection signal="pressed" from="CanvasLayer/Paper/MainMenu/Editor/Button" to="." method="OnEditorPressed"]

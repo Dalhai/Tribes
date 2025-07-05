@@ -1,9 +1,10 @@
 ﻿using Godot;
+using Godot.Collections;
 using TribesOfDust.Utils;
 
 namespace TribesOfDust.Core.Entities;
 
-public partial class BuildingConfiguration : Resource, IConfiguration, IVariant<string>
+public partial class BuildingConfiguration : Resource, IVariant<string>
 {
     public override string ToString() => $"Building: {Key}";
 
@@ -14,12 +15,6 @@ public partial class BuildingConfiguration : Resource, IConfiguration, IVariant<
     /// </summary>
     [Export]
     public string Key { get; set; } = "Building";
-
-    /// <summary>
-    /// The texture associated with the building.
-    /// </summary>
-    [Export(PropertyHint.ResourceType, "Texture2D")]
-    public Texture2D Texture { get; set; } = null!;
 
     #endregion
 }
