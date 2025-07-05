@@ -92,8 +92,6 @@ public partial class Camera : Camera2D
         ForceUpdateScroll();
     }
 
-    private Rect2 _lastExtents;
-
     /// <summary>
     /// Set the camera zoom so that the center stays on the current position, 
     /// but the camera zoom fully covers the provided extents.
@@ -119,28 +117,7 @@ public partial class Camera : Camera2D
         Zoom     = new Vector2(targetZoom, targetZoom);
         Position = extents.Position;
 
-        _lastExtents = extents; // Store the extents for drawing
-
         ForceUpdateScroll();
-    }
-
-    public override void _Draw()
-    {
-        if (_lastExtents.Size == Vector2.Zero)
-            return;
-        
-        var extentPos = _lastExtents.Position;
-        var extentFarPos = extentPos + _lastExtents.Size;
-        
-
-        // Convert world space extents to local space
-        var localExtents = new Rect2(
-            ToLocal(extentPos),
-            ToLocal(extentFarPos) - ToLocal(extentPos)
-        );
-
-        // Draw the rectangle
-        DrawRect(localExtents, Colors.Green, false);
     }
     #endregion
 }

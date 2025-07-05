@@ -37,9 +37,6 @@ public partial class GameMode : Node2D, IUnique<GameMode>
         _hexMap = GetHexMap();
         _hexMap.ConnectToMap(Context.Map);
         
-        // Verify coordinate conversions work properly
-        GD.Print("Hex coordinate system initialized with TileSet size: " + _hexMap.TerrainLayer.TileSet.GetTileSize());
-        
         // Connect HexMap to Display for overlay support
         Context.Display.HexMap = _hexMap;
 
