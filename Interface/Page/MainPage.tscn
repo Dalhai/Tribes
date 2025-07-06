@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://cibfwkksm1eys" path="res://Scripts/Core/Mode/MainMode.cs" id="1_i0mqw"]
 [ext_resource type="Material" uid="uid://c3ut8catgyvoc" path="res://Assets/Interface/paper_mat.tres" id="2_3orge"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="3_10b7i"]
-[ext_resource type="Texture2D" uid="uid://dj75j540b3xy6" path="res://Assets/Interface/main_menu_figures_1.png" id="6_cm0p5"]
-[ext_resource type="FontFile" uid="uid://bdweby6ksu3gc" path="res://Assets/Fonts/GreatVibes.otf" id="7_0jxo3"]
-[ext_resource type="Texture2D" uid="uid://bw22nx8br0xk6" path="res://Assets/Interface/widgets/menu_button.png" id="7_2i5gr"]
+[ext_resource type="Texture2D" uid="uid://bwpo1fjaivsic" path="res://Assets/Interface/main_menu_figures_1.png" id="6_cm0p5"]
+[ext_resource type="FontFile" uid="uid://cndptk36k5pv1" path="res://Assets/Fonts/GreatVibes.otf" id="7_0jxo3"]
+[ext_resource type="Texture2D" uid="uid://dswwymnf8n6et" path="res://Assets/Interface/widgets/menu_button.png" id="7_2i5gr"]
 [ext_resource type="PackedScene" uid="uid://ddobccwufg0w0" path="res://Interface/Menu/MainMenu.tscn" id="8_s4jcs"]
 
 [node name="Scene" type="Node2D"]

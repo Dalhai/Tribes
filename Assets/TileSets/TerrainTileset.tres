@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://q0eos2vjkg8d"]
 
-[ext_resource type="Texture2D" uid="uid://dtykambhvrxjm" path="res://Assets/TileSets/Terrain.png" id="1_n82pq"]
+[ext_resource type="Texture2D" uid="uid://cgmcl7voopx22" path="res://Assets/TileSets/Terrain.png" id="1_n82pq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4k3rd"]
 resource_name = "Base"

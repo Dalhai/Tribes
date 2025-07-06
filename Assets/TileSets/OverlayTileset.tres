@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b8k2xfg3h0c7m"]
 
-[ext_resource type="Texture2D" uid="uid://lp18rq1a3kle" path="res://Assets/TileSets/Overlay.png" id="1_np6xx"]
+[ext_resource type="Texture2D" uid="uid://dlcxhjffrvi6f" path="res://Assets/TileSets/Overlay.png" id="1_np6xx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_48icg"]
 resource_name = "Overlay"

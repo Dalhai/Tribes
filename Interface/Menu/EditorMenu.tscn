@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dx2fl7vgof78g" path="res://Scripts/Interface/Menu/EditorMenu.cs" id="1_menu_script"]
 [ext_resource type="Theme" uid="uid://du1i18p0adupq" path="res://Assets/Theme/ThemeMenu.tres" id="2_d6qb6"]
-[ext_resource type="Texture2D" uid="uid://bw22nx8br0xk6" path="res://Assets/Interface/widgets/menu_button.png" id="4_e575c"]
+[ext_resource type="Texture2D" uid="uid://dswwymnf8n6et" path="res://Assets/Interface/widgets/menu_button.png" id="4_e575c"]
 
 [node name="EditorMenu" type="MarginContainer"]
 anchors_preset = 9
