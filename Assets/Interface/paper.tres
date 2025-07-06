@@ -1,6 +1,6 @@
 [gd_resource type="VisualShader" load_steps=6 format=3 uid="uid://d4lw6u6qjtxfb"]
 
-[ext_resource type="Texture2D" uid="uid://beuym1t7b6nd8" path="res://Assets/Interface/paper.png" id="1_e2qjc"]
+[ext_resource type="Texture2D" uid="uid://dhvahxfeyq8xw" path="res://Assets/Interface/paper.png" id="1_e2qjc"]
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_cx3c2"]
 output_port_for_preview = 3
